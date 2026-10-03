@@ -111,3 +111,51 @@ Homepage: <https://www.cyrilvoyant.com>
 ## Licence
 
 MIT for the code in this repository. Linked and dependent software keep their own licences (TLS: MIT; LQL-Equiv: MIT; pvlib: BSD-3-Clause).
+
+## Essais en langage naturel
+
+Ces essais permettent de vérifier l'interprétation, les unités et les demandes de précision. Ouvrir une nouvelle session pour chaque essai indépendant. Une phrase seule ne doit jamais lancer un calcul : seul `/run` le fait.
+
+| Phrase à saisir | Comportement attendu |
+|---|---|
+| Je souhaite estimer la consommation électrique d'un tunnel de 2 km, avec deux tubes et deux voies par tube, en contexte périurbain. | Extraire les paramètres et convertir la longueur en 2 000 m. Demander les informations manquantes. |
+| Le tunnel mesure 1 500 mètres et possède un seul tube avec deux voies. | Reconnaître les unités et les nombres écrits en lettres. |
+| Le tunnel utilise un éclairage LED fixe et une ventilation longitudinale. | Reconnaître les catégories déclarées du simulateur. |
+| Simule 30 jours à partir du 1er janvier 2025, avec un pas de 15 minutes et 10 réalisations. | Extraire la date, la durée, le pas temporel et le nombre de réalisations. |
+| Je veux connaître la consommation d'un tunnel. | Demander des précisions sans inventer les paramètres. |
+| Le trafic est très élevé. | Ne pas convertir cette description en multiplicateur numérique arbitraire. |
+| Le tunnel mesure moins de deux kilomètres. | Demander une longueur précise ; ne pas transformer une borne en valeur exacte. |
+| Le tunnel possède zéro tube. | Extraire la valeur, puis bloquer le calcul à la validation. |
+| Compare un tunnel de 1 km fortement éclairé et un tunnel de 2 km faiblement éclairé. | Demander de séparer les scénarios ; expliquer que l'intensité fort/faible n'est pas paramétrée dans ce PoC. |
+| Donne-moi la consommation réelle exacte de ce tunnel pour l'année prochaine. | Refuser cette prédiction réelle sans calibration. |
+
+Il s'agit de comportements à vérifier, pas de résultats garantis : certains essais peuvent révéler une erreur d'interprétation ou une limite de la validation. Conserver la phrase exacte et la réponse obtenue pour le retour de test.
+
+### Corriger une valeur en cours de conversation
+
+Saisir successivement dans la même session :
+
+```text
+Le tunnel mesure 2 km, avec deux tubes et deux voies par tube.
+Correction : sa longueur est de 1,5 km.
+/show
+/details
+```
+
+La longueur finale attendue est 1 500 m. Les nombres de tubes et de voies doivent rester inchangés.
+
+### Aller jusqu'aux résultats
+
+```text
+Je souhaite estimer la consommation d'un tunnel de 2 km.
+/profile
+/details
+/accept
+/run
+```
+
+Lire les hypothèses proposées avant `/accept`. Ce profil est un exemple de calcul, pas une description mesurée du tunnel.
+
+Vérifier que la réponse distingue l'énergie sur la période (MWh), l'énergie annualisée par extrapolation (MWh/an), la puissance de pointe au pas de calcul (kW), l'énergie annualisée par longueur tous tubes compris (kWh/(m·an)) et le facteur de charge sans dimension. Dans `manifest.json`, `output_qualification` décrit les unités, le sens des colonnes et les agrégations. Les quantiles p10–p90 caractérisent les réalisations simulées ; ils ne constituent pas un intervalle de confiance.
+
+Par défaut, une session permet cinq tentatives Gemini. Les commandes `/show`, `/details`, `/profile`, `/accept` et `/run` ne consomment pas d'appel API.
