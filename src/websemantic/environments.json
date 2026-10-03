@@ -1,0 +1,23 @@
+[
+  {
+    "id": "tls",
+    "namespace": "websemantic.tls",
+    "definition": "Tunnel Load Simulator : demande électrique des tunnels routiers",
+    "descriptor": "tls",
+    "available": true
+  },
+  {
+    "id": "lql",
+    "namespace": "websemantic.lql",
+    "definition": "LQL-Equiv : équivalences radiobiologiques",
+    "descriptor": "lqlequiv",
+    "available": false
+  },
+  {
+    "id": "pvlib",
+    "namespace": "websemantic.pvlib",
+    "definition": "pvlib : modélisation des systèmes photovoltaïques",
+    "descriptor": "pvlib",
+    "available": false
+  }
+]

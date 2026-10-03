@@ -102,7 +102,7 @@ def run(scenario, descriptor, workspace, output_root=None):
         json.dumps(manifest, ensure_ascii=False, indent=2, allow_nan=False),
         encoding="utf-8",
     )
-    export_semantics(scenario, qualification, target)
+    export_semantics(scenario, qualification, target, descriptor)
     medians = (
         outputs["kpis"][["total_mwh", "annualized_mwh", "peak_kw", "load_factor", "specific_kwh_m_year"]]
         .median()

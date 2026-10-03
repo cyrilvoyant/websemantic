@@ -1,95 +1,81 @@
-WEBSEMANTIC — QUELQUES REPÈRES POUR LE TEST
+﻿WEBSEMANTIC — ESSAIS ENTRE COLLÈGUES
 
 Bonjour à tous,
+Je vous propose deux essais de WebSemantic pour préparer un scénario en français, examiner ses hypothèses et lancer TLS. Vos retours m'aideront à améliorer ce prototype.
 
-Je vous propose de tester WebSemantic, un prototype qui permet de décrire un scénario en français, de vérifier les paramètres retenus, puis de lancer un simulateur. Pour ce premier essai, seul TLS est opérationnel. LQL-Equiv et pvlib viendront ensuite.
+PARTIE 1 — INSTALLER ET UTILISER
 
-Ce qui m’intéresse dans vos retours, c’est de savoir si la demande est bien comprise, si les hypothèses et les unités sont claires, et si les résultats sont faciles à interpréter. Nous travaillons ici avec des données synthétiques, sans calibration sur un tunnel réel.
+Décompressez le package, puis double-cliquez sur Installer.cmd : il vérifie les composants et installe ce qui manque. Les versions compatibles déjà présentes sont conservées. Ensuite, utilisez uniquement WebSemantic_TLS.cmd ; ce lanceur n'installe rien. S'il manque un composant, relancez Installer.cmd.
 
-POUR COMMENCER
+Au menu, choisissez 1 pour TLS. Les choix 2 (LQL) et 3 (pvlib) affichent « Work in progress ». La clé Gemini est fournie dans ce package privé : ne le publiez pas. Internet est nécessaire pour Gemini et les recherches ; le simulateur est fourni dans une version fixée.
 
-Décompressez le dossier, puis double-cliquez sur Installer.cmd. Il vérifie les composants et installe ce qui manque. Si tout est déjà présent, il ne réinstalle rien ; les versions plus récentes compatibles sont conservées.
+Saisissez une phrase ou une commande, puis Entrée :
+/s : cinq suggestions ; /d : tableau des paramètres et unités ;
+/e VARIABLE : définition, unité et options ; /p : propose les valeurs manquantes ;
+/v : accepte les hypothèses ; /set GROUPE.VARIABLE VALEUR : fixe un choix ;
+/web QUESTION : recherche documentaire ; /q : quitte.
 
-Pour les utilisations suivantes, ouvrez simplement WebSemantic_TLS.cmd. Ce lanceur n’installe rien. S’il manque un composant, un message vous indique de relancer Installer.cmd.
+Demandez « calcule » après vérification. Le calcul démarre seulement si les informations sont suffisantes et les hypothèses acceptées. « Prends les valeurs moyennes » accepte le profil de démonstration : ce ne sont pas des moyennes mesurées. Une recherche documentaire ne valide aucun paramètre. Si Gemini est indisponible, les commandes locales restent utilisables.
 
-Le menu propose :
-1 — websemantic.tls : consommation électrique des tunnels routiers
-2 — websemantic.lql : équivalences radiobiologiques
-3 — websemantic.pvlib : systèmes photovoltaïques
+Les sorties indiquent énergie en MWh, puissance en kW et énergie spécifique en kWh/(km·tube). Les paramètres ont chacun leur unité dans /d et /e. L'énergie annualisée multiplie l'énergie de la période par 365/nombre de jours ; elle n'est pas une mesure annuelle. La dispersion des réalisations ne couvre pas toutes les incertitudes. Le manifeste et les CSV permettent de retrouver les hypothèses et les résultats.
 
-Tapez 1, puis Entrée. Les choix 2 et 3 affichent « Work in progress » et reviennent au menu. Vous pouvez quitter avec q.
+Code et documentation : https://github.com/cyrilvoyant/websemantic
+Simulateur TLS : https://github.com/cyrilvoyant/tunnel-load-simulator
+WebSemantic : PolyForm Noncommercial 1.0.0, conditions dans application/LICENSE. Les composants tiers conservent leurs licences.
 
-La clé Gemini est déjà configurée dans ce package de test privé. Merci de ne pas publier le dossier ou l’archive tels quels. Une connexion Internet est nécessaire pour les échanges avec Gemini et les recherches documentaires.
+PARTIE 2 — DEUX EXEMPLES COMPLETS
 
-UN PREMIER ESSAI
+Ouvrez une nouvelle conversation pour chaque exemple et choisissez 1. Saisissez chaque ligne séparément.
 
-Dans la conversation, saisissez cette phrase :
-Calcule la consommation électrique d’un tunnel de 2 km, avec deux tubes et deux voies par tube, en contexte périurbain.
+1. OBJECTIF PRÉCIS : ÉNERGIE SUR 30 JOURS ET PIC DE PUISSANCE
 
-Puis, une ligne à la fois :
+Le tunnel mesure 2000 m, possède deux tubes et deux voies par tube. Le contexte est périurbain, l’éclairage est LED fixed et la ventilation est longitudinal.
+La période commence le 2025-01-01 et dure 30 jours. Le pas est de 15 minutes, avec 10 réalisations et une graine de 42.
 /p
 /d
+
+Vérifiez les valeurs et les unités. Les champs restants proviennent du profil de démonstration : j'accepte cette hypothèse pour l'exercice.
+
 /v
+calcule
 
-/p propose des valeurs de démonstration pour les informations manquantes. /d affiche les paramètres, leurs unités et leur statut. Prenez le temps de regarder le tableau avant de saisir /v, qui valide les hypothèses et déclenche le calcul demandé si les contrôles passent.
+L'énergie couvre 30 jours ; le pic est évalué au pas de 15 min. L'annualisation applique 365/30. Vérifiez le scénario enregistré dans le manifeste, puis quittez avec /q.
 
-Vous pouvez aussi écrire « prends les valeurs par défaut » ou « prends les valeurs moyennes ». Cela vaut acceptation du profil de démonstration et peut déclencher un calcul déjà demandé. Ces valeurs ne sont pas des moyennes mesurées.
+2. IDÉE VAGUE : TUNNEL URBAIN À MONTPELLIER, VENTILATION ANCIENNE
 
-QUELQUES COMMANDES UTILES
+Je voudrais étudier un tunnel urbain à Montpellier avec un ancien système de ventilation. Je ne connais pas encore ses dimensions ni le type exact de ventilation.
+/s
+/e length_m
+/e ventilation_type
+/e lighting_type
+/web Montpellier mobilité trafic heures de pointe sources officielles
+/web CETU types de ventilation des tunnels routiers
 
-/s : propose cinq questions ou pistes d’affinement ; choisissez 1 à 5 ou écrivez votre propre question.
-/d : affiche les paramètres et leurs unités.
-/e altitude_m : explique une variable et comment la modifier.
-/set inputs.altitude_m 25 : fixe l’altitude à 25 m.
-/set inputs.lighting_type "LED fixed" : choisit un éclairage LED fixe.
-/v : valide les hypothèses proposées.
-/q : quitte la conversation.
+Regardez les cinq suggestions, les options et les sources. « Ancien » ne définit pas un type de ventilation ; Montpellier ne définit pas la géométrie. Pour cet exercice, choisissez explicitement les hypothèses fictives suivantes :
 
-Vous pouvez remplacer / par un antislash. Pour calculer, il suffit d’écrire « calcule » ou « estime la consommation ». Si des informations manquent, la demande attend les précisions ou la validation. « Annule le calcul » annule cette attente. /r reste disponible, mais n’est pas nécessaire.
+/set inputs.tunnel_context "urban"
+/set inputs.length_m 1200
+/set inputs.n_tubes 1
+/set inputs.n_lanes_per_tube 2
+/set inputs.altitude_m 40
+/set inputs.max_depth_m 30
+/set inputs.gradient_percent 1
+/set inputs.ventilation_type "semi-transverse"
+/set inputs.lighting_type "sodium fixed"
+/set experiment.start_date "2025-01-01"
+/set experiment.n_days 14
+/set experiment.freq_minutes 30
+/set experiment.n_runs 10
+/set experiment.base_seed 42
+/p
+/d
 
-D’AUTRES DEMANDES À ESSAYER
+Longueurs en m, pente en %, durée en jours, pas en min. Examinez aussi les auxiliaires en kW/(km·tube), la charge fixe en kW et le trafic relatif sans dimension. Sans comptages locaux, les pics à 8 h et 18 h restent des hypothèses. Les événements synthétiques ne représentent pas des mesures de pollution ou d'accidents. /e permet de comprendre un paramètre avant de l'accepter.
 
-Le tunnel mesure 1 500 mètres et possède un seul tube avec deux voies.
-Le tunnel utilise un éclairage LED fixe et une ventilation longitudinale.
-Simule 30 jours à partir du 1er janvier 2025, avec un pas de 15 minutes et 10 réalisations.
-Calcule un tunnel de 1500 m comme Ajaccio, avec des hypothèses de trafic, pollution, accidents et pics matin et soir.
-Un tunnel de 2 km à Paris : propose les hypothèses de circulation.
-/web CETU rôle de la ventilation et de l’éclairage dans la consommation électrique d’un tunnel
+/v
+calcule
 
-Pour tester les demandes ambiguës ou hors périmètre :
-Le trafic est très élevé.
-Le tunnel mesure moins de deux kilomètres.
-Le tunnel possède zéro tube.
-Compare un tunnel de 1 km fortement éclairé et un tunnel de 2 km faiblement éclairé.
-Donne-moi la consommation réelle exacte de ce tunnel pour l’année prochaine.
+L'énergie couvre 14 jours et l'annualisation applique 365/14. Le résultat décrit le scénario choisi, pas un tunnel réel de Montpellier. Retrouvez les hypothèses et les sources dans les fichiers du calcul. Pour tester une autre ventilation, consultez /e ventilation_type, modifiez votre choix et demandez un nouveau calcul. Terminez avec /q.
 
-Sur ces derniers exemples, j’attends une clarification ou un refus expliqué. La comparaison de deux scénarios dans une même demande reste à développer.
-
-COMMENT LIRE LES HYPOTHÈSES ET LES RÉSULTATS
-
-Paris et Ajaccio déclenchent une consultation de sources publiques, puis une proposition de contexte à valider. Le nom de la ville ne définit pas la géométrie ou l’altitude du tunnel. Sans comptage local exploitable, les pointes de 8 h et 18 h, leur largeur de 1,4 h et le trafic relatif de 1 restent des valeurs de démonstration. Les probabilités d’accident et de pollution du modèle ne sont pas des risques mesurés pour la ville.
-
-La recherche web peut aussi servir aux questions techniques. La réponse cite les pages consultées et signale les limites. Les documents PDF ne sont pas encore lus. Une réponse documentaire ne modifie pas les paramètres et ne lance pas de calcul. Des connaissances générales du modèle peuvent aider à interpréter la demande ; elles ne suffisent pas à établir une mesure locale actuelle.
-
-Les résultats se trouvent dans Resultats, à côté du lanceur. Le dossier du calcul s’ouvre à la fin. Sur un partage réseau, le programme utilise une copie locale pour fonctionner, tout en conservant les résultats à côté du lanceur.
-
-Les principaux indicateurs sont :
-- l’énergie sur la période simulée, en MWh ;
-- l’énergie annualisée, en MWh/an, extrapolée par 365/nombre de jours simulés ;
-- le pic de puissance au pas de calcul, en kW ;
-- l’énergie annualisée par mètre de tunnel, tous tubes compris, en kWh/(m·an) ;
-- le facteur de charge, sans dimension.
-
-La moyenne et la médiane portent sur les réalisations simulées. Les quantiles p10–p90 décrivent leur dispersion ; ce ne sont pas des intervalles de confiance. Les CSV et le manifeste permettent de retrouver les paramètres, les unités et les hypothèses. Les recherches web sont aussi enregistrées, même sans calcul.
-
-TLS est fourni dans le package, avec une version fixée pour reproduire les essais. Pour une étude plus détaillée, vous pouvez consulter le simulateur original :
-https://github.com/cyrilvoyant/tunnel-load-simulator
-
-POUR VOS RETOURS
-
-Si une réponse vous semble incorrecte, peu claire ou trop longue, merci de me transmettre la phrase saisie, la réponse obtenue et ce que vous attendiez. Les cas où une unité manque, une hypothèse est mal justifiée ou un calcul démarre trop tôt m’intéressent particulièrement.
-
-Le code WebSemantic est sous PolyForm Noncommercial 1.0.0, avec les usages permis et les notices d’attribution précisés dans application/LICENSE. Les composants tiers gardent leur propre licence. Les droits accordés sur les anciennes versions MIT restent valables.
-
-Merci pour vos essais et vos retours,
+Merci de me transmettre la phrase saisie, la réponse et ce que vous attendiez.
 Cyril

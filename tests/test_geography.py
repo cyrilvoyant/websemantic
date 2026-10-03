@@ -6,7 +6,7 @@ import pytest
 import yaml
 
 from websemantic.cli import run_if_ready
-from websemantic.geography import ALLOWED, apply_report, location
+from websemantic.geography import apply_report, location
 from websemantic.session import Session
 
 
@@ -17,22 +17,22 @@ def session():
 
 
 @pytest.fixture
-def report():
+def report(session):
     return {
         'city': 'Ajaccio', 'summary': 'Contexte documentaire, sans calibration du tunnel.',
         'sources': [{'url': 'https://example.org/official', 'status': 'consulted', 'retrieved_at': '2026-10-03'}],
         'topics': [{'topic': name, 'explanation': 'Source de test.'} for name in ('trafic', 'pollution', 'accidents', 'pics')],
         'proposals': [{'field': name, 'value': str(value), 'rationale': 'Hypothèse de test, pas une mesure.', 'sources': [0]}
-                      for name, value in zip(ALLOWED, ('urban', 1, 8, 18, 1.4))],
+                      for name, value in zip(session.descriptor["geography"]["fields"], ('urban', 1, 8, 18, 1.4))],
     }
 
 
-def test_city_detection_and_comparison():
-    assert location('Comme Àjaccio') == 'ajaccio'
-    assert location('un tunnel à PARIS') == 'paris'
-    assert location('tunnel rural') is None
+def test_city_detection_and_comparison(session):
+    assert location('Comme Àjaccio', session.descriptor) == 'ajaccio'
+    assert location('un tunnel à PARIS', session.descriptor) == 'paris'
+    assert location('tunnel rural', session.descriptor) is None
     with pytest.raises(ValueError):
-        location('Paris ou Ajaccio')
+        location('Paris ou Ajaccio', session.descriptor)
 
 
 def test_geography_keeps_user_values_and_requires_acceptance(session, report):

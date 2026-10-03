@@ -55,7 +55,7 @@ def test_web_answer_keeps_values_acceptance_and_run_request(monkeypatch, tmp_pat
     report = {'answer': 'Une explication documentée.', 'limits': '', 'citations': [0], 'sources': [
         {'title': 'Source', 'url': 'https://example.org', 'status': 'consulted', 'retrieved_at': '2026-10-03'}]}
     monkeypatch.setattr(cli, 'load_private_key', lambda _: None)
-    monkeypatch.setattr(web_research, 'research', lambda *args: report)
+    monkeypatch.setattr(web_research, 'research', lambda *args, **kwargs: report)
     cli.answer_from_web(session, 'cherche la méthode', SimpleNamespace(max_calls=0, workspace=ROOT, output_dir=tmp_path, llm='test'))
     assert asdict(session.scenario) == before
     assert session.run_requested

@@ -2,9 +2,9 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix ws: <https://github.com/cyrilvoyant/websemantic/ns#> .
 
-ws:EnergyIntent a rdfs:Class .
-
 ws:Hypothesis a rdfs:Class .
+
+ws:Intent a rdfs:Class .
 
 ws:Parameter a rdfs:Class .
 
@@ -29,7 +29,7 @@ ws:altitude_m a skos:Concept ;
     skos:prefLabel "Altitude"@fr ;
     ws:unitSymbol "m" .
 
-ws:annual_energy a ws:EnergyIntent ;
+ws:annual_energy a ws:Intent ;
     ws:requiresIndicator ws:annualized_mwh .
 
 ws:aux_kw_per_km_tube a skos:Concept ;
@@ -47,7 +47,7 @@ ws:base_seed a skos:Concept ;
     skos:prefLabel "Graine"@fr ;
     ws:unitSymbol "identifiant" .
 
-ws:energy_demand a ws:EnergyIntent ;
+ws:energy_demand a ws:Intent ;
     ws:requiresIndicator ws:total_mwh .
 
 ws:evening_peak_hour a skos:Concept ;
@@ -65,7 +65,7 @@ ws:gradient_percent a skos:Concept ;
     skos:prefLabel "Pente"@fr ;
     ws:unitSymbol "%" .
 
-ws:length_efficiency a ws:EnergyIntent ;
+ws:length_efficiency a ws:Intent ;
     ws:requiresIndicator ws:specific_kwh_m_year .
 
 ws:length_m a skos:Concept ;
@@ -113,7 +113,7 @@ ws:noise_sigma a skos:Concept ;
     skos:prefLabel "Bruit multiplicatif"@fr ;
     ws:unitSymbol "1" .
 
-ws:peak_demand a ws:EnergyIntent ;
+ws:peak_demand a ws:Intent ;
     ws:requiresIndicator ws:peak_kw .
 
 ws:peak_width_h a skos:Concept ;

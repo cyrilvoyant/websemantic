@@ -6,7 +6,7 @@
 
 ## Try the terminal PoC
 
-**Windows :** décompressez entièrement le package privé puis double-cliquez sur `Lancer-WebSemantic_TLS.cmd`. Le script `installer-et-lancer.ps1` crée l'environnement et installe les dépendances au premier lancement ; les suivants ouvrent directement le terminal. Git et Python 3.10 ou supérieur (3.12 conseillé) doivent être installés. Le `.env` inclus dans l'archive privée est lu automatiquement. Le clone GitHub ne contient aucune clé. Ne lancez pas le programme directement depuis le ZIP.
+**Windows :** décompressez entièrement le package privé, puis double-cliquez sur `Installer.cmd`. Pour les usages suivants, ouvrez `WebSemantic_TLS.cmd` : ce lanceur ne réalise aucune installation. Le menu propose TLS (disponible), LQL et pvlib (Work in progress). Les composants compatibles déjà présents sont conservés. Le `.env` du package privé est lu automatiquement ; le clone GitHub ne contient aucune clé. Ne lancez pas directement depuis le ZIP et ne publiez pas l’archive privée.
 
 **Installation on another Windows PC:** [French step-by-step guide](docs/installation-windows.md). Clone with submodules, install `.[tls]`, configure your own Gemini key, then run the terminal. No activation or GUI is required.
 
@@ -37,14 +37,14 @@ The architectural goal is a shared core with software-specific **descriptors** a
 
 Limitations: exact declared-task matching only; evidence presence is not semantic proof; no SHACL or general unit conversion. The terminal normalizes quoted lengths, applies TLS resource limits and runs the pinned backend. It supports one scenario at a time; comparisons request clarification. `execute` means this initial gate has no reported issue, not certification of the experiment. This is a research prototype.
 
-The local development environment is `.venv/`; `requirements-tested.txt` records installed versions used for verification. Install the project separately with `pip install -e .` when recreating that environment. Tests: `python -m pytest -q`. The first verification completed with 21 passing tests, including the two existing backend smoke tests; these are software checks, not benchmark evidence of scientific benefit.
+The local development environment is `.venv/`; `requirements-tested.txt` records installed versions used for verification. Install the project separately with `pip install -e .` when recreating that environment. Tests: `python -m pytest -q`. The refactored implementation is checked by the automated regression suite, including independent descriptor-only structural fixtures and the existing backend smoke tests. These are software checks, not benchmark evidence of scientific benefit.
 
 ## Design principles
 
 - **Non-intrusive**: target software is never modified, locally or on GitHub. TLS and LQL-Equiv are linked as git submodules pinned to exact commits (read-only references); pvlib is a pinned PyPI dependency. Only their public APIs are called.
 - **Non-invention**: an unsupported value that is not an accepted assumption cannot reach the simulator.
 - **LLM as interpreter, not as calculator**: the language model only sees deterministic tools generated from descriptors (`describe_model`, `propose_config`, `validate`, `run`, `annotate`). It never executes code and never computes results. Any explanation reads annotated outputs only.
-- **LLM-agnostic**: one commercial API and one open local model, for reproducibility. Ranking LLMs is not a goal.
+- **Model comparisons planned**: Gemini is implemented; Claude/GPT repository-reading baselines and within-model comparisons remain prospective. Ranking models alone is not the research objective.
 - **Standards**: QUDT for units, PROV-O for provenance, SHACL for the execution gate, DCAT and schema.org for output datasets, CodeMeta and CITATION.cff as input to model selection.
 
 ## Case studies
@@ -70,7 +70,7 @@ The local development environment is `.venv/`; `requirements-tested.txt` records
 src/websemantic/core/      generic core: semantic state, parser, clarification, validation, selection, run, annotation
 src/websemantic/adapters/  thin per-software adapters (the only code touching target APIs)
 descriptors/{tls,lqlequiv,pvlib}/ declarative descriptors (inputs, outputs, tasks, validity, entry point)
-ontology/                         SHACL shapes and JSON-LD context
+ontology/                         initial RDF/SKOS vocabulary (OWL/SHACL/JSON-LD planned)
 benchmark/                        requests, reference annotations, evaluation scripts
 docs/                             architecture, protocol, decisions, context
 external/                         pinned submodules (read-only, never edited)
@@ -220,3 +220,7 @@ Saisir 2 ou 3 affiche « Work in progress » puis réaffiche le menu, sans charg
 `websemantic chat` affiche ce menu. `websemantic chat --direct --model tls` permet un démarrage TLS direct pour les scripts et les tests. `--once` conserve une exécution non interactive ; demander un modèle indisponible avec `--once` retourne Work in progress et un code d’échec, sans basculer silencieusement sur TLS. L’environnement TLS est aussi enregistré dans `conversation.json` avec les résultats.
 
 Le menu est aussi affiché par les anciens lanceurs qui préselectionnaient TLS : le démarrage interactif reste un choix utilisateur. Seul `--direct` désactive explicitement le menu.
+
+## Descriptor-driven integration
+
+TLS labels, defaults, geographical catalogue, qualitative rules, extraction guidance and result presentation are now declared in its descriptor. The session, validation, RDF export and CLI dispatch are shared. Numerical backend constraints and output qualification remain in the TLS adapter. See [the integration contract](docs/integrating-models.md). LQL and pvlib are still placeholders; structural fixtures do not establish scientific transfer performance.

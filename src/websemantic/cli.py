@@ -11,14 +11,14 @@ import yaml
 from websemantic import web_research
 from websemantic.gemini import GeminiError, extract, load_private_key
 from websemantic.geography import apply_report, location, research, show_report
+from websemantic.registry import environments, execute, load_descriptor
 from websemantic.semantics import describe
 from websemantic.session import ClarificationNeeded, Session
 
-ENVIRONMENTS = {
-    '1': ('tls', 'websemantic.tls', 'Tunnel Load Simulator : demande électrique des tunnels routiers'),
-    '2': ('lql', 'websemantic.lql', 'LQL-Equiv : équivalences radiobiologiques'),
-    '3': ('pvlib', 'websemantic.pvlib', 'pvlib : modélisation des systèmes photovoltaïques'),
-}
+ENVIRONMENTS = {str(i): (item['id'], item['namespace'], item['definition'])
+                for i, item in enumerate(environments(), 1)}
+AVAILABLE = {item['id'] for item in environments() if item['available']}
+DEFAULT_MODEL = next(item['id'] for item in environments() if item['available'])
 
 
 def choose_environment():
@@ -28,20 +28,24 @@ def choose_environment():
             print(f'{number} — {namespace} — {definition}')
         print('q — quitter')
         try:
-            choice = input('Votre choix (1, 2 ou 3) > ').strip().lower()
+            choice = input('Votre choix (' + ', '.join(ENVIRONMENTS) + ') > ').strip().lower()
         except (EOFError, KeyboardInterrupt):
             print('\nFin de session.')
             return None
         if choice in ('q', '/q', 'quit', 'exit'):
             return None
         if choice not in ENVIRONMENTS:
-            print('Saisissez 1, 2 ou 3.')
+            print('Saisissez ' + ', '.join(ENVIRONMENTS) + '.')
             continue
         model, namespace, _ = ENVIRONMENTS[choice]
-        if model != 'tls':
+        if model not in AVAILABLE:
             print(f'{namespace} — Work in progress.')
             continue
         return model
+
+
+def presentation(session):
+    return session.descriptor.get('presentation', {})
 
 
 def show(session):
@@ -49,124 +53,115 @@ def show(session):
         print(session.pending_clarification)
         return
     result = session.result()
-    print("\nDemande -> paramètres -> contrôle -> TLS -> résultats")
+    ui = presentation(session)
+    print("\nDemande -> paramètres -> contrôle -> " + ui.get('short_name', 'simulateur') + " -> résultats")
     decisions = {
-        "execute": "Les paramètres passent les contrôles. " + ('Le calcul demandé peut démarrer.' if session.run_requested else 'Vous pouvez demander le calcul en une phrase.'),
-        "clarify": "Il reste des informations à préciser avant le calcul.",
-        "refuse": "TLS ne permet pas de traiter cette demande.",
+        'execute': 'Les paramètres passent les contrôles. ' + ('Le calcul demandé peut démarrer.' if session.run_requested else 'Vous pouvez demander le calcul en une phrase.'),
+        'clarify': 'Il reste des informations à préciser avant le calcul.',
+        'refuse': 'Le logiciel ne permet pas de traiter cette demande.',
     }
     print(decisions.get(result.decision, result.decision))
-    inputs = session.scenario.inputs
-    geometry = []
-    for name, label, unit in (
-        ("length_m", "longueur", "m"),
-        ("n_tubes", "nombre de tubes", ""),
-        ("n_lanes_per_tube", "voies par tube", ""),
-    ):
-        record = inputs.get(name)
+    summary = []
+    for name in ui.get('summary_fields', []):
+        record = session.scenario.inputs.get(name)
         if record:
-            geometry.append(f"{label} : {record.value} {unit}".strip())
-    if geometry:
-        print("Tunnel : " + "; ".join(geometry) + ".")
-    missing = [issue.field for issue in result.issues if issue.code == "missing"]
+            label, unit, _ = describe(name, session.descriptor)
+            summary.append(f'{label} : {record.value} {unit}')
+    if summary:
+        print(ui.get('summary_title', 'Scénario') + ' : ' + '; '.join(summary) + '.')
+    missing = [issue.field for issue in result.issues if issue.code == 'missing']
     if missing:
-        names = [describe(field.split('.')[1])[0] for field in missing[:4]]
-        print("À préciser : " + ", ".join(names) + (f" et {len(missing)-4} autres champs." if len(missing)>4 else '.'))
-        print("Pour un premier essai : « prends les valeurs par défaut ». Le calcul demandé attend les informations suffisantes.")
-    unaccepted = [issue for issue in result.issues if issue.code == "unaccepted_assumption"]
+        names = [describe(field.split('.')[1], session.descriptor)[0] for field in missing[:4]]
+        print('À préciser : ' + ', '.join(names) + (f' et {len(missing)-4} autres champs.' if len(missing)>4 else '.'))
+        if any('default' in spec for group in ('inputs', 'experiment') for spec in session.descriptor.get(group, {}).values()):
+            print('Pour un premier essai : « prends les valeurs par défaut ». Le calcul demandé attend les informations suffisantes.')
+    unaccepted = [issue for issue in result.issues if issue.code == 'unaccepted_assumption']
     if unaccepted:
-        print(
-            f"{len(unaccepted)} hypothèses attendent votre accord. "
-            "Consultez /details, puis /accept pour accepter le profil proposé."
-        )
+        print(f'{len(unaccepted)} hypothèses attendent votre accord. Consultez /details, puis /accept pour accepter le profil proposé.')
     for issue in result.issues:
-        if issue.code not in ("missing", "unaccepted_assumption"):
-            print(f"À vérifier : {issue.field} ({issue.code}).")
+        if issue.code not in ('missing', 'unaccepted_assumption'):
+            print(f'À vérifier : {issue.field} ({issue.code}).')
 
 
 def details(session):
     print(f"{'Paramètre':28} | {'Valeur':22} | {'Unité':16} | État")
     print('-' * 90)
-    for group in ("inputs", "experiment"):
-        for name in session.descriptor[group]:
+    for group in ('inputs', 'experiment'):
+        for name in session.descriptor.get(group, {}):
             record = getattr(session.scenario, group).get(name)
-            label, unit, _ = describe(name)
+            label, unit, _ = describe(name, session.descriptor)
             status = 'manquant' if not record else ('fourni' if record.origin == 'provided' else ('hypothèse validée' if record.accepted else 'à valider'))
             print(f"{label:28} | {record.value if record else '?'!s:22} | {unit:16} | {status}")
-    print("\nComprendre une variable : /e altitude_m. Modifier : /set inputs.altitude_m 10 (en m).")
-    sources = sorted({record.source for group in ('inputs', 'experiment') for record in getattr(session.scenario, group).values() if record.source})
-    for source in sources:
+    print('\nComprendre une variable : /e NOM_VARIABLE ; modifier : /set GROUPE.VARIABLE VALEUR.')
+    for source in sorted({record.source for group in ('inputs', 'experiment') for record in getattr(session.scenario, group).values() if record.source}):
         print('Source des hypothèses :', source)
 
 
 def explain(session, name):
     name = name.split('.')[-1]
     for group in ('inputs', 'experiment'):
-        if name in session.descriptor[group]:
-            label, unit, definition = describe(name)
-            print(f"{label} — unité : {unit}. {definition}")
+        if name in session.descriptor.get(group, {}):
+            label, unit, definition = describe(name, session.descriptor)
+            print(f'{label} — unité : {unit}. {definition}')
             spec = session.descriptor[group][name]
             if 'values' in spec:
                 print('Choix possibles : ' + ', '.join(spec['values']))
-            print(f"Modifier : /set {group}.{name} VALEUR (valeur dans cette unité ; catégorie entre guillemets).")
+            print(f'Modifier : /set {group}.{name} VALEUR (valeur dans cette unité ; catégorie entre guillemets).')
             record = getattr(session.scenario, group).get(name)
             if record and record.source:
                 print('Source :', record.source)
             return
-    print('Variable inconnue. /d affiche le tableau ; exemples : length_m, altitude_m, traffic_level.')
+    print('Variable inconnue. /d affiche les variables déclarées.')
 
 
 def results_table(session, target, medians):
-    import pandas as pd
+    ui = presentation(session)
+    config = ui.get('results', {})
+    manifest = json.loads((target / 'manifest.json').read_text(encoding='utf-8'))
+    recorded = manifest['scenario']['experiment']
+    context = [f"{describe(name, session.descriptor)[0]} : {recorded[name]['value']} {describe(name, session.descriptor)[1]}"
+               for name in config.get('context_fields', []) if name in recorded]
+    print('\nRésultats simulés' + (': ' + '; '.join(context) if context else '') + '.')
+    if config.get('table'):
+        import pandas as pd
 
-    means = pd.read_csv(target / 'kpis.csv').mean(numeric_only=True)
-    recorded = json.loads((target / 'manifest.json').read_text(encoding='utf-8'))['scenario']['experiment']
-    print(f"\nRésultats simulés : {recorded['n_days']['value']} jours, "
-          f"{recorded['n_runs']['value']} réalisations.")
-    print(f"{'Indicateur':30} | {'Médiane':12} | {'Moyenne':12} | Unité")
-    for name, label, unit in (
-        ('total_mwh', 'Énergie sur la période', 'MWh'),
-        ('annualized_mwh', 'Énergie annualisée', 'MWh/an'),
-        ('peak_kw', 'Pic au pas de calcul', 'kW'),
-        ('specific_kwh_m_year', 'Énergie par longueur', 'kWh/(m·an)'),
-        ('load_factor', 'Facteur de charge', '1 (sans dimension)'),
-    ):
-        print(f"{label:30} | {medians[name]:12.3f} | {means[name]:12.3f} | {unit}")
-    print('Moyenne et médiane entre réalisations. Annualisation par 365/durée ; spécifique tous tubes, par mètre de tunnel.')
-    print('Données synthétiques sans calibration terrain. p10–p90 : dispersion horaire, pas intervalle de confiance.')
+        means = pd.read_csv(target / config['table']).mean(numeric_only=True)
+        print(f"{'Indicateur':30} | {'Médiane':12} | {'Moyenne':12} | Unité")
+        for name, label, unit in config.get('indicators', []):
+            print(f'{label:30} | {medians[name]:12.3f} | {means[name]:12.3f} | {unit}')
+    for note in config.get('notes', []):
+        print(note)
     print('Résultats et provenance :', target)
-    print('Pour une étude plus détaillée, utiliser le simulateur TLS complet : ' +
-          os.environ.get('WEBSEMANTIC_TLS_URL', session.descriptor['software']['repository']))
+    url = os.environ.get(config.get('url_environment', 'WEBSEMANTIC_SIMULATOR_URL'), session.descriptor['software']['repository'])
+    print('Pour une étude plus détaillée, utiliser le simulateur complet : ' + url)
 
 
 def suggestions(session, has_results=False):
+    ui = presentation(session)
     missing = [issue for issue in session.result().issues if issue.code == 'missing']
     if missing:
         field = missing[0].field.split('.')[-1]
-        label, unit, _ = describe(field)
-        fourth = (f"Préciser {label.lower()} ({unit}) et comprendre son rôle.", '/e ' + field)
+        label, unit, _ = describe(field, session.descriptor)
+        fourth = (f'Préciser {label.lower()} ({unit}) et comprendre son rôle.', '/e ' + field)
     else:
         fourth = ('Revoir les hypothèses, leurs unités et leurs sources avant de calculer.', '/details')
-    fifth = ('Comprendre les hypothèses d’accidents et de pollution.', '/events')
+    fifth = tuple(ui.get('event_suggestion', ['Comprendre les limites du modèle.', '/uncertainty']))
     if session.geographic_context:
         fifth = (f"Vérifier les hypothèses pour {session.geographic_context['city']}, les unités et leurs sources.", '/details')
     if has_results:
         fifth = ('Comprendre la dispersion et les limites des résultats déjà calculés.', '/uncertainty')
-    return [
-        ('Préciser l’objectif : énergie consommée sur une période (MWh).', "Je souhaite estimer l'énergie électrique totale du tunnel sur la période simulée."),
-        ('Préciser l’objectif : puissance maximale appelée (kW).', 'Je souhaite estimer la puissance électrique maximale du tunnel au pas de calcul.'),
-        ('Préciser l’objectif : énergie par mètre de tunnel (kWh/(m·an)).', "Je souhaite obtenir l'énergie annualisée par mètre de tunnel, tous tubes compris."),
-        fourth, fifth,
-    ]
+    initial = [tuple(item) for item in ui.get('suggestions', [])[:3]]
+    fallback = [('Comprendre le périmètre du logiciel.', '/show'), ('Examiner les paramètres déclarés.', '/details'), ('Comprendre les hypothèses du profil.', '/profile')]
+    initial += fallback[len(initial):]
+    return initial + [fourth, fifth]
 
 
 def run_if_ready(session, args, descriptor):
     if not session.run_requested or session.pending_clarification or session.geographic_pending or session.result().decision != 'execute':
         return None
-    from websemantic.adapters.tls import run
 
     print('Les informations sont suffisantes : lancement du calcul demandé.')
-    target, medians = run(session.scenario, descriptor, args.workspace, args.output_dir)
+    target, medians = execute(session.scenario, descriptor, args.workspace, args.output_dir)
     session.run_requested = False
     if getattr(session, 'geographic_context', None):
         (target / 'geographic-context.json').write_text(json.dumps(session.geographic_context, ensure_ascii=False, indent=2), encoding='utf-8')
@@ -174,7 +169,7 @@ def run_if_ready(session, args, descriptor):
         (target / 'web-context.json').write_text(json.dumps(session.web_reports, ensure_ascii=False, indent=2), encoding='utf-8')
     results_table(session, target, medians)
     (target / 'conversation.json').write_text(json.dumps({
-        'environment': 'websemantic.tls', 'llm': args.llm, 'calls': session.calls, 'history': session.history,
+        'environment': presentation(session).get('namespace', args.model), 'llm': args.llm, 'calls': session.calls, 'history': session.history,
         'validation': asdict(session.result()),
     }, ensure_ascii=False, indent=2), encoding='utf-8')
     if args.open_results and os.name == 'nt':
@@ -188,23 +183,23 @@ def answer_from_web(session, question, args):
     load_private_key(args.workspace)
     session.calls += 1
     state = {name: {'value': record.value, 'unit': record.unit} for name, record in session.scenario.inputs.items()}
-    report = web_research.research(question, args.llm, state)
+    report = web_research.research(question, args.llm, state, descriptor=session.descriptor)
     session.web_reports.append(report)
     session.history.append({'user': question, 'assistant': report['answer'], 'web_context': report})
     output_root = Path(getattr(args, 'output_dir', None) or args.workspace / 'runs')
     output_root.mkdir(parents=True, exist_ok=True)
     with (output_root / 'documentation.jsonl').open('a', encoding='utf-8') as journal:
         journal.write(json.dumps(report, ensure_ascii=False) + '\n')
-    web_research.show_report(report)
+    web_research.show_report(report, presentation(session).get("short_name", "WebSemantic"))
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(
-        description="Websemantic : conversation Gemini et TLS local."
+        description="Websemantic : conversation et simulation scientifique locale."
     )
     parser.add_argument("command", choices=["models", "describe", "chat"])
-    parser.add_argument("name", nargs="?", default="tls")
-    parser.add_argument("--model", choices=["tls", "lql", "pvlib"], help="Environnement pour un démarrage direct ou une demande non interactive.")
+    parser.add_argument("name", nargs="?", default=DEFAULT_MODEL)
+    parser.add_argument("--model", choices=[item[0] for item in ENVIRONMENTS.values()], help="Environnement pour un démarrage direct ou une demande non interactive.")
     parser.add_argument('--direct', action='store_true', help='Démarrage sans menu pour les scripts.')
     parser.add_argument("--llm", default="gemini-3.5-flash-lite")
     parser.add_argument("--max-calls", type=int, default=0, help="0 : sans plafond local (quota fournisseur inchangé).")
@@ -223,11 +218,13 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if args.command == "models":
         for model, namespace, definition in ENVIRONMENTS.values():
-            print(f"{namespace} — {definition} — " + ('disponible' if model == 'tls' else 'Work in progress'))
+            print(f"{namespace} — {definition} — " + ('disponible' if model in AVAILABLE else 'Work in progress'))
         return 0
-    if args.name != "tls" or args.max_calls < 0:
-        parser.error("TLS seulement; --max-calls doit être positif ou zéro.")
-    if args.model in ('lql', 'pvlib'):
+    if args.max_calls < 0:
+        parser.error("--max-calls doit être positif ou zéro.")
+    if args.name != DEFAULT_MODEL and args.model is None:
+        args.model = args.name
+    if args.model is not None and args.model not in AVAILABLE:
         print(f'websemantic.{args.model} — Work in progress.')
         if args.once or args.direct or args.command != 'chat':
             return 2
@@ -236,14 +233,10 @@ def main(argv=None):
         args.model = choose_environment()
         if args.model is None:
             return 0
-    args.model = args.model or 'tls'
+    args.model = args.model or DEFAULT_MODEL
     try:
-        descriptor = yaml.safe_load(
-            (args.workspace / "descriptors/tls/descriptor.yaml").read_text(
-                encoding="utf-8"
-            )
-        )
-    except OSError:
+        descriptor = load_descriptor(args.workspace, args.model)
+    except (OSError, ValueError, TypeError):
         print(
             "Descripteur introuvable : utiliser --workspace avec le dossier semantic-sim-layer."
         )
@@ -252,10 +245,11 @@ def main(argv=None):
         print(yaml.safe_dump(descriptor, allow_unicode=True, sort_keys=False))
         return 0
     session = Session(descriptor)
+    namespace = presentation(session).get("namespace", "websemantic." + args.model)
     last_output = None
     choices = []
     print(
-        f"websemantic.tls / {args.llm}. " + (f"Maximum {args.max_calls} appels." if args.max_calls else 'Sans plafond local de conversation ; quotas Gemini applicables.')
+        f"{namespace} / {args.llm}. " + (f"Maximum {args.max_calls} appels." if args.max_calls else 'Sans plafond local de conversation ; quotas Gemini applicables.')
     )
     print('Outils : /s 5 suggestions | /d tableau | /e variable | /web question | /p proposer | /v valider | /r calculer | /q quitter')
     print(
@@ -264,7 +258,7 @@ def main(argv=None):
     while True:
         try:
             may_run = False
-            line = args.once if args.once else input("\nwebsemantic.tls > ").strip()
+            line = args.once if args.once else input("\n" + namespace + " > ").strip()
         except (EOFError, KeyboardInterrupt):
             print("\nFin de session.")
             return 0
@@ -291,16 +285,14 @@ def main(argv=None):
                     print(f'{number}. {label}')
                 print('Saisissez 1 à 5, ou écrivez votre question. Les choix 1–3 demandent un calcul, soumis aux contrôles et à la validation des hypothèses.')
             elif line == '/events':
-                explain(session, 'accident_probability_per_day')
-                explain(session, 'pollution_probability_per_day')
+                for field in presentation(session).get('events', []):
+                    explain(session, field)
             elif line == '/uncertainty':
-                print('p10–p90 décrit la dispersion entre trajectoires simulées, pas un intervalle de confiance. '
-                      'Le modèle couvre bruit, trafic et événements ; erreurs de paramètres, de structure et de calibration ne sont pas couvertes. '
-                      'L’annualisation extrapole la période. /d permet de revoir les hypothèses.')
+                print(presentation(session).get('uncertainty_text', 'Consultez les limites et incertitudes déclarées du modèle.'))
             elif line == "/help":
                 print(
                     "/s (5 suggestions); /show (explication); /details (paramètres techniques); /profile (propose le profil); /accept (accepte ses valeurs); "
-                    "/web question (recherche documentaire); /set inputs.length_m 2000; /set experiment.n_days 365; /run; /quit"
+                    "/web question (recherche documentaire); /set GROUPE.VARIABLE VALEUR; /run; /quit"
                 )
             elif line == "/show":
                 show(session)
@@ -311,7 +303,7 @@ def main(argv=None):
             elif line.startswith('/web '):
                 answer_from_web(session, line.split(maxsplit=1)[1], args)
             elif line == '/web':
-                print('Exemple : /web CETU rôle de la ventilation et de l’éclairage dans la consommation électrique d’un tunnel')
+                print('Exemple : /web ' + presentation(session).get('web_example', 'sources scientifiques du modèle'))
             elif line == "/profile":
                 session.propose_profile()
                 may_run = True
@@ -370,7 +362,7 @@ def main(argv=None):
                     if args.once:
                         return 0
                     continue
-                place = location(line)
+                place = location(line, descriptor)
                 if place:
                     session.geographic_pending = True
                     session.pending_clarification = 'Le contexte géographique demandé doit être consulté et validé avant le calcul.'
@@ -382,7 +374,7 @@ def main(argv=None):
                     session.apply(line, parsed)
                     session.pending_clarification = 'Analyse géographique en attente ; aucun calcul.'
                     session.calls += 1
-                    report = research(place, args.llm)
+                    report = research(place, args.llm, descriptor)
                     apply_report(session, line, report)
                     show_report(session)
                     show(session)
@@ -391,7 +383,7 @@ def main(argv=None):
                     continue
                 local_message = session.local_intent(line)
                 if local_message:
-                    print('TLS >', local_message)
+                    print(presentation(session).get('short_name', 'WebSemantic') + ' >', local_message)
                     show(session)
                     output = run_if_ready(session, args, descriptor)
                     if output:

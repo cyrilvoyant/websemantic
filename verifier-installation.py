@@ -52,20 +52,27 @@ def runtime(root):
     git = shutil.which('git')
     if not git:
         return ['Git est introuvable : il est nécessaire pour vérifier la version du simulateur.']
-    backend = root / 'external/tunnel-load-simulator'
-    descriptor = root / 'descriptors/tls/descriptor.yaml'
-    if not descriptor.is_file() or not (backend / 'src/tunnel_load_simulator/simulator.py').is_file():
-        return ['Les fichiers du simulateur TLS ou son descripteur sont absents.']
     try:
-        import yaml
+        from websemantic.registry import environments, load_descriptor
 
-        expected = yaml.safe_load(descriptor.read_text(encoding='utf-8'))['software']['commit']
+        active = next(item for item in environments() if item['available'])
+        descriptor = load_descriptor(root, active['id'])
+        metadata = descriptor.get('runtime', {})
+        if 'backend_path' not in metadata:
+            return []
+        backend = root / metadata['backend_path']
+        marker = backend / metadata['backend_marker']
+        if not marker.is_file():
+            return ['Les fichiers du simulateur ou son descripteur sont absents.']
+        expected = descriptor['software']['commit']
         commit = subprocess.check_output([git, '-C', str(backend), 'rev-parse', 'HEAD'], text=True, stderr=subprocess.DEVNULL, timeout=10).strip()
         dirty = subprocess.check_output([git, '-C', str(backend), 'status', '--porcelain', '--untracked-files=no'], text=True, stderr=subprocess.DEVNULL, timeout=10)
         if commit != expected or dirty:
-            return ['Le simulateur TLS ne correspond pas à la version de recherche prévue, ou ses sources ont été modifiées.']
-    except (OSError, subprocess.SubprocessError, KeyError, ValueError):
-        return ['La vérification du simulateur TLS est impossible.']
+            return ['Le simulateur ne correspond pas à la version de recherche prévue, ou ses sources ont été modifiées.']
+    except FileNotFoundError:
+        return ["Les fichiers du simulateur ou son descripteur sont absents."]
+    except (OSError, subprocess.SubprocessError, KeyError, ValueError, TypeError, StopIteration):
+        return ['La vérification du simulateur est impossible.']
     return []
 
 

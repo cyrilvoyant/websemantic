@@ -7,7 +7,7 @@ from rdflib import Graph
 
 from websemantic.adapters.tls import run
 from websemantic.cli import main, suggestions
-from websemantic.semantics import DEFINITIONS, describe
+from websemantic.semantics import definitions, describe
 from websemantic.session import ClarificationNeeded, Session
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -52,8 +52,8 @@ def test_high_coefficients_proposal_is_not_silent_acceptance(session):
 
 
 def test_vocabulary_covers_every_parameter(session):
-    assert set(DEFINITIONS) == set(session.descriptor['inputs']) | set(session.descriptor['experiment'])
-    assert describe('aux_kw_per_km_tube')[1] == 'kW/(km·tube)'
+    assert set(definitions(session.descriptor)) == set(session.descriptor['inputs']) | set(session.descriptor['experiment'])
+    assert describe('aux_kw_per_km_tube', session.descriptor)[1] == 'kW/(km·tube)'
 
 
 def test_output_destination_and_rdf_without_thirty_run_limit(session, tmp_path):
@@ -159,14 +159,14 @@ def test_replay_user_conversation_and_open_results(monkeypatch, capsys, tmp_path
     monkeypatch.setattr('builtins.input', lambda _: next(lines))
     opened = []
     monkeypatch.setattr(cli.os, 'startfile', lambda path: opened.append(path), raising=False)
-    from websemantic.geography import ALLOWED
+    allowed = yaml.safe_load((ROOT / "descriptors/tls/descriptor.yaml").read_text(encoding="utf-8"))["geography"]["fields"]
     monkeypatch.setattr(cli, 'extract', lambda *args, **kwargs: ({'task': args[1]['tasks']['supported'][0], 'updates': []}, {}))
     monkeypatch.setattr(cli, 'research', lambda *args: {
         'city': 'Ajaccio', 'summary': 'Profil de test non calibré.',
         'sources': [{'url': 'https://example.org', 'status': 'consulted', 'retrieved_at': '2026-10-03'}],
         'topics': [{'topic': name, 'explanation': 'Contexte de test.'} for name in ('trafic', 'pollution', 'accidents', 'pics')],
         'proposals': [{'field': name, 'value': str(value), 'rationale': 'Hypothèse de test.', 'sources': [0]}
-                      for name, value in zip(ALLOWED, ('urban', 1, 8, 18, 1.4))],
+                      for name, value in zip(allowed, ('urban', 1, 8, 18, 1.4))],
     })
     assert main(['chat', '--direct', '--model', 'tls', '--workspace', str(ROOT), '--output-dir', str(tmp_path), '--open-results']) == 0
     text = capsys.readouterr().out
