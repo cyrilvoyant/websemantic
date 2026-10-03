@@ -39,6 +39,8 @@ The layer is agnostic. Supporting a new software only requires a **descriptor** 
 - pvlib is restricted to declared task profiles (e.g. `ModelChain`). Requests outside a profile are refused or flagged, never improvised.
 - No measured tunnel, PV or clinical data are used. Simulator outputs are computational references, not observations.
 
+**DOI policy**: software is cited by its concept DOI (all versions) and pinned by commit, because the pinned commits postdate the archived releases. TLS: concept `10.5281/zenodo.20080042` (v1.0.1: `20080043`). LQL-Equiv: concept `10.5281/zenodo.21948623` (v3.0.0: `21948624`).
+
 ## Repository layout
 
 ```
