@@ -155,4 +155,3 @@ ws:ventilation_type a skos:Concept ;
     skos:definition "Type de ventilation modélisé."@fr ;
     skos:prefLabel "Ventilation"@fr ;
     ws:unitSymbol "catégorie" .
-
