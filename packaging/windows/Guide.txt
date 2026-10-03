@@ -56,3 +56,14 @@ INSTALLER ET LANCER : DEUX ACTIONS DISTINCTES
 - Installer.cmd vérifie les composants. Il installe uniquement ce qui manque ou ne satisfait pas les versions minimales. Python 3.10 ou supérieur convient ; une version plus récente compatible est conservée. Les bibliothèques déjà présentes à une version suffisante ne sont pas réinstallées. Relancer Installer.cmd sur une installation complète effectue seulement des vérifications.
 - WebSemantic_TLS.cmd ouvre le programme sans installer quoi que ce soit. Avant de démarrer, il vérifie Python, les bibliothèques, Git et les sources TLS. S’il manque un composant, un message indique lequel et demande de lancer Installer.cmd.
 Le simulateur TLS reste volontairement fixé à la révision de recherche indiquée dans le descripteur : une autre version du simulateur n’est pas substituée automatiquement.
+
+RECHERCHE WEB TECHNIQUE
+La consultation d’Internet est autorisée au-delà des villes : éclairage, ventilation, unités, méthodes, références et données externes. Essayez :
+/web CETU rôle de la ventilation et de l’éclairage dans la consommation électrique d’un tunnel
+Recherche sur le web des références pour justifier les hypothèses de ventilation.
+Gemini peut également déclencher une recherche documentaire quand votre question nécessite des informations externes. Les étapes internes restent masquées ; la réponse en français cite les sources, leurs dates de consultation et les limites. Une recherche ne change aucun paramètre et ne lance aucun calcul.
+Le programme utilise une recherche publique Bing et lit jusqu’à quatre pages textuelles, puis Gemini les synthétise. Les pages inaccessibles sont signalées ; les PDF ne sont pas encore lus. Si la recherche échoue, aucune information n’est inventée. La recherche publique peut varier ou devenir indisponible.
+Les recherches sont enregistrées dans documentation.jsonl dans le dossier des résultats, même sans calcul. Elles sont aussi jointes au prochain calcul dans web-context.json.
+
+LICENCE DU CODE
+Le code actuel WebSemantic_TLS de Cyril Voyant est sous PolyForm Noncommercial 1.0.0 : utilisations non commerciales et usages explicitement autorisés par cette licence, avec notices d’attribution à conserver. Texte intégral dans application/LICENSE. Cette licence réserve les autres usages commerciaux à une autorisation séparée. Les composants tiers, notamment TLS sous MIT, gardent leur propre licence. Les versions de WebSemantic déjà diffusées sous MIT conservent les droits accordés à l’époque.

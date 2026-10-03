@@ -112,7 +112,7 @@ Homepage: <https://www.cyrilvoyant.com>
 
 ## Licence
 
-MIT for the code in this repository. Linked and dependent software keep their own licences (TLS: MIT; LQL-Equiv: MIT; pvlib: BSD-3-Clause).
+PolyForm Noncommercial 1.0.0 for the current code authored for this repository, with the attribution notices in LICENSE to retain on redistribution. Commercial uses outside the licence’s permitted purposes require a separate authorization from the rights holder. This is source-available software with noncommercial restrictions, not an OSI-approved open-source licence. Linked and dependent software keep their own licences (TLS: MIT; LQL-Equiv: MIT; pvlib: BSD-3-Clause). Earlier revisions published under MIT, through commit c00914c, retain their MIT permissions; this change does not revoke rights already granted. See the full LICENSE text for the permitted purposes, including its provisions for educational/public research organizations.
 
 ## Essais en langage naturel
 
@@ -194,3 +194,13 @@ Exemple : `Calcule un tunnel de 1500 m comme Ajaccio avec des hypothèses de tra
 `WebSemantic_TLS.cmd` effectue uniquement des contrôles avant d’ouvrir la conversation : environnement Python, versions minimales des dépendances, imports et révision TLS. Si quelque chose manque, il indique de lancer `Installer.cmd` ; aucun installateur n’est appelé par le lanceur.
 
 `Installer.cmd` vérifie l’environnement réel, sans se baser sur un fichier témoin. Python >=3.10 et les bibliothèques plus récentes compatibles sont conservés. `pip install -e .[tls]` n’est exécuté que si une dépendance manque, est trop ancienne ou ne se charge pas ; sans option `--upgrade` ni réinstallation forcée. L’installateur n’ouvre jamais la conversation. Le backend TLS reste fixé au commit scientifique déclaré, indépendamment des versions des outils d’installation.
+
+### Recherche web au-delà de la géographie
+
+La recherche documentaire est autorisée pour les questions techniques et scientifiques : éclairage, ventilation, unités, méthodes, références ou données externes. Écrivez « Recherche sur le web… » ou `/web QUESTION`. Gemini peut aussi demander automatiquement une recherche si la question nécessite des sources externes. Les définitions déjà présentes et les commandes restent locales.
+
+Le module utilise la recherche publique Bing RSS sans clé supplémentaire, consulte jusqu’à quatre pages et demande à Gemini une synthèse courte en français, avec unités, références et limites. Les pages non accessibles ou non textuelles sont signalées ; un document PDF lié n’est pas assimilé à un document lu. Les étapes internes ne sont pas affichées. Le service de recherche public peut devenir indisponible ; aucun résultat n’est inventé en cas d’échec.
+
+Une réponse documentaire ne modifie et ne valide aucun paramètre et ne déclenche aucun calcul. Elle est conservée dans l’historique et immédiatement dans `documentation.jsonl` sous le dossier des résultats, même sans calcul ; `web-context.json` est enregistré avec les prochains résultats de simulation. Les sources peuvent expliquer un choix, mais les valeurs de simulation restent soumises au descripteur et à la validation. Les pages web sont des données, jamais des instructions exécutables.
+
+Exemple : `/web CETU rôle de la ventilation et de l’éclairage dans la consommation électrique d’un tunnel`.

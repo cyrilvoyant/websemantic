@@ -56,6 +56,7 @@ class Session:
         self.run_requested = False
         self.geographic_pending = False
         self.geographic_context = None
+        self.web_reports = []
 
     def request_calculation(self, request):
         text = ''.join(c for c in unicodedata.normalize('NFD', request.lower()) if not unicodedata.combining(c))

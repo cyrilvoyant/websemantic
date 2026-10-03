@@ -8,7 +8,7 @@ version = "0.0.1"
 description = "Software-agnostic semantic layer from intent to qualified simulated data (research prototype)"
 readme = "README.md"
 requires-python = ">=3.10"
-license = "MIT"
+license = "PolyForm-Noncommercial-1.0.0"
 authors = [{ name = "Cyril Voyant", email = "cyril.voyant@minesparis.psl.eu" }]
 dependencies = [
   "pydantic>=2.6",

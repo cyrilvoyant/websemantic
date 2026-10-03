@@ -8,6 +8,7 @@ from pathlib import Path
 
 import yaml
 
+from websemantic import web_research
 from websemantic.gemini import GeminiError, extract, load_private_key
 from websemantic.geography import apply_report, location, research, show_report
 from websemantic.semantics import describe
@@ -140,6 +141,8 @@ def run_if_ready(session, args, descriptor):
     session.run_requested = False
     if getattr(session, 'geographic_context', None):
         (target / 'geographic-context.json').write_text(json.dumps(session.geographic_context, ensure_ascii=False, indent=2), encoding='utf-8')
+    if session.web_reports:
+        (target / 'web-context.json').write_text(json.dumps(session.web_reports, ensure_ascii=False, indent=2), encoding='utf-8')
     results_table(session, target, medians)
     (target / 'conversation.json').write_text(json.dumps({
         'llm': args.llm, 'calls': session.calls, 'history': session.history,
@@ -148,6 +151,22 @@ def run_if_ready(session, args, descriptor):
     if args.open_results and os.name == 'nt':
         os.startfile(target)
     return target, medians
+
+
+def answer_from_web(session, question, args):
+    if args.max_calls and session.calls >= args.max_calls:
+        raise GeminiError('Plafond local atteint ; la recherche documentaire nécessite un appel Gemini.')
+    load_private_key(args.workspace)
+    session.calls += 1
+    state = {name: {'value': record.value, 'unit': record.unit} for name, record in session.scenario.inputs.items()}
+    report = web_research.research(question, args.llm, state)
+    session.web_reports.append(report)
+    session.history.append({'user': question, 'assistant': report['answer'], 'web_context': report})
+    output_root = Path(getattr(args, 'output_dir', None) or args.workspace / 'runs')
+    output_root.mkdir(parents=True, exist_ok=True)
+    with (output_root / 'documentation.jsonl').open('a', encoding='utf-8') as journal:
+        journal.write(json.dumps(report, ensure_ascii=False) + '\n')
+    web_research.show_report(report)
 
 
 def main(argv=None):
@@ -199,7 +218,7 @@ def main(argv=None):
     print(
         f"WebSemantic_TLS / {args.llm}. " + (f"Maximum {args.max_calls} appels." if args.max_calls else 'Sans plafond local de conversation ; quotas Gemini applicables.')
     )
-    print('Outils : /s 5 suggestions | /d tableau | /e variable | /p proposer | /v valider | /r calculer | /q quitter')
+    print('Outils : /s 5 suggestions | /d tableau | /e variable | /web question | /p proposer | /v valider | /r calculer | /q quitter')
     print(
         "Un calcul demandé démarre dès que les informations et validations sont suffisantes. /s pour vous guider."
     )
@@ -222,7 +241,7 @@ def main(argv=None):
             if line.startswith('\\'):
                 line = '/' + line[1:]
             aliases = {'/r': '/run', '/v': '/accept', '/d': '/details', '/p': '/profile', '/a': '/help', '/q': '/quit', '/s': '/suggest'}
-            if line.startswith('/') and not line.startswith(('/set ', '/e ')):
+            if line.startswith('/') and not line.startswith(('/set ', '/e ', '/web ')):
                 line = aliases.get(line.split()[0], line.split()[0])
             if line in ("/quit", "/exit"):
                 return 0
@@ -242,7 +261,7 @@ def main(argv=None):
             elif line == "/help":
                 print(
                     "/s (5 suggestions); /show (explication); /details (paramètres techniques); /profile (propose le profil); /accept (accepte ses valeurs); "
-                    "/set inputs.length_m 2000; /set experiment.n_days 365; /run; /quit"
+                    "/web question (recherche documentaire); /set inputs.length_m 2000; /set experiment.n_days 365; /run; /quit"
                 )
             elif line == "/show":
                 show(session)
@@ -250,6 +269,10 @@ def main(argv=None):
                 details(session)
             elif line.startswith('/e '):
                 explain(session, line.split(maxsplit=1)[1])
+            elif line.startswith('/web '):
+                answer_from_web(session, line.split(maxsplit=1)[1], args)
+            elif line == '/web':
+                print('Exemple : /web CETU rôle de la ventilation et de l’éclairage dans la consommation électrique d’un tunnel')
             elif line == "/profile":
                 session.propose_profile()
                 may_run = True
@@ -282,6 +305,12 @@ def main(argv=None):
             elif line.startswith("/"):
                 print("Commande inconnue. /help")
             else:
+                if web_research.explicitly_requested(line):
+                    answer_from_web(session, line, args)
+                    if args.once:
+                        return 0
+                    continue
+                previous_run_requested = session.run_requested
                 session.request_calculation(line)
                 if line.lower().strip() in ('annule le calcul', 'ne calcule pas', 'stop le calcul'):
                     print('Demande de calcul en attente annulée. Le scénario est conservé.')
@@ -343,6 +372,12 @@ def main(argv=None):
                 load_private_key(args.workspace)
                 state = {group: {name: {'value': record.value, 'accepted': record.accepted, 'origin': record.origin} for name, record in getattr(session.scenario, group).items()} for group in ('inputs', 'experiment')}
                 parsed, _usage = extract(line, descriptor, session.history, args.llm, state=state)
+                if parsed.get('needs_web') is True:
+                    session.run_requested = previous_run_requested
+                    answer_from_web(session, line, args)
+                    if args.once:
+                        return 0
+                    continue
                 session.apply(line, parsed)
                 print("Gemini >", parsed.get("message", ""))
                 print(
@@ -366,7 +401,7 @@ def main(argv=None):
                 return 1
         finally:
             if not args.once:
-                print("\nOutils : /s suggestions | /d tableau et unités | /e variable | /p proposer | /v valider | /r calculer | /set modifier | /q quitter")
+                print("\nOutils : /s suggestions | /d tableau et unités | /e variable | /web question | /p proposer | /v valider | /r calculer | /set modifier | /q quitter")
 
 
 if __name__ == "__main__":

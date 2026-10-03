@@ -60,7 +60,10 @@ def fetch_source(item):
     try:
         request = urllib.request.Request(url, headers={'User-Agent': 'WebSemantic-TLS-research/0.1'})
         with urllib.request.urlopen(request, timeout=12) as response:
-            body = response.read(350000).decode('utf-8', errors='replace')
+            content_type = response.headers.get_content_type()
+            if content_type not in ('text/html', 'text/plain', 'application/json', 'application/xhtml+xml'):
+                raise ValueError
+            body = response.read(350000).decode(response.headers.get_content_charset() or 'utf-8', errors='replace')
             record['url'] = response.url
         if topic == 'geography':
             facts = json.loads(body)
