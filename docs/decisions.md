@@ -9,6 +9,7 @@
 | 2026-10-03 | Original repositories are never modified, neither locally nor on GitHub, and their deployments (Streamlit, stlite) are untouched. A new dedicated repository carries the semantic layer. | Cyril |
 | 2026-10-03 | Original software is linked as pinned git submodules, not copied. | Cyril, Claude |
 | 2026-10-03 | Cases: TLS (development), LQL-Equiv and pvlib (held-out). pvlib is used unmodified as a pinned dependency (BSD-3-Clause) and restricted to declared task profiles. | Cyril, Claude |
+| 2026-10-03 | Co-authors: H. El-Houari, D. Julian, N. Fichaux. | Cyril |
 | 2026-10-03 | Core frozen after TLS (`core-frozen` tag) to test genericity. | Claude, pending Codex |
 
-Open questions: repository name; author list; MCP or plain function calling; first pvlib profile (`ModelChain` or a simpler chain); target journal.
+Open questions: Nicolas Fichaux affiliation and ORCID; MCP or plain function calling; first pvlib profile (`ModelChain` or a simpler chain); target journal.

@@ -9,7 +9,11 @@
   "codeRepository": "https://github.com/cyrilvoyant/websemantic",
   "url": "https://www.cyrilvoyant.com",
   "developmentStatus": "concept",
-  "programmingLanguage": {"@type": "ComputerLanguage", "name": "Python", "version": ">=3.10"},
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "Python",
+    "version": ">=3.10"
+  },
   "author": [
     {
       "@type": "Person",
@@ -18,10 +22,46 @@
       "familyName": "Voyant",
       "email": "cyril.voyant@minesparis.psl.eu",
       "url": "https://person.cyrilvoyant.com",
-      "affiliation": {"@type": "Organization", "name": "Mines Paris, PSL University, O.I.E."}
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Mines Paris, PSL University, O.I.E."
+      }
+    },
+    {
+      "@type": "Person",
+      "givenName": "Haytham",
+      "familyName": "El-Houari",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Université Sidi Mohamed Ben Abdellah (USMBA), Fès, Morocco"
+      }
+    },
+    {
+      "@type": "Person",
+      "givenName": "Daniel",
+      "familyName": "Julian",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Centre de Cancérologie du Grand Montpellier, Montpellier, France"
+      }
+    },
+    {
+      "@type": "Person",
+      "givenName": "Nicolas",
+      "familyName": "Fichaux"
     }
   ],
-  "keywords": ["semantic web", "scientific software", "large language models", "simulation configuration", "provenance", "PROV-O", "SHACL", "FAIR", "reproducibility"],
+  "keywords": [
+    "semantic web",
+    "scientific software",
+    "large language models",
+    "simulation configuration",
+    "provenance",
+    "PROV-O",
+    "SHACL",
+    "FAIR",
+    "reproducibility"
+  ],
   "softwareRequirements": [
     "https://github.com/cyrilvoyant/tunnel-load-simulator (pinned 748e053e129669cf3e896d381e3c0ac01c763edd)",
     "https://github.com/cyrilvoyant/LQL-Equiv-web (pinned dfc9a338205b8864b8e3470c4ae245b019e88844)",

@@ -75,7 +75,12 @@ Project governance (Cyril / Codex / Claude) is kept in `trilog.md` in the parent
 
 ## Authors and citation
 
-Cyril Voyant, Mines Paris – PSL, O.I.E. ([ORCID 0000-0003-0242-7377](https://orcid.org/0000-0003-0242-7377)). The rest of the author list is to be confirmed. See [CITATION.cff](CITATION.cff).
+- Cyril Voyant, Mines Paris – PSL, O.I.E. ([ORCID 0000-0003-0242-7377](https://orcid.org/0000-0003-0242-7377))
+- Haytham El-Houari, Université Sidi Mohamed Ben Abdellah (USMBA), Fès, Morocco (co-author of TLS)
+- Daniel Julian, Centre de Cancérologie du Grand Montpellier (co-author of LQL-Equiv)
+- Nicolas Fichaux (origin of the user-intent demonstration, see [docs/context.md](docs/context.md))
+
+See [CITATION.cff](CITATION.cff).
 
 Homepage: <https://www.cyrilvoyant.com>
 
