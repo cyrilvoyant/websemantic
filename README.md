@@ -6,6 +6,8 @@
 
 ## Try the terminal PoC
 
+**Windows :** décompressez entièrement le package privé puis double-cliquez sur `Lancer-WebSemantic_TLS.cmd`. Le script `installer-et-lancer.ps1` crée l'environnement et installe les dépendances au premier lancement ; les suivants ouvrent directement le terminal. Git et Python 3.10 ou supérieur (3.12 conseillé) doivent être installés. Le `.env` inclus dans l'archive privée est lu automatiquement. Le clone GitHub ne contient aucune clé. Ne lancez pas le programme directement depuis le ZIP.
+
 **Installation on another Windows PC:** [French step-by-step guide](docs/installation-windows.md). Clone with submodules, install `.[tls]`, configure your own Gemini key, then run the terminal. No activation or GUI is required.
 
 See [PowerShell instructions](docs/terminal.md). On the configured local machine:
