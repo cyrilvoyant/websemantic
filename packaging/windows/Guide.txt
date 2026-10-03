@@ -9,14 +9,13 @@ Je souhaite estimer la consommation électrique d'un tunnel de 2 km, avec deux t
 prends les valeurs moyennes
 /d
 /e altitude_m
-/r
 
 OUTILS rappelés après chaque échange
 /d : tableau des variables, valeurs, unités et statuts
 /e altitude_m : explique une variable et comment la modifier
 /p : propose des valeurs pour les champs manquants
 /v : valide les hypothèses proposées
-/r : calcule et ouvre le dossier des résultats
+Calcul demandé : il démarre dès que les informations sont suffisantes et les hypothèses validées. Le dossier des résultats s’ouvre à la fin.
 /set inputs.altitude_m 25 : fixe l'altitude à 25 m
 /set inputs.lighting_type "LED fixed" : choisit une catégorie
 /q : quitte
@@ -37,8 +36,10 @@ les plus coûteux énergétiquement
 
 Les valeurs par défaut ne sont pas des moyennes mesurées. Ajaccio déclenche un profil documentaire limité (contexte urbain, proxy d'altitude littorale 10 m), à valider : pas les caractéristiques d'un tunnel réel. Les catégories coûteuses sont proposées selon les coefficients TLS, sans certifier un optimum.
 Les demandes imprécises doivent entraîner une clarification, jamais des données présentées comme mesurées. Une comparaison A/B reste à développer.
-La conversation n'a plus de plafond local ; les quotas Gemini restent applicables. Aucun calcul automatique après une phrase.
+La conversation n'a plus de plafond local ; les quotas Gemini restent applicables. Une demande de calcul est exécutée après vérification des paramètres et des hypothèses. Une question d’explication ne lance rien.
 Les résultats sont simulés : MWh sur la période, MWh/an extrapolés, kW de pointe, kWh/(m·an) tous tubes compris et facteur sans dimension. Moyenne et médiane sont distinguées. Le dossier contient CSV, manifeste et graphe RDF de provenance.
 Pour une étude plus détaillée : simulateur TLS original https://github.com/cyrilvoyant/tunnel-load-simulator (lien direct de l'interface à confirmer).
 
-/s ou \s : cinq suggestions pour préciser l'objectif ou revoir les hypothèses. Saisir 1 à 5, ou écrire sa question. Les choix ne valident rien et ne lancent pas le calcul.
+/s ou \s : cinq suggestions pour préciser l'objectif ou revoir les hypothèses. Saisir 1 à 5, ou écrire sa question. Les choix d’objectif peuvent demander un calcul ; aucune hypothèse n’est validée automatiquement.
+
+Pour demander le calcul : « calcule » ou « estime la consommation ». S’il manque des données, la demande reste en attente ; compléter ou valider avec /v la déclenche. « Annule le calcul » annule cette attente. /r reste un raccourci facultatif.

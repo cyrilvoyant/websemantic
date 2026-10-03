@@ -116,7 +116,7 @@ MIT for the code in this repository. Linked and dependent software keep their ow
 
 ## Essais en langage naturel
 
-Ces essais permettent de vérifier l'interprétation, les unités et les demandes de précision. Ouvrir une nouvelle session pour chaque essai indépendant. Une phrase seule ne doit jamais lancer un calcul : seul `/run` le fait.
+Ces essais permettent de vérifier l'interprétation, les unités et les demandes de précision. Ouvrir une nouvelle session pour chaque essai indépendant. Une demande de calcul démarre dès que les paramètres sont complets et les hypothèses validées. Une demande incomplète reste en attente ; les explications ne déclenchent aucun calcul.
 
 | Phrase à saisir | Comportement attendu |
 |---|---|
@@ -174,4 +174,7 @@ La conversation n'a plus de plafond local par défaut (`--max-calls 0`) ; les qu
 
 Pour une étude plus détaillée, utiliser le simulateur TLS original : https://github.com/cyrilvoyant/tunnel-load-simulator . Le lien direct de l'interface déployée reste à confirmer ; aucun domaine .net n'est deviné.
 
-Pour affiner l'objectif : taper /s ou \s. Cinq choix sont proposés selon les paramètres manquants, le contexte Ajaccio et la présence de résultats. Saisir 1 à 5 ou écrire une autre question. Les suggestions n'acceptent aucune hypothèse et ne lancent aucun calcul ; une question d'objectif sélectionnée peut utiliser Gemini, les explications de paramètres sont locales.
+Pour affiner l'objectif : taper /s ou \s. Cinq choix sont proposés selon les paramètres manquants, le contexte Ajaccio et la présence de résultats. Saisir 1 à 5 ou écrire une autre question. Les suggestions n'acceptent aucune hypothèse ; les choix d'objectif peuvent demander un calcul soumis aux contrôles ; une question d'objectif sélectionnée peut utiliser Gemini, les explications de paramètres sont locales.
+
+## Calcul à la demande
+« Calcule » ou « estime la consommation » suffit : le calcul démarre quand les informations passent les contrôles. Si elles manquent, la demande reste en attente et repart après complément ou validation des hypothèses. /run et /r sont facultatifs. « Annule le calcul » annule une demande en attente. Les explications, tableaux et suggestions ne relancent pas un calcul terminé.

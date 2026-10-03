@@ -103,6 +103,35 @@ def test_suggestion_shortcut_selection_is_local(monkeypatch, capsys):
     assert 'Gemini interprete' not in text
 
 
+def test_requested_calculation_waits_for_acceptance_then_runs_once(monkeypatch, capsys, tmp_path):
+    lines = iter(['/profile', 'calcule', '/d', '/v', '/show', '/s', '/q'])
+    monkeypatch.setattr('builtins.input', lambda _: next(lines))
+    assert main(['chat', '--workspace', str(ROOT), '--output-dir', str(tmp_path)]) == 0
+    assert len(list(tmp_path.iterdir())) == 1
+    assert capsys.readouterr().out.count('lancement du calcul demandé') == 1
+
+
+def test_no_calculation_without_request(monkeypatch, tmp_path):
+    lines = iter(['prends les valeurs par défaut', '/d', '/v', '/s', '/q'])
+    monkeypatch.setattr('builtins.input', lambda _: next(lines))
+    assert main(['chat', '--workspace', str(ROOT), '--output-dir', str(tmp_path)]) == 0
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_cancel_pending_calculation(monkeypatch, tmp_path):
+    lines = iter(['calcule', 'annule le calcul', 'prends les valeurs par défaut', '/q'])
+    monkeypatch.setattr('builtins.input', lambda _: next(lines))
+    assert main(['chat', '--workspace', str(ROOT), '--output-dir', str(tmp_path)]) == 0
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_invalid_configuration_never_autoruns(monkeypatch, tmp_path):
+    lines = iter(['prends les valeurs par défaut', '/set inputs.n_tubes 0', 'calcule', '/v', '/q'])
+    monkeypatch.setattr('builtins.input', lambda _: next(lines))
+    assert main(['chat', '--workspace', str(ROOT), '--output-dir', str(tmp_path)]) == 0
+    assert list(tmp_path.iterdir()) == []
+
+
 def test_explicit_dimensionless_number_uses_declared_unit(session):
     session.local_intent('prends les valeurs par défaut')
     session.apply('accident_sensitivity vaut 1', {'task': session.scenario.task, 'updates': [

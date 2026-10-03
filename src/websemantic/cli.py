@@ -20,7 +20,7 @@ def show(session):
     result = session.result()
     print("\nDemande -> paramètres -> contrôle -> TLS -> résultats")
     decisions = {
-        "execute": "Les paramètres passent les contrôles. /run lance le calcul.",
+        "execute": "Les paramètres passent les contrôles. " + ('Le calcul demandé peut démarrer.' if session.run_requested else 'Vous pouvez demander le calcul en une phrase.'),
         "clarify": "Il reste des informations à préciser avant le calcul.",
         "refuse": "TLS ne permet pas de traiter cette demande.",
     }
@@ -129,6 +129,24 @@ def suggestions(session, has_results=False):
     ]
 
 
+def run_if_ready(session, args, descriptor):
+    if not session.run_requested or session.pending_clarification or session.result().decision != 'execute':
+        return None
+    from websemantic.adapters.tls import run
+
+    print('Les informations sont suffisantes : lancement du calcul demandé.')
+    target, medians = run(session.scenario, descriptor, args.workspace, args.output_dir)
+    session.run_requested = False
+    results_table(session, target, medians)
+    (target / 'conversation.json').write_text(json.dumps({
+        'llm': args.llm, 'calls': session.calls, 'history': session.history,
+        'validation': asdict(session.result()),
+    }, ensure_ascii=False, indent=2), encoding='utf-8')
+    if args.open_results and os.name == 'nt':
+        os.startfile(target)
+    return target, medians
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(
         description="Websemantic : conversation Gemini et TLS local."
@@ -180,10 +198,11 @@ def main(argv=None):
     )
     print('Outils : /s 5 suggestions | /d tableau | /e variable | /p proposer | /v valider | /r calculer | /q quitter')
     print(
-        "Une phrase = un appel Gemini. Aucun calcul automatique. /help pour les commandes."
+        "Un calcul demandé démarre dès que les informations et validations sont suffisantes. /s pour vous guider."
     )
     while True:
         try:
+            may_run = False
             line = args.once if args.once else input("\nWebSemantic_TLS > ").strip()
         except (EOFError, KeyboardInterrupt):
             print("\nFin de session.")
@@ -209,7 +228,7 @@ def main(argv=None):
                 print('Pour préciser votre objectif ou le scénario :')
                 for number, (label, _) in enumerate(choices, 1):
                     print(f'{number}. {label}')
-                print('Saisissez 1 à 5, ou écrivez votre propre question. Aucun choix ne lance le calcul ni ne valide les hypothèses.')
+                print('Saisissez 1 à 5, ou écrivez votre question. Les choix 1–3 demandent un calcul, soumis aux contrôles et à la validation des hypothèses.')
             elif line == '/events':
                 explain(session, 'accident_probability_per_day')
                 explain(session, 'pollution_probability_per_day')
@@ -230,6 +249,7 @@ def main(argv=None):
                 explain(session, line.split(maxsplit=1)[1])
             elif line == "/profile":
                 session.propose_profile()
+                may_run = True
                 print(
                     "Profil DEMONSTRATION propose, jamais des mesures reelles. Verifiez ci-dessous puis /accept."
                 )
@@ -238,40 +258,37 @@ def main(argv=None):
                 session.accept_profile()
                 session.pending_clarification = None
                 print(
-                    "Valeurs du profil propose explicitement acceptees; aucun calcul lance."
+                    "Hypothèses proposées acceptées."
                 )
                 show(session)
+                may_run = True
             elif line.startswith("/set "):
                 _, path, text = line.split(" ", 2)
                 session.set_value(path, text)
                 show(session)
+                may_run = True
             elif line == "/run":
-                if session.pending_clarification:
-                    raise ClarificationNeeded(session.pending_clarification)
-                from websemantic.adapters.tls import run
-
-                target, medians = run(session.scenario, descriptor, args.workspace, args.output_dir)
-                last_output = (target, medians)
-                results_table(session, target, medians)
-                (target / "conversation.json").write_text(
-                    json.dumps(
-                        {
-                            "llm": args.llm,
-                            "calls": session.calls,
-                            "history": session.history,
-                            "validation": asdict(session.result()),
-                        },
-                        ensure_ascii=False,
-                        indent=2,
-                    ),
-                    encoding="utf-8",
-                )
-                if args.open_results and os.name == 'nt':
-                    os.startfile(target)
+                session.run_requested = True
+                may_run = True
+                show(session)
             elif line.startswith("/"):
                 print("Commande inconnue. /help")
             else:
-                if last_output and ('moyenne' in line.lower() or 'résultat' in line.lower()) and not any(word in line.lower() for word in ('prend', 'utilise', 'profil', 'mix')):
+                session.request_calculation(line)
+                if line.lower().strip() in ('annule le calcul', 'ne calcule pas', 'stop le calcul'):
+                    print('Demande de calcul en attente annulée. Le scénario est conservé.')
+                    if args.once:
+                        return 0
+                    continue
+                if line.lower().strip() in ('calcule', 'calcule maintenant', 'lance le calcul', 'simule', 'fais le calcul', 'recalcule'):
+                    show(session)
+                    output = run_if_ready(session, args, descriptor)
+                    if output:
+                        last_output = output
+                    if args.once:
+                        return 0
+                    continue
+                if last_output and not session.run_requested and ('moyenne' in line.lower() or 'résultat' in line.lower()) and not any(word in line.lower() for word in ('prend', 'utilise', 'profil', 'mix')):
                     results_table(session, *last_output)
                     print('Ces résultats concernent le dernier calcul enregistré ; /r recalcule le scénario actuel.')
                     if args.once:
@@ -281,6 +298,9 @@ def main(argv=None):
                 if local_message:
                     print('TLS >', local_message)
                     show(session)
+                    output = run_if_ready(session, args, descriptor)
+                    if output:
+                        last_output = output
                     if args.once:
                         return 0
                     continue
@@ -302,6 +322,11 @@ def main(argv=None):
                     f"Appels Gemini : {session.calls}" + (f"/{args.max_calls}." if args.max_calls else '.')
                 )
                 show(session)
+                may_run = True
+            if may_run:
+                output = run_if_ready(session, args, descriptor)
+                if output:
+                    last_output = output
             if args.once:
                 return 0
         except ClarificationNeeded as exc:

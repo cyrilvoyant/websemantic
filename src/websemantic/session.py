@@ -53,6 +53,17 @@ class Session:
         self.history = []
         self.calls = 0
         self.pending_clarification = None
+        self.run_requested = False
+
+    def request_calculation(self, request):
+        text = ''.join(c for c in unicodedata.normalize('NFD', request.lower()) if not unicodedata.combining(c))
+        if re.search(r'\b(annule|stop|ne .*pas|sans)\b.*(calcul|simul)|\bne (calcule|simule).*pas', text):
+            self.run_requested = False
+            return
+        if re.match(r'\s*(comment|pourquoi|explique|que signifie|qu.est)', text):
+            return
+        if re.search(r'\b(calcule|calculer|simule|simuler|estime|estimer|recalcule)\b|\blance.*(calcul|simulation)|\bje (souhaite|veux|voudrais).*obtenir.*(energie|puissance)', text):
+            self.run_requested = True
 
     def local_intent(self, request):
         """Resolve explicit workflow requests without asking the LLM to invent data."""
@@ -83,12 +94,12 @@ class Session:
             self.propose_profile()
             self.accept_profile()
             self.pending_clarification = None
-            message = "Les valeurs manquantes sont complétées par le profil TLS et acceptées à votre demande. Ce sont des valeurs de démonstration, pas des moyennes mesurées. /r lance le calcul."
+            message = "Les valeurs manquantes sont complétées par le profil TLS et acceptées à votre demande. Ce sont des valeurs de démonstration, pas des moyennes mesurées. Le calcul démarrera si vous l’avez demandé et si les contrôles passent."
         elif 'mix' in text and 'moyenn' in text:
             self.propose_profile()
             self.accept_profile()
             self.pending_clarification = None
-            message = "J'utilise le profil par défaut pour les champs manquants, comme demandé. Je ne fais pas de moyenne entre technologies : les catégories ne se moyennent pas. /d permet de vérifier ce choix, /r de calculer."
+            message = "J'utilise le profil par défaut pour les champs manquants, comme demandé. Je ne fais pas de moyenne entre technologies : les catégories ne se moyennent pas. /d permet de vérifier ce choix, une demande de calcul pour lancer TLS."
         elif re.search(r'(plus|moins).*co[uû]teu|plus.*energet|plus.*energivo', text):
             high = 'moins' not in text
             self.propose_profile()
@@ -108,6 +119,7 @@ class Session:
         if task not in self.descriptor["tasks"]["supported"] + ["unsupported"]:
             raise ValueError("Tache Gemini non reconnue.")
         if task == 'unsupported':
+            self.run_requested = False
             self.pending_clarification = parsed.get('message') or 'Demande à préciser ; le scénario précédent est conservé.'
             self.history.append({'user': request, 'assistant': self.pending_clarification})
             raise ClarificationNeeded(self.pending_clarification)

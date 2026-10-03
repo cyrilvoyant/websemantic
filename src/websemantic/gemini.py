@@ -110,7 +110,7 @@ def extract(request, descriptor, history, model="gemini-3.5-flash-lite", state=N
         "task doit correspondre a une tache declaree; pour demande hors perimetre utilise unsupported. "
         "Une précision sur les paramètres dans une conversation TLS conserve la tâche d'estimation. "
         "Consulte ETAT ACTUEL : ne redemande pas les paramètres déjà présents. Si les hypothèses "
-        "attendent accord, indique /v ; si tout est fourni ou accepté, indique /r. "
+        "attendent accord, indique /v ; si tout est fourni ou accepté, le calcul demandé sera lancé localement. "
         "Une demande de moyenne des résultats se rapporte aux sorties du simulateur, sans calculer toi-même. "
         "Utilise l'historique uniquement comme contexte, pas pour reextraire des valeurs anciennes."
     )
