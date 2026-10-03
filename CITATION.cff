@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below. Author list to be confirmed."
-title: "semantic-sim-layer: a software-agnostic semantic layer from human intent to qualified simulated data"
+title: "websemantic: a software-agnostic semantic layer from human intent to qualified simulated data"
 type: software
 authors:
   - given-names: "Cyril"

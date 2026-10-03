@@ -1,7 +1,7 @@
 {
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
-  "name": "semantic-sim-layer",
+  "name": "websemantic",
   "description": "Software-agnostic, non-intrusive semantic layer from natural-language intent to validated simulator configurations and qualified (provenance-annotated) simulated data. Research prototype.",
   "version": "0.0.1",
   "dateCreated": "2026-10-03",

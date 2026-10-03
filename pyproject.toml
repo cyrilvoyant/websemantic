@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "semantic-sim-layer"
+name = "websemantic"
 version = "0.0.1"
 description = "Software-agnostic semantic layer from intent to qualified simulated data (research prototype)"
 readme = "README.md"

@@ -1,9 +1,9 @@
-# semantic-sim-layer
+# websemantic
 
 **A software-agnostic semantic layer between human intent and existing scientific simulators.**
 
 > Status: research prototype, scaffold only (October 2026). No implementation, benchmark or result yet.
-> The name is provisional.
+
 
 ## Purpose
 
@@ -42,8 +42,8 @@ The layer is agnostic. Supporting a new software only requires a **descriptor** 
 ## Repository layout
 
 ```
-src/semantic_sim_layer/core/      generic core: semantic state, parser, clarification, validation, selection, run, annotation
-src/semantic_sim_layer/adapters/  thin per-software adapters (the only code touching target APIs)
+src/websemantic/core/      generic core: semantic state, parser, clarification, validation, selection, run, annotation
+src/websemantic/adapters/  thin per-software adapters (the only code touching target APIs)
 descriptors/{tls,lqlequiv,pvlib}/ declarative descriptors (inputs, outputs, tasks, validity, entry point)
 ontology/                         SHACL shapes and JSON-LD context
 benchmark/                        requests, reference annotations, evaluation scripts
