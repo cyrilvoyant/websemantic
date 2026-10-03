@@ -1,4 +1,16 @@
 ﻿$ErrorActionPreference = 'Stop'
+if ($PSScriptRoot.StartsWith('\\')) {
+    $localApplication = Join-Path $env:LOCALAPPDATA 'WebSemantic_TLS\application'
+    New-Item -ItemType Directory -Path $localApplication -Force | Out-Null
+    Write-Host 'Dossier réseau détecté. Préparation du programme sur le disque local...'
+    & robocopy $PSScriptRoot $localApplication /E /XD .venv runs /R:1 /W:1 /NFL /NDL /NJH /NJS
+    if ($LASTEXITCODE -ge 8) {
+        Write-Host 'Copie locale impossible. Décompressez le package sur le disque C:.' -ForegroundColor Red
+        exit 1
+    }
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $localApplication 'installer-et-lancer.ps1')
+    exit $LASTEXITCODE
+}
 Set-Location -LiteralPath $PSScriptRoot
 function Refresh-Tools {
     $env:Path = [Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('Path', 'User')
