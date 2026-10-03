@@ -57,6 +57,7 @@ def details(session):
             record = getattr(session.scenario, group).get(name)
             print(
                 f"  {name}: {record.value if record else '?'} "
+                f"{session.descriptor[group][name].get('unit', '(catégorie ou identifiant)')} "
                 f"[{record.origin if record else 'missing'}; "
                 f"{'accepte' if record and record.accepted else 'extrait/non accepte'}]"
             )
@@ -170,6 +171,16 @@ def main(argv=None):
                     f"L'énergie annualisée médiane est de {medians['annualized_mwh']:.3f} MWh/an. "
                     "Elle résulte d'une extrapolation par 365/n_days ; une période courte "
                     "ne représente pas nécessairement toutes les saisons."
+                )
+                print(
+                    f"Rapportée à la longueur du tunnel, elle vaut {medians['specific_kwh_m_year']:.2f} "
+                    "kWh/(m·an), tous tubes compris ; ce n'est pas une valeur par mètre-tube."
+                )
+                print(
+                    f"Ces médianes portent sur {session.scenario.experiment['n_runs'].value} réalisations. "
+                    "Le pic est le maximum au pas de calcul, pas une pointe instantanée mesurée. "
+                    "L'enveloppe p10–p90 décrit la dispersion des puissances horaires simulées ; "
+                    "ce n'est pas un intervalle de confiance."
                 )
                 print(
                     "Ces résultats sont calculés par TLS, sous les hypothèses acceptées. "

@@ -64,3 +64,20 @@ Les réponses présentent des phrases explicatives et un schéma textuel. /show 
 
 ### Évolution prévue : conversation vocale
 À terme : microphone -> transcription corrigible -> LLM -> validation locale -> calcul autorisé -> explication écrite et synthèse vocale. Les schémas restent affichés dans le terminal. Les nombres, unités et hypothèses restent soumis aux confirmations et contrôles du PoC textuel. La voix est une évolution prévue, non implémentée ; moteurs, coûts et traitement des enregistrements restent à définir.
+
+## Qualification des résultats
+Le document de Nicolas Fichaux (réunion du 2 octobre 2026) motive le lien entre besoin, information, données, provenance et adéquation à l'usage. Il ne fournit pas de nomenclature d'unités TLS. Celle-ci est vérifiée dans le code du simulateur figé.
+
+Chaque `manifest.json` contient désormais `output_qualification` : signification et unité de chaque colonne CSV, agrégation, durée, pas de calcul, nombre de réalisations, périmètre du tunnel et usages admis ou exclus. L'absence de coordonnées et de fuseau horaire est explicite. Les hypothèses et incertitudes restent documentées dans le même manifeste.
+
+| Grandeur | Unité | Interprétation |
+|---|---|---|
+| Puissance | kW | Valeur calculée au pas déclaré ; pic dépendant de ce pas |
+| Énergie du pas | kWh | Puissance × durée du pas en heures |
+| Énergie totale | MWh | Somme sur la période simulée |
+| Énergie annualisée | MWh/an | Total × 365 / nombre de jours, sans correction saisonnière |
+| Énergie spécifique annualisée | kWh/(m·an) | Tous tubes compris, divisée par la longueur du tunnel ; pas par mètre-tube |
+| Facteur de charge | 1 (sans dimension) | Puissance moyenne / puissance maximale par réalisation |
+| Trafic | 1 (indice relatif) | Pas un débit en véhicules/jour |
+
+L'enveloppe p10–p90 est une dispersion empirique entre réalisations après moyenne horaire, pas un intervalle de confiance. La trajectoire representative est celle de la réalisation 0. Les profils saisonniers portent seulement sur les dates effectivement simulées. Avec trois réalisations, les quantiles restent peu étayés. Cette qualification est en JSON ordinaire, pas encore en RDF/JSON-LD ou SHACL.

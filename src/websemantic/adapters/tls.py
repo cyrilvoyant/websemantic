@@ -8,6 +8,7 @@ from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
 
+from websemantic.adapters.tls_outputs import qualify
 from websemantic.core.validation import validate
 
 
@@ -76,6 +77,7 @@ def run(scenario, descriptor, workspace):
         exp["n_runs"],
         exp["base_seed"],
     )
+    qualification = qualify(outputs, exp)
     target = (
         Path(workspace)
         / "runs"
@@ -95,6 +97,7 @@ def run(scenario, descriptor, workspace):
         "uncertainty": descriptor["uncertainty"],
         "validity_notes": descriptor["validity_notes"],
         "outputs": list(outputs),
+        "output_qualification": qualification,
         "note": "Computational synthetic outputs, not field validation; JSON-LD not yet implemented.",
     }
     (target / "manifest.json").write_text(
@@ -102,7 +105,7 @@ def run(scenario, descriptor, workspace):
         encoding="utf-8",
     )
     medians = (
-        outputs["kpis"][["total_mwh", "annualized_mwh", "peak_kw", "load_factor"]]
+        outputs["kpis"][["total_mwh", "annualized_mwh", "peak_kw", "load_factor", "specific_kwh_m_year"]]
         .median()
         .to_dict()
     )

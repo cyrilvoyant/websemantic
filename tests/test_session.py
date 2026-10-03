@@ -105,6 +105,17 @@ def test_local_run_records_configuration(session):
     manifest = json.loads((target / "manifest.json").read_text(encoding="utf-8"))
     assert manifest["software"]["commit"] == session.descriptor["software"]["commit"]
     assert manifest["scenario"]["inputs"]["traffic_level"]["accepted"]
+    qualification = manifest["output_qualification"]
+    assert qualification["temporal_scope"]["duration_days"] == 7
+    import pandas as pd
+
+    for name in manifest["outputs"]:
+        columns = pd.read_csv(target / f"{name}.csv").columns
+        assert set(columns) == set(qualification["tables"][name]["columns"])
+    kpis = pd.read_csv(target / "kpis.csv")
+    assert qualification["tables"]["kpis"]["columns"]["specific_kwh_m_year"]["unit"] == "kWh/(m·an)"
+    assert kpis["annualized_mwh"].tolist() == pytest.approx((kpis["total_mwh"] * 365 / 7).tolist())
+    assert kpis["specific_kwh_m_year"].tolist() == pytest.approx((kpis["annualized_mwh"] * 1000 / 1500).tolist())
 
 
 def test_wrong_llm_length_unit_cannot_multiply_metres(session):
