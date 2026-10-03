@@ -17,7 +17,7 @@ Saisissez une phrase ou une commande, puis Entrée :
 
 Demandez « calcule » après vérification. Le calcul démarre seulement si les informations sont suffisantes et les hypothèses acceptées. « Prends les valeurs moyennes » accepte le profil de démonstration : ce ne sont pas des moyennes mesurées. Une recherche documentaire ne valide aucun paramètre. Si Gemini est indisponible, les commandes locales restent utilisables.
 
-Les sorties indiquent énergie en MWh, puissance en kW et énergie spécifique en kWh/(km·tube). Les paramètres ont chacun leur unité dans /d et /e. L'énergie annualisée multiplie l'énergie de la période par 365/nombre de jours ; elle n'est pas une mesure annuelle. La dispersion des réalisations ne couvre pas toutes les incertitudes. Le manifeste et les CSV permettent de retrouver les hypothèses et les résultats.
+Les sorties indiquent énergie en MWh, puissance en kW et énergie spécifique en kWh/(m·an), par mètre de tunnel tous tubes compris. Les paramètres ont chacun leur unité dans /d et /e. L'énergie annualisée multiplie l'énergie de la période par 365/nombre de jours ; elle n'est pas une mesure annuelle. La dispersion des réalisations ne couvre pas toutes les incertitudes. Le manifeste et les CSV permettent de retrouver les hypothèses et les résultats.
 
 Code et documentation : https://github.com/cyrilvoyant/websemantic
 Simulateur TLS : https://github.com/cyrilvoyant/tunnel-load-simulator
