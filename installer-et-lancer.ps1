@@ -1,30 +1,82 @@
 ﻿$ErrorActionPreference = 'Stop'
 Set-Location -LiteralPath $PSScriptRoot
-try {
-    if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
-        throw 'Git est requis. Installez Git puis relancez ce fichier.'
+function Refresh-Tools {
+    $env:Path = [Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('Path', 'User')
+    foreach ($folder in @("$env:LOCALAPPDATA\Programs\Git\cmd", "$env:ProgramFiles\Git\cmd")) {
+        if (Test-Path -LiteralPath $folder) { $env:Path += ';' + $folder }
     }
+}
+function Install-Tool($packageId) {
+    if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+        throw 'Installation automatique indisponible : installez App Installer (winget) depuis le Microsoft Store, puis relancez.'
+    }
+    Write-Host "Installation de $packageId..."
+    & winget install --id $packageId --exact --source winget --silent --accept-package-agreements --accept-source-agreements
+    if ($LASTEXITCODE -ne 0) { throw "Installation de $packageId échouée. Vérifiez les droits et la connexion Internet." }
+    Refresh-Tools
+}
+function Find-Python {
+    $candidates = @()
+    if (Get-Command py -ErrorAction SilentlyContinue) {
+        $found = & py -3 -c 'import sys; print(sys.executable) if sys.version_info >= (3,10) else None' 2>$null
+        if ($LASTEXITCODE -eq 0 -and $found) { $candidates += [string]$found }
+    }
+    if (Get-Command python -ErrorAction SilentlyContinue) { $candidates += (Get-Command python).Source }
+    $candidates += "$env:LOCALAPPDATA\Programs\Python\Python312\python.exe"
+    foreach ($candidate in $candidates) {
+        if (-not (Test-Path -LiteralPath $candidate)) { continue }
+        & $candidate -c 'import sys,venv; sys.exit(0 if sys.version_info >= (3,10) else 1)' 2>$null
+        if ($LASTEXITCODE -eq 0) { return $candidate }
+    }
+    return $null
+}
+try {
+    Refresh-Tools
+    if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+        Install-Tool 'Git.Git'
+    }
+    & git --version
+    if ($LASTEXITCODE -ne 0) { throw 'Git ne fonctionne pas après installation.' }
     $pythonExecutable = Join-Path $PSScriptRoot '.venv\Scripts\python.exe'
     if (-not (Test-Path -LiteralPath $pythonExecutable)) {
-        Write-Host 'Premier lancement : création de l environnement Python...'
-        if (Get-Command py -ErrorAction SilentlyContinue) {
-            & py -3 -m venv .venv
-        } elseif (Get-Command python -ErrorAction SilentlyContinue) {
-            & python -m venv .venv
-        } else {
-            throw 'Python est requis (3.10 minimum, 3.12 conseillé). Installez-le puis relancez.'
+        $basePython = Find-Python
+        if (-not $basePython) {
+            Install-Tool 'Python.Python.3.12'
+            $basePython = Find-Python
         }
+        if (-not $basePython) { throw 'Python reste introuvable. Fermez puis relancez le lanceur.' }
+        Write-Host 'Premier lancement : création de l environnement Python...'
+        & $basePython -m venv .venv
         if ($LASTEXITCODE -ne 0) { throw 'Création de l environnement impossible.' }
     }
     & $pythonExecutable -c 'import sys; sys.exit(0 if sys.version_info >= (3, 10) else 1)'
     if ($LASTEXITCODE -ne 0) { throw 'Python 3.10 ou supérieur est requis.' }
     $installationMarker = Join-Path $PSScriptRoot '.venv\websemantic-ready'
-    if (-not (Test-Path -LiteralPath $installationMarker)) {
+    & $pythonExecutable -c 'import yaml,numpy,pandas,websemantic.cli' 2>$null
+    $dependenciesReady = $LASTEXITCODE -eq 0
+    if (-not (Test-Path -LiteralPath $installationMarker) -or -not $dependenciesReady) {
         Write-Host 'Installation des dépendances (connexion Internet nécessaire)...'
         & $pythonExecutable -m pip install -e '.[tls]'
         if ($LASTEXITCODE -ne 0) { throw 'Installation échouée. Vérifiez la connexion puis relancez.' }
         New-Item -ItemType File -Path $installationMarker -Force | Out-Null
     }
+    & $pythonExecutable -m pip check
+    if ($LASTEXITCODE -ne 0) { throw 'Dépendances incohérentes. Supprimez le dossier .venv puis relancez.' }
+    $backendPath = Join-Path $PSScriptRoot 'external\tunnel-load-simulator'
+    if (-not (Test-Path -LiteralPath (Join-Path $backendPath 'src\tunnel_load_simulator\simulator.py'))) {
+        & git submodule update --init --recursive
+        if ($LASTEXITCODE -ne 0) { throw 'Les sources TLS sont absentes. Décompressez entièrement le package.' }
+    }
+    @"
+import subprocess, yaml
+from pathlib import Path
+d = yaml.safe_load(Path('descriptors/tls/descriptor.yaml').read_text(encoding='utf-8'))
+p = 'external/tunnel-load-simulator'
+c = subprocess.check_output(['git', '-C', p, 'rev-parse', 'HEAD'], text=True).strip()
+s = subprocess.check_output(['git', '-C', p, 'status', '--porcelain', '--untracked-files=no'], text=True)
+assert c == d['software']['commit'] and not s, 'Version TLS incorrecte ou sources modifiees'
+"@ | & $pythonExecutable -
+    if ($LASTEXITCODE -ne 0) { throw 'Le contrôle du simulateur TLS a échoué.' }
     Write-Host 'Démarrage de WebSemantic_TLS. /help pour les commandes, /quit pour sortir.'
     & $pythonExecutable -m websemantic.cli chat --model tls
     if ($LASTEXITCODE -ne 0) { throw 'Le programme s est arrêté avec une erreur.' }
