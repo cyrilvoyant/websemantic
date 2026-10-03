@@ -88,7 +88,7 @@ def test_five_suggestions_adapt_to_context_without_mutation(session):
     before = session.scenario
     assert len(suggestions(session)) == 5
     assert session.scenario is before
-    session.local_intent('comme Ajaccio')
+    session.geographic_context = {'city': 'Ajaccio'}
     assert 'Ajaccio' in suggestions(session)[4][0]
     assert 'dispersion' in suggestions(session, has_results=True)[4][0]
 
@@ -159,7 +159,15 @@ def test_replay_user_conversation_and_open_results(monkeypatch, capsys, tmp_path
     monkeypatch.setattr('builtins.input', lambda _: next(lines))
     opened = []
     monkeypatch.setattr(cli.os, 'startfile', lambda path: opened.append(path), raising=False)
-    monkeypatch.setattr(cli, 'extract', lambda *args, **kwargs: pytest.fail('These requests should be local.'))
+    from websemantic.geography import ALLOWED
+    monkeypatch.setattr(cli, 'extract', lambda *args, **kwargs: ({'task': args[1]['tasks']['supported'][0], 'updates': []}, {}))
+    monkeypatch.setattr(cli, 'research', lambda *args: {
+        'city': 'Ajaccio', 'summary': 'Profil de test non calibré.',
+        'sources': [{'url': 'https://example.org', 'status': 'consulted', 'retrieved_at': '2026-10-03'}],
+        'topics': [{'topic': name, 'explanation': 'Contexte de test.'} for name in ('trafic', 'pollution', 'accidents', 'pics')],
+        'proposals': [{'field': name, 'value': str(value), 'rationale': 'Hypothèse de test.', 'sources': [0]}
+                      for name, value in zip(ALLOWED, ('urban', 1, 8, 18, 1.4))],
+    })
     assert main(['chat', '--workspace', str(ROOT), '--output-dir', str(tmp_path), '--open-results']) == 0
     text = capsys.readouterr().out
     assert 'Médiane' in text and 'Moyenne' in text

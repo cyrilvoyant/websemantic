@@ -34,7 +34,7 @@ Donne-moi la consommation réelle exacte de ce tunnel pour l'année prochaine.
 altitude et autres paramètres comme Ajaccio
 les plus coûteux énergétiquement
 
-Les valeurs par défaut ne sont pas des moyennes mesurées. Ajaccio déclenche un profil documentaire limité (contexte urbain, proxy d'altitude littorale 10 m), à valider : pas les caractéristiques d'un tunnel réel. Les catégories coûteuses sont proposées selon les coefficients TLS, sans certifier un optimum.
+Les valeurs par défaut ne sont pas des moyennes mesurées. Paris et Ajaccio déclenchent une consultation en ligne de sources publiques puis leur analyse par Gemini. Le tableau propose trafic, pics matin/soir et contexte à valider. Aucune altitude de tunnel n’est déduite du nom de la ville. Les catégories coûteuses sont proposées selon les coefficients TLS, sans certifier un optimum.
 Les demandes imprécises doivent entraîner une clarification, jamais des données présentées comme mesurées. Une comparaison A/B reste à développer.
 La conversation n'a plus de plafond local ; les quotas Gemini restent applicables. Une demande de calcul est exécutée après vérification des paramètres et des hypothèses. Une question d’explication ne lance rien.
 Les résultats sont simulés : MWh sur la période, MWh/an extrapolés, kW de pointe, kWh/(m·an) tous tubes compris et facteur sans dimension. Moyenne et médiane sont distinguées. Le dossier contient CSV, manifeste et graphe RDF de provenance.
@@ -43,3 +43,11 @@ Pour une étude plus détaillée : simulateur TLS original https://github.com/cy
 /s ou \s : cinq suggestions pour préciser l'objectif ou revoir les hypothèses. Saisir 1 à 5, ou écrire sa question. Les choix d’objectif peuvent demander un calcul ; aucune hypothèse n’est validée automatiquement.
 
 Pour demander le calcul : « calcule » ou « estime la consommation ». S’il manque des données, la demande reste en attente ; compléter ou valider avec /v la déclenche. « Annule le calcul » annule cette attente. /r reste un raccourci facultatif.
+
+CONTEXTE GÉOGRAPHIQUE
+Essayez : « Calcule un tunnel de 1500 m comme Ajaccio, avec les hypothèses de trafic, pollution, accidents et pics matin et soir ».
+Ou : « Un tunnel de 2 km à Paris : propose les hypothèses de circulation ».
+Le programme consulte des pages sélectionnées (API géographique, DREAL/Qualitair ou Airparif/Sytadin, ONISR), puis Gemini produit une synthèse et un tableau en français. Deux appels Gemini par demande géographique. Les étapes internes restent masquées. Ce premier module couvre Paris et Ajaccio ; ce n’est pas encore un moteur de recherche général.
+/v valide les propositions. Si un calcul a été demandé, il démarre ensuite sans /r. /d montre les justifications et les sources ; /set permet de corriger une valeur.
+Sans comptage local, 8 h, 18 h, largeur 1,4 h et trafic relatif 1 restent des défauts TLS non calibrés. Les probabilités d’événements restent des valeurs de démonstration, pas des risques mesurés pour la ville. Pollution ambiante et accidents corporels BAAC sont contextualisés sans conversion automatique en événements de tunnel. Les documents peuvent être historiques ; consultation en ligne ne signifie pas mesure en temps réel.
+Si une source est inaccessible, son état est affiché. Si l’analyse échoue, aucun calcul du contexte demandé ne démarre : reformulez avec la ville pour réessayer. Le dossier de résultats contient geographic-context.json avec synthèse, propositions, sources et dates.

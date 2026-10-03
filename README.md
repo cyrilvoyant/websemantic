@@ -178,3 +178,13 @@ Pour affiner l'objectif : taper /s ou \s. Cinq choix sont proposés selon les pa
 
 ## Calcul à la demande
 « Calcule » ou « estime la consommation » suffit : le calcul démarre quand les informations passent les contrôles. Si elles manquent, la demande reste en attente et repart après complément ou validation des hypothèses. /run et /r sont facultatifs. « Annule le calcul » annule une demande en attente. Les explications, tableaux et suggestions ne relancent pas un calcul terminé.
+
+### Contexte géographique documentaire
+
+« Comme Paris » ou « comme Ajaccio » déclenche maintenant une consultation directe de sources publiques sélectionnées, puis une analyse Gemini structurée. Le terminal montre les quatre thèmes trafic, pollution, accidents et pics horaires, un tableau avec unités et statut, ainsi que les URLs et dates de consultation. Deux appels Gemini sont utilisés : extraction des valeurs explicites, puis interprétation des sources. Les étapes techniques ne sont pas affichées.
+
+Les propositions restent des hypothèses à valider avec `/v`, et les valeurs explicitement saisies restent prioritaires. Une demande de calcul antérieure démarre après validation. Aucun comptage local n’est extrait à ce stade : en son absence, les pics 8 h/18 h, largeur 1,4 h et trafic relatif 1 restent des défauts non calibrés. Les données d’air ambiant et BAAC ne déterminent pas automatiquement les probabilités d’événements TLS. La géométrie et l’altitude du tunnel ne sont pas déduites de la commune.
+
+Le module couvre pour l’instant Paris et Ajaccio. Il consulte un catalogue limité de pages, sans recherche ouverte Google : les essais de grounding Gemini avec cette clé n’ont pas abouti (HTTP 429/404). Les sources inaccessibles sont signalées ; un échec d’analyse bloque le calcul demandé, y compris sur un ancien scénario valide. `geographic-context.json` conserve le contexte et les références dans chaque dossier de résultats. Les rapports historiques ne sont pas présentés comme des mesures actuelles.
+
+Exemple : `Calcule un tunnel de 1500 m comme Ajaccio avec des hypothèses de trafic, pollution, accidents et pics matin et soir`, puis `/v`.

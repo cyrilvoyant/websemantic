@@ -9,6 +9,7 @@ from pathlib import Path
 import yaml
 
 from websemantic.gemini import GeminiError, extract, load_private_key
+from websemantic.geography import apply_report, location, research, show_report
 from websemantic.semantics import describe
 from websemantic.session import ClarificationNeeded, Session
 
@@ -117,8 +118,8 @@ def suggestions(session, has_results=False):
     else:
         fourth = ('Revoir les hypothèses, leurs unités et leurs sources avant de calculer.', '/details')
     fifth = ('Comprendre les hypothèses d’accidents et de pollution.', '/events')
-    if any('ajaccio' in item['user'].lower() for item in session.history):
-        fifth = ('Vérifier ce qui vient du contexte Ajaccio et ce qui reste une hypothèse.', '/e altitude_m')
+    if session.geographic_context:
+        fifth = (f"Vérifier les hypothèses pour {session.geographic_context['city']}, les unités et leurs sources.", '/details')
     if has_results:
         fifth = ('Comprendre la dispersion et les limites des résultats déjà calculés.', '/uncertainty')
     return [
@@ -130,13 +131,15 @@ def suggestions(session, has_results=False):
 
 
 def run_if_ready(session, args, descriptor):
-    if not session.run_requested or session.pending_clarification or session.result().decision != 'execute':
+    if not session.run_requested or session.pending_clarification or session.geographic_pending or session.result().decision != 'execute':
         return None
     from websemantic.adapters.tls import run
 
     print('Les informations sont suffisantes : lancement du calcul demandé.')
     target, medians = run(session.scenario, descriptor, args.workspace, args.output_dir)
     session.run_requested = False
+    if getattr(session, 'geographic_context', None):
+        (target / 'geographic-context.json').write_text(json.dumps(session.geographic_context, ensure_ascii=False, indent=2), encoding='utf-8')
     results_table(session, target, medians)
     (target / 'conversation.json').write_text(json.dumps({
         'llm': args.llm, 'calls': session.calls, 'history': session.history,
@@ -255,6 +258,11 @@ def main(argv=None):
                 )
                 show(session)
             elif line == "/accept":
+                if session.geographic_pending:
+                    print('Le contexte géographique n’a pas abouti. Reformulez la demande avec la ville pour réessayer ; /v ne remplace pas la consultation des sources.')
+                    if args.once:
+                        return 1
+                    continue
                 session.accept_profile()
                 session.pending_clarification = None
                 print(
@@ -291,6 +299,25 @@ def main(argv=None):
                 if last_output and not session.run_requested and ('moyenne' in line.lower() or 'résultat' in line.lower()) and not any(word in line.lower() for word in ('prend', 'utilise', 'profil', 'mix')):
                     results_table(session, *last_output)
                     print('Ces résultats concernent le dernier calcul enregistré ; /r recalcule le scénario actuel.')
+                    if args.once:
+                        return 0
+                    continue
+                place = location(line)
+                if place:
+                    session.geographic_pending = True
+                    session.pending_clarification = 'Le contexte géographique demandé doit être consulté et validé avant le calcul.'
+                    if args.max_calls and session.calls + 2 > args.max_calls:
+                        raise GeminiError('Ce contexte nécessite deux appels Gemini ; plafond local insuffisant.')
+                    load_private_key(args.workspace)
+                    session.calls += 1
+                    parsed, _usage = extract(line, descriptor, session.history, args.llm)
+                    session.apply(line, parsed)
+                    session.pending_clarification = 'Analyse géographique en attente ; aucun calcul.'
+                    session.calls += 1
+                    report = research(place, args.llm)
+                    apply_report(session, line, report)
+                    show_report(session)
+                    show(session)
                     if args.once:
                         return 0
                     continue
