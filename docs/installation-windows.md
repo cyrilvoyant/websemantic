@@ -1,6 +1,6 @@
 # Tester WebSemantic_TLS sur un autre PC Windows
 
-Prototype de recherche : terminal PowerShell, Gemini pour interpréter les demandes et TLS pour calculer localement. Aucune interface graphique. Les sources TLS sont des références Git figées et ne sont pas modifiées.
+Ce guide permet d'installer la version de test sur Windows. Vous décrivez le tunnel dans PowerShell ; Gemini extrait les paramètres et TLS calcule la consommation. Les deux étapes restent séparées : vous vérifiez les paramètres avant de lancer le calcul.
 
 ## 1. Installer le code
 
@@ -23,7 +23,7 @@ Pour un clone existant : `git submodule update --init --recursive`.
 
 ## 2. Configurer sa propre clé Gemini
 
-Créer une clé dans Google AI Studio. Chaque testeur utilise sa propre clé et son propre quota. Ne pas envoyer la clé à Cyril ni la déposer sur GitHub.
+Créez votre clé dans Google AI Studio et gardez-la sur votre machine. Le quota utilisé sera celui de votre projet Google.
 
 Dans le même PowerShell, saisir la clé de façon masquée :
 
@@ -55,9 +55,9 @@ Je souhaite estimer la consommation électrique d'un tunnel de 2 km, avec deux t
 /quit
 ```
 
-`/profile` propose des hypothèses de démonstration pour les champs manquants. Lire `/details` avant `/accept`. L'acceptation ne constitue pas une validation physique des hypothèses. Le profil de calcul rapide couvre 7 jours, avec un pas de 60 minutes, 3 simulations et une graine de 42.
+Il manque généralement des paramètres après la première phrase. `/profile` propose des valeurs pour un essai ; `/details` permet de les lire et `/accept` de les retenir. Ce sont des hypothèses de démonstration, pas des données du tunnel. Le calcul couvre 7 jours, avec un pas de 60 minutes, 3 simulations et une graine de 42.
 
-Chaque demande en langage naturel consomme une tentative Gemini ; les commandes commençant par `/` sont locales. `/run` lance le calcul explicitement. Les réponses comprennent des phrases et un schéma textuel ; les résultats chiffrés viennent de TLS.
+Chaque phrase envoyée fait un appel à Gemini. Les commandes `/show`, `/profile`, `/accept` et `/run` sont locales. Le calcul commence seulement avec `/run` ; ses résultats viennent de TLS.
 
 Les fichiers sont écrits dans `runs/` : CSV, `manifest.json` et `conversation.json`. L'historique contient vos demandes : relire avant de partager. Aucune clé n'y est enregistrée.
 
@@ -73,7 +73,7 @@ Pour les tests logiciels :
 git rev-parse HEAD
 ```
 
-Transmettre le commit, la version Python, la demande testée, la réponse et l'éventuelle erreur. Ne transmettre aucune clé API. Les versions testées en développement sont dans `requirements-tested.txt` ; les dépendances d'installation ne sont pas toutes figées.
+Pour un retour exploitable, envoyez le commit affiché, la version de Python et la demande qui pose problème, avec la réponse ou le message d'erreur. Les versions utilisées en développement sont dans `requirements-tested.txt` ; l'installation peut récupérer des versions plus récentes.
 
 ## Limites actuelles
 

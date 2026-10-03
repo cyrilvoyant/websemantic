@@ -17,11 +17,11 @@ def show(session):
         print(session.pending_clarification)
         return
     result = session.result()
-    print("\nVotre demande -> paramètres -> validation -> calcul TLS -> résultats expliqués")
+    print("\nDemande -> paramètres -> contrôle -> TLS -> résultats")
     decisions = {
-        "execute": "Le scénario est complet et validé. Tapez /run pour lancer le calcul local.",
-        "clarify": "Le scénario doit encore être précisé ou confirmé avant le calcul.",
-        "refuse": "Cette demande ne peut pas être exécutée dans le périmètre déclaré de TLS.",
+        "execute": "Les paramètres passent les contrôles. /run lance le calcul.",
+        "clarify": "Il reste des informations à préciser avant le calcul.",
+        "refuse": "TLS ne permet pas de traiter cette demande.",
     }
     print(decisions.get(result.decision, result.decision))
     inputs = session.scenario.inputs
@@ -35,15 +35,19 @@ def show(session):
         if record:
             geometry.append(f"{label} : {record.value} {unit}".strip())
     if geometry:
-        print("Le tunnel décrit a les caractéristiques suivantes : " + "; ".join(geometry) + ".")
+        print("Tunnel : " + "; ".join(geometry) + ".")
     missing = [issue.field for issue in result.issues if issue.code == "missing"]
     if missing:
-        print("Il manque encore les paramètres suivants : " + ", ".join(missing) + ".")
-    print("Les valeurs du profil de démonstration sont des hypothèses à accepter explicitement.")
-    print("Le simulateur produit des données synthétiques ; elles ne constituent pas des mesures terrain.")
+        print("À renseigner : " + ", ".join(missing) + ".")
+    unaccepted = [issue for issue in result.issues if issue.code == "unaccepted_assumption"]
+    if unaccepted:
+        print(
+            f"{len(unaccepted)} hypothèses attendent votre accord. "
+            "Consultez /details, puis /accept pour accepter le profil proposé."
+        )
     for issue in result.issues:
-        if issue.code != "missing":
-            print(f"Le paramètre {issue.field} nécessite une correction ou une confirmation ({issue.code}).")
+        if issue.code not in ("missing", "unaccepted_assumption"):
+            print(f"À vérifier : {issue.field} ({issue.code}).")
 
 
 def details(session):
