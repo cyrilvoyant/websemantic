@@ -6,7 +6,7 @@ import yaml
 from rdflib import Graph
 
 from websemantic.adapters.tls import run
-from websemantic.cli import main
+from websemantic.cli import main, suggestions
 from websemantic.semantics import DEFINITIONS, describe
 from websemantic.session import ClarificationNeeded, Session
 
@@ -82,6 +82,25 @@ def test_spaced_length_is_not_truncated(session):
         {'field': 'inputs.length_m', 'value': '1500', 'unit': 'unit:M', 'evidence': '1 500 mètres'}
     ]})
     assert session.scenario.inputs['length_m'].value == 1500
+
+
+def test_five_suggestions_adapt_to_context_without_mutation(session):
+    before = session.scenario
+    assert len(suggestions(session)) == 5
+    assert session.scenario is before
+    session.local_intent('comme Ajaccio')
+    assert 'Ajaccio' in suggestions(session)[4][0]
+    assert 'dispersion' in suggestions(session, has_results=True)[4][0]
+
+
+def test_suggestion_shortcut_selection_is_local(monkeypatch, capsys):
+    lines = iter([r'\s', '4', '/q'])
+    monkeypatch.setattr('builtins.input', lambda _: next(lines))
+    assert main(['chat', '--workspace', str(ROOT)]) == 0
+    text = capsys.readouterr().out
+    assert '5. Comprendre' in text
+    assert 'Longueur — unité : m' in text
+    assert 'Gemini interprete' not in text
 
 
 def test_explicit_dimensionless_number_uses_declared_unit(session):

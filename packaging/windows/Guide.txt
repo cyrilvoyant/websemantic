@@ -40,3 +40,5 @@ Les demandes imprécises doivent entraîner une clarification, jamais des donné
 La conversation n'a plus de plafond local ; les quotas Gemini restent applicables. Aucun calcul automatique après une phrase.
 Les résultats sont simulés : MWh sur la période, MWh/an extrapolés, kW de pointe, kWh/(m·an) tous tubes compris et facteur sans dimension. Moyenne et médiane sont distinguées. Le dossier contient CSV, manifeste et graphe RDF de provenance.
 Pour une étude plus détaillée : simulateur TLS original https://github.com/cyrilvoyant/tunnel-load-simulator (lien direct de l'interface à confirmer).
+
+/s ou \s : cinq suggestions pour préciser l'objectif ou revoir les hypothèses. Saisir 1 à 5, ou écrire sa question. Les choix ne valident rien et ne lancent pas le calcul.

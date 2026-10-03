@@ -173,3 +173,5 @@ Les commandes courtes sont rappelées après chaque échange : `/d` tableau des 
 La conversation n'a plus de plafond local par défaut (`--max-calls 0`) ; les quotas Gemini demeurent. Le nombre de réalisations n'est plus limité à 30 ; un garde de volume de deux millions de points reste actif. Résultats en tableau français (moyenne et médiane), export JSON et RDF. Dans le package, le dossier `Resultats` apparaît à côté du lanceur et s'ouvre à la fin du calcul. Une installation depuis un partage réseau utilise AppData uniquement pour l'environnement technique.
 
 Pour une étude plus détaillée, utiliser le simulateur TLS original : https://github.com/cyrilvoyant/tunnel-load-simulator . Le lien direct de l'interface déployée reste à confirmer ; aucun domaine .net n'est deviné.
+
+Pour affiner l'objectif : taper /s ou \s. Cinq choix sont proposés selon les paramètres manquants, le contexte Ajaccio et la présence de résultats. Saisir 1 à 5 ou écrire une autre question. Les suggestions n'acceptent aucune hypothèse et ne lancent aucun calcul ; une question d'objectif sélectionnée peut utiliser Gemini, les explications de paramètres sont locales.

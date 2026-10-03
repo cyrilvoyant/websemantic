@@ -108,6 +108,27 @@ def results_table(session, target, medians):
           os.environ.get('WEBSEMANTIC_TLS_URL', session.descriptor['software']['repository']))
 
 
+def suggestions(session, has_results=False):
+    missing = [issue for issue in session.result().issues if issue.code == 'missing']
+    if missing:
+        field = missing[0].field.split('.')[-1]
+        label, unit, _ = describe(field)
+        fourth = (f"Préciser {label.lower()} ({unit}) et comprendre son rôle.", '/e ' + field)
+    else:
+        fourth = ('Revoir les hypothèses, leurs unités et leurs sources avant de calculer.', '/details')
+    fifth = ('Comprendre les hypothèses d’accidents et de pollution.', '/events')
+    if any('ajaccio' in item['user'].lower() for item in session.history):
+        fifth = ('Vérifier ce qui vient du contexte Ajaccio et ce qui reste une hypothèse.', '/e altitude_m')
+    if has_results:
+        fifth = ('Comprendre la dispersion et les limites des résultats déjà calculés.', '/uncertainty')
+    return [
+        ('Préciser l’objectif : énergie consommée sur une période (MWh).', "Je souhaite estimer l'énergie électrique totale du tunnel sur la période simulée."),
+        ('Préciser l’objectif : puissance maximale appelée (kW).', 'Je souhaite estimer la puissance électrique maximale du tunnel au pas de calcul.'),
+        ('Préciser l’objectif : énergie par mètre de tunnel (kWh/(m·an)).', "Je souhaite obtenir l'énergie annualisée par mètre de tunnel, tous tubes compris."),
+        fourth, fifth,
+    ]
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(
         description="Websemantic : conversation Gemini et TLS local."
@@ -153,10 +174,11 @@ def main(argv=None):
         return 0
     session = Session(descriptor)
     last_output = None
+    choices = []
     print(
         f"WebSemantic_TLS / {args.llm}. " + (f"Maximum {args.max_calls} appels." if args.max_calls else 'Sans plafond local de conversation ; quotas Gemini applicables.')
     )
-    print('Outils : /d tableau | /e variable | /p proposer | /v valider | /r calculer | /q quitter')
+    print('Outils : /s 5 suggestions | /d tableau | /e variable | /p proposer | /v valider | /r calculer | /q quitter')
     print(
         "Une phrase = un appel Gemini. Aucun calcul automatique. /help pour les commandes."
     )
@@ -169,16 +191,35 @@ def main(argv=None):
         try:
             if not line:
                 continue
+            if choices and line in ('1', '2', '3', '4', '5'):
+                line = choices[int(line)-1][1]
+                choices = []
+                print('Choix >', line)
+            elif line not in ('/s', '\\s'):
+                choices = []
             if line.startswith('\\'):
                 line = '/' + line[1:]
-            aliases = {'/r': '/run', '/v': '/accept', '/d': '/details', '/p': '/profile', '/a': '/help', '/q': '/quit'}
+            aliases = {'/r': '/run', '/v': '/accept', '/d': '/details', '/p': '/profile', '/a': '/help', '/q': '/quit', '/s': '/suggest'}
             if line.startswith('/') and not line.startswith(('/set ', '/e ')):
                 line = aliases.get(line.split()[0], line.split()[0])
             if line in ("/quit", "/exit"):
                 return 0
-            if line == "/help":
+            if line == '/suggest':
+                choices = suggestions(session, last_output is not None)
+                print('Pour préciser votre objectif ou le scénario :')
+                for number, (label, _) in enumerate(choices, 1):
+                    print(f'{number}. {label}')
+                print('Saisissez 1 à 5, ou écrivez votre propre question. Aucun choix ne lance le calcul ni ne valide les hypothèses.')
+            elif line == '/events':
+                explain(session, 'accident_probability_per_day')
+                explain(session, 'pollution_probability_per_day')
+            elif line == '/uncertainty':
+                print('p10–p90 décrit la dispersion entre trajectoires simulées, pas un intervalle de confiance. '
+                      'Le modèle couvre bruit, trafic et événements ; erreurs de paramètres, de structure et de calibration ne sont pas couvertes. '
+                      'L’annualisation extrapole la période. /d permet de revoir les hypothèses.')
+            elif line == "/help":
                 print(
-                    "/show (explication); /details (paramètres techniques); /profile (propose le profil); /accept (accepte ses valeurs); "
+                    "/s (5 suggestions); /show (explication); /details (paramètres techniques); /profile (propose le profil); /accept (accepte ses valeurs); "
                     "/set inputs.length_m 2000; /set experiment.n_days 365; /run; /quit"
                 )
             elif line == "/show":
@@ -273,7 +314,7 @@ def main(argv=None):
                 return 1
         finally:
             if not args.once:
-                print("\nOutils : /d tableau et unités | /e variable | /p proposer | /v valider | /r calculer | /set modifier | /q quitter")
+                print("\nOutils : /s suggestions | /d tableau et unités | /e variable | /p proposer | /v valider | /r calculer | /set modifier | /q quitter")
 
 
 if __name__ == "__main__":
