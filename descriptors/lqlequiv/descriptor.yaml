@@ -1,0 +1,16 @@
+# Descriptor stub for LQL-Equiv (held-out case 1).
+# Not to be completed before the core is frozen (tag core-frozen). Only identity is recorded now.
+
+software:
+  name: LQL-Equiv
+  version: 3.0.0+dfc9a33
+  repository: https://github.com/cyrilvoyant/LQL-Equiv-web
+  commit: dfc9a338205b8864b8e3470c4ae245b019e88844
+  doi: 10.5281/zenodo.21948623
+  licence: MIT
+  entry_point: lqlequiv:compute
+  status: research and education only; not a medical device
+
+tasks:
+  excluded:
+    - any treatment decision, prescription or validation for an individual patient

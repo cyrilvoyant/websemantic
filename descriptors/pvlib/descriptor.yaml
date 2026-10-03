@@ -1,0 +1,12 @@
+# Descriptor stub for pvlib-python (held-out case 2, third-party library).
+# Not to be completed before the core is frozen (tag core-frozen). Only identity is recorded now.
+# pvlib is used unmodified, as a pinned PyPI dependency, through its public API only.
+
+software:
+  name: pvlib python
+  version: 0.16.1
+  repository: https://github.com/pvlib/pvlib-python
+  licence: BSD-3-Clause
+  task_profiles:
+    - candidate: pvlib.modelchain.ModelChain   # first profile to be confirmed with Codex
+  out_of_profile_policy: refuse or flag, never improvise

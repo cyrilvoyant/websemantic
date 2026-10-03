@@ -1,0 +1,55 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below. Author list to be confirmed."
+title: "semantic-sim-layer: a software-agnostic semantic layer from human intent to qualified simulated data"
+type: software
+authors:
+  - given-names: "Cyril"
+    family-names: "Voyant"
+    affiliation: "Mines Paris, PSL University, Centre for Observation, Impacts, Energy (O.I.E.), Sophia-Antipolis, France"
+    email: "cyril.voyant@minesparis.psl.eu"
+    website: "https://person.cyrilvoyant.com"
+    orcid: "https://orcid.org/0000-0003-0242-7377"
+url: "https://www.cyrilvoyant.com"
+license: "MIT"
+version: "0.0.1"
+date-released: "2026-10-03"
+abstract: >
+  Research prototype of a non-intrusive semantic layer that turns natural-language
+  requests into traceable, validated configurations of existing scientific
+  simulators, runs them unmodified, and publishes their outputs as self-describing
+  records with provenance, accepted assumptions, uncertainty coverage and admitted
+  uses. Case studies: Tunnel Load Simulator, LQL-Equiv and pvlib-python.
+keywords:
+  - semantic web
+  - scientific software
+  - large language models
+  - simulation configuration
+  - provenance
+  - PROV-O
+  - SHACL
+  - FAIR
+  - reproducibility
+references:
+  - type: software
+    title: "Tunnel Load Simulator — SmartTunnel project"
+    authors:
+      - given-names: "Haytham"
+        family-names: "El-Houari"
+      - given-names: "Cyril"
+        family-names: "Voyant"
+    doi: "10.5281/zenodo.20080042"
+    repository-code: "https://github.com/cyrilvoyant/tunnel-load-simulator"
+  - type: software
+    title: "LQL-Equiv-web"
+    authors:
+      - given-names: "Cyril"
+        family-names: "Voyant"
+      - given-names: "Daniel"
+        family-names: "Julian"
+    doi: "10.5281/zenodo.21948623"
+    repository-code: "https://github.com/cyrilvoyant/LQL-Equiv-web"
+  - type: software
+    title: "pvlib python"
+    authors:
+      - name: "pvlib python contributors"
+    repository-code: "https://github.com/pvlib/pvlib-python"

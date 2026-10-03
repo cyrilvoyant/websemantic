@@ -1,0 +1,6 @@
+[submodule "external/tunnel-load-simulator"]
+	path = external/tunnel-load-simulator
+	url = https://github.com/cyrilvoyant/tunnel-load-simulator.git
+[submodule "external/LQL-Equiv-web"]
+	path = external/LQL-Equiv-web
+	url = https://github.com/cyrilvoyant/LQL-Equiv-web.git

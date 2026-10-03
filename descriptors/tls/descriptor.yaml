@@ -1,0 +1,73 @@
+# Descriptor draft for Tunnel Load Simulator (TLS).
+# Source: external/tunnel-load-simulator @ 748e053, src/tunnel_load_simulator/simulator.py (introspected 2026-10-03).
+# Bounds marked authority: code are enforced by TunnelConfig.__post_init__; all others are TODO.
+# Defaults live in the Streamlit interface (app.py), not in the dataclass: to extract, with origin "ui_default".
+
+software:
+  name: Tunnel Load Simulator
+  version: v1.0.1+748e053
+  repository: https://github.com/cyrilvoyant/tunnel-load-simulator
+  commit: 748e053e129669cf3e896d381e3c0ac01c763edd
+  doi: 10.5281/zenodo.20080042
+  licence: MIT
+  entry_point: tunnel_load_simulator.simulator:run_monte_carlo
+  config_class: tunnel_load_simulator.simulator:TunnelConfig
+
+nature: synthetic, first-order Monte Carlo generator; not calibrated against measured tunnels
+
+inputs:
+  # Geometry
+  length_m:              {type: float, unit: unit:M, bounds: {min_exclusive: 0, authority: code}}
+  n_tubes:               {type: int, unit: unit:NUM, bounds: {min: 1, max: 8, authority: code}}
+  n_lanes_per_tube:      {type: int, unit: unit:NUM, bounds: {min: 1, max: 6, authority: code}}
+  altitude_m:            {type: float, unit: unit:M}
+  max_depth_m:           {type: float, unit: unit:M}
+  gradient_percent:      {type: float, unit: unit:PERCENT}
+  # Operating context
+  tunnel_context:        {type: category, values: [urban, peri-urban, rural], authority: code}
+  lighting_type:         {type: category, values: [LED adaptive, LED fixed, mixed, sodium fixed], authority: code}
+  ventilation_type:      {type: category, values: [natural/low ventilation, longitudinal, semi-transverse, transverse], authority: code}
+  aux_kw_per_km_tube:    {type: float, unit: "unit:KiloW per km per tube"}
+  base_fixed_kw:         {type: float, unit: unit:KiloW}
+  # Traffic (relative, not vehicles per day; measured counts need an explicit mapping)
+  traffic_level:         {type: float, unit: unit:UNITLESS, note: relative multiplier}
+  morning_peak_hour:     {type: float, unit: unit:HR}
+  evening_peak_hour:     {type: float, unit: unit:HR}
+  peak_width_h:          {type: float, unit: unit:HR}
+  traffic_sensitivity:   {type: float, unit: unit:UNITLESS}
+  # Stochastic
+  noise_sigma:           {type: float, unit: unit:UNITLESS, bounds: {min: 0, authority: code}}
+  pollution_probability_per_day: {type: float, unit: unit:UNITLESS, bounds: {min: 0, max: 1, authority: code}}
+  accident_probability_per_day:  {type: float, unit: unit:UNITLESS, bounds: {min: 0, max: 1, authority: code}}
+  pollution_sensitivity: {type: float, unit: unit:UNITLESS}
+  accident_sensitivity:  {type: float, unit: unit:UNITLESS}
+
+experiment:
+  start_date:   {type: date}
+  n_days:       {type: int, unit: unit:DAY}
+  freq_minutes: {type: int, unit: unit:MIN}
+  n_runs:       {type: int, unit: unit:NUM}
+  base_seed:    {type: int}
+
+outputs:
+  representative:  time series of run 0, load decomposition
+  kpis:            one row per Monte Carlo run (annual energy uses 365/n_days extrapolation)
+  envelope:        hourly median, p10, p90 and mean of total power across runs
+  season_profiles: mean hourly profile per season, hour and run
+
+tasks:
+  supported:
+    - estimate electricity demand (energy, peak, load factor) of a road tunnel under stated assumptions
+    - compare configurations (lighting, ventilation, traffic) with controlled seeds
+    - characterise stochastic variability from modelled events
+  excluded:
+    - certify design values or predict consumption of a real tunnel without calibration
+    - infer traffic in vehicles per day
+
+uncertainty:
+  covered: [multiplicative noise, daily traffic variability, pollution and accident events]
+  not_covered: [parameter uncertainty, structural model error, calibration error]
+
+validity_notes:
+  - short-period annualisation (365/n_days) differs from seasonally complete simulation
+  - engineering constants are placeholders to calibrate against measured data
