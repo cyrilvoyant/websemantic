@@ -90,7 +90,7 @@ class Session:
                 "ni celle d'un tunnel identifié. Les autres valeurs viennent du profil TLS. "
                 "Les valeurs que vous avez fournies restent prioritaires. /d affiche les définitions et sources."
             )
-        elif re.search(r'\b(prend|prends|utilise|choisis|mets|valide|accepte)\b', text) and re.search(r'moyenn|defaut|profil|hypothes', text):
+        elif re.search(r'\b(prend|prends|utilise|choisis|mets|valide|accepte|calcule|calculer|simule|simuler)\b', text) and re.search(r'moyenn|defaut|profil|hypothes', text):
             self.propose_profile()
             self.accept_profile()
             self.pending_clarification = None

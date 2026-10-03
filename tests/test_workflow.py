@@ -132,6 +132,15 @@ def test_invalid_configuration_never_autoruns(monkeypatch, tmp_path):
     assert list(tmp_path.iterdir()) == []
 
 
+def test_combined_default_calculation_request_needs_no_api(monkeypatch, tmp_path):
+    from websemantic import cli
+
+    monkeypatch.setattr(cli, 'extract', lambda *a, **kw: pytest.fail('Defaults are handled locally.'))
+    assert main(['chat', '--workspace', str(ROOT), '--output-dir', str(tmp_path),
+                 '--once', 'calcule avec les valeurs par defaut']) == 0
+    assert len(list(tmp_path.iterdir())) == 1
+
+
 def test_explicit_dimensionless_number_uses_declared_unit(session):
     session.local_intent('prends les valeurs par défaut')
     session.apply('accident_sensitivity vaut 1', {'task': session.scenario.task, 'updates': [

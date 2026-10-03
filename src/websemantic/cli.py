@@ -41,7 +41,7 @@ def show(session):
     if missing:
         names = [describe(field.split('.')[1])[0] for field in missing[:4]]
         print("À préciser : " + ", ".join(names) + (f" et {len(missing)-4} autres champs." if len(missing)>4 else '.'))
-        print("Pour un premier essai : « prends les valeurs par défaut », puis /r.")
+        print("Pour un premier essai : « prends les valeurs par défaut ». Le calcul demandé attend les informations suffisantes.")
     unaccepted = [issue for issue in result.issues if issue.code == "unaccepted_assumption"]
     if unaccepted:
         print(
