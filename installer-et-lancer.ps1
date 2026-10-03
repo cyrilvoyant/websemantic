@@ -103,6 +103,7 @@ s = subprocess.check_output(['git', '-C', p, 'status', '--porcelain', '--untrack
 assert c == d['software']['commit'] and not s, 'Version TLS incorrecte ou sources modifiees'
 "@ | & $pythonExecutable -
     if ($LASTEXITCODE -ne 0) { throw 'Le contrôle du simulateur TLS a échoué.' }
+    if ($env:WEBSEMANTIC_INSTALL_ONLY -eq '1') { exit 0 }
     Write-Host 'Démarrage de WebSemantic_TLS. /help pour les commandes, /quit pour sortir.'
     & $pythonExecutable -m websemantic.cli chat --model tls
     if ($LASTEXITCODE -ne 0) { throw 'Le programme s est arrêté avec une erreur.' }
