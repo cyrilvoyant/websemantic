@@ -44,10 +44,10 @@ inputs:
 
 experiment:
   start_date:   {type: date}
-  n_days:       {type: int, unit: unit:DAY}
-  freq_minutes: {type: int, unit: unit:MIN}
-  n_runs:       {type: int, unit: unit:NUM}
-  base_seed:    {type: int}
+  n_days:       {type: int, unit: unit:DAY, bounds: {min: 1, authority: policy}}
+  freq_minutes: {type: int, unit: unit:MIN, bounds: {min: 1, authority: policy}}
+  n_runs:       {type: int, unit: unit:NUM, bounds: {min: 1, authority: policy}}
+  base_seed:    {type: int, bounds: {min: 0, authority: policy}}
 
 outputs:
   representative:  time series of run 0, load decomposition

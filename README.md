@@ -2,7 +2,20 @@
 
 **A software-agnostic semantic layer between human intent and existing scientific simulators.**
 
-> Status: research prototype, scaffold only (October 2026). No implementation, benchmark or result yet.
+> Status: early terminal proof of concept (October 2026). Gemini interpretation, deterministic validation, explicit demonstration-profile acceptance and pinned local TLS execution are implemented. CSV outputs and an initial JSON manifest are saved. No comparative benchmark, transfer study or RDF/JSON-LD/SHACL implementation yet.
+
+## Try the terminal PoC
+
+**Installation on another Windows PC:** [French step-by-step guide](docs/installation-windows.md). Clone with submodules, install `.[tls]`, configure your own Gemini key, then run the terminal. No activation or GUI is required.
+
+See [PowerShell instructions](docs/terminal.md). On the configured local machine:
+
+```powershell
+cd C:\Users\cvoyant\Documents\websemantic\semantic-sim-layer
+& .\.venv\Scripts\websemantic.exe chat --model tls
+```
+
+Write a request, inspect `/show`, then optionally `/profile`, `/accept` and `/run`. At most five Gemini attempts per session by default, no automatic retry. Original backend sources stay unchanged. API credentials are read server-side from GEMINI_API_KEY, never versioned.
 
 
 ## Purpose
@@ -14,7 +27,15 @@ Scientific software exposes numerical parameters, while users ask questions. Thi
 3. runs the **unmodified** simulator;
 4. **qualifies the simulated data**: each output is published as a self-describing JSON-LD record stating which software, version and configuration produced it, which assumptions were accepted, which uncertainties are and are not covered, and what uses are admitted or excluded.
 
-The layer is agnostic. Supporting a new software only requires a **descriptor** and a thin **adapter**. The core never changes.
+The architectural goal is a shared core with software-specific **descriptors** and **adapters**. Transfer without core changes is a hypothesis to test after a core freeze, not an established guarantee for arbitrary software.
+
+## First implemented slice
+
+`src/websemantic/core/validation.py` defines parameter records, scenarios and structured issue reports. `validate(scenario, descriptor)` returns `execute`, `clarify` or `refuse` without completing or changing the scenario. It checks missing values, conflicting candidates, exact evidence-span presence, sourced and explicitly accepted assumptions, strict numeric types (excluding booleans), finite values, canonical units, categories, dates and declared bounds. Experiment positivity and non-negative seed bounds are explicit prototype policies in the TLS descriptor.
+
+Limitations: exact declared-task matching only; evidence presence is not semantic proof; no SHACL or general unit conversion. The terminal normalizes quoted lengths, applies TLS resource limits and runs the pinned backend. It supports one scenario at a time; comparisons request clarification. `execute` means this initial gate has no reported issue, not certification of the experiment. This is a research prototype.
+
+The local development environment is `.venv/`; `requirements-tested.txt` records installed versions used for verification. Install the project separately with `pip install -e .` when recreating that environment. Tests: `python -m pytest -q`. The first verification completed with 21 passing tests, including the two existing backend smoke tests; these are software checks, not benchmark evidence of scientific benefit.
 
 ## Design principles
 
@@ -57,7 +78,8 @@ tests/                            smoke and non-regression tests
 ## Getting started
 
 ```bash
-git clone --recurse-submodules <url>
+git clone --recurse-submodules https://github.com/cyrilvoyant/websemantic.git
+cd websemantic
 python -m venv .venv
 .venv\Scripts\activate          # Linux/macOS: source .venv/bin/activate
 pip install -e ".[dev,backends]"

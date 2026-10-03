@@ -18,10 +18,14 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+tls = ["numpy>=1.24", "pandas>=2.0"]
 # Target simulators. TLS and LQL-Equiv are loaded from the pinned submodules in external/.
 backends = ["numpy>=1.24", "pandas>=2.0", "pvlib==0.16.1"]
-llm = []  # provider SDKs added when the parser is implemented
+llm = []  # Gemini uses the Python standard library REST client.
 dev = ["pytest>=8", "ruff>=0.6"]
+
+[project.scripts]
+websemantic = "websemantic.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

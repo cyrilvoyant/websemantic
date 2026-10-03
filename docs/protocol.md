@@ -45,3 +45,25 @@ Contrasts: A3−A2 (provenance) and A4−A3 (semantics). Same LLM, budgets and s
 ## Statistics
 
 Paired comparisons; scenario-level bootstrap intervals; Wilcoxon signed-rank for paired contrasts; effect sizes reported alongside tests.
+
+## PoC scope and operational measures (3 October 2026)
+
+This is a proof of concept, not a complete product. The full request-to-qualified-output chain has not yet been implemented. Feasibility demonstrations must be distinguished from evidence that the semantic layer adds value. Develop on TLS, freeze the core, then attempt transfer to LQL-Equiv and one bounded pvlib task profile.
+
+Five primary measurement families are planned:
+
+| Family | Operational definition |
+|---|---|
+| Parameter fidelity | Correctly extracted explicitly specified fields / expected specified fields. Normalise units, predefine numerical tolerances, and report type-specific and scenario-level summaries. |
+| Unsupported values | Unsupported non-null assignments without an accepted assumption / all non-null assignments. Report counts and undefined denominators. An accepted assumption is not an observation. |
+| Decision quality | Confusion matrix for execute / clarify / refuse, missingness precision and recall, false acceptance among non-executable requests and incorrect refusal among executable requests. |
+| Output qualification | Required annotation fields present and correct / required fields. Separately count omissions and false assertions, using human references and independently recorded execution manifests. |
+| Transfer cost | Active integration time, descriptor/adapter additions, manually versus automatically populated fields, and number and nature of post-freeze core changes. Lines of code are descriptive, not a sufficient measure of difficulty. |
+
+Energy and peak-power deviations against a matched TLS reference run are complementary outcomes. Use absolute error and relative error for nonzero references. For incomplete requests without an admissible reference configuration, score clarification rather than manufacture a numerical target. These deviations measure interface-induced computational changes, not accuracy against actual energy measurements.
+
+Begin with 20–30 TLS requests to refine the protocol and references. Before the full benchmark, fix a primary outcome, numerical tolerances, interaction budgets and annotation rules. A minimal simple-versus-enriched comparison establishes whether the added layer helps; A3–A2 and A4–A3 are required to attribute provenance and relational effects separately. Score raw proposals and final accepted configurations separately.
+
+Human-reviewed reference data include values, unknowns, conflicts, admissible decisions and correct annotations. Group paraphrases and repeated calls by underlying scenario. Report null and adverse effects as well as improvements. No usability benefit is established without an appropriate interaction study. No measured tunnel data are available or required for this interface-level evaluation.
+
+The statistical test will be selected for the outcome and dependence structure; Wilcoxon is not automatically appropriate for binary decisions. Paired categorical comparisons and scenario-level confidence intervals may require other methods. Three integrations provide bounded transfer evidence, not proof of support for arbitrary software.
