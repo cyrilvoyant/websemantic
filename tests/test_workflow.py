@@ -68,7 +68,7 @@ def test_output_destination_and_rdf_without_thirty_run_limit(session, tmp_path):
 def test_cli_short_commands_and_default_phrase(monkeypatch, capsys):
     lines = iter(['prends les valeurs par défaut', r'\d permet de vérifier', '/e altitude_m', r'\v', '/q'])
     monkeypatch.setattr('builtins.input', lambda _: next(lines))
-    assert main(['chat', '--workspace', str(ROOT)]) == 0
+    assert main(['chat', '--direct', '--model', 'tls', '--workspace', str(ROOT)]) == 0
     output = capsys.readouterr().out
     assert 'hypothèse validée' in output
     assert 'kW/(km·tube)' in output
@@ -96,7 +96,7 @@ def test_five_suggestions_adapt_to_context_without_mutation(session):
 def test_suggestion_shortcut_selection_is_local(monkeypatch, capsys):
     lines = iter([r'\s', '4', '/q'])
     monkeypatch.setattr('builtins.input', lambda _: next(lines))
-    assert main(['chat', '--workspace', str(ROOT)]) == 0
+    assert main(['chat', '--direct', '--model', 'tls', '--workspace', str(ROOT)]) == 0
     text = capsys.readouterr().out
     assert '5. Comprendre' in text
     assert 'Longueur — unité : m' in text
@@ -106,7 +106,7 @@ def test_suggestion_shortcut_selection_is_local(monkeypatch, capsys):
 def test_requested_calculation_waits_for_acceptance_then_runs_once(monkeypatch, capsys, tmp_path):
     lines = iter(['/profile', 'calcule', '/d', '/v', '/show', '/s', '/q'])
     monkeypatch.setattr('builtins.input', lambda _: next(lines))
-    assert main(['chat', '--workspace', str(ROOT), '--output-dir', str(tmp_path)]) == 0
+    assert main(['chat', '--direct', '--model', 'tls', '--workspace', str(ROOT), '--output-dir', str(tmp_path)]) == 0
     assert len(list(tmp_path.iterdir())) == 1
     assert capsys.readouterr().out.count('lancement du calcul demandé') == 1
 
@@ -114,21 +114,21 @@ def test_requested_calculation_waits_for_acceptance_then_runs_once(monkeypatch, 
 def test_no_calculation_without_request(monkeypatch, tmp_path):
     lines = iter(['prends les valeurs par défaut', '/d', '/v', '/s', '/q'])
     monkeypatch.setattr('builtins.input', lambda _: next(lines))
-    assert main(['chat', '--workspace', str(ROOT), '--output-dir', str(tmp_path)]) == 0
+    assert main(['chat', '--direct', '--model', 'tls', '--workspace', str(ROOT), '--output-dir', str(tmp_path)]) == 0
     assert list(tmp_path.iterdir()) == []
 
 
 def test_cancel_pending_calculation(monkeypatch, tmp_path):
     lines = iter(['calcule', 'annule le calcul', 'prends les valeurs par défaut', '/q'])
     monkeypatch.setattr('builtins.input', lambda _: next(lines))
-    assert main(['chat', '--workspace', str(ROOT), '--output-dir', str(tmp_path)]) == 0
+    assert main(['chat', '--direct', '--model', 'tls', '--workspace', str(ROOT), '--output-dir', str(tmp_path)]) == 0
     assert list(tmp_path.iterdir()) == []
 
 
 def test_invalid_configuration_never_autoruns(monkeypatch, tmp_path):
     lines = iter(['prends les valeurs par défaut', '/set inputs.n_tubes 0', 'calcule', '/v', '/q'])
     monkeypatch.setattr('builtins.input', lambda _: next(lines))
-    assert main(['chat', '--workspace', str(ROOT), '--output-dir', str(tmp_path)]) == 0
+    assert main(['chat', '--direct', '--model', 'tls', '--workspace', str(ROOT), '--output-dir', str(tmp_path)]) == 0
     assert list(tmp_path.iterdir()) == []
 
 
@@ -136,7 +136,7 @@ def test_combined_default_calculation_request_needs_no_api(monkeypatch, tmp_path
     from websemantic import cli
 
     monkeypatch.setattr(cli, 'extract', lambda *a, **kw: pytest.fail('Defaults are handled locally.'))
-    assert main(['chat', '--workspace', str(ROOT), '--output-dir', str(tmp_path),
+    assert main(['chat', '--direct', '--model', 'tls', '--workspace', str(ROOT), '--output-dir', str(tmp_path),
                  '--once', 'calcule avec les valeurs par defaut']) == 0
     assert len(list(tmp_path.iterdir())) == 1
 
@@ -168,7 +168,7 @@ def test_replay_user_conversation_and_open_results(monkeypatch, capsys, tmp_path
         'proposals': [{'field': name, 'value': str(value), 'rationale': 'Hypothèse de test.', 'sources': [0]}
                       for name, value in zip(ALLOWED, ('urban', 1, 8, 18, 1.4))],
     })
-    assert main(['chat', '--workspace', str(ROOT), '--output-dir', str(tmp_path), '--open-results']) == 0
+    assert main(['chat', '--direct', '--model', 'tls', '--workspace', str(ROOT), '--output-dir', str(tmp_path), '--open-results']) == 0
     text = capsys.readouterr().out
     assert 'Médiane' in text and 'Moyenne' in text
     assert 'unit:M' not in text

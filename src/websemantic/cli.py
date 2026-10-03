@@ -14,6 +14,35 @@ from websemantic.geography import apply_report, location, research, show_report
 from websemantic.semantics import describe
 from websemantic.session import ClarificationNeeded, Session
 
+ENVIRONMENTS = {
+    '1': ('tls', 'websemantic.tls', 'Tunnel Load Simulator : demande électrique des tunnels routiers'),
+    '2': ('lql', 'websemantic.lql', 'LQL-Equiv : équivalences radiobiologiques'),
+    '3': ('pvlib', 'websemantic.pvlib', 'pvlib : modélisation des systèmes photovoltaïques'),
+}
+
+
+def choose_environment():
+    while True:
+        print('\nWebSemantic — choisissez votre environnement :')
+        for number, (_, namespace, definition) in ENVIRONMENTS.items():
+            print(f'{number} — {namespace} — {definition}')
+        print('q — quitter')
+        try:
+            choice = input('Votre choix (1, 2 ou 3) > ').strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            print('\nFin de session.')
+            return None
+        if choice in ('q', '/q', 'quit', 'exit'):
+            return None
+        if choice not in ENVIRONMENTS:
+            print('Saisissez 1, 2 ou 3.')
+            continue
+        model, namespace, _ = ENVIRONMENTS[choice]
+        if model != 'tls':
+            print(f'{namespace} — Work in progress.')
+            continue
+        return model
+
 
 def show(session):
     if session.pending_clarification:
@@ -145,7 +174,7 @@ def run_if_ready(session, args, descriptor):
         (target / 'web-context.json').write_text(json.dumps(session.web_reports, ensure_ascii=False, indent=2), encoding='utf-8')
     results_table(session, target, medians)
     (target / 'conversation.json').write_text(json.dumps({
-        'llm': args.llm, 'calls': session.calls, 'history': session.history,
+        'environment': 'websemantic.tls', 'llm': args.llm, 'calls': session.calls, 'history': session.history,
         'validation': asdict(session.result()),
     }, ensure_ascii=False, indent=2), encoding='utf-8')
     if args.open_results and os.name == 'nt':
@@ -175,7 +204,8 @@ def main(argv=None):
     )
     parser.add_argument("command", choices=["models", "describe", "chat"])
     parser.add_argument("name", nargs="?", default="tls")
-    parser.add_argument("--model", default="tls", choices=["tls"])
+    parser.add_argument("--model", choices=["tls", "lql", "pvlib"], help="Environnement pour un démarrage direct ou une demande non interactive.")
+    parser.add_argument('--direct', action='store_true', help='Démarrage sans menu pour les scripts.')
     parser.add_argument("--llm", default="gemini-3.5-flash-lite")
     parser.add_argument("--max-calls", type=int, default=0, help="0 : sans plafond local (quota fournisseur inchangé).")
     parser.add_argument('--output-dir', type=Path, default=os.environ.get('WEBSEMANTIC_OUTPUT_DIR'))
@@ -188,16 +218,25 @@ def main(argv=None):
         ),
     )
     parser.add_argument(
-        "--once", help="Une seule demande, sans simulation automatique."
+        "--once", help="Une seule demande sans menu interactif ; le calcul explicitement demandé reste soumis aux contrôles."
     )
     args = parser.parse_args(argv)
     if args.command == "models":
-        print(
-            "tls : disponible; LQL-Equiv et pvlib : integration future apres gel du coeur."
-        )
+        for model, namespace, definition in ENVIRONMENTS.values():
+            print(f"{namespace} — {definition} — " + ('disponible' if model == 'tls' else 'Work in progress'))
         return 0
     if args.name != "tls" or args.max_calls < 0:
         parser.error("TLS seulement; --max-calls doit être positif ou zéro.")
+    if args.model in ('lql', 'pvlib'):
+        print(f'websemantic.{args.model} — Work in progress.')
+        if args.once or args.direct or args.command != 'chat':
+            return 2
+        args.model = None
+    if args.command == 'chat' and not args.once and not args.direct:
+        args.model = choose_environment()
+        if args.model is None:
+            return 0
+    args.model = args.model or 'tls'
     try:
         descriptor = yaml.safe_load(
             (args.workspace / "descriptors/tls/descriptor.yaml").read_text(
@@ -216,7 +255,7 @@ def main(argv=None):
     last_output = None
     choices = []
     print(
-        f"WebSemantic_TLS / {args.llm}. " + (f"Maximum {args.max_calls} appels." if args.max_calls else 'Sans plafond local de conversation ; quotas Gemini applicables.')
+        f"websemantic.tls / {args.llm}. " + (f"Maximum {args.max_calls} appels." if args.max_calls else 'Sans plafond local de conversation ; quotas Gemini applicables.')
     )
     print('Outils : /s 5 suggestions | /d tableau | /e variable | /web question | /p proposer | /v valider | /r calculer | /q quitter')
     print(
@@ -225,7 +264,7 @@ def main(argv=None):
     while True:
         try:
             may_run = False
-            line = args.once if args.once else input("\nWebSemantic_TLS > ").strip()
+            line = args.once if args.once else input("\nwebsemantic.tls > ").strip()
         except (EOFError, KeyboardInterrupt):
             print("\nFin de session.")
             return 0

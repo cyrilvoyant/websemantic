@@ -72,7 +72,7 @@ def test_documentary_cli_never_launches_calculation(monkeypatch, line, automatic
     monkeypatch.setattr(cli, 'load_private_key', lambda _: None)
     monkeypatch.setattr(cli, 'extract', lambda *args, **kwargs: ({'needs_web': True, 'task': 'unsupported', 'updates': []}, {}))
     monkeypatch.setattr(cli, 'run_if_ready', lambda *args: pytest.fail('A documentary question must not run TLS.'))
-    assert cli.main(['chat', '--workspace', str(ROOT)]) == 0
+    assert cli.main(['chat', '--direct', '--model', 'tls', '--workspace', str(ROOT)]) == 0
     assert seen == [line.split(maxsplit=1)[1] if line.startswith('/web ') else line]
 
 
@@ -86,5 +86,5 @@ def test_web_needed_calculation_does_not_arm_old_profile(monkeypatch):
     flags = []
     monkeypatch.setattr(cli, 'answer_from_web', lambda session, question, args: flags.append(session.run_requested))
     monkeypatch.setattr(tls, 'run', lambda *args, **kwargs: pytest.fail('The old profile must not run for an unresolved documentary request.'))
-    assert cli.main(['chat', '--workspace', str(ROOT)]) == 0
+    assert cli.main(['chat', '--direct', '--model', 'tls', '--workspace', str(ROOT)]) == 0
     assert flags == [False]

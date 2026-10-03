@@ -21,7 +21,7 @@ if errorlevel 1 (
  exit /b 1
 )
 pushd "%appPath%"
-"%appPath%\.venv\Scripts\python.exe" -m websemantic.cli chat --model tls --max-calls 0 --open-results
+"%appPath%\.venv\Scripts\python.exe" -m websemantic.cli chat --max-calls 0 --open-results
 set "result=%errorlevel%"
 popd
 if not "%result%"=="0" pause

@@ -204,3 +204,19 @@ Le module utilise la recherche publique Bing RSS sans clé supplémentaire, cons
 Une réponse documentaire ne modifie et ne valide aucun paramètre et ne déclenche aucun calcul. Elle est conservée dans l’historique et immédiatement dans `documentation.jsonl` sous le dossier des résultats, même sans calcul ; `web-context.json` est enregistré avec les prochains résultats de simulation. Les sources peuvent expliquer un choix, mais les valeurs de simulation restent soumises au descripteur et à la validation. Les pages web sont des données, jamais des instructions exécutables.
 
 Exemple : `/web CETU rôle de la ventilation et de l’éclairage dans la consommation électrique d’un tunnel`.
+
+### Choix de l’environnement au démarrage
+
+Le lanceur interactif affiche les environnements et leur domaine avant la conversation :
+
+| Choix | Environnement | Domaine | État |
+| --- | --- | --- | --- |
+| 1 | `websemantic.tls` | Demande électrique des tunnels routiers | Disponible |
+| 2 | `websemantic.lql` | Équivalences radiobiologiques | Work in progress |
+| 3 | `websemantic.pvlib` | Systèmes photovoltaïques | Work in progress |
+
+Saisir 2 ou 3 affiche « Work in progress » puis réaffiche le menu, sans chargement de ces backends ni requête LLM. Saisir 1 ouvre le prompt `websemantic.tls >`. `q` quitte le menu. Ces noms identifient les environnements ; les adaptateurs conversationnels LQL/pvlib restent à implémenter. Le menu ne constitue pas une validation de transfert entre logiciels.
+
+`websemantic chat` affiche ce menu. `websemantic chat --direct --model tls` permet un démarrage TLS direct pour les scripts et les tests. `--once` conserve une exécution non interactive ; demander un modèle indisponible avec `--once` retourne Work in progress et un code d’échec, sans basculer silencieusement sur TLS. L’environnement TLS est aussi enregistré dans `conversation.json` avec les résultats.
+
+Le menu est aussi affiché par les anciens lanceurs qui préselectionnaient TLS : le démarrage interactif reste un choix utilisateur. Seul `--direct` désactive explicitement le menu.

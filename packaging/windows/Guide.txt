@@ -1,6 +1,11 @@
 WEBSEMANTIC TLS — TEST
 
-Installer.cmd prépare le logiciel une fois. WebSemantic_TLS.cmd ouvre ensuite le terminal.
+Installer.cmd prépare le logiciel une fois. WebSemantic_TLS.cmd ouvre ensuite le menu des environnements :
+1 — websemantic.tls : demande électrique des tunnels routiers (disponible)
+2 — websemantic.lql : équivalences radiobiologiques (Work in progress)
+3 — websemantic.pvlib : systèmes photovoltaïques (Work in progress)
+Tapez 1 puis Entrée pour ouvrir la conversation TLS. Les choix 2 et 3 affichent « Work in progress », puis réaffichent les trois choix. q quitte le menu. Le choix d’un environnement ne lance ni calcul, ni appel Gemini, ni installation.
+Le prompt devient websemantic.tls > une fois TLS sélectionné.
 Conserver le dossier au même emplacement. La clé est déjà configurée ; archive privée.
 Sur partage réseau, le logiciel est préparé sur le disque local ; les résultats sont enregistrés dans Resultats, à côté du lanceur, et ouverts après le calcul.
 
