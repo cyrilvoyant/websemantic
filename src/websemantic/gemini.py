@@ -4,10 +4,37 @@ import json
 import os
 import urllib.error
 import urllib.request
+from pathlib import Path
 
 
 class GeminiError(RuntimeError):
     pass
+
+
+def load_private_key(workspace):
+    """Read only GEMINI_API_KEY from a private file; never execute its contents."""
+    if os.environ.get("GEMINI_API_KEY"):
+        return
+    path = Path(workspace) / ".env"
+    if not path.is_file():
+        return
+    try:
+        lines = path.read_text(encoding="utf-8-sig").splitlines()
+        values = []
+        for line in lines:
+            name, sep, value = line.strip().partition("=")
+            if sep and name.strip() == "GEMINI_API_KEY":
+                value = value.strip()
+                if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+                    value = value[1:-1]
+                if not value or any(char.isspace() for char in value):
+                    raise ValueError
+                values.append(value)
+        if len(values) != 1:
+            raise ValueError
+    except (OSError, UnicodeError, ValueError):
+        raise GeminiError("Fichier .env illisible ou invalide : une seule entrée GEMINI_API_KEY est attendue.") from None
+    os.environ["GEMINI_API_KEY"] = values[0]
 
 
 def api_key():
@@ -22,7 +49,7 @@ def api_key():
             pass
     if not key:
         raise GeminiError(
-            "GEMINI_API_KEY absente. Configurez la variable utilisateur Windows."
+            "Clé absente : configurez GEMINI_API_KEY ou placez le fichier .env privé dans le dossier du projet."
         )
     return key
 

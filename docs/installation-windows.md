@@ -39,6 +39,8 @@ Le modèle par défaut est `gemini-3.5-flash-lite`, utilisé lors des essais de 
 
 ## 3. Converser et lancer un calcul
 
+Pour le test temporaire avec la clé fournie par Cyril, placez le fichier privé `.env` reçu séparément à la racine du clone, à côté de `pyproject.toml`. Vous pouvez alors passer l'étape 2. Le programme lit ce fichier lors du premier appel Gemini. Une variable `GEMINI_API_KEY` déjà présente dans la session PowerShell reste prioritaire. Le fichier contient une clé en clair : ne le joignez pas aux retours de test et ne le publiez pas. Il est exclu de Git. Le modèle et les quotas restent ceux du projet associé à cette clé. Supprimez le fichier à la fin de l'essai ; la révocation de la clé se fait dans Google AI Studio.
+
 ```powershell
 & .\.venv\Scripts\websemantic.exe chat --model tls --max-calls 5
 ```

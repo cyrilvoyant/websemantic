@@ -8,7 +8,7 @@ from pathlib import Path
 
 import yaml
 
-from websemantic.gemini import GeminiError, extract
+from websemantic.gemini import GeminiError, extract, load_private_key
 from websemantic.session import ClarificationNeeded, Session
 
 
@@ -205,6 +205,7 @@ def main(argv=None):
                     continue
                 session.calls += 1
                 print("Gemini interprete la demande...")
+                load_private_key(args.workspace)
                 parsed, _usage = extract(line, descriptor, session.history, args.llm)
                 session.apply(line, parsed)
                 print("Gemini >", parsed.get("message", ""))
