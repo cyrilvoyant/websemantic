@@ -42,6 +42,9 @@ function Find-Python {
     }
     return $null
 }
+# Windows PowerShell treats native stderr as an ErrorRecord. Inspect exit codes
+# instead of aborting at the first line of a Python traceback or import probe.
+$ErrorActionPreference = 'Continue'
 try {
     Refresh-Tools
     if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
@@ -50,16 +53,27 @@ try {
     & git --version
     if ($LASTEXITCODE -ne 0) { throw 'Git ne fonctionne pas après installation.' }
     $pythonExecutable = Join-Path $PSScriptRoot '.venv\Scripts\python.exe'
-    if (-not (Test-Path -LiteralPath $pythonExecutable)) {
+    $environmentReady = $false
+    if (Test-Path -LiteralPath $pythonExecutable) {
+        & $pythonExecutable -m pip --version 2>$null
+        $environmentReady = $LASTEXITCODE -eq 0
+    }
+    if (-not $environmentReady) {
         $basePython = Find-Python
         if (-not $basePython) {
             Install-Tool 'Python.Python.3.12'
             $basePython = Find-Python
         }
         if (-not $basePython) { throw 'Python reste introuvable. Fermez puis relancez le lanceur.' }
+        $environmentPath = Join-Path $PSScriptRoot '.venv'
+        if (Test-Path -LiteralPath $environmentPath) {
+            Rename-Item -LiteralPath $environmentPath -NewName ('.venv-incomplete-' + [guid]::NewGuid().ToString('N')) -ErrorAction Stop
+        }
         Write-Host 'Premier lancement : création de l environnement Python...'
-        & $basePython -m venv .venv
-        if ($LASTEXITCODE -ne 0) { throw 'Création de l environnement impossible.' }
+        Write-Host "Python utilisé : $basePython"
+        $creationLog = Join-Path $PSScriptRoot 'installation-diagnostic.txt'
+        & $basePython -m venv .venv 2>&1 | ForEach-Object { $_.ToString() } | Tee-Object -FilePath $creationLog
+        if ($LASTEXITCODE -ne 0) { throw "Création Python impossible. Détail complet dans $creationLog" }
     }
     & $pythonExecutable -c 'import sys; sys.exit(0 if sys.version_info >= (3, 10) else 1)'
     if ($LASTEXITCODE -ne 0) { throw 'Python 3.10 ou supérieur est requis.' }
