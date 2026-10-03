@@ -34,7 +34,13 @@ function Find-Python {
         if ($LASTEXITCODE -eq 0 -and $found) { $candidates += [string]$found }
     }
     if (Get-Command python -ErrorAction SilentlyContinue) { $candidates += (Get-Command python).Source }
-    $candidates += "$env:LOCALAPPDATA\Programs\Python\Python312\python.exe"
+    foreach ($pythonHome in @("$env:LOCALAPPDATA\Programs\Python", "$env:ProgramFiles")) {
+        if (Test-Path -LiteralPath $pythonHome) {
+            Get-ChildItem -LiteralPath $pythonHome -Directory -Filter 'Python*' -ErrorAction SilentlyContinue | ForEach-Object {
+                $candidates += Join-Path $_.FullName 'python.exe'
+            }
+        }
+    }
     foreach ($candidate in $candidates) {
         if (-not (Test-Path -LiteralPath $candidate)) { continue }
         & $candidate -c 'import sys,venv; sys.exit(0 if sys.version_info >= (3,10) else 1)' 2>$null
@@ -55,7 +61,7 @@ try {
     $pythonExecutable = Join-Path $PSScriptRoot '.venv\Scripts\python.exe'
     $environmentReady = $false
     if (Test-Path -LiteralPath $pythonExecutable) {
-        & $pythonExecutable -m pip --version 2>$null
+        & $pythonExecutable -c 'import sys; sys.exit(0 if sys.version_info >= (3,10) else 1)' 2>$null
         $environmentReady = $LASTEXITCODE -eq 0
     }
     if (-not $environmentReady) {
@@ -77,17 +83,27 @@ try {
     }
     & $pythonExecutable -c 'import sys; sys.exit(0 if sys.version_info >= (3, 10) else 1)'
     if ($LASTEXITCODE -ne 0) { throw 'Python 3.10 ou supérieur est requis.' }
-    $installationMarker = Join-Path $PSScriptRoot '.venv\websemantic-ready'
-    & $pythonExecutable -c 'import yaml,numpy,pandas,websemantic.cli' 2>$null
+    & $pythonExecutable (Join-Path $PSScriptRoot 'verifier-installation.py') --dependencies-only
     $dependenciesReady = $LASTEXITCODE -eq 0
-    if (-not (Test-Path -LiteralPath $installationMarker) -or -not $dependenciesReady) {
+    if (-not $dependenciesReady) {
         Write-Host 'Installation des dépendances (connexion Internet nécessaire)...'
+        & $pythonExecutable -m pip --version 2>$null | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+            & $pythonExecutable -m ensurepip
+            if ($LASTEXITCODE -ne 0) { throw 'pip est absent et sa réparation a échoué.' }
+        }
         & $pythonExecutable -m pip install -e '.[tls]'
         if ($LASTEXITCODE -ne 0) { throw 'Installation échouée. Vérifiez la connexion puis relancez.' }
-        New-Item -ItemType File -Path $installationMarker -Force | Out-Null
+        & $pythonExecutable (Join-Path $PSScriptRoot 'verifier-installation.py') --dependencies-only
+        if ($LASTEXITCODE -ne 0) { throw 'Les composants restent incomplets après installation.' }
+    } else {
+        Write-Host 'Composants déjà présents et compatibles : aucune installation nécessaire.'
     }
-    & $pythonExecutable -m pip check
-    if ($LASTEXITCODE -ne 0) { throw 'Dépendances incohérentes. Supprimez le dossier .venv puis relancez.' }
+    & $pythonExecutable -m pip --version 2>$null | Out-Null
+    if ($LASTEXITCODE -eq 0) {
+        & $pythonExecutable -m pip check
+        if ($LASTEXITCODE -ne 0) { throw 'Dépendances incohérentes. Vérifiez les versions indiquées par pip check.' }
+    }
     $backendPath = Join-Path $PSScriptRoot 'external\tunnel-load-simulator'
     if (-not (Test-Path -LiteralPath (Join-Path $backendPath 'src\tunnel_load_simulator\simulator.py'))) {
         & git submodule update --init --recursive
@@ -103,10 +119,8 @@ s = subprocess.check_output(['git', '-C', p, 'status', '--porcelain', '--untrack
 assert c == d['software']['commit'] and not s, 'Version TLS incorrecte ou sources modifiees'
 "@ | & $pythonExecutable -
     if ($LASTEXITCODE -ne 0) { throw 'Le contrôle du simulateur TLS a échoué.' }
-    if ($env:WEBSEMANTIC_INSTALL_ONLY -eq '1') { exit 0 }
-    Write-Host 'Démarrage de WebSemantic_TLS. /help pour les commandes, /quit pour sortir.'
-    & $pythonExecutable -m websemantic.cli chat --model tls
-    if ($LASTEXITCODE -ne 0) { throw 'Le programme s est arrêté avec une erreur.' }
+    Write-Host 'Vérification terminée. Ouvrez WebSemantic_TLS.cmd pour utiliser le programme.'
+    exit 0
 } catch {
     Write-Host ('Erreur : ' + $_.Exception.Message) -ForegroundColor Red
     Read-Host 'Appuyez sur Entrée pour fermer'

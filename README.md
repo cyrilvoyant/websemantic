@@ -188,3 +188,9 @@ Les propositions restent des hypothèses à valider avec `/v`, et les valeurs ex
 Le module couvre pour l’instant Paris et Ajaccio. Il consulte un catalogue limité de pages, sans recherche ouverte Google : les essais de grounding Gemini avec cette clé n’ont pas abouti (HTTP 429/404). Les sources inaccessibles sont signalées ; un échec d’analyse bloque le calcul demandé, y compris sur un ancien scénario valide. `geographic-context.json` conserve le contexte et les références dans chaque dossier de résultats. Les rapports historiques ne sont pas présentés comme des mesures actuelles.
 
 Exemple : `Calcule un tunnel de 1500 m comme Ajaccio avec des hypothèses de trafic, pollution, accidents et pics matin et soir`, puis `/v`.
+
+### Lancement sans installation
+
+`WebSemantic_TLS.cmd` effectue uniquement des contrôles avant d’ouvrir la conversation : environnement Python, versions minimales des dépendances, imports et révision TLS. Si quelque chose manque, il indique de lancer `Installer.cmd` ; aucun installateur n’est appelé par le lanceur.
+
+`Installer.cmd` vérifie l’environnement réel, sans se baser sur un fichier témoin. Python >=3.10 et les bibliothèques plus récentes compatibles sont conservés. `pip install -e .[tls]` n’est exécuté que si une dépendance manque, est trop ancienne ou ne se charge pas ; sans option `--upgrade` ni réinstallation forcée. L’installateur n’ouvre jamais la conversation. Le backend TLS reste fixé au commit scientifique déclaré, indépendamment des versions des outils d’installation.
