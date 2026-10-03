@@ -1,74 +1,95 @@
-WEBSEMANTIC TLS — TEST
+WEBSEMANTIC — QUELQUES REPÈRES POUR LE TEST
 
-Installer.cmd prépare le logiciel une fois. WebSemantic_TLS.cmd ouvre ensuite le menu des environnements :
-1 — websemantic.tls : demande électrique des tunnels routiers (disponible)
-2 — websemantic.lql : équivalences radiobiologiques (Work in progress)
-3 — websemantic.pvlib : systèmes photovoltaïques (Work in progress)
-Tapez 1 puis Entrée pour ouvrir la conversation TLS. Les choix 2 et 3 affichent « Work in progress », puis réaffichent les trois choix. q quitte le menu. Le choix d’un environnement ne lance ni calcul, ni appel Gemini, ni installation.
-Le prompt devient websemantic.tls > une fois TLS sélectionné.
-Conserver le dossier au même emplacement. La clé est déjà configurée ; archive privée.
-Sur partage réseau, le logiciel est préparé sur le disque local ; les résultats sont enregistrés dans Resultats, à côté du lanceur, et ouverts après le calcul.
+Bonjour à tous,
 
-ESSAI SIMPLE : saisir une ligne à la fois
-Je souhaite estimer la consommation électrique d'un tunnel de 2 km, avec deux tubes et deux voies par tube, en contexte périurbain.
-prends les valeurs moyennes
+Je vous propose de tester WebSemantic, un prototype qui permet de décrire un scénario en français, de vérifier les paramètres retenus, puis de lancer un simulateur. Pour ce premier essai, seul TLS est opérationnel. LQL-Equiv et pvlib viendront ensuite.
+
+Ce qui m’intéresse dans vos retours, c’est de savoir si la demande est bien comprise, si les hypothèses et les unités sont claires, et si les résultats sont faciles à interpréter. Nous travaillons ici avec des données synthétiques, sans calibration sur un tunnel réel.
+
+POUR COMMENCER
+
+Décompressez le dossier, puis double-cliquez sur Installer.cmd. Il vérifie les composants et installe ce qui manque. Si tout est déjà présent, il ne réinstalle rien ; les versions plus récentes compatibles sont conservées.
+
+Pour les utilisations suivantes, ouvrez simplement WebSemantic_TLS.cmd. Ce lanceur n’installe rien. S’il manque un composant, un message vous indique de relancer Installer.cmd.
+
+Le menu propose :
+1 — websemantic.tls : consommation électrique des tunnels routiers
+2 — websemantic.lql : équivalences radiobiologiques
+3 — websemantic.pvlib : systèmes photovoltaïques
+
+Tapez 1, puis Entrée. Les choix 2 et 3 affichent « Work in progress » et reviennent au menu. Vous pouvez quitter avec q.
+
+La clé Gemini est déjà configurée dans ce package de test privé. Merci de ne pas publier le dossier ou l’archive tels quels. Une connexion Internet est nécessaire pour les échanges avec Gemini et les recherches documentaires.
+
+UN PREMIER ESSAI
+
+Dans la conversation, saisissez cette phrase :
+Calcule la consommation électrique d’un tunnel de 2 km, avec deux tubes et deux voies par tube, en contexte périurbain.
+
+Puis, une ligne à la fois :
+/p
 /d
-/e altitude_m
+/v
 
-OUTILS rappelés après chaque échange
-/d : tableau des variables, valeurs, unités et statuts
-/e altitude_m : explique une variable et comment la modifier
-/p : propose des valeurs pour les champs manquants
-/v : valide les hypothèses proposées
-Calcul demandé : il démarre dès que les informations sont suffisantes et les hypothèses validées. Le dossier des résultats s’ouvre à la fin.
-/set inputs.altitude_m 25 : fixe l'altitude à 25 m
-/set inputs.lighting_type "LED fixed" : choisit une catégorie
-/q : quitte
-Les mêmes commandes avec antislash sont acceptées.
+/p propose des valeurs de démonstration pour les informations manquantes. /d affiche les paramètres, leurs unités et leur statut. Prenez le temps de regarder le tableau avant de saisir /v, qui valide les hypothèses et déclenche le calcul demandé si les contrôles passent.
 
-AUTRES PHRASES À ESSAYER
+Vous pouvez aussi écrire « prends les valeurs par défaut » ou « prends les valeurs moyennes ». Cela vaut acceptation du profil de démonstration et peut déclencher un calcul déjà demandé. Ces valeurs ne sont pas des moyennes mesurées.
+
+QUELQUES COMMANDES UTILES
+
+/s : propose cinq questions ou pistes d’affinement ; choisissez 1 à 5 ou écrivez votre propre question.
+/d : affiche les paramètres et leurs unités.
+/e altitude_m : explique une variable et comment la modifier.
+/set inputs.altitude_m 25 : fixe l’altitude à 25 m.
+/set inputs.lighting_type "LED fixed" : choisit un éclairage LED fixe.
+/v : valide les hypothèses proposées.
+/q : quitte la conversation.
+
+Vous pouvez remplacer / par un antislash. Pour calculer, il suffit d’écrire « calcule » ou « estime la consommation ». Si des informations manquent, la demande attend les précisions ou la validation. « Annule le calcul » annule cette attente. /r reste disponible, mais n’est pas nécessaire.
+
+D’AUTRES DEMANDES À ESSAYER
+
 Le tunnel mesure 1 500 mètres et possède un seul tube avec deux voies.
 Le tunnel utilise un éclairage LED fixe et une ventilation longitudinale.
 Simule 30 jours à partir du 1er janvier 2025, avec un pas de 15 minutes et 10 réalisations.
-Je veux connaître la consommation d'un tunnel.
+Calcule un tunnel de 1500 m comme Ajaccio, avec des hypothèses de trafic, pollution, accidents et pics matin et soir.
+Un tunnel de 2 km à Paris : propose les hypothèses de circulation.
+/web CETU rôle de la ventilation et de l’éclairage dans la consommation électrique d’un tunnel
+
+Pour tester les demandes ambiguës ou hors périmètre :
 Le trafic est très élevé.
 Le tunnel mesure moins de deux kilomètres.
 Le tunnel possède zéro tube.
 Compare un tunnel de 1 km fortement éclairé et un tunnel de 2 km faiblement éclairé.
-Donne-moi la consommation réelle exacte de ce tunnel pour l'année prochaine.
-altitude et autres paramètres comme Ajaccio
-les plus coûteux énergétiquement
+Donne-moi la consommation réelle exacte de ce tunnel pour l’année prochaine.
 
-Les valeurs par défaut ne sont pas des moyennes mesurées. Paris et Ajaccio déclenchent une consultation en ligne de sources publiques puis leur analyse par Gemini. Le tableau propose trafic, pics matin/soir et contexte à valider. Aucune altitude de tunnel n’est déduite du nom de la ville. Les catégories coûteuses sont proposées selon les coefficients TLS, sans certifier un optimum.
-Les demandes imprécises doivent entraîner une clarification, jamais des données présentées comme mesurées. Une comparaison A/B reste à développer.
-La conversation n'a plus de plafond local ; les quotas Gemini restent applicables. Une demande de calcul est exécutée après vérification des paramètres et des hypothèses. Une question d’explication ne lance rien.
-Les résultats sont simulés : MWh sur la période, MWh/an extrapolés, kW de pointe, kWh/(m·an) tous tubes compris et facteur sans dimension. Moyenne et médiane sont distinguées. Le dossier contient CSV, manifeste et graphe RDF de provenance.
-Pour une étude plus détaillée : simulateur TLS original https://github.com/cyrilvoyant/tunnel-load-simulator (lien direct de l'interface à confirmer).
+Sur ces derniers exemples, j’attends une clarification ou un refus expliqué. La comparaison de deux scénarios dans une même demande reste à développer.
 
-/s ou \s : cinq suggestions pour préciser l'objectif ou revoir les hypothèses. Saisir 1 à 5, ou écrire sa question. Les choix d’objectif peuvent demander un calcul ; aucune hypothèse n’est validée automatiquement.
+COMMENT LIRE LES HYPOTHÈSES ET LES RÉSULTATS
 
-Pour demander le calcul : « calcule » ou « estime la consommation ». S’il manque des données, la demande reste en attente ; compléter ou valider avec /v la déclenche. « Annule le calcul » annule cette attente. /r reste un raccourci facultatif.
+Paris et Ajaccio déclenchent une consultation de sources publiques, puis une proposition de contexte à valider. Le nom de la ville ne définit pas la géométrie ou l’altitude du tunnel. Sans comptage local exploitable, les pointes de 8 h et 18 h, leur largeur de 1,4 h et le trafic relatif de 1 restent des valeurs de démonstration. Les probabilités d’accident et de pollution du modèle ne sont pas des risques mesurés pour la ville.
 
-CONTEXTE GÉOGRAPHIQUE
-Essayez : « Calcule un tunnel de 1500 m comme Ajaccio, avec les hypothèses de trafic, pollution, accidents et pics matin et soir ».
-Ou : « Un tunnel de 2 km à Paris : propose les hypothèses de circulation ».
-Le programme consulte des pages sélectionnées (API géographique, DREAL/Qualitair ou Airparif/Sytadin, ONISR), puis Gemini produit une synthèse et un tableau en français. Deux appels Gemini par demande géographique. Les étapes internes restent masquées. Ce premier module couvre Paris et Ajaccio ; ce n’est pas encore un moteur de recherche général.
-/v valide les propositions. Si un calcul a été demandé, il démarre ensuite sans /r. /d montre les justifications et les sources ; /set permet de corriger une valeur.
-Sans comptage local, 8 h, 18 h, largeur 1,4 h et trafic relatif 1 restent des défauts TLS non calibrés. Les probabilités d’événements restent des valeurs de démonstration, pas des risques mesurés pour la ville. Pollution ambiante et accidents corporels BAAC sont contextualisés sans conversion automatique en événements de tunnel. Les documents peuvent être historiques ; consultation en ligne ne signifie pas mesure en temps réel.
-Si une source est inaccessible, son état est affiché. Si l’analyse échoue, aucun calcul du contexte demandé ne démarre : reformulez avec la ville pour réessayer. Le dossier de résultats contient geographic-context.json avec synthèse, propositions, sources et dates.
+La recherche web peut aussi servir aux questions techniques. La réponse cite les pages consultées et signale les limites. Les documents PDF ne sont pas encore lus. Une réponse documentaire ne modifie pas les paramètres et ne lance pas de calcul. Des connaissances générales du modèle peuvent aider à interpréter la demande ; elles ne suffisent pas à établir une mesure locale actuelle.
 
-INSTALLER ET LANCER : DEUX ACTIONS DISTINCTES
-- Installer.cmd vérifie les composants. Il installe uniquement ce qui manque ou ne satisfait pas les versions minimales. Python 3.10 ou supérieur convient ; une version plus récente compatible est conservée. Les bibliothèques déjà présentes à une version suffisante ne sont pas réinstallées. Relancer Installer.cmd sur une installation complète effectue seulement des vérifications.
-- WebSemantic_TLS.cmd ouvre le programme sans installer quoi que ce soit. Avant de démarrer, il vérifie Python, les bibliothèques, Git et les sources TLS. S’il manque un composant, un message indique lequel et demande de lancer Installer.cmd.
-Le simulateur TLS reste volontairement fixé à la révision de recherche indiquée dans le descripteur : une autre version du simulateur n’est pas substituée automatiquement.
+Les résultats se trouvent dans Resultats, à côté du lanceur. Le dossier du calcul s’ouvre à la fin. Sur un partage réseau, le programme utilise une copie locale pour fonctionner, tout en conservant les résultats à côté du lanceur.
 
-RECHERCHE WEB TECHNIQUE
-La consultation d’Internet est autorisée au-delà des villes : éclairage, ventilation, unités, méthodes, références et données externes. Essayez :
-/web CETU rôle de la ventilation et de l’éclairage dans la consommation électrique d’un tunnel
-Recherche sur le web des références pour justifier les hypothèses de ventilation.
-Gemini peut également déclencher une recherche documentaire quand votre question nécessite des informations externes. Les étapes internes restent masquées ; la réponse en français cite les sources, leurs dates de consultation et les limites. Une recherche ne change aucun paramètre et ne lance aucun calcul.
-Le programme utilise une recherche publique Bing et lit jusqu’à quatre pages textuelles, puis Gemini les synthétise. Les pages inaccessibles sont signalées ; les PDF ne sont pas encore lus. Si la recherche échoue, aucune information n’est inventée. La recherche publique peut varier ou devenir indisponible.
-Les recherches sont enregistrées dans documentation.jsonl dans le dossier des résultats, même sans calcul. Elles sont aussi jointes au prochain calcul dans web-context.json.
+Les principaux indicateurs sont :
+- l’énergie sur la période simulée, en MWh ;
+- l’énergie annualisée, en MWh/an, extrapolée par 365/nombre de jours simulés ;
+- le pic de puissance au pas de calcul, en kW ;
+- l’énergie annualisée par mètre de tunnel, tous tubes compris, en kWh/(m·an) ;
+- le facteur de charge, sans dimension.
 
-LICENCE DU CODE
-Le code actuel WebSemantic_TLS de Cyril Voyant est sous PolyForm Noncommercial 1.0.0 : utilisations non commerciales et usages explicitement autorisés par cette licence, avec notices d’attribution à conserver. Texte intégral dans application/LICENSE. Cette licence réserve les autres usages commerciaux à une autorisation séparée. Les composants tiers, notamment TLS sous MIT, gardent leur propre licence. Les versions de WebSemantic déjà diffusées sous MIT conservent les droits accordés à l’époque.
+La moyenne et la médiane portent sur les réalisations simulées. Les quantiles p10–p90 décrivent leur dispersion ; ce ne sont pas des intervalles de confiance. Les CSV et le manifeste permettent de retrouver les paramètres, les unités et les hypothèses. Les recherches web sont aussi enregistrées, même sans calcul.
+
+TLS est fourni dans le package, avec une version fixée pour reproduire les essais. Pour une étude plus détaillée, vous pouvez consulter le simulateur original :
+https://github.com/cyrilvoyant/tunnel-load-simulator
+
+POUR VOS RETOURS
+
+Si une réponse vous semble incorrecte, peu claire ou trop longue, merci de me transmettre la phrase saisie, la réponse obtenue et ce que vous attendiez. Les cas où une unité manque, une hypothèse est mal justifiée ou un calcul démarre trop tôt m’intéressent particulièrement.
+
+Le code WebSemantic est sous PolyForm Noncommercial 1.0.0, avec les usages permis et les notices d’attribution précisés dans application/LICENSE. Les composants tiers gardent leur propre licence. Les droits accordés sur les anciennes versions MIT restent valables.
+
+Merci pour vos essais et vos retours,
+Cyril
