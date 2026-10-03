@@ -2,7 +2,7 @@
 
 **A software-agnostic semantic layer between human intent and existing scientific simulators.**
 
-> Status: early terminal proof of concept (October 2026). Gemini interpretation, deterministic validation, explicit demonstration-profile acceptance and pinned local TLS execution are implemented. CSV outputs and an initial JSON manifest are saved. No comparative benchmark, transfer study or RDF/JSON-LD/SHACL implementation yet.
+> Status: early terminal proof of concept (October 2026). Gemini interpretation, deterministic validation, explicit demonstration-profile acceptance and pinned local TLS execution are implemented. CSV outputs and an initial JSON manifest are saved. An initial RDF/SKOS vocabulary and PROV-O export are implemented. No comparative benchmark, transfer study, JSON-LD or SHACL execution gate yet.
 
 ## Try the terminal PoC
 
@@ -17,7 +17,7 @@ cd C:\Users\cvoyant\Documents\websemantic\semantic-sim-layer
 & .\.venv\Scripts\websemantic.exe chat --model tls
 ```
 
-Write a request, inspect `/show`, then optionally `/profile`, `/accept` and `/run`. No local conversation ceiling by default; Gemini project quotas still apply. No automatic retry. Original backend sources stay unchanged. API credentials are read server-side from GEMINI_API_KEY, never versioned.
+Write a request, inspect `/show`, then optionally `/profile`, `/accept` and `/run`. No local conversation ceiling by default; Gemini project quotas still apply. No automatic retry. Original backend sources stay unchanged. API credentials are read locally from GEMINI_API_KEY or a private .env file, never versioned.
 
 
 ## Purpose
