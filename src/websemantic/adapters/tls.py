@@ -10,16 +10,15 @@ from pathlib import Path
 
 from websemantic.adapters.tls_outputs import qualify
 from websemantic.core.validation import validate
+from websemantic.semantics import export_semantics
 
 
-def run(scenario, descriptor, workspace):
+def run(scenario, descriptor, workspace, output_root=None):
     result = validate(scenario, descriptor)
     if result.decision != "execute":
         raise ValueError("Configuration non validee : /show puis completer les champs.")
     config = {k: v.value for k, v in scenario.inputs.items()}
     exp = {k: v.value for k, v in scenario.experiment.items()}
-    if exp["n_days"] > 366 or exp["n_runs"] > 30:
-        raise ValueError("Limite PoC : 366 jours et 30 realisations maximum.")
     if exp["freq_minutes"] not in (5, 10, 15, 30, 60):
         raise ValueError("Pas temporel autorise : 5, 10, 15, 30, 60 minutes.")
     if exp["n_days"] * 1440 / exp["freq_minutes"] * exp["n_runs"] > 2_000_000:
@@ -79,8 +78,7 @@ def run(scenario, descriptor, workspace):
     )
     qualification = qualify(outputs, exp)
     target = (
-        Path(workspace)
-        / "runs"
+        (Path(output_root) if output_root else Path(workspace) / "runs")
         / (
             datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
             + "-"
@@ -104,6 +102,7 @@ def run(scenario, descriptor, workspace):
         json.dumps(manifest, ensure_ascii=False, indent=2, allow_nan=False),
         encoding="utf-8",
     )
+    export_semantics(scenario, qualification, target)
     medians = (
         outputs["kpis"][["total_mwh", "annualized_mwh", "peak_kw", "load_factor", "specific_kwh_m_year"]]
         .median()

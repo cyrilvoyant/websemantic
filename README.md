@@ -17,7 +17,7 @@ cd C:\Users\cvoyant\Documents\websemantic\semantic-sim-layer
 & .\.venv\Scripts\websemantic.exe chat --model tls
 ```
 
-Write a request, inspect `/show`, then optionally `/profile`, `/accept` and `/run`. At most five Gemini attempts per session by default, no automatic retry. Original backend sources stay unchanged. API credentials are read server-side from GEMINI_API_KEY, never versioned.
+Write a request, inspect `/show`, then optionally `/profile`, `/accept` and `/run`. No local conversation ceiling by default; Gemini project quotas still apply. No automatic retry. Original backend sources stay unchanged. API credentials are read server-side from GEMINI_API_KEY, never versioned.
 
 
 ## Purpose
@@ -160,6 +160,16 @@ Lire les hypothèses proposées avant `/accept`. Ce profil est un exemple de cal
 
 Vérifier que la réponse distingue l'énergie sur la période (MWh), l'énergie annualisée par extrapolation (MWh/an), la puissance de pointe au pas de calcul (kW), l'énergie annualisée par longueur tous tubes compris (kWh/(m·an)) et le facteur de charge sans dimension. Dans `manifest.json`, `output_qualification` décrit les unités, le sens des colonnes et les agrégations. Les quantiles p10–p90 caractérisent les réalisations simulées ; ils ne constituent pas un intervalle de confiance.
 
-Par défaut, une session permet cinq tentatives Gemini. Les commandes `/show`, `/details`, `/profile`, `/accept` et `/run` ne consomment pas d'appel API.
+Par défaut, la conversation ne comporte plus de plafond local ; les quotas Gemini restent applicables. Les commandes `/show`, `/details`, `/profile`, `/accept` et `/run` ne consomment pas d'appel API.
 
 Le lanceur vérifie Git, Python, les dépendances et le commit TLS. Il installe les outils absents via winget, puis les dépendances Python. Une connexion Internet est nécessaire ; Windows peut demander une autorisation administrateur. Si winget est absent, installer App Installer depuis le Microsoft Store puis relancer. Les branches d'installation des outils absents restent à tester sur un PC vierge. Documentation winget : https://learn.microsoft.com/en-us/windows/package-manager/winget/install
+
+## Mise à jour du test conversationnel
+
+Les commandes courtes sont rappelées après chaque échange : `/d` tableau des valeurs et unités, `/e altitude_m` définition d'une variable, `/p` proposition, `/v` validation des hypothèses, `/r` calcul, `/q` sortie. Les mêmes alias avec antislash sont acceptés. Les commandes copiées avec une explication après leur nom sont reconnues.
+
+« Prends les valeurs moyennes » accepte explicitement les valeurs de démonstration pour les champs manquants ; ce ne sont pas des moyennes terrain. « Comme Ajaccio » propose un contexte documenté à valider, sans inventer les paramètres d'un tunnel réel. « Les plus coûteux énergétiquement » propose les catégories à coefficients élevés dans TLS, sans prétendre à un optimum.
+
+La conversation n'a plus de plafond local par défaut (`--max-calls 0`) ; les quotas Gemini demeurent. Le nombre de réalisations n'est plus limité à 30 ; un garde de volume de deux millions de points reste actif. Résultats en tableau français (moyenne et médiane), export JSON et RDF. Dans le package, le dossier `Resultats` apparaît à côté du lanceur et s'ouvre à la fin du calcul. Une installation depuis un partage réseau utilise AppData uniquement pour l'environnement technique.
+
+Pour une étude plus détaillée, utiliser le simulateur TLS original : https://github.com/cyrilvoyant/tunnel-load-simulator . Le lien direct de l'interface déployée reste à confirmer ; aucun domaine .net n'est deviné.

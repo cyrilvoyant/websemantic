@@ -1,0 +1,158 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix ws: <https://github.com/cyrilvoyant/websemantic/ns#> .
+
+ws:EnergyIntent a rdfs:Class .
+
+ws:Hypothesis a rdfs:Class .
+
+ws:Parameter a rdfs:Class .
+
+ws:Scenario a rdfs:Class .
+
+ws:SimulationOutput a rdfs:Class .
+
+ws:UserValue a rdfs:Class .
+
+ws:accident_probability_per_day a skos:Concept ;
+    skos:definition "Probabilité par jour ; 0,015 = 1,5 %."@fr ;
+    skos:prefLabel "Probabilité d'accident"@fr ;
+    ws:unitSymbol "1" .
+
+ws:accident_sensitivity a skos:Concept ;
+    skos:definition "Coefficient de surcroît lié aux accidents simulés."@fr ;
+    skos:prefLabel "Sensibilité accidents"@fr ;
+    ws:unitSymbol "1" .
+
+ws:altitude_m a skos:Concept ;
+    skos:definition "Altitude du tunnel ; une ville ne fixe pas celle du site."@fr ;
+    skos:prefLabel "Altitude"@fr ;
+    ws:unitSymbol "m" .
+
+ws:annual_energy a ws:EnergyIntent ;
+    ws:requiresIndicator ws:annualized_mwh .
+
+ws:aux_kw_per_km_tube a skos:Concept ;
+    skos:definition "Puissance auxiliaire par kilomètre et par tube."@fr ;
+    skos:prefLabel "Auxiliaires"@fr ;
+    ws:unitSymbol "kW/(km·tube)" .
+
+ws:base_fixed_kw a skos:Concept ;
+    skos:definition "Puissance constante ajoutée pour l'ensemble du tunnel."@fr ;
+    skos:prefLabel "Charge fixe"@fr ;
+    ws:unitSymbol "kW" .
+
+ws:base_seed a skos:Concept ;
+    skos:definition "Graine pseudo-aléatoire pour reproduire le calcul."@fr ;
+    skos:prefLabel "Graine"@fr ;
+    ws:unitSymbol "identifiant" .
+
+ws:energy_demand a ws:EnergyIntent ;
+    ws:requiresIndicator ws:total_mwh .
+
+ws:evening_peak_hour a skos:Concept ;
+    skos:definition "Heure centrale du pic de trafic, entre 0 et 24."@fr ;
+    skos:prefLabel "Pointe du soir"@fr ;
+    ws:unitSymbol "h du jour" .
+
+ws:freq_minutes a skos:Concept ;
+    skos:definition "Durée entre deux points de calcul."@fr ;
+    skos:prefLabel "Pas de calcul"@fr ;
+    ws:unitSymbol "min" .
+
+ws:gradient_percent a skos:Concept ;
+    skos:definition "Pente longitudinale : 2 % correspond à 2 m par 100 m."@fr ;
+    skos:prefLabel "Pente"@fr ;
+    ws:unitSymbol "%" .
+
+ws:length_efficiency a ws:EnergyIntent ;
+    ws:requiresIndicator ws:specific_kwh_m_year .
+
+ws:length_m a skos:Concept ;
+    skos:definition "Longueur du tunnel, commune aux tubes."@fr ;
+    skos:prefLabel "Longueur"@fr ;
+    ws:unitSymbol "m" .
+
+ws:lighting_type a skos:Concept ;
+    skos:definition "Technologie et commande, pas une intensité lumineuse en lux."@fr ;
+    skos:prefLabel "Éclairage"@fr ;
+    ws:unitSymbol "catégorie" .
+
+ws:max_depth_m a skos:Concept ;
+    skos:definition "Épaisseur maximale au-dessus du tunnel dans TLS."@fr ;
+    skos:prefLabel "Couverture maximale"@fr ;
+    ws:unitSymbol "m" .
+
+ws:morning_peak_hour a skos:Concept ;
+    skos:definition "Heure centrale du pic de trafic, entre 0 et 24."@fr ;
+    skos:prefLabel "Pointe du matin"@fr ;
+    ws:unitSymbol "h du jour" .
+
+ws:n_days a skos:Concept ;
+    skos:definition "Nombre de jours effectivement simulés."@fr ;
+    skos:prefLabel "Durée"@fr ;
+    ws:unitSymbol "jours" .
+
+ws:n_lanes_per_tube a skos:Concept ;
+    skos:definition "Nombre de voies dans chaque tube."@fr ;
+    skos:prefLabel "Voies par tube"@fr ;
+    ws:unitSymbol "nombre" .
+
+ws:n_runs a skos:Concept ;
+    skos:definition "Nombre de trajectoires Monte Carlo."@fr ;
+    skos:prefLabel "Réalisations"@fr ;
+    ws:unitSymbol "nombre" .
+
+ws:n_tubes a skos:Concept ;
+    skos:definition "Nombre de tubes du tunnel."@fr ;
+    skos:prefLabel "Tubes"@fr ;
+    ws:unitSymbol "nombre" .
+
+ws:noise_sigma a skos:Concept ;
+    skos:definition "Écart-type relatif du bruit ; 0,06 correspond à 6 %."@fr ;
+    skos:prefLabel "Bruit multiplicatif"@fr ;
+    ws:unitSymbol "1" .
+
+ws:peak_demand a ws:EnergyIntent ;
+    ws:requiresIndicator ws:peak_kw .
+
+ws:peak_width_h a skos:Concept ;
+    skos:definition "Durée caractéristique des pics de trafic."@fr ;
+    skos:prefLabel "Largeur des pics"@fr ;
+    ws:unitSymbol "h" .
+
+ws:pollution_probability_per_day a skos:Concept ;
+    skos:definition "Probabilité par jour ; 0,05 = 5 %, pas un taux mesuré."@fr ;
+    skos:prefLabel "Probabilité de pollution"@fr ;
+    ws:unitSymbol "1" .
+
+ws:pollution_sensitivity a skos:Concept ;
+    skos:definition "Coefficient de surcroît lié aux événements de pollution."@fr ;
+    skos:prefLabel "Sensibilité pollution"@fr ;
+    ws:unitSymbol "1" .
+
+ws:start_date a skos:Concept ;
+    skos:definition "Premier jour simulé, au format AAAA-MM-JJ."@fr ;
+    skos:prefLabel "Début"@fr ;
+    ws:unitSymbol "date" .
+
+ws:traffic_level a skos:Concept ;
+    skos:definition "Multiplicateur du trafic ; 1 est la référence, pas des véhicules/jour."@fr ;
+    skos:prefLabel "Trafic relatif"@fr ;
+    ws:unitSymbol "1" .
+
+ws:traffic_sensitivity a skos:Concept ;
+    skos:definition "Coefficient du modèle, sans dimension."@fr ;
+    skos:prefLabel "Sensibilité au trafic"@fr ;
+    ws:unitSymbol "1" .
+
+ws:tunnel_context a skos:Concept ;
+    skos:definition "Urbain, périurbain ou rural : modifie le modèle de trafic."@fr ;
+    skos:prefLabel "Contexte"@fr ;
+    ws:unitSymbol "catégorie" .
+
+ws:ventilation_type a skos:Concept ;
+    skos:definition "Type de ventilation modélisé."@fr ;
+    skos:prefLabel "Ventilation"@fr ;
+    ws:unitSymbol "catégorie" .
+

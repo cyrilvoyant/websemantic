@@ -2,6 +2,7 @@
 
 import json
 import re
+import unicodedata
 from dataclasses import replace
 
 from websemantic.core.validation import Parameter, Scenario, validate
@@ -53,6 +54,52 @@ class Session:
         self.calls = 0
         self.pending_clarification = None
 
+    def local_intent(self, request):
+        """Resolve explicit workflow requests without asking the LLM to invent data."""
+        text = ''.join(c for c in unicodedata.normalize('NFD', request.lower()) if not unicodedata.combining(c))
+        message = None
+        if re.search(r'\b(moins|plus|entre|environ)\b', text) and re.search(r'\b(km|kilometres?|metres?)\b', text):
+            self.pending_clarification = 'Une borne ou une approximation ne fixe pas une longueur précise. Indiquez une longueur de calcul (avec m ou km), ou demandez un profil de démonstration.'
+            message = self.pending_clarification
+        elif 'ajaccio' in text:
+            self.propose_profile()
+            source = (
+                "Ajaccio coastal demonstration proxy, reviewed 2026-10-03. "
+                "https://www.insee.fr/fr/metadonnees/geographie/commune/2A004-ajaccio ; "
+                "https://www.corse.developpement-durable.gouv.fr/IMG/pdf/210706-dle_finosello_ajacciu.pdf . "
+                "Local study site spans 5.5–18 m NGF; 10 m is a chosen proxy, not a city mean or tunnel observation."
+            )
+            for name, value in (("altitude_m", 10.0), ("tunnel_context", "urban")):
+                if name not in self.scenario.inputs or self.scenario.inputs[name].origin != "provided":
+                    self.scenario.inputs[name] = Parameter(value, self.descriptor['inputs'][name].get('unit'), 'assumption', source=source)
+            self.pending_clarification = None
+            message = (
+                "Pour un cas urbain littoral à Ajaccio, je propose 10 m d'altitude et un contexte urbain, "
+                "à valider avec /v. Ce sont des hypothèses : 10 m n'est ni l'altitude moyenne d'Ajaccio "
+                "ni celle d'un tunnel identifié. Les autres valeurs viennent du profil TLS. "
+                "Les valeurs que vous avez fournies restent prioritaires. /d affiche les définitions et sources."
+            )
+        elif re.search(r'\b(prend|prends|utilise|choisis|mets|valide|accepte)\b', text) and re.search(r'moyenn|defaut|profil|hypothes', text):
+            self.propose_profile()
+            self.accept_profile()
+            self.pending_clarification = None
+            message = "Les valeurs manquantes sont complétées par le profil TLS et acceptées à votre demande. Ce sont des valeurs de démonstration, pas des moyennes mesurées. /r lance le calcul."
+        elif 'mix' in text and 'moyenn' in text:
+            self.propose_profile()
+            self.accept_profile()
+            self.pending_clarification = None
+            message = "J'utilise le profil par défaut pour les champs manquants, comme demandé. Je ne fais pas de moyenne entre technologies : les catégories ne se moyennent pas. /d permet de vérifier ce choix, /r de calculer."
+        elif re.search(r'(plus|moins).*co[uû]teu|plus.*energet|plus.*energivo', text):
+            high = 'moins' not in text
+            self.propose_profile()
+            for name, value in (("lighting_type", "sodium fixed" if high else "LED adaptive"), ("ventilation_type", "transverse" if high else "natural/low ventilation")):
+                self.scenario.inputs[name] = Parameter(value, None, 'assumption', source="TLS @748e053 category coefficients; scenario proposal, not proof of global optimum.")
+            self.pending_clarification = None
+            message = "Je propose les catégories aux coefficients " + ('élevés' if high else 'faibles') + " dans TLS. /v valide ces hypothèses. Ce choix ne prouve pas un optimum énergétique ni la faisabilité technique."
+        if message:
+            self.history.append({'user': request, 'assistant': message})
+        return message
+
     def apply(self, request, parsed):
         """Validate the entire extraction before changing state (atomic update)."""
         updates = []
@@ -60,6 +107,10 @@ class Session:
         task = parsed.get("task")
         if task not in self.descriptor["tasks"]["supported"] + ["unsupported"]:
             raise ValueError("Tache Gemini non reconnue.")
+        if task == 'unsupported':
+            self.pending_clarification = parsed.get('message') or 'Demande à préciser ; le scénario précédent est conservé.'
+            self.history.append({'user': request, 'assistant': self.pending_clarification})
+            raise ClarificationNeeded(self.pending_clarification)
         paths = [update["field"] for update in parsed["updates"]]
         if len(paths) != len(set(paths)) or task.startswith("compare configurations"):
             self.pending_clarification = (
@@ -99,16 +150,20 @@ class Session:
             if group == "inputs" and name == "length_m":
                 # Derive length from the quoted source, never from the LLM's unit label.
                 matches = re.findall(
-                    r"(\d+(?:[.,]\d+)?)\s*(km|kilom[eè]tres?|m[eè]tres?|m)\b",
+                    r"(\d(?:[\d \u00a0\u202f]*\d)?(?:[.,]\d+)?)\s*(km|kilom[eè]tres?|m[eè]tres?|m)\b",
                     evidence,
                     re.IGNORECASE,
                 )
+                if not matches:
+                    numbers = {'un': 1, 'une': 1, 'deux': 2, 'trois': 3, 'quatre': 4, 'cinq': 5, 'six': 6, 'sept': 7, 'huit': 8, 'neuf': 9, 'dix': 10}
+                    words = re.findall(r'\b(' + '|'.join(numbers) + r')\s*(km|kilom[eè]tres?|m[eè]tres?|m)\b', evidence, re.IGNORECASE)
+                    matches = [(str(numbers[word.lower()]), unit) for word, unit in words]
                 if len(matches) != 1:
                     raise ValueError(
                         "Longueur : fournir une preuve avec une valeur et une unite m ou km explicites."
                     )
                 original, source_unit = matches[0]
-                original = float(original.replace(",", "."))
+                original = float(re.sub(r'\s', '', original).replace(",", "."))
                 factor = 1000 if source_unit.lower().startswith("k") else 1
                 value = original * factor
                 source = f"Exact normalisation: {original} {source_unit} x {factor} -> unit:M"
@@ -121,6 +176,8 @@ class Session:
                 "voies",
             ):
                 unit = "unit:NUM"
+            elif spec.get('unit') == 'unit:UNITLESS' and unit in (None, '1', 'unit:UNITLESS', 'unit:NUM', 'sans dimension', 'dimensionless', 'UNITLESS'):
+                unit = 'unit:UNITLESS'
             updates.append(
                 (group, name, Parameter(value, unit, "provided", evidence, source))
             )
@@ -152,7 +209,7 @@ class Session:
         for group in ("inputs", "experiment"):
             records = getattr(self.scenario, group)
             for name, record in list(records.items()):
-                if record.origin == "default" and record.source == PROFILE_SOURCE:
+                if record.origin in ('default', 'assumption') and record.source:
                     records[name] = replace(record, accepted=True)
 
     def set_value(self, path, text):

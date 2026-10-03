@@ -6,6 +6,8 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+from websemantic.semantics import DEFINITIONS
+
 
 class GeminiError(RuntimeError):
     pass
@@ -54,7 +56,7 @@ def api_key():
     return key
 
 
-def extract(request, descriptor, history, model="gemini-3.5-flash-lite"):
+def extract(request, descriptor, history, model="gemini-3.5-flash-lite", state=None):
     """Extract explicitly supplied updates. Acceptance is never delegated to Gemini."""
     fields = [
         f"{group}.{name}"
@@ -106,6 +108,10 @@ def extract(request, descriptor, history, model="gemini-3.5-flash-lite"):
         "les informations principales manquantes. Aucun résultat chiffré inventé, aucun diagnostic "
         "de validation : la validation sera effectuée localement après ta réponse. "
         "task doit correspondre a une tache declaree; pour demande hors perimetre utilise unsupported. "
+        "Une précision sur les paramètres dans une conversation TLS conserve la tâche d'estimation. "
+        "Consulte ETAT ACTUEL : ne redemande pas les paramètres déjà présents. Si les hypothèses "
+        "attendent accord, indique /v ; si tout est fourni ou accepté, indique /r. "
+        "Une demande de moyenne des résultats se rapporte aux sorties du simulateur, sans calculer toi-même. "
         "Utilise l'historique uniquement comme contexte, pas pour reextraire des valeurs anciennes."
     )
     payload = {
@@ -115,6 +121,10 @@ def extract(request, descriptor, history, model="gemini-3.5-flash-lite"):
         + json.dumps(descriptor, ensure_ascii=False)
         + "\nHISTORIQUE:\n"
         + json.dumps(history, ensure_ascii=False)
+        + '\nETAT ACTUEL:\n'
+        + json.dumps(state or {}, ensure_ascii=False)
+        + '\nVOCABULAIRE PARAMETRES (nom français, unité, définition):\n'
+        + json.dumps(DEFINITIONS, ensure_ascii=False)
         + "\nNOUVEAU MESSAGE:\n"
         + request,
         "response_format": {

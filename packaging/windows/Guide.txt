@@ -1,0 +1,42 @@
+WEBSEMANTIC TLS — TEST
+
+Installer.cmd prépare le logiciel une fois. WebSemantic_TLS.cmd ouvre ensuite le terminal.
+Conserver le dossier au même emplacement. La clé est déjà configurée ; archive privée.
+Sur partage réseau, le logiciel est préparé sur le disque local ; les résultats sont enregistrés dans Resultats, à côté du lanceur, et ouverts après le calcul.
+
+ESSAI SIMPLE : saisir une ligne à la fois
+Je souhaite estimer la consommation électrique d'un tunnel de 2 km, avec deux tubes et deux voies par tube, en contexte périurbain.
+prends les valeurs moyennes
+/d
+/e altitude_m
+/r
+
+OUTILS rappelés après chaque échange
+/d : tableau des variables, valeurs, unités et statuts
+/e altitude_m : explique une variable et comment la modifier
+/p : propose des valeurs pour les champs manquants
+/v : valide les hypothèses proposées
+/r : calcule et ouvre le dossier des résultats
+/set inputs.altitude_m 25 : fixe l'altitude à 25 m
+/set inputs.lighting_type "LED fixed" : choisit une catégorie
+/q : quitte
+Les mêmes commandes avec antislash sont acceptées.
+
+AUTRES PHRASES À ESSAYER
+Le tunnel mesure 1 500 mètres et possède un seul tube avec deux voies.
+Le tunnel utilise un éclairage LED fixe et une ventilation longitudinale.
+Simule 30 jours à partir du 1er janvier 2025, avec un pas de 15 minutes et 10 réalisations.
+Je veux connaître la consommation d'un tunnel.
+Le trafic est très élevé.
+Le tunnel mesure moins de deux kilomètres.
+Le tunnel possède zéro tube.
+Compare un tunnel de 1 km fortement éclairé et un tunnel de 2 km faiblement éclairé.
+Donne-moi la consommation réelle exacte de ce tunnel pour l'année prochaine.
+altitude et autres paramètres comme Ajaccio
+les plus coûteux énergétiquement
+
+Les valeurs par défaut ne sont pas des moyennes mesurées. Ajaccio déclenche un profil documentaire limité (contexte urbain, proxy d'altitude littorale 10 m), à valider : pas les caractéristiques d'un tunnel réel. Les catégories coûteuses sont proposées selon les coefficients TLS, sans certifier un optimum.
+Les demandes imprécises doivent entraîner une clarification, jamais des données présentées comme mesurées. Une comparaison A/B reste à développer.
+La conversation n'a plus de plafond local ; les quotas Gemini restent applicables. Aucun calcul automatique après une phrase.
+Les résultats sont simulés : MWh sur la période, MWh/an extrapolés, kW de pointe, kWh/(m·an) tous tubes compris et facteur sans dimension. Moyenne et médiane sont distinguées. Le dossier contient CSV, manifeste et graphe RDF de provenance.
+Pour une étude plus détaillée : simulateur TLS original https://github.com/cyrilvoyant/tunnel-load-simulator (lien direct de l'interface à confirmer).
