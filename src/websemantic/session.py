@@ -6,7 +6,7 @@ import unicodedata
 from dataclasses import replace
 
 from websemantic.core.validation import Parameter, Scenario, validate
-from websemantic.units import normalize
+from websemantic.units import normalize, parse_number
 
 
 class ClarificationNeeded(ValueError):
@@ -106,11 +106,11 @@ class Session:
             value = update["value"]
             unit = update["unit"] or None
             source = None
-            if spec["type"] == "int":
-                value = int(value)
-            elif spec["type"] == "float":
-                value = float(value.replace(",", "."))
+            number_source = None
+            if spec["type"] in ("int", "float"):
+                value, number_source = parse_number(value, spec["type"])
             value, unit, source = normalize(value, unit, evidence, spec)
+            source = '; '.join(part for part in (number_source, source) if part) or None
             updates.append(
                 (group, name, Parameter(value, unit, "provided", evidence, source))
             )
