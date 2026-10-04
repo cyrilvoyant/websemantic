@@ -10,6 +10,38 @@
     "entry_point": "tunnel_load_simulator.simulator:run_monte_carlo",
     "config_class": "tunnel_load_simulator.simulator:TunnelConfig"
   },
+  "concept_identifiers": {
+    "inputs": {
+      "length_m": "https://github.com/cyrilvoyant/websemantic/ns#tls/length_m",
+      "n_tubes": "https://github.com/cyrilvoyant/websemantic/ns#tls/n_tubes",
+      "n_lanes_per_tube": "https://github.com/cyrilvoyant/websemantic/ns#tls/n_lanes_per_tube",
+      "altitude_m": "https://github.com/cyrilvoyant/websemantic/ns#tls/altitude_m",
+      "max_depth_m": "https://github.com/cyrilvoyant/websemantic/ns#tls/max_depth_m",
+      "gradient_percent": "https://github.com/cyrilvoyant/websemantic/ns#tls/gradient_percent",
+      "tunnel_context": "https://github.com/cyrilvoyant/websemantic/ns#tls/tunnel_context",
+      "lighting_type": "https://github.com/cyrilvoyant/websemantic/ns#tls/lighting_type",
+      "ventilation_type": "https://github.com/cyrilvoyant/websemantic/ns#tls/ventilation_type",
+      "aux_kw_per_km_tube": "https://github.com/cyrilvoyant/websemantic/ns#tls/aux_kw_per_km_tube",
+      "base_fixed_kw": "https://github.com/cyrilvoyant/websemantic/ns#tls/base_fixed_kw",
+      "traffic_level": "https://github.com/cyrilvoyant/websemantic/ns#tls/traffic_level",
+      "morning_peak_hour": "https://github.com/cyrilvoyant/websemantic/ns#tls/morning_peak_hour",
+      "evening_peak_hour": "https://github.com/cyrilvoyant/websemantic/ns#tls/evening_peak_hour",
+      "peak_width_h": "https://github.com/cyrilvoyant/websemantic/ns#tls/peak_width_h",
+      "traffic_sensitivity": "https://github.com/cyrilvoyant/websemantic/ns#tls/traffic_sensitivity",
+      "noise_sigma": "https://github.com/cyrilvoyant/websemantic/ns#tls/noise_sigma",
+      "pollution_probability_per_day": "https://github.com/cyrilvoyant/websemantic/ns#tls/pollution_probability_per_day",
+      "accident_probability_per_day": "https://github.com/cyrilvoyant/websemantic/ns#tls/accident_probability_per_day",
+      "pollution_sensitivity": "https://github.com/cyrilvoyant/websemantic/ns#tls/pollution_sensitivity",
+      "accident_sensitivity": "https://github.com/cyrilvoyant/websemantic/ns#tls/accident_sensitivity"
+    },
+    "experiment": {
+      "start_date": "https://github.com/cyrilvoyant/websemantic/ns#tls/start_date",
+      "n_days": "https://github.com/cyrilvoyant/websemantic/ns#tls/n_days",
+      "freq_minutes": "https://github.com/cyrilvoyant/websemantic/ns#tls/freq_minutes",
+      "n_runs": "https://github.com/cyrilvoyant/websemantic/ns#tls/n_runs",
+      "base_seed": "https://github.com/cyrilvoyant/websemantic/ns#tls/base_seed"
+    }
+  },
   "runtime": {
     "adapter": "websemantic.adapters.tls:run",
     "backend_path": "external/tunnel-load-simulator",
@@ -26,7 +58,7 @@
         },
         "label": "Longueur",
         "display_unit": "m",
-        "definition": "Longueur du tunnel, commune aux tubes.",
+        "definition": "Longueur du tunnel commune aux tubes ; convertie en kilomètres pour les charges proportionnelles à la longueur.",
         "default": 1500,
         "unit_aliases": [
           "m",
@@ -57,7 +89,14 @@
             "neuf": 9,
             "dix": 10
           }
-        }
+        },
+        "quantity_kind": "length",
+        "model_component": "geometry",
+        "scope_note": "Ne pas multiplier la longueur par le nombre de tubes ; ce facteur est appliqué séparément.",
+        "aliases": [
+          "longueur du tunnel"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "n_tubes": {
         "type": "int",
@@ -69,7 +108,7 @@
         },
         "label": "Tubes",
         "display_unit": "nombre",
-        "definition": "Nombre de tubes du tunnel.",
+        "definition": "Nombre de tubes ; multiplie les charges de ventilation et d’auxiliaires et contribue au nombre total de voies.",
         "default": 2,
         "unit_aliases": [
           null,
@@ -82,7 +121,14 @@
           "1",
           "réalisations",
           "realisations"
-        ]
+        ],
+        "quantity_kind": "count",
+        "model_component": "geometry",
+        "scope_note": "Un tube est distinct d’une voie de circulation.",
+        "aliases": [
+          "nombre de tubes"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "n_lanes_per_tube": {
         "type": "int",
@@ -94,7 +140,7 @@
         },
         "label": "Voies par tube",
         "display_unit": "nombre",
-        "definition": "Nombre de voies dans chaque tube.",
+        "definition": "Nombre de voies dans chaque tube ; l’éclairage est dimensionné sur n_tubes × n_lanes_per_tube.",
         "default": 2,
         "unit_aliases": [
           null,
@@ -107,14 +153,21 @@
           "1",
           "réalisations",
           "realisations"
-        ]
+        ],
+        "quantity_kind": "count",
+        "model_component": "geometry",
+        "scope_note": "Ne pas fournir le nombre total de voies à la place du nombre par tube.",
+        "aliases": [
+          "nombre de voies par tube"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "altitude_m": {
         "type": "float",
         "unit": "unit:M",
         "label": "Altitude",
         "display_unit": "m",
-        "definition": "Altitude du tunnel ; une ville ne fixe pas celle du site.",
+        "definition": "Altitude utilisée dans le facteur de ventilation : 1 + max(altitude_m − 500, 0)/6000.",
         "default": 300,
         "unit_aliases": [
           "m",
@@ -122,14 +175,21 @@
           "metres",
           "mètre",
           "mètres"
-        ]
+        ],
+        "quantity_kind": "length",
+        "model_component": "ventilation",
+        "scope_note": "Le référentiel altimétrique n’est pas déclaré par le modèle ; l’altitude de la commune ne fixe pas celle du tunnel.",
+        "aliases": [
+          "altitude du tunnel"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "max_depth_m": {
         "type": "float",
         "unit": "unit:M",
         "label": "Couverture maximale",
         "display_unit": "m",
-        "definition": "Épaisseur maximale au-dessus du tunnel dans TLS.",
+        "definition": "Profondeur maximale utilisée pour les auxiliaires : facteur 1 + min(max_depth_m, 800)/6000.",
         "default": 80,
         "unit_aliases": [
           "m",
@@ -137,21 +197,35 @@
           "metres",
           "mètre",
           "mètres"
-        ]
+        ],
+        "quantity_kind": "length",
+        "model_component": "auxiliaries",
+        "scope_note": "Le plafonnement de l’effet à 800 m n’est pas une limite géométrique de validité physique.",
+        "aliases": [
+          "profondeur maximale"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "gradient_percent": {
         "type": "float",
         "unit": "unit:PERCENT",
         "label": "Pente",
         "display_unit": "%",
-        "definition": "Pente longitudinale : 2 % correspond à 2 m par 100 m.",
+        "definition": "Pente en pourcentage, utilisée dans le facteur de ventilation 1 + abs(gradient_percent)/20.",
         "default": 2.0,
         "unit_aliases": [
           "%",
           "percent",
           "pourcent",
           "pourcentage"
-        ]
+        ],
+        "quantity_kind": "percentage",
+        "model_component": "ventilation",
+        "scope_note": "Une pente de 2 % se saisit 2, pas 0,02 ; l’adaptateur courant demande une valeur non négative.",
+        "aliases": [
+          "pente du tunnel"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "tunnel_context": {
         "type": "category",
@@ -163,7 +237,7 @@
         "authority": "code",
         "label": "Contexte",
         "display_unit": "catégorie",
-        "definition": "Urbain, périurbain ou rural : modifie le modèle de trafic.",
+        "definition": "Catégorie appliquant un multiplicateur au profil de trafic ; urban ajoute également une composante de pointe en soirée.",
         "default": "peri-urban",
         "unit_aliases": [
           null,
@@ -178,7 +252,14 @@
           "categorie",
           "category",
           "categorical"
-        ]
+        ],
+        "quantity_kind": "category",
+        "model_component": "traffic",
+        "scope_note": "Le contexte n’est pas une commune et ne constitue pas une calibration du trafic.",
+        "aliases": [
+          "contexte du tunnel"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "lighting_type": {
         "type": "category",
@@ -191,7 +272,7 @@
         "authority": "code",
         "label": "Éclairage",
         "display_unit": "catégorie",
-        "definition": "Technologie et commande, pas une intensité lumineuse en lux.",
+        "definition": "Catégorie déterminant la puissance spécifique installée, le couplage au trafic et la fraction minimale d’éclairage.",
         "default": "LED adaptive",
         "unit_aliases": [
           null,
@@ -206,7 +287,14 @@
           "categorie",
           "category",
           "categorical"
-        ]
+        ],
+        "quantity_kind": "category",
+        "model_component": "lighting",
+        "scope_note": "Même les catégories fixed ont une modulation horaire dans ce modèle ; aucun éclairement en lux n’est calculé.",
+        "aliases": [
+          "type d’éclairage"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "ventilation_type": {
         "type": "category",
@@ -219,7 +307,7 @@
         "authority": "code",
         "label": "Ventilation",
         "display_unit": "catégorie",
-        "definition": "Type de ventilation modélisé.",
+        "definition": "Catégorie déterminant la charge de ventilation par kilomètre et par tube, modulée par trafic, altitude, pente et événements.",
         "default": "longitudinal",
         "unit_aliases": [
           null,
@@ -234,35 +322,56 @@
           "categorie",
           "category",
           "categorical"
-        ]
+        ],
+        "quantity_kind": "category",
+        "model_component": "ventilation",
+        "scope_note": "Il s’agit d’une charge électrique synthétique, pas d’un débit d’air ni d’une vérification de sécurité.",
+        "aliases": [
+          "type de ventilation"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "aux_kw_per_km_tube": {
         "type": "float",
         "unit": "unit:KiloW per km per tube",
         "label": "Auxiliaires",
         "display_unit": "kW/(km·tube)",
-        "definition": "Puissance auxiliaire par kilomètre et par tube.",
+        "definition": "Charge de référence des auxiliaires en kW/(km·tube), multipliée par la longueur, les tubes et le facteur de profondeur.",
         "default": 35.0,
         "unit_aliases": [
           "kW par km et par tube",
           "kW/(km.tube)",
           "kW/(km·tube)",
           "kW/km/tube"
-        ]
+        ],
+        "quantity_kind": "linear_power_per_tube",
+        "model_component": "auxiliaries",
+        "scope_note": "Ne pas confondre cette charge linéique avec une énergie ; un bruit propre aux auxiliaires est ajouté par TLS.",
+        "aliases": [
+          "charge des auxiliaires"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "base_fixed_kw": {
         "type": "float",
         "unit": "unit:KiloW",
         "label": "Charge fixe",
         "display_unit": "kW",
-        "definition": "Puissance constante ajoutée pour l'ensemble du tunnel.",
+        "definition": "Puissance fixe ajoutée une seule fois à la demande totale du tunnel, avant le bruit multiplicatif global.",
         "default": 40.0,
         "unit_aliases": [
           "kW",
           "kilowatt",
           "kilowatts",
           "kw"
-        ]
+        ],
+        "quantity_kind": "power",
+        "model_component": "base_load",
+        "scope_note": "Cette puissance concerne l’ensemble du tunnel, pas chaque tube.",
+        "aliases": [
+          "charge fixe"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "traffic_level": {
         "type": "float",
@@ -270,7 +379,7 @@
         "note": "relative multiplier",
         "label": "Trafic relatif",
         "display_unit": "1",
-        "definition": "Multiplicateur du trafic ; 1 est la référence, pas des véhicules/jour.",
+        "definition": "Multiplicateur du profil synthétique de trafic normalisé ; l’indice final est borné entre 0 et 2 dans TLS.",
         "default": 1.0,
         "unit_aliases": [
           null,
@@ -279,14 +388,21 @@
           "sans dimension",
           "dimensionless",
           "UNITLESS"
-        ]
+        ],
+        "quantity_kind": "dimensionless_multiplier",
+        "model_component": "traffic",
+        "scope_note": "Ce paramètre n’est ni un débit en véhicules/heure ni un trafic journalier observé.",
+        "aliases": [
+          "niveau de trafic"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "morning_peak_hour": {
         "type": "float",
         "unit": "unit:HR",
         "label": "Pointe du matin",
         "display_unit": "h du jour",
-        "definition": "Heure centrale du pic de trafic, entre 0 et 24.",
+        "definition": "Heure du centre du pic gaussien du matin, comprise entre 0 inclus et 24 exclu.",
         "default": 8.0,
         "unit_aliases": [
           "h",
@@ -295,14 +411,21 @@
           "heures",
           "hour",
           "hours"
-        ]
+        ],
+        "quantity_kind": "time_of_day",
+        "model_component": "traffic",
+        "scope_note": "Heure du calendrier simulé ; aucun fuseau horaire ni changement d’heure n’est modélisé.",
+        "aliases": [
+          "pointe du matin"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "evening_peak_hour": {
         "type": "float",
         "unit": "unit:HR",
         "label": "Pointe du soir",
         "display_unit": "h du jour",
-        "definition": "Heure centrale du pic de trafic, entre 0 et 24.",
+        "definition": "Heure du centre du pic gaussien du soir, comprise entre 0 inclus et 24 exclu.",
         "default": 18.0,
         "unit_aliases": [
           "h",
@@ -311,14 +434,21 @@
           "heures",
           "hour",
           "hours"
-        ]
+        ],
+        "quantity_kind": "time_of_day",
+        "model_component": "traffic",
+        "scope_note": "Heure du calendrier simulé ; aucun fuseau horaire ni changement d’heure n’est modélisé.",
+        "aliases": [
+          "pointe du soir"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "peak_width_h": {
         "type": "float",
         "unit": "unit:HR",
         "label": "Largeur des pics",
         "display_unit": "h",
-        "definition": "Durée caractéristique des pics de trafic.",
+        "definition": "Écart-type temporel du pic gaussien du matin en heures ; TLS utilise 1,15 fois cette valeur pour le soir.",
         "default": 1.4,
         "unit_aliases": [
           "h",
@@ -327,14 +457,21 @@
           "heures",
           "hour",
           "hours"
-        ]
+        ],
+        "quantity_kind": "duration",
+        "model_component": "traffic",
+        "scope_note": "Ce n’est pas la durée totale de la pointe ni sa largeur à mi-hauteur.",
+        "aliases": [
+          "largeur des pointes"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "traffic_sensitivity": {
         "type": "float",
         "unit": "unit:UNITLESS",
         "label": "Sensibilité au trafic",
         "display_unit": "1",
-        "definition": "Coefficient du modèle, sans dimension.",
+        "definition": "Coefficient du trafic dans la charge de ventilation : facteur 0,15 + traffic_sensitivity × traffic_index.",
         "default": 0.65,
         "unit_aliases": [
           null,
@@ -343,7 +480,14 @@
           "sans dimension",
           "dimensionless",
           "UNITLESS"
-        ]
+        ],
+        "quantity_kind": "dimensionless_coefficient",
+        "model_component": "ventilation",
+        "scope_note": "Coefficient de modèle ; ce n’est pas une élasticité mesurée de consommation.",
+        "aliases": [
+          "sensibilité au trafic"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "noise_sigma": {
         "type": "float",
@@ -354,7 +498,7 @@
         },
         "label": "Bruit multiplicatif",
         "display_unit": "1",
-        "definition": "Écart-type relatif du bruit ; 0,06 correspond à 6 %.",
+        "definition": "Écart-type du bruit gaussien relatif appliqué à la puissance totale ; la puissance résultante est ramenée au minimum à zéro.",
         "default": 0.06,
         "unit_aliases": [
           null,
@@ -363,7 +507,14 @@
           "sans dimension",
           "dimensionless",
           "UNITLESS"
-        ]
+        ],
+        "quantity_kind": "relative_standard_deviation",
+        "model_component": "stochastic",
+        "scope_note": "D’autres tirages restent actifs même si noise_sigma=0 : trafic quotidien, auxiliaires et événements.",
+        "aliases": [
+          "bruit relatif"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "pollution_probability_per_day": {
         "type": "float",
@@ -375,7 +526,7 @@
         },
         "label": "Probabilité de pollution",
         "display_unit": "1",
-        "definition": "Probabilité par jour ; 0,05 = 5 %, pas un taux mesuré.",
+        "definition": "Probabilité journalière de tirer un événement synthétique de pollution ; TLS tire ensuite son début et sa durée.",
         "default": 0.05,
         "unit_aliases": [
           null,
@@ -384,7 +535,14 @@
           "sans dimension",
           "dimensionless",
           "UNITLESS"
-        ]
+        ],
+        "quantity_kind": "daily_event_probability",
+        "model_component": "stochastic",
+        "scope_note": "Une valeur de 0,05 signifie une probabilité de 5 % par jour, pas un taux de pollution ni une concentration.",
+        "aliases": [
+          "probabilité de pollution"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "accident_probability_per_day": {
         "type": "float",
@@ -396,7 +554,7 @@
         },
         "label": "Probabilité d'accident",
         "display_unit": "1",
-        "definition": "Probabilité par jour ; 0,015 = 1,5 %.",
+        "definition": "Probabilité journalière de tirer un événement synthétique d’accident ; TLS tire ensuite son début et sa durée.",
         "default": 0.015,
         "unit_aliases": [
           null,
@@ -405,14 +563,21 @@
           "sans dimension",
           "dimensionless",
           "UNITLESS"
-        ]
+        ],
+        "quantity_kind": "daily_event_probability",
+        "model_component": "stochastic",
+        "scope_note": "Ce n’est pas une fréquence d’accident par véhicule ni une statistique directement déduite de BAAC.",
+        "aliases": [
+          "probabilité d’accident"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "pollution_sensitivity": {
         "type": "float",
         "unit": "unit:UNITLESS",
         "label": "Sensibilité pollution",
         "display_unit": "1",
-        "definition": "Coefficient de surcroît lié aux événements de pollution.",
+        "definition": "Coefficient de surcroît de ventilation lorsqu’un événement de pollution est actif : ajout à 1 + pollution_sensitivity × indicateur.",
         "default": 0.55,
         "unit_aliases": [
           null,
@@ -421,14 +586,21 @@
           "sans dimension",
           "dimensionless",
           "UNITLESS"
-        ]
+        ],
+        "quantity_kind": "dimensionless_coefficient",
+        "model_component": "ventilation",
+        "scope_note": "Quand les deux événements sont actifs, leurs coefficients s’ajoutent ; aucune dispersion atmosphérique n’est simulée.",
+        "aliases": [
+          "sensibilité à la pollution"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       },
       "accident_sensitivity": {
         "type": "float",
         "unit": "unit:UNITLESS",
         "label": "Sensibilité accidents",
         "display_unit": "1",
-        "definition": "Coefficient de surcroît lié aux accidents simulés.",
+        "definition": "Coefficient de surcroît de ventilation lorsqu’un accident est actif ; il s’ajoute au coefficient de pollution dans le même facteur.",
         "default": 0.75,
         "unit_aliases": [
           null,
@@ -437,7 +609,14 @@
           "sans dimension",
           "dimensionless",
           "UNITLESS"
-        ]
+        ],
+        "quantity_kind": "dimensionless_coefficient",
+        "model_component": "ventilation",
+        "scope_note": "Ce paramètre ne représente ni la gravité ni le coût énergétique complet d’un accident réel.",
+        "aliases": [
+          "sensibilité aux accidents"
+        ],
+        "reference_implementation": "simulator.py:simulate_one_realization"
       }
     },
     "experiment": {
@@ -445,7 +624,7 @@
         "type": "date",
         "label": "Début",
         "display_unit": "date",
-        "definition": "Premier jour simulé, au format AAAA-MM-JJ.",
+        "definition": "Date de début au format YYYY-MM-DD ; détermine le calendrier, les jours de semaine et les saisons du modèle.",
         "default": "2025-01-01",
         "unit_aliases": [
           null,
@@ -459,7 +638,14 @@
           "date",
           "YYYY-MM-DD",
           "ISO8601"
-        ]
+        ],
+        "quantity_kind": "calendar_date",
+        "model_component": "experiment",
+        "scope_note": "Pas de fuseau déclaré ; le profil de lumière saisonnier est celui du modèle, pas une éphéméride du site.",
+        "aliases": [
+          "date de début"
+        ],
+        "reference_implementation": "simulator.py:run_monte_carlo"
       },
       "n_days": {
         "type": "int",
@@ -470,7 +656,7 @@
         },
         "label": "Durée",
         "display_unit": "jours",
-        "definition": "Nombre de jours effectivement simulés.",
+        "definition": "Nombre de jours entiers simulés à partir de start_date.",
         "default": 7,
         "unit_aliases": [
           "day",
@@ -478,7 +664,14 @@
           "j",
           "jour",
           "jours"
-        ]
+        ],
+        "quantity_kind": "duration_days",
+        "model_component": "experiment",
+        "scope_note": "L’annualisation utilise 365/n_days ; 365 jours ne couvrent pas une année civile bissextile complète.",
+        "aliases": [
+          "durée de simulation"
+        ],
+        "reference_implementation": "simulator.py:run_monte_carlo"
       },
       "freq_minutes": {
         "type": "int",
@@ -489,13 +682,21 @@
         },
         "label": "Pas de calcul",
         "display_unit": "min",
-        "definition": "Durée entre deux points de calcul.",
+        "definition": "Durée constante du pas interne ; l’énergie du pas vaut puissance × freq_minutes/60.",
         "default": 60,
         "unit_aliases": [
           "min",
           "minute",
           "minutes"
-        ]
+        ],
+        "quantity_kind": "duration_minutes",
+        "model_component": "experiment",
+        "scope_note": "Pas admis : 5, 10, 15, 30 ou 60 min. Une sortie quotidienne est une agrégation, pas un calcul à minuit.",
+        "aliases": [
+          "pas temporel",
+          "pas interne"
+        ],
+        "reference_implementation": "simulator.py:run_monte_carlo"
       },
       "n_runs": {
         "type": "int",
@@ -506,7 +707,7 @@
         },
         "label": "Réalisations",
         "display_unit": "nombre",
-        "definition": "Nombre de trajectoires Monte Carlo.",
+        "definition": "Nombre de réalisations Monte Carlo indépendantes ; chaque réalisation utilise base_seed + son indice.",
         "default": 3,
         "unit_aliases": [
           null,
@@ -519,11 +720,18 @@
           "1",
           "réalisations",
           "realisations"
-        ]
+        ],
+        "quantity_kind": "count",
+        "model_component": "experiment",
+        "scope_note": "Augmenter ce nombre décrit mieux la variabilité du modèle, sans ajouter une validation terrain.",
+        "aliases": [
+          "nombre de réalisations"
+        ],
+        "reference_implementation": "simulator.py:run_monte_carlo"
       },
       "base_seed": {
         "operational_default": true,
-        "operational_default_source": "Fixed technical setting 42, authorised by Cyril; retain unless explicitly changed. Not a calibrated scientific parameter.",
+        "operational_default_source": "Politique de reproductibilité des essais : graine initiale fixe à 42, modifiable sur demande explicite.",
         "aliases": [
           "seed",
           "graine aléatoire"
@@ -535,7 +743,7 @@
         },
         "label": "Graine",
         "display_unit": "identifiant",
-        "definition": "Graine pseudo-aléatoire pour reproduire le calcul.",
+        "definition": "Identifiant initial du générateur pseudo-aléatoire ; chaque réalisation utilise base_seed + run.",
         "default": 42,
         "unit_aliases": [
           null,
@@ -553,7 +761,11 @@
           "number",
           "unit:NUM"
         ],
-        "display_hidden": true
+        "display_hidden": true,
+        "quantity_kind": "identifier",
+        "model_component": "operational",
+        "scope_note": "Valeur fixe 42 selon la politique d’essai, modifiable explicitement ; ce n’est pas un paramètre physique.",
+        "reference_implementation": "simulator.py:run_monte_carlo"
       }
     }
   },

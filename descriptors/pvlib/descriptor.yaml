@@ -8,5 +8,5 @@ software:
   repository: https://github.com/pvlib/pvlib-python
   licence: BSD-3-Clause
   task_profiles:
-    - candidate: pvlib.modelchain.ModelChain   # first profile to be confirmed with Codex
+    - candidate: pvlib.modelchain.ModelChain   # first profile pending scientific review
   out_of_profile_policy: refuse or flag, never improvise

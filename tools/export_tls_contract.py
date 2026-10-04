@@ -12,7 +12,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from websemantic.adapters.tls import run
 from websemantic.core.validation import Parameter, Scenario
 from websemantic.registry import load_descriptor
-from websemantic.semantics import vocabulary
+from websemantic.semantics import concept, vocabulary
 
 
 def main():
@@ -33,6 +33,7 @@ def main():
     tables = {name: {key: value for key, value in info.items() if key != "rows"}
               for name, info in qualification["tables"].items()}
     contract = {"schema_version": "websemantic-tls-contract-1", "software": descriptor["software"],
+                "concept_identifiers": {group: {name: str(concept(descriptor, name)) for name in descriptor[group]} for group in groups},
                 "runtime": descriptor["runtime"], "parameters": {group: descriptor[group] for group in groups},
                 "tasks": descriptor["tasks"], "nature": descriptor["nature"],
                 "uncertainty": descriptor["uncertainty"], "validity_notes": descriptor["validity_notes"],
@@ -81,7 +82,7 @@ def main():
     vocabulary(descriptor, {"tables": tables}).serialize(ROOT / "ontology/tls-vocabulary.ttl",format="turtle")
     examples=ROOT / "examples"; examples.mkdir(exist_ok=True)
     (examples / "tls-complete.json").write_text(json.dumps(asdict(scenario),ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-    lines=["# Paramètres et sorties TLS", "", "Document généré par tools/export_tls_contract.py. Le descripteur et les contrôles Python font autorité.", "",
+    lines=["# Paramètres et sorties TLS", "", "Référence du modèle TLS à la révision indiquée dans le contrat. Les définitions et les colonnes sont maintenues à partir du descripteur et des métadonnées de calcul.", "",
            "Les défauts scientifiques sont des propositions non calibrées, à accepter explicitement. Tous les paramètres sont requis dans la configuration ; les réglages operational_default sont fournis automatiquement selon la politique utilisateur.", ""]
     for group in groups:
         lines += [f"## {group}", "", "| Champ | Définition | Type | Unité canonique / lisible | Défaut proposé | Contraintes déclarées |", "|---|---|---|---|---|---|"]
@@ -89,7 +90,11 @@ def main():
             constraint=json.dumps({key:spec[key] for key in ("bounds","values") if key in spec},ensure_ascii=False)
             lines.append(f"| `{name}` | {spec['definition']} | {spec['type']} | `{spec.get('unit')}` / {spec['display_unit']} | {spec['default']} | {constraint} |")
         lines.append("")
-    lines += ["## Sorties", "", "Les quantités concernent tous les tubes. Les séries ne déclarent pas de fuseau horaire.", ""]
+    lines += ["## Rôle et précautions d'interprétation", ""]
+    for group in groups:
+        for name, spec in descriptor[group].items():
+            lines += [f"- `{group}.{name}` — {spec.get('model_component', group)} ; {spec.get('quantity_kind', spec['type'])}. {spec.get('scope_note', '')}"]
+    lines += ["", "## Sorties", "", "Les quantités concernent tous les tubes. Les séries ne déclarent pas de fuseau horaire.", ""]
     for name,info in tables.items():
         lines += [f"### {name}.csv", "", info["aggregation"], "", "| Colonne | Unité | Sens |", "|---|---|---|"]
         for column,metadata in info["columns"].items():

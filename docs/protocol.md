@@ -1,73 +1,48 @@
-# Evaluation protocol (draft)
+# Protocole de validation
 
-No measured data are used. Three reference levels:
+Le protocole évalue la traduction d’une demande, la traçabilité du scénario et la réutilisation du code. Les sorties TLS constituent une référence de calcul sous configuration contrôlée, pas une observation de terrain. Aucun résultat comparatif n’est encore disponible.
 
-1. intended configuration;
-2. admissible decision (execute / clarify / refuse);
-3. simulator output on the reference configuration, which is a computational reference and not an observation.
+## Conditions
 
-## Corpus
-
-- Pilot of 20–30 requests, then about 60 requests per software.
-- Classes:
-  - complete;
-  - incomplete;
-  - qualitative or ambiguous;
-  - contradictory or invalid;
-  - linguistic variants (register, word order, French and English);
-  - out-of-scope or excluded task, e.g. individual-patient decisions for LQL-Equiv.
-- Two configuration-first and intent-first subsets. Paraphrases are grouped with their parent scenario in splits.
-- Two independent annotators; disagreement and adjudication are reported. Where several completions are legitimate, the reference is a set of admissible decisions.
-
-## Comparators
-
-| System | Components |
+| Condition | Accès et rôle |
 |---|---|
-| A0 | Direct LLM configuration |
-| A1 | Typed schema and controlled vocabularies |
-| A2 | A1 + deterministic validation and clarification |
-| A3 | A2 + provenance and assumption acceptance |
-| A4 | A3 + relational knowledge, task-suitability rules and shared vocabularies |
+| Interface dédiée | Dialogue WebSemantic, interprétation structurée, contrôles locaux et TLS |
+| Agent avec contrat | Dépôt public avec définitions, règles, ontologie et sorties qualifiées ; script Python préparé par l’agent |
+| Agent avec dépôt du modèle | Même tâche, code TLS et documentation native, sans enrichissement WebSemantic |
 
-Contrasts: A3−A2 (provenance) and A4−A3 (semantics). Same LLM, budgets and settings within a comparison; one commercial and one open local LLM.
+La réussite ne suppose pas que l’interface dédiée surpasse les agents : une exécution correcte grâce au contrat public constitue un résultat attendu de réutilisation. Utiliser les mêmes familles de modèles dans les conditions compatibles, ou signaler explicitement les facteurs confondus. Les ablations de provenance ou de relations sémantiques restent des analyses complémentaires à définir avant l’expérience.
 
-## Metrics
+## Corpus et environnement
 
-- Unsupported assignment rate: unsupported non-null values / non-null values.
-- Missingness precision and recall.
-- Invalid acceptance (expected non-execution) and incorrect refusal (expected execution).
-- Evidence accuracy, conflict preservation.
-- Downstream indicator error relative to the computational reference (matched seeds and horizon).
-- Repeated-call agreement (K repetitions).
-- Annotation completeness of outputs: share of required provenance and qualification fields present and correct.
-- Genericity: core changes after `core-frozen`, integration lines and time, share of descriptor fields auto-filled.
+Préparer un pilote de 20 à 30 demandes, puis un corpus réservé : demandes complètes, incomplètes, qualitatives, ambiguës, contradictoires, invalides et hors périmètre. Les paraphrases d’un scénario restent dans le même groupe. Les essais de développement déjà utilisés pour corriger le logiciel sont exclus du corpus réservé.
 
-## Statistics
+Définir avant les comparaisons les critères principaux, tolérances, budgets d’interaction et références admissibles. Deux évaluateurs examinent les annotations et arbitrent les désaccords. Une demande vague peut admettre plusieurs configurations ou une clarification ; elle ne doit pas recevoir une cible numérique artificielle.
 
-Paired comparisons; scenario-level bootstrap intervals; Wilcoxon signed-rank for paired contrasts; effect sizes reported alongside tests.
+Fixer les révisions des dépôts, l’environnement Python, les outils et la politique d’accès au web. Conserver les traces d’outils, les scripts exécutés, les paramètres, les sources, les accords et les fichiers produits. Distinguer variabilité de l’interprétation et variabilité Monte Carlo.
 
-## PoC scope and operational measures (3 October 2026)
+## Métriques
 
-This is a proof of concept, not a complete product. The full request-to-qualified-output chain has not yet been implemented. Feasibility demonstrations must be distinguished from evidence that the semantic layer adds value. Develop on TLS, freeze the core, then attempt transfer to LQL-Equiv and one bounded pvlib task profile.
-
-Five primary measurement families are planned:
-
-| Family | Operational definition |
+| Objet | Mesure |
 |---|---|
-| Parameter fidelity | Correctly extracted explicitly specified fields / expected specified fields. Normalise units, predefine numerical tolerances, and report type-specific and scenario-level summaries. |
-| Unsupported values | Unsupported non-null assignments without an accepted assumption / all non-null assignments. Report counts and undefined denominators. An accepted assumption is not an observation. |
-| Decision quality | Confusion matrix for execute / clarify / refuse, missingness precision and recall, false acceptance among non-executable requests and incorrect refusal among executable requests. |
-| Output qualification | Required annotation fields present and correct / required fields. Separately count omissions and false assertions, using human references and independently recorded execution manifests. |
-| Transfer cost | Active integration time, descriptor/adapter additions, manually versus automatically populated fields, and number and nature of post-freeze core changes. Lines of code are descriptive, not a sufficient measure of difficulty. |
+| Paramètres | Exactitude par champ et par scénario, après conversion d’unités ; catégories et comptages exacts, tolérances numériques déclarées |
+| Hypothèses | Affectations sans preuve ni hypothèse acceptée ; inconnues et conflits correctement conservés |
+| Décisions | Matrice execute/clarify/refuse ; acceptations dangereuses et refus incorrects |
+| Trajectoires | RMSD en kW et nRMSD par réalisation, sur la même grille temporelle et les mêmes graines |
+| Indicateurs | Erreurs absolues et relatives séparées, avec traitement explicite des références nulles |
+| JSON et qualification | Validité, complétude et exactitude contre le manifeste et les CSV, évaluées séparément |
+| Explications | Part d’affirmations soutenues et couverture des éléments requis : unité, période, hypothèses, origine et limites |
+| Transfert | Modifications du cœur, temps d’intégration et ajouts de descripteur/adaptateur après gel |
 
-Energy and peak-power deviations against a matched TLS reference run are complementary outcomes. Use absolute error and relative error for nonzero references. For incomplete requests without an admissible reference configuration, score clarification rather than manufacture a numerical target. These deviations measure interface-induced computational changes, not accuracy against actual energy measurements.
+Pour une trajectoire de puissance, RMSD = sqrt(mean((P − P_ref)²)) et nRMSD = RMSD/mean(P_ref). Une moyenne nulle rend la nRMSD indéfinie ; conserver l’erreur absolue. Aucune interpolation ni association de graines n’est effectuée silencieusement. Ne pas calculer une nRMSD globale entre paramètres de dimensions différentes.
 
-Begin with 20–30 TLS requests to refine the protocol and references. Before the full benchmark, fix a primary outcome, numerical tolerances, interaction budgets and annotation rules. A minimal simple-versus-enriched comparison establishes whether the added layer helps; A3–A2 and A4–A3 are required to attribute provenance and relational effects separately. Score raw proposals and final accepted configurations separately.
+Comparer les résultats par scénario et conserver cette dépendance dans les intervalles de confiance et tests statistiques. La méthode sera choisie selon le type de résultat ; un test sur variables continues ne s’applique pas automatiquement aux décisions binaires. Rapporter aussi les résultats nuls ou défavorables.
 
-Human-reviewed reference data include values, unknowns, conflicts, admissible decisions and correct annotations. Group paraphrases and repeated calls by underlying scenario. Report null and adverse effects as well as improvements. No usability benefit is established without an appropriate interaction study. No measured tunnel data are available or required for this interface-level evaluation.
+## Reproductibilité
 
-The statistical test will be selected for the outcome and dependence structure; Wilcoxon is not automatically appropriate for binary decisions. Paired categorical comparisons and scenario-level confidence intervals may require other methods. Three integrations provide bounded transfer evidence, not proof of support for arbitrary software.
+La graine de base est 42 sauf modification explicite. Chaque réalisation utilise base_seed + run. Vérifier `base_seed` et `seed` dans `kpis.csv`, ainsi que `base_seed` dans le manifeste. Une graine modifiée constitue un changement d’expérience. L’interface n’impose pas de renseigner ce réglage pendant le dialogue courant.
 
-## Fixed technical setting for conversational tests
+Le contrôle interne de répétition utilise la configuration acceptée et le backend fixé, sans nouvelle interprétation. Il est distinct de l’essai où un agent découvre le dépôt et construit son propre script.
 
-The default base seed is 42 and remains unchanged unless the user explicitly requests another value. Each Monte Carlo realization uses base_seed + run. Record both columns from kpis.csv and the configuration in manifest.json for every test. This technical setting is omitted from ordinary dialogue; changing it is an explicit experimental change, not a new physical assumption. Use identical seeds when comparing trajectories.
+## Portée
+
+Les tests logiciels ne démontrent ni une meilleure utilisabilité ni la fidélité d’une consommation réelle. Le transfert LQL/pvlib demande des intégrations scientifiques effectives ; les contrats fictifs ne suffisent pas. Le protocole sera figé avant les comparaisons réservées et ses écarts seront consignés.

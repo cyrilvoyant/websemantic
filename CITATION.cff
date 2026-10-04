@@ -23,11 +23,11 @@ license: "PolyForm-Noncommercial-1.0.0"
 version: "0.0.1"
 date-released: "2026-10-03"
 abstract: >
-  Research prototype of a non-intrusive semantic layer that turns natural-language
-  requests into traceable, validated configurations of existing scientific
-  simulators, runs them unmodified, and publishes their outputs as self-describing
-  records with provenance, accepted assumptions, uncertainty coverage and admitted
-  uses. Case studies: Tunnel Load Simulator, LQL-Equiv and pvlib-python.
+  Semantic framework for preparing scientific simulation scenarios, validating
+  typed configurations and qualifying numerical outputs with explicit provenance.
+  The current implementation runs a pinned TLS backend and exports CSV, JSON and RDF.
+  Outputs are synthetic and have not been validated against field measurements.
+
 keywords:
   - semantic web
   - scientific software
@@ -35,7 +35,6 @@ keywords:
   - simulation configuration
   - provenance
   - PROV-O
-  - SHACL
   - FAIR
   - reproducibility
 references:

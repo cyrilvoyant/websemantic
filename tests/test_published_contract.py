@@ -7,7 +7,7 @@ from rdflib import Graph, Literal
 
 from websemantic import replay
 from websemantic.registry import load_descriptor
-from websemantic.semantics import WS
+from websemantic.semantics import WS, concept
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -23,15 +23,15 @@ def test_published_contract_and_rdf_cover_descriptor_and_outputs():
     for group in ("inputs", "experiment"):
         assert contract["parameters"][group] == descriptor[group]
         for name, spec in descriptor[group].items():
-            assert (WS[name], WS.fieldPath, Literal(f"{group}.{name}")) in graph
-            assert (WS[name], WS.dataType, Literal(spec["type"])) in graph
+            assert (concept(descriptor, name), WS.fieldPath, Literal(f"{group}.{name}")) in graph
+            assert (concept(descriptor, name), WS.dataType, Literal(spec["type"])) in graph
             for choice in spec.get("values", []):
-                assert (WS[name], WS.allowedValue, Literal(choice)) in graph
+                assert (concept(descriptor, name), WS.allowedValue, Literal(choice)) in graph
     assert set(contract["output_tables"]) == set(descriptor["outputs"])
     for table, info in contract["output_tables"].items():
         for name, metadata in info["columns"].items():
             assert metadata["meaning"] and metadata["quantity"]
-            assert (WS[f"outputs/{table}/{name}"], WS.quantity, Literal(metadata["quantity"])) in graph
+            assert (concept(descriptor, f"outputs/{table}/{name}"), WS.quantity, Literal(metadata["quantity"])) in graph
 
 
 def test_complete_example_satisfies_json_schema_and_python_gate():

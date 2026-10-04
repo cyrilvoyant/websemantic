@@ -1,6 +1,6 @@
 # Paramètres et sorties TLS
 
-Document généré par tools/export_tls_contract.py. Le descripteur et les contrôles Python font autorité.
+Référence du modèle TLS à la révision indiquée dans le contrat. Les définitions et les colonnes sont maintenues à partir du descripteur et des métadonnées de calcul.
 
 Les défauts scientifiques sont des propositions non calibrées, à accepter explicitement. Tous les paramètres sont requis dans la configuration ; les réglages operational_default sont fournis automatiquement selon la politique utilisateur.
 
@@ -8,37 +8,66 @@ Les défauts scientifiques sont des propositions non calibrées, à accepter exp
 
 | Champ | Définition | Type | Unité canonique / lisible | Défaut proposé | Contraintes déclarées |
 |---|---|---|---|---|---|
-| `length_m` | Longueur du tunnel, commune aux tubes. | float | `unit:M` / m | 1500 | {"bounds": {"min_exclusive": 0, "authority": "code"}} |
-| `n_tubes` | Nombre de tubes du tunnel. | int | `unit:NUM` / nombre | 2 | {"bounds": {"min": 1, "max": 8, "authority": "code"}} |
-| `n_lanes_per_tube` | Nombre de voies dans chaque tube. | int | `unit:NUM` / nombre | 2 | {"bounds": {"min": 1, "max": 6, "authority": "code"}} |
-| `altitude_m` | Altitude du tunnel ; une ville ne fixe pas celle du site. | float | `unit:M` / m | 300 | {} |
-| `max_depth_m` | Épaisseur maximale au-dessus du tunnel dans TLS. | float | `unit:M` / m | 80 | {} |
-| `gradient_percent` | Pente longitudinale : 2 % correspond à 2 m par 100 m. | float | `unit:PERCENT` / % | 2.0 | {} |
-| `tunnel_context` | Urbain, périurbain ou rural : modifie le modèle de trafic. | category | `None` / catégorie | peri-urban | {"values": ["urban", "peri-urban", "rural"]} |
-| `lighting_type` | Technologie et commande, pas une intensité lumineuse en lux. | category | `None` / catégorie | LED adaptive | {"values": ["LED adaptive", "LED fixed", "mixed", "sodium fixed"]} |
-| `ventilation_type` | Type de ventilation modélisé. | category | `None` / catégorie | longitudinal | {"values": ["natural/low ventilation", "longitudinal", "semi-transverse", "transverse"]} |
-| `aux_kw_per_km_tube` | Puissance auxiliaire par kilomètre et par tube. | float | `unit:KiloW per km per tube` / kW/(km·tube) | 35.0 | {} |
-| `base_fixed_kw` | Puissance constante ajoutée pour l'ensemble du tunnel. | float | `unit:KiloW` / kW | 40.0 | {} |
-| `traffic_level` | Multiplicateur du trafic ; 1 est la référence, pas des véhicules/jour. | float | `unit:UNITLESS` / 1 | 1.0 | {} |
-| `morning_peak_hour` | Heure centrale du pic de trafic, entre 0 et 24. | float | `unit:HR` / h du jour | 8.0 | {} |
-| `evening_peak_hour` | Heure centrale du pic de trafic, entre 0 et 24. | float | `unit:HR` / h du jour | 18.0 | {} |
-| `peak_width_h` | Durée caractéristique des pics de trafic. | float | `unit:HR` / h | 1.4 | {} |
-| `traffic_sensitivity` | Coefficient du modèle, sans dimension. | float | `unit:UNITLESS` / 1 | 0.65 | {} |
-| `noise_sigma` | Écart-type relatif du bruit ; 0,06 correspond à 6 %. | float | `unit:UNITLESS` / 1 | 0.06 | {"bounds": {"min": 0, "authority": "code"}} |
-| `pollution_probability_per_day` | Probabilité par jour ; 0,05 = 5 %, pas un taux mesuré. | float | `unit:UNITLESS` / 1 | 0.05 | {"bounds": {"min": 0, "max": 1, "authority": "code"}} |
-| `accident_probability_per_day` | Probabilité par jour ; 0,015 = 1,5 %. | float | `unit:UNITLESS` / 1 | 0.015 | {"bounds": {"min": 0, "max": 1, "authority": "code"}} |
-| `pollution_sensitivity` | Coefficient de surcroît lié aux événements de pollution. | float | `unit:UNITLESS` / 1 | 0.55 | {} |
-| `accident_sensitivity` | Coefficient de surcroît lié aux accidents simulés. | float | `unit:UNITLESS` / 1 | 0.75 | {} |
+| `length_m` | Longueur du tunnel commune aux tubes ; convertie en kilomètres pour les charges proportionnelles à la longueur. | float | `unit:M` / m | 1500 | {"bounds": {"min_exclusive": 0, "authority": "code"}} |
+| `n_tubes` | Nombre de tubes ; multiplie les charges de ventilation et d’auxiliaires et contribue au nombre total de voies. | int | `unit:NUM` / nombre | 2 | {"bounds": {"min": 1, "max": 8, "authority": "code"}} |
+| `n_lanes_per_tube` | Nombre de voies dans chaque tube ; l’éclairage est dimensionné sur n_tubes × n_lanes_per_tube. | int | `unit:NUM` / nombre | 2 | {"bounds": {"min": 1, "max": 6, "authority": "code"}} |
+| `altitude_m` | Altitude utilisée dans le facteur de ventilation : 1 + max(altitude_m − 500, 0)/6000. | float | `unit:M` / m | 300 | {} |
+| `max_depth_m` | Profondeur maximale utilisée pour les auxiliaires : facteur 1 + min(max_depth_m, 800)/6000. | float | `unit:M` / m | 80 | {} |
+| `gradient_percent` | Pente en pourcentage, utilisée dans le facteur de ventilation 1 + abs(gradient_percent)/20. | float | `unit:PERCENT` / % | 2.0 | {} |
+| `tunnel_context` | Catégorie appliquant un multiplicateur au profil de trafic ; urban ajoute également une composante de pointe en soirée. | category | `None` / catégorie | peri-urban | {"values": ["urban", "peri-urban", "rural"]} |
+| `lighting_type` | Catégorie déterminant la puissance spécifique installée, le couplage au trafic et la fraction minimale d’éclairage. | category | `None` / catégorie | LED adaptive | {"values": ["LED adaptive", "LED fixed", "mixed", "sodium fixed"]} |
+| `ventilation_type` | Catégorie déterminant la charge de ventilation par kilomètre et par tube, modulée par trafic, altitude, pente et événements. | category | `None` / catégorie | longitudinal | {"values": ["natural/low ventilation", "longitudinal", "semi-transverse", "transverse"]} |
+| `aux_kw_per_km_tube` | Charge de référence des auxiliaires en kW/(km·tube), multipliée par la longueur, les tubes et le facteur de profondeur. | float | `unit:KiloW per km per tube` / kW/(km·tube) | 35.0 | {} |
+| `base_fixed_kw` | Puissance fixe ajoutée une seule fois à la demande totale du tunnel, avant le bruit multiplicatif global. | float | `unit:KiloW` / kW | 40.0 | {} |
+| `traffic_level` | Multiplicateur du profil synthétique de trafic normalisé ; l’indice final est borné entre 0 et 2 dans TLS. | float | `unit:UNITLESS` / 1 | 1.0 | {} |
+| `morning_peak_hour` | Heure du centre du pic gaussien du matin, comprise entre 0 inclus et 24 exclu. | float | `unit:HR` / h du jour | 8.0 | {} |
+| `evening_peak_hour` | Heure du centre du pic gaussien du soir, comprise entre 0 inclus et 24 exclu. | float | `unit:HR` / h du jour | 18.0 | {} |
+| `peak_width_h` | Écart-type temporel du pic gaussien du matin en heures ; TLS utilise 1,15 fois cette valeur pour le soir. | float | `unit:HR` / h | 1.4 | {} |
+| `traffic_sensitivity` | Coefficient du trafic dans la charge de ventilation : facteur 0,15 + traffic_sensitivity × traffic_index. | float | `unit:UNITLESS` / 1 | 0.65 | {} |
+| `noise_sigma` | Écart-type du bruit gaussien relatif appliqué à la puissance totale ; la puissance résultante est ramenée au minimum à zéro. | float | `unit:UNITLESS` / 1 | 0.06 | {"bounds": {"min": 0, "authority": "code"}} |
+| `pollution_probability_per_day` | Probabilité journalière de tirer un événement synthétique de pollution ; TLS tire ensuite son début et sa durée. | float | `unit:UNITLESS` / 1 | 0.05 | {"bounds": {"min": 0, "max": 1, "authority": "code"}} |
+| `accident_probability_per_day` | Probabilité journalière de tirer un événement synthétique d’accident ; TLS tire ensuite son début et sa durée. | float | `unit:UNITLESS` / 1 | 0.015 | {"bounds": {"min": 0, "max": 1, "authority": "code"}} |
+| `pollution_sensitivity` | Coefficient de surcroît de ventilation lorsqu’un événement de pollution est actif : ajout à 1 + pollution_sensitivity × indicateur. | float | `unit:UNITLESS` / 1 | 0.55 | {} |
+| `accident_sensitivity` | Coefficient de surcroît de ventilation lorsqu’un accident est actif ; il s’ajoute au coefficient de pollution dans le même facteur. | float | `unit:UNITLESS` / 1 | 0.75 | {} |
 
 ## experiment
 
 | Champ | Définition | Type | Unité canonique / lisible | Défaut proposé | Contraintes déclarées |
 |---|---|---|---|---|---|
-| `start_date` | Premier jour simulé, au format AAAA-MM-JJ. | date | `None` / date | 2025-01-01 | {} |
-| `n_days` | Nombre de jours effectivement simulés. | int | `unit:DAY` / jours | 7 | {"bounds": {"min": 1, "authority": "policy"}} |
-| `freq_minutes` | Durée entre deux points de calcul. | int | `unit:MIN` / min | 60 | {"bounds": {"min": 1, "authority": "policy"}} |
-| `n_runs` | Nombre de trajectoires Monte Carlo. | int | `unit:NUM` / nombre | 3 | {"bounds": {"min": 1, "authority": "policy"}} |
-| `base_seed` | Graine pseudo-aléatoire pour reproduire le calcul. | int | `None` / identifiant | 42 | {"bounds": {"min": 0, "authority": "policy"}} |
+| `start_date` | Date de début au format YYYY-MM-DD ; détermine le calendrier, les jours de semaine et les saisons du modèle. | date | `None` / date | 2025-01-01 | {} |
+| `n_days` | Nombre de jours entiers simulés à partir de start_date. | int | `unit:DAY` / jours | 7 | {"bounds": {"min": 1, "authority": "policy"}} |
+| `freq_minutes` | Durée constante du pas interne ; l’énergie du pas vaut puissance × freq_minutes/60. | int | `unit:MIN` / min | 60 | {"bounds": {"min": 1, "authority": "policy"}} |
+| `n_runs` | Nombre de réalisations Monte Carlo indépendantes ; chaque réalisation utilise base_seed + son indice. | int | `unit:NUM` / nombre | 3 | {"bounds": {"min": 1, "authority": "policy"}} |
+| `base_seed` | Identifiant initial du générateur pseudo-aléatoire ; chaque réalisation utilise base_seed + run. | int | `None` / identifiant | 42 | {"bounds": {"min": 0, "authority": "policy"}} |
+
+## Rôle et précautions d'interprétation
+
+- `inputs.length_m` — geometry ; length. Ne pas multiplier la longueur par le nombre de tubes ; ce facteur est appliqué séparément.
+- `inputs.n_tubes` — geometry ; count. Un tube est distinct d’une voie de circulation.
+- `inputs.n_lanes_per_tube` — geometry ; count. Ne pas fournir le nombre total de voies à la place du nombre par tube.
+- `inputs.altitude_m` — ventilation ; length. Le référentiel altimétrique n’est pas déclaré par le modèle ; l’altitude de la commune ne fixe pas celle du tunnel.
+- `inputs.max_depth_m` — auxiliaries ; length. Le plafonnement de l’effet à 800 m n’est pas une limite géométrique de validité physique.
+- `inputs.gradient_percent` — ventilation ; percentage. Une pente de 2 % se saisit 2, pas 0,02 ; l’adaptateur courant demande une valeur non négative.
+- `inputs.tunnel_context` — traffic ; category. Le contexte n’est pas une commune et ne constitue pas une calibration du trafic.
+- `inputs.lighting_type` — lighting ; category. Même les catégories fixed ont une modulation horaire dans ce modèle ; aucun éclairement en lux n’est calculé.
+- `inputs.ventilation_type` — ventilation ; category. Il s’agit d’une charge électrique synthétique, pas d’un débit d’air ni d’une vérification de sécurité.
+- `inputs.aux_kw_per_km_tube` — auxiliaries ; linear_power_per_tube. Ne pas confondre cette charge linéique avec une énergie ; un bruit propre aux auxiliaires est ajouté par TLS.
+- `inputs.base_fixed_kw` — base_load ; power. Cette puissance concerne l’ensemble du tunnel, pas chaque tube.
+- `inputs.traffic_level` — traffic ; dimensionless_multiplier. Ce paramètre n’est ni un débit en véhicules/heure ni un trafic journalier observé.
+- `inputs.morning_peak_hour` — traffic ; time_of_day. Heure du calendrier simulé ; aucun fuseau horaire ni changement d’heure n’est modélisé.
+- `inputs.evening_peak_hour` — traffic ; time_of_day. Heure du calendrier simulé ; aucun fuseau horaire ni changement d’heure n’est modélisé.
+- `inputs.peak_width_h` — traffic ; duration. Ce n’est pas la durée totale de la pointe ni sa largeur à mi-hauteur.
+- `inputs.traffic_sensitivity` — ventilation ; dimensionless_coefficient. Coefficient de modèle ; ce n’est pas une élasticité mesurée de consommation.
+- `inputs.noise_sigma` — stochastic ; relative_standard_deviation. D’autres tirages restent actifs même si noise_sigma=0 : trafic quotidien, auxiliaires et événements.
+- `inputs.pollution_probability_per_day` — stochastic ; daily_event_probability. Une valeur de 0,05 signifie une probabilité de 5 % par jour, pas un taux de pollution ni une concentration.
+- `inputs.accident_probability_per_day` — stochastic ; daily_event_probability. Ce n’est pas une fréquence d’accident par véhicule ni une statistique directement déduite de BAAC.
+- `inputs.pollution_sensitivity` — ventilation ; dimensionless_coefficient. Quand les deux événements sont actifs, leurs coefficients s’ajoutent ; aucune dispersion atmosphérique n’est simulée.
+- `inputs.accident_sensitivity` — ventilation ; dimensionless_coefficient. Ce paramètre ne représente ni la gravité ni le coût énergétique complet d’un accident réel.
+- `experiment.start_date` — experiment ; calendar_date. Pas de fuseau déclaré ; le profil de lumière saisonnier est celui du modèle, pas une éphéméride du site.
+- `experiment.n_days` — experiment ; duration_days. L’annualisation utilise 365/n_days ; 365 jours ne couvrent pas une année civile bissextile complète.
+- `experiment.freq_minutes` — experiment ; duration_minutes. Pas admis : 5, 10, 15, 30 ou 60 min. Une sortie quotidienne est une agrégation, pas un calcul à minuit.
+- `experiment.n_runs` — experiment ; count. Augmenter ce nombre décrit mieux la variabilité du modèle, sans ajouter une validation terrain.
+- `experiment.base_seed` — operational ; identifier. Valeur fixe 42 selon la politique d’essai, modifiable explicitement ; ce n’est pas un paramètre physique.
 
 ## Sorties
 

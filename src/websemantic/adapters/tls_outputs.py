@@ -1,4 +1,4 @@
-"""Output meanings reviewed against the pinned TLS implementation, not LLM guesses."""
+"""Output definitions checked against the pinned TLS implementation."""
 
 
 def column_metadata(name, table):

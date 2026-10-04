@@ -1,230 +1,75 @@
-# websemantic
+# WebSemantic
 
-**A software-agnostic semantic layer between human intent and existing scientific simulators.**
+WebSemantic permet de préparer un scénario en langage naturel, de vérifier ses hypothèses et d’exécuter un logiciel scientifique dans une version fixée. Les résultats sont accompagnés de leurs unités, de la configuration utilisée et de leurs limites d’interprétation.
 
-> Status: early terminal proof of concept (October 2026). Gemini interpretation, deterministic validation, explicit demonstration-profile acceptance and pinned local TLS execution are implemented. CSV outputs and an initial JSON manifest are saved. An initial RDF/SKOS vocabulary and PROV-O export are implemented. No comparative benchmark, transfer study, JSON-LD or SHACL execution gate yet.
+La version actuelle concerne TLS, un modèle de demande électrique des tunnels routiers. LQL-Equiv et pvlib sont proposés au menu, mais leur intégration conversationnelle reste en préparation. Les données produites par TLS sont synthétiques ; aucune validation sur des mesures de terrain n’est revendiquée.
 
-## For repository-reading agents
+## Utilisation
 
-Start with [the agent execution contract](docs/agent-contract.md), [all parameter and output definitions](docs/tls-reference.md), the [machine-readable JSON contract](ontology/tls-contract.json) and [RDF/SKOS vocabulary](ontology/tls-vocabulary.ttl). A complete accepted fictitious scenario is available in [examples/tls-complete.json](examples/tls-complete.json). For the general-agent experiment, the user gives a prompt to a tool-enabled assistant, which retrieves the repository, reads the contract and TLS API, constructs the scenario and executes its own Python script through the reviewed validator and adapter. No PowerShell application or Gemini key is required. Missing or unaccepted values are blocked; no implicit defaults are added.
+Avec le package Windows de validation, décompressez l’archive puis ouvrez `Installer.cmd` une fois. Pour les utilisations suivantes, ouvrez `WebSemantic.cmd` et choisissez TLS. Le lanceur vérifie l’installation et indique si une réparation est nécessaire.
 
-## Try the terminal PoC
+Décrivez votre étude, puis précisez progressivement vos choix. Par exemple :
 
-**Windows :** décompressez entièrement le package privé, puis double-cliquez sur `Installer.cmd`. Pour les usages suivants, ouvrez `WebSemantic.cmd` : ce lanceur ne réalise aucune installation. Le menu propose TLS (disponible), LQL et pvlib (Work in progress). Les composants compatibles déjà présents sont conservés. Le `.env` du package privé est lu automatiquement ; le clone GitHub ne contient aucune clé. Ne lancez pas directement depuis le ZIP et ne publiez pas l’archive privée.
+> Je voudrais étudier un tunnel de 2 km, avec deux tubes, un éclairage LED fixe et une ventilation longitudinale. Propose les informations manquantes sans les accepter.
 
-**Installation on another Windows PC:** [French step-by-step guide](docs/installation-windows.md). Clone with submodules, install `.[tls]`, configure your own Gemini key, then run the terminal. No activation or GUI is required.
+Vous pouvez demander un tableau avec unités, une définition, des sources ou cinq pistes d’affinement. Les hypothèses scientifiques restent à accepter explicitement. Le calcul démarre quand la configuration est complète et admissible ; une modification explicite permet un nouveau calcul. Les questions de consultation ne relancent pas une simulation.
 
-See [PowerShell instructions](docs/terminal.md). On the configured local machine:
+Le dialogue présente les choix principaux. Le détail complet reste accessible sur demande. La graine technique est fixée à 42, sauf modification explicite ; elle est conservée dans les fichiers de résultats.
+
+Le module conversationnel utilise Gemini. Le clone public ne contient aucune clé ; la configuration est décrite dans [l’installation Windows](docs/installation-windows.md). Les archives privées de validation ne doivent pas être publiées.
+
+## Installer depuis le dépôt
 
 ```powershell
-cd C:\Users\cvoyant\Documents\websemantic\semantic-sim-layer
-& .\.venv\Scripts\websemantic.exe chat --model tls
-```
-
-Write naturally: ask for missing-value proposals, explanations, a table with units or five suggestions. Say “J’accepte les hypothèses proposées” to accept the displayed assumptions: a valid scenario then runs automatically. Explicit consent is checked locally; a negative sentence or question never grants acceptance. Slash commands remain optional shortcuts via `/help`. Explicit parameter changes also request a new run; read-only questions do not. `/details-all` retains access to technical parameters. No local conversation ceiling by default; Gemini project quotas still apply. No automatic retry. Original backend sources stay unchanged. API credentials are read locally from GEMINI_API_KEY or a private .env file, never versioned.
-
-
-## Purpose
-
-Scientific software exposes numerical parameters, while users ask questions. This repository studies a generic, non-intrusive layer that:
-
-1. turns a natural-language request into a **traceable semantic state**: every value is user-provided, deterministically transformed, an accepted assumption or unknown, and none is silently invented;
-2. **selects** a suitable model and validates a configuration before any run, by checking structure, units, bounds, completeness, conflicts and task suitability;
-3. runs the **unmodified** simulator;
-4. **qualifies the simulated data**: each output is saved as CSV with JSON qualification and an RDF provenance graph stating which software, version and configuration produced it, which assumptions were accepted, which uncertainties are and are not covered, and what uses are admitted or excluded.
-
-The architectural goal is a shared core with software-specific **descriptors** and **adapters**. Transfer without core changes is a hypothesis to test after a core freeze, not an established guarantee for arbitrary software.
-
-## First implemented slice
-
-`src/websemantic/core/validation.py` defines parameter records, scenarios and structured issue reports. `validate(scenario, descriptor)` returns `execute`, `clarify` or `refuse` without completing or changing the scenario. It checks missing values, conflicting candidates, exact evidence-span presence, sourced and explicitly accepted assumptions, strict numeric types (excluding booleans), finite values, canonical units, categories, dates and declared bounds. Experiment positivity and non-negative seed bounds are explicit prototype policies in the TLS descriptor.
-
-Limitations: exact declared-task matching only; evidence presence is not semantic proof; no SHACL or general unit conversion. The terminal normalizes quoted lengths, applies TLS resource limits and runs the pinned backend. It supports one scenario at a time; comparisons request clarification. `execute` means this initial gate has no reported issue, not certification of the experiment. This is a research prototype.
-
-The local development environment is `.venv/`; `requirements-tested.txt` records installed versions used for verification. Install the project separately with `pip install -e .` when recreating that environment. Tests: `python -m pytest -q`. The refactored implementation is checked by the automated regression suite, including independent descriptor-only structural fixtures and the existing backend smoke tests. These are software checks, not benchmark evidence of scientific benefit.
-
-## Design principles
-
-- **Non-intrusive**: target software is never modified, locally or on GitHub. TLS and LQL-Equiv are linked as git submodules pinned to exact commits (read-only references); pvlib is a pinned PyPI dependency. Only their public APIs are called.
-- **Non-invention**: an unsupported value that is not an accepted assumption cannot reach the simulator.
-- **LLM as interpreter, not as calculator**: Gemini receives the descriptor and returns a structured interpretation. Local Python performs validation, approved adapter dispatch and annotation. In the dedicated Gemini workflow it never executes code and never computes results. An external tool-enabled agent constructs and executes its Python script using the reviewed contract and adapter. Any explanation must read qualified computed outputs.
-- **Model comparisons planned**: Gemini is implemented; Claude/GPT repository-reading baselines and within-model comparisons remain prospective. Ranking models alone is not the research objective.
-- **Standards**: RDF/SKOS vocabulary and PROV-O derivations are implemented, along with a JSON Schema scenario contract. QUDT alignment, SHACL execution validation, JSON-LD dataset records and broader ontology reasoning remain planned. CodeMeta and CITATION.cff describe the software.
-
-## Case studies
-
-| Role | Software | Domain | Link | Licence |
-|---|---|---|---|---|
-| Development case (core built here, then frozen) | Tunnel Load Simulator (TLS) | Road-tunnel electricity demand, Monte Carlo | submodule `external/tunnel-load-simulator` @ `748e053` · [repo](https://github.com/cyrilvoyant/tunnel-load-simulator) · [DOI](https://doi.org/10.5281/zenodo.20080042) | MIT |
-| Held-out case 1 (same authors, other domain) | LQL-Equiv | Radiobiology: BED, EQD2, NTCP, TCP | submodule `external/LQL-Equiv-web` @ `dfc9a33` · [repo](https://github.com/cyrilvoyant/LQL-Equiv-web) · [DOI](https://doi.org/10.5281/zenodo.21948623) | MIT |
-| Held-out case 2 (third-party library) | pvlib-python | PV system modelling | PyPI `pvlib==0.16.1` · [repo](https://github.com/pvlib/pvlib-python) | BSD-3-Clause |
-
-**Genericity protocol**: the core is developed on TLS only, then frozen with the git tag `core-frozen`. LQL-Equiv and pvlib are then integrated by adding descriptors and adapters only. Any required change to the core is logged and reported as a partial genericity failure. Integration cost is measured: descriptor and adapter lines, time, and fields auto-filled versus written by hand.
-
-**Scope limits**:
-- LQL-Equiv is research and education software, not a medical device. Individual-patient clinical requests are an *expected refusal* class.
-- pvlib is restricted to declared task profiles (e.g. `ModelChain`). Requests outside a profile are refused or flagged, never improvised.
-- No measured tunnel, PV or clinical data are used. Simulator outputs are computational references, not observations.
-
-**DOI policy**: software is cited by its concept DOI (all versions) and pinned by commit, because the pinned commits postdate the archived releases. TLS: concept `10.5281/zenodo.20080042` (v1.0.1: `20080043`). LQL-Equiv: concept `10.5281/zenodo.21948623` (v3.0.0: `21948624`).
-
-## Repository layout
-
-```
-src/websemantic/core/      generic core: semantic state, parser, clarification, validation, selection, run, annotation
-src/websemantic/adapters/  thin per-software adapters (the only code touching target APIs)
-descriptors/{tls,lqlequiv,pvlib}/ declarative descriptors (inputs, outputs, tasks, validity, entry point)
-ontology/                         initial RDF/SKOS vocabulary (OWL/SHACL/JSON-LD planned)
-benchmark/                        requests, reference annotations, evaluation scripts
-docs/                             architecture, protocol, decisions, context
-external/                         pinned submodules (read-only, never edited)
-tests/                            smoke and non-regression tests
-```
-
-## Getting started
-
-```bash
 git clone --recurse-submodules https://github.com/cyrilvoyant/websemantic.git
 cd websemantic
 python -m venv .venv
-.venv\Scripts\activate          # Linux/macOS: source .venv/bin/activate
-pip install -e ".[dev,backends]"
-pytest
+& .\.venv\Scripts\python.exe -m pip install -e ".[tls]"
+& .\.venv\Scripts\python.exe -m websemantic.cli chat
 ```
 
-The smoke test checks that TLS and LQL-Equiv still run through the submodules and reproduce a documented reference output.
+Sous Linux ou macOS, utilisez `.venv/bin/python`. Voir [l’utilisation du terminal](docs/terminal.md) pour les raccourcis et les réglages.
 
-## Documentation
+## Paramètres et résultats
 
-- [docs/architecture.md](docs/architecture.md): components and data flow
-- [docs/protocol.md](docs/protocol.md): benchmark, comparators, metrics
-- [docs/decisions.md](docs/decisions.md): decision log
-- [docs/context.md](docs/context.md): origin of the study and the remarks from the 2 October 2026 demonstration
+Le [référentiel TLS](docs/tls-reference.md) décrit les 26 paramètres : sens, unité, type, catégories, bornes, rôle dans le modèle et précautions d’emploi. Les valeurs fournies, les conversions et les hypothèses acceptées restent distinctes. Les valeurs manquantes ne sont pas remplacées silencieusement par des hypothèses physiques.
 
-Project governance (Cyril / Codex / Claude) is kept in `trilog.md` in the parent working folder, outside this repository.
+Chaque calcul écrit un dossier contenant :
 
-## Authors and citation
-
-- Cyril Voyant, Mines Paris – PSL, O.I.E. ([ORCID 0000-0003-0242-7377](https://orcid.org/0000-0003-0242-7377))
-- Haytham El-Houari, Université Sidi Mohamed Ben Abdellah (USMBA), Fès, Morocco (co-author of TLS)
-- Daniel Julian, Centre de Cancérologie du Grand Montpellier (co-author of LQL-Equiv)
-- Nicolas Fichaux (origin of the user-intent demonstration, see [docs/context.md](docs/context.md))
-
-See [CITATION.cff](CITATION.cff).
-
-Homepage: <https://www.cyrilvoyant.com>
-
-## Licence
-
-PolyForm Noncommercial 1.0.0 for the current code authored for this repository, with the attribution notices in LICENSE to retain on redistribution. Commercial uses outside the licence’s permitted purposes require a separate authorization from the rights holder. This is source-available software with noncommercial restrictions, not an OSI-approved open-source licence. Linked and dependent software keep their own licences (TLS: MIT; LQL-Equiv: MIT; pvlib: BSD-3-Clause). Earlier revisions published under MIT, through commit c00914c, retain their MIT permissions; this change does not revoke rights already granted. See the full LICENSE text for the permitted purposes, including its provisions for educational/public research organizations.
-
-## Essais en langage naturel
-
-Ces essais permettent de vérifier l'interprétation, les unités et les demandes de précision. Ouvrir une nouvelle session pour chaque essai indépendant. Une demande de calcul démarre dès que les paramètres sont complets et les hypothèses validées. Une demande incomplète reste en attente ; les explications ne déclenchent aucun calcul.
-
-| Phrase à saisir | Comportement attendu |
+| Fichier | Contenu |
 |---|---|
-| Je souhaite estimer la consommation électrique d'un tunnel de 2 km, avec deux tubes et deux voies par tube, en contexte périurbain. | Extraire les paramètres et convertir la longueur en 2 000 m. Demander les informations manquantes. |
-| Le tunnel mesure 1 500 mètres et possède un seul tube avec deux voies. | Reconnaître les unités et les nombres écrits en lettres. |
-| Le tunnel utilise un éclairage LED fixe et une ventilation longitudinale. | Reconnaître les catégories déclarées du simulateur. |
-| Simule 30 jours à partir du 1er janvier 2025, avec un pas de 15 minutes et 10 réalisations. | Extraire la date, la durée, le pas temporel et le nombre de réalisations. |
-| Je veux connaître la consommation d'un tunnel. | Demander des précisions sans inventer les paramètres. |
-| Le trafic est très élevé. | Ne pas convertir cette description en multiplicateur numérique arbitraire. |
-| Le tunnel mesure moins de deux kilomètres. | Demander une longueur précise ; ne pas transformer une borne en valeur exacte. |
-| Le tunnel possède zéro tube. | Extraire la valeur, puis bloquer le calcul à la validation. |
-| Compare un tunnel de 1 km fortement éclairé et un tunnel de 2 km faiblement éclairé. | Demander de séparer les scénarios ; expliquer que l'intensité fort/faible n'est pas paramétrée dans ce PoC. |
-| Donne-moi la consommation réelle exacte de ce tunnel pour l'année prochaine. | Refuser cette prédiction réelle sans calibration. |
+| `kpis.csv` | Indicateurs par réalisation, graine de base et graine utilisée |
+| `representative.csv` | Trajectoire native de la réalisation 0 |
+| `daily.csv` | Énergie et puissance moyenne par jour, réalisation 0 |
+| `envelope.csv` | Statistiques horaires entre réalisations |
+| `season_profiles.csv` | Profils des saisons effectivement simulées |
+| `manifest.json` | Configuration, sources, acceptations, révision TLS et qualification des sorties |
+| `semantics.ttl` | Définitions et provenance en RDF |
 
-Il s'agit de comportements à vérifier, pas de résultats garantis : certains essais peuvent révéler une erreur d'interprétation ou une limite de la validation. Conserver la phrase exacte et la réponse obtenue pour le retour de test.
+L’énergie totale couvre la période simulée. L’énergie annualisée applique `365/n_days` ; elle ne devient pas une mesure annuelle. La puissance est exprimée en kW et l’énergie en kWh ou MWh selon la table. L’énergie spécifique est en kWh/(m·an), tous tubes compris. Les quantiles Monte Carlo ne sont pas des intervalles de confiance sur une consommation réelle.
 
-### Corriger une valeur en cours de conversation
+## Contrat sémantique
 
-Saisir successivement dans la même session :
+Les définitions sont maintenues dans le [descripteur TLS](descriptors/tls/descriptor.yaml), puis publiées sous trois formes : [contrat JSON](ontology/tls-contract.json), [schéma de scénario](ontology/tls-scenario.schema.json) et [vocabulaire RDF/SKOS](ontology/tls-vocabulary.ttl). L’ontologie distingue paramètres, hypothèses, réglages techniques, scénarios, exécutions et sorties.
 
-```text
-Le tunnel mesure 2 km, avec deux tubes et deux voies par tube.
-Correction : sa longueur est de 1,5 km.
-/show
-/details
+Les contrôles Python et l’adaptateur font autorité avant le calcul. Le graphe apporte les relations et la provenance ; il n’exécute pas un contrôle SHACL ni un raisonnement OWL. L’alignement QUDT et les exports JSON-LD restent à développer.
+
+Pour un accès programmatique ou l’essai avec un agent externe, consulter le [contrat d’exécution](docs/agent-contract.md). L’essai demande à l’agent de lire le dépôt, de préparer son script Python et d’exécuter réellement TLS ; aucun résultat précalculé ne remplace cette étape.
+
+## Validation et développement
+
+Les sources des simulateurs et leurs déploiements restent inchangés. TLS est fixé au commit `748e053e129669cf3e896d381e3c0ac01c763edd`. L’adaptateur refuse une autre révision ou des modifications suivies du backend. Les tests de logiciel, la comparaison entre interfaces et la validation physique sont trois niveaux distincts.
+
+```powershell
+& .\.venv\Scripts\python.exe -m pip install -e ".[dev,tls]"
+& .\.venv\Scripts\python.exe -m pytest -q
+& .\.venv\Scripts\python.exe -m ruff check .
 ```
 
-La longueur finale attendue est 1 500 m. Les nombres de tubes et de voies doivent rester inchangés.
+Le [protocole](docs/protocol.md) précise les comparaisons prévues, les graines et les métriques. Aucun résultat comparatif ni transfert scientifique LQL/pvlib n’est encore établi. L’ajout d’un logiciel suit le [contrat d’intégration](docs/integrating-models.md).
 
-### Aller jusqu'aux résultats
+## Citation et licence
 
-```text
-Je souhaite estimer la consommation d'un tunnel de 2 km.
-/profile
-/details
-/accept
-/run
-```
+Cyril Voyant, Haytham El-Houari, Daniel Julian et Nicolas Fichaux. Les informations de citation sont dans [CITATION.cff](CITATION.cff).
 
-Lire les hypothèses proposées avant `/accept`. Ce profil est un exemple de calcul, pas une description mesurée du tunnel.
-
-Vérifier que la réponse distingue l'énergie sur la période (MWh), l'énergie annualisée par extrapolation (MWh/an), la puissance de pointe au pas de calcul (kW), l'énergie annualisée par longueur tous tubes compris (kWh/(m·an)) et le facteur de charge sans dimension. Dans `manifest.json`, `output_qualification` décrit les unités, le sens des colonnes et les agrégations. Les quantiles p10–p90 caractérisent les réalisations simulées ; ils ne constituent pas un intervalle de confiance.
-
-Par défaut, la conversation ne comporte plus de plafond local ; les quotas Gemini restent applicables. Les commandes `/show`, `/details`, `/profile`, `/accept` et `/run` ne consomment pas d'appel API.
-
-Le lanceur vérifie Git, Python, les dépendances et le commit TLS. Il installe les outils absents via winget, puis les dépendances Python. Une connexion Internet est nécessaire ; Windows peut demander une autorisation administrateur. Si winget est absent, installer App Installer depuis le Microsoft Store puis relancer. Les branches d'installation des outils absents restent à tester sur un PC vierge. Documentation winget : https://learn.microsoft.com/en-us/windows/package-manager/winget/install
-
-## Mise à jour du test conversationnel
-
-Les commandes courtes sont rappelées après chaque échange : `/d` tableau des valeurs et unités, `/e altitude_m` définition d'une variable, `/p` proposition, `/v` validation des hypothèses, `/r` calcul, `/q` sortie. Les mêmes alias avec antislash sont acceptés. Les commandes copiées avec une explication après leur nom sont reconnues.
-
-« Prends les valeurs moyennes » accepte explicitement les valeurs de démonstration pour les champs manquants ; ce ne sont pas des moyennes terrain. « Comme Ajaccio » propose un contexte documenté à valider, sans inventer les paramètres d'un tunnel réel. « Les plus coûteux énergétiquement » propose les catégories à coefficients élevés dans TLS, sans prétendre à un optimum.
-
-La conversation n'a plus de plafond local par défaut (`--max-calls 0`) ; les quotas Gemini demeurent. Le nombre de réalisations n'est plus limité à 30 ; un garde de volume de deux millions de points reste actif. Résultats en tableau français (moyenne et médiane), export JSON et RDF. Dans le package, le dossier `Resultats` apparaît à côté du lanceur et s'ouvre à la fin du calcul. Une installation depuis un partage réseau utilise AppData uniquement pour l'environnement technique.
-
-Pour une étude plus détaillée, utiliser le simulateur TLS original : https://github.com/cyrilvoyant/tunnel-load-simulator . Le lien direct de l'interface déployée reste à confirmer ; aucun domaine .net n'est deviné.
-
-Pour affiner l'objectif : taper /s ou \s. Cinq choix sont proposés selon les paramètres manquants, le contexte Ajaccio et la présence de résultats. Saisir 1 à 5 ou écrire une autre question. Les suggestions n'acceptent aucune hypothèse ; les choix d'objectif peuvent demander un calcul soumis aux contrôles ; une question d'objectif sélectionnée peut utiliser Gemini, les explications de paramètres sont locales.
-
-## Calcul à la demande
-« Calcule » ou « estime la consommation » suffit : le calcul démarre quand les informations passent les contrôles. Si elles manquent, la demande reste en attente et repart après complément ou validation des hypothèses. /run et /r sont facultatifs. « Annule le calcul » annule une demande en attente. Les explications, tableaux et suggestions ne relancent pas un calcul terminé.
-
-### Contexte géographique documentaire
-
-« Comme Paris » ou « comme Ajaccio » déclenche maintenant une consultation directe de sources publiques sélectionnées, puis une analyse Gemini structurée. Le terminal montre les quatre thèmes trafic, pollution, accidents et pics horaires, un tableau avec unités et statut, ainsi que les URLs et dates de consultation. Deux appels Gemini sont utilisés : extraction des valeurs explicites, puis interprétation des sources. Les étapes techniques ne sont pas affichées.
-
-Les propositions restent des hypothèses à valider avec `/v`, et les valeurs explicitement saisies restent prioritaires. Une demande de calcul antérieure démarre après validation. Aucun comptage local n’est extrait à ce stade : en son absence, les pics 8 h/18 h, largeur 1,4 h et trafic relatif 1 restent des défauts non calibrés. Les données d’air ambiant et BAAC ne déterminent pas automatiquement les probabilités d’événements TLS. La géométrie et l’altitude du tunnel ne sont pas déduites de la commune.
-
-Le module couvre pour l’instant Paris et Ajaccio. Il consulte un catalogue limité de pages, sans recherche ouverte Google : les essais de grounding Gemini avec cette clé n’ont pas abouti (HTTP 429/404). Les sources inaccessibles sont signalées ; un échec d’analyse bloque le calcul demandé, y compris sur un ancien scénario valide. `geographic-context.json` conserve le contexte et les références dans chaque dossier de résultats. Les rapports historiques ne sont pas présentés comme des mesures actuelles.
-
-Exemple : `Calcule un tunnel de 1500 m comme Ajaccio avec des hypothèses de trafic, pollution, accidents et pics matin et soir`, puis `/v`.
-
-### Lancement sans installation
-
-`WebSemantic.cmd` effectue uniquement des contrôles avant d’ouvrir la conversation : environnement Python, versions minimales des dépendances, imports et révision TLS. Si quelque chose manque, il indique de lancer `Installer.cmd` ; aucun installateur n’est appelé par le lanceur.
-
-`Installer.cmd` vérifie l’environnement réel, sans se baser sur un fichier témoin. Python >=3.10 et les bibliothèques plus récentes compatibles sont conservés. `pip install -e .[tls]` n’est exécuté que si une dépendance manque, est trop ancienne ou ne se charge pas ; sans option `--upgrade` ni réinstallation forcée. L’installateur n’ouvre jamais la conversation. Le backend TLS reste fixé au commit scientifique déclaré, indépendamment des versions des outils d’installation.
-
-### Recherche web au-delà de la géographie
-
-La recherche documentaire est autorisée pour les questions techniques et scientifiques : éclairage, ventilation, unités, méthodes, références ou données externes. Écrivez « Recherche sur le web… » ou `/web QUESTION`. Gemini peut aussi demander automatiquement une recherche si la question nécessite des sources externes. Les définitions déjà présentes et les commandes restent locales.
-
-Le module utilise la recherche publique Bing RSS sans clé supplémentaire, consulte jusqu’à quatre pages et demande à Gemini une synthèse courte en français, avec unités, références et limites. Les pages non accessibles ou non textuelles sont signalées ; un document PDF lié n’est pas assimilé à un document lu. Les étapes internes ne sont pas affichées. Le service de recherche public peut devenir indisponible ; aucun résultat n’est inventé en cas d’échec.
-
-Une réponse documentaire ne modifie et ne valide aucun paramètre et ne déclenche aucun calcul. Elle est conservée dans l’historique et immédiatement dans `documentation.jsonl` sous le dossier des résultats, même sans calcul ; `web-context.json` est enregistré avec les prochains résultats de simulation. Les sources peuvent expliquer un choix, mais les valeurs de simulation restent soumises au descripteur et à la validation. Les pages web sont des données, jamais des instructions exécutables.
-
-Exemple : `/web CETU rôle de la ventilation et de l’éclairage dans la consommation électrique d’un tunnel`.
-
-### Choix de l’environnement au démarrage
-
-Le lanceur interactif affiche les environnements et leur domaine avant la conversation :
-
-| Choix | Environnement | Domaine | État |
-| --- | --- | --- | --- |
-| 1 | `websemantic.tls` | Demande électrique des tunnels routiers | Disponible |
-| 2 | `websemantic.lql` | Équivalences radiobiologiques | Work in progress |
-| 3 | `websemantic.pvlib` | Systèmes photovoltaïques | Work in progress |
-
-Saisir 2 ou 3 affiche « Work in progress » puis réaffiche le menu, sans chargement de ces backends ni requête LLM. Saisir 1 ouvre le prompt `websemantic.tls >`. `q` quitte le menu. Ces noms identifient les environnements ; les adaptateurs conversationnels LQL/pvlib restent à implémenter. Le menu ne constitue pas une validation de transfert entre logiciels.
-
-`websemantic chat` affiche ce menu. `websemantic chat --direct --model tls` permet un démarrage TLS direct pour les scripts et les tests. `--once` conserve une exécution non interactive ; demander un modèle indisponible avec `--once` retourne Work in progress et un code d’échec, sans basculer silencieusement sur TLS. L’environnement TLS est aussi enregistré dans `conversation.json` avec les résultats.
-
-Le menu est aussi affiché par les anciens lanceurs qui préselectionnaient TLS : le démarrage interactif reste un choix utilisateur. Seul `--direct` désactive explicitement le menu.
-
-## Descriptor-driven integration
-
-TLS labels, defaults, geographical catalogue, qualitative rules, extraction guidance and result presentation are now declared in its descriptor. The session, validation, RDF export and CLI dispatch are shared. Numerical backend constraints and output qualification remain in the TLS adapter. See [the integration contract](docs/integrating-models.md). LQL and pvlib are still placeholders; structural fixtures do not establish scientific transfer performance.
+Le code WebSemantic courant est sous [PolyForm Noncommercial 1.0.0](LICENSE). Les simulateurs et dépendances conservent leurs licences. Les révisions antérieures publiées sous MIT jusqu’au commit `c00914c` conservent ces permissions. Cette licence comporte des restrictions commerciales et n’est pas une licence open source au sens de l’OSI.

@@ -1,5 +1,6 @@
 """Descriptor-driven RDF vocabulary and evidence/provenance export."""
 
+import json
 import re
 from hashlib import sha256
 
@@ -8,6 +9,14 @@ from rdflib.namespace import RDF, RDFS, SKOS
 
 WS = Namespace("https://github.com/cyrilvoyant/websemantic/ns#")
 PROV = Namespace("http://www.w3.org/ns/prov#")
+def concept(descriptor, name):
+    """Keep model concepts distinct when graphs from several simulators are merged."""
+    software = descriptor.get('software', {})
+    identity = software.get('repository') or software.get('name', 'unnamed')
+    scope = descriptor.get('semantics', {}).get('namespace') or 'software-' + sha256(identity.encode()).hexdigest()[:16]
+    return WS[f'{scope}/{name}']
+
+
 def definitions(descriptor):
     return {name: (spec.get('label', name), spec.get('display_unit', spec.get('unit') or 'sans unité'),
                    spec.get('definition', 'Définition non renseignée.'))
@@ -19,11 +28,29 @@ def vocabulary(descriptor, qualification=None):
     graph.bind("ws", WS)
     graph.bind("skos", SKOS)
     graph.bind("prov", PROV)
-    for cls in ("Parameter", "Scenario", "SimulationOutput", "Hypothesis", "UserValue", "Intent"):
+    for cls in ("Parameter", "Scenario", "SimulationOutput", "Hypothesis", "UserValue", "Intent", "OperationalSetting"):
         graph.add((WS[cls], RDF.type, RDFS.Class))
+    scheme = WS['vocabulary/' + sha256(json.dumps(descriptor.get('software', {}), sort_keys=True).encode()).hexdigest()[:16]]
+    graph.add((scheme, RDF.type, SKOS.ConceptScheme))
+    graph.add((scheme, SKOS.prefLabel, Literal(descriptor.get('software', {}).get('name', 'Scientific software'))))
+    for group in ('inputs', 'experiment', 'outputs'):
+        category = concept(descriptor, 'group/' + group)
+        graph.add((category, RDF.type, SKOS.Concept))
+        graph.add((category, SKOS.prefLabel, Literal(group)))
+        graph.add((category, SKOS.inScheme, scheme))
+        graph.add((scheme, SKOS.hasTopConcept, category))
+    for cls in ('Parameter', 'Scenario', 'SimulationOutput'):
+        graph.add((WS[cls], RDFS.subClassOf, PROV.Entity))
+    graph.add((WS.OperationalSetting, RDFS.subClassOf, WS.Parameter))
     graph.add((WS.Hypothesis, RDFS.subClassOf, WS.Parameter))
     graph.add((WS.UserValue, RDFS.subClassOf, WS.Parameter))
     property_definitions = {
+        "request": "Demande ayant produit la configuration.",
+        "task": "Tâche déclarée du scénario.",
+        "revision": "Révision du logiciel effectivement exécuté.",
+        "repository": "Dépôt source du logiciel.",
+        "modelComponent": "Composante du modèle à laquelle appartient le paramètre.",
+        "implementationReference": "Fonction du backend où le paramètre est utilisé.",
         "hasParameter": "Relie un scénario à ses enregistrements de paramètres.",
         "concept": "Relie un enregistrement à la définition du paramètre.",
         "value": "Valeur typée dans l'unité canonique déclarée.",
@@ -53,15 +80,31 @@ def vocabulary(descriptor, qualification=None):
     for name, meaning in property_definitions.items():
         graph.add((WS[name], RDF.type, RDF.Property))
         graph.add((WS[name], RDFS.comment, Literal(meaning, lang="fr")))
+    for name, domain, range_ in (
+        ('hasParameter', WS.Scenario, WS.Parameter),
+        ('value', WS.Parameter, RDFS.Literal),
+        ('accepted', WS.Parameter, RDFS.Literal),
+        ('concept', RDFS.Resource, SKOS.Concept),
+    ):
+        graph.add((WS[name], RDFS.domain, domain))
+        graph.add((WS[name], RDFS.range, range_))
     specs = {name: (group, spec) for group in ("inputs", "experiment")
              for name, spec in descriptor.get(group, {}).items()}
     for name, (label, unit, definition) in definitions(descriptor).items():
-        term = WS[name]
+        term = concept(descriptor, name)
         graph.add((term, RDF.type, SKOS.Concept))
         graph.add((term, SKOS.prefLabel, Literal(label, lang="fr")))
         graph.add((term, SKOS.definition, Literal(definition, lang="fr")))
         graph.add((term, WS.unitSymbol, Literal(unit)))
         group, spec = specs[name]
+        graph.add((term, SKOS.inScheme, scheme))
+        graph.add((term, SKOS.broader, concept(descriptor, 'group/' + group)))
+        graph.add((term, SKOS.notation, Literal(f'{group}.{name}')))
+        for key, predicate in (('quantity_kind', WS.quantity), ('model_component', WS.modelComponent), ('reference_implementation', WS.implementationReference)):
+            if spec.get(key):
+                graph.add((term, predicate, Literal(spec[key])))
+        if spec.get('scope_note'):
+            graph.add((term, SKOS.scopeNote, Literal(spec['scope_note'], lang='fr')))
         for alias in spec.get("aliases", []):
             graph.add((term, SKOS.altLabel, Literal(alias, lang="fr")))
         graph.add((term, WS.fieldPath, Literal(f"{group}.{name}")))
@@ -85,21 +128,26 @@ def vocabulary(descriptor, qualification=None):
             if key in bounds:
                 graph.add((term, WS[predicate], Literal(bounds[key])))
     for intent, indicator in descriptor.get("semantics", {}).get("intent_indicators", {}).items():
-        graph.add((WS[intent], RDF.type, WS.Intent))
-        graph.add((WS[intent], WS.requiresIndicator, WS[indicator]))
+        graph.add((concept(descriptor, intent), RDF.type, WS.Intent))
+        graph.add((concept(descriptor, intent), SKOS.related, concept(descriptor, indicator)))
+        graph.add((concept(descriptor, intent), WS.requiresIndicator, concept(descriptor, indicator)))
     if qualification:
         for table, info in qualification["tables"].items():
-            term = WS[f"outputs/{table}"]
+            term = concept(descriptor, f"outputs/{table}")
             graph.add((term, RDF.type, SKOS.Concept))
+            graph.add((term, SKOS.inScheme, scheme))
+            graph.add((term, SKOS.broader, concept(descriptor, "group/outputs")))
             graph.add((term, SKOS.prefLabel, Literal(table)))
             graph.add((term, WS.aggregation, Literal(info["aggregation"], lang="fr")))
             for column, metadata in info["columns"].items():
-                field = WS[f"outputs/{table}/{column}"]
+                field = concept(descriptor, f"outputs/{table}/{column}")
                 graph.add((term, WS.hasColumn, field))
                 graph.add((field, RDF.type, SKOS.Concept))
-                graph.add((field, WS.concept, WS[column]))
-                graph.add((WS[column], RDF.type, SKOS.Concept))
-                graph.add((WS[column], SKOS.prefLabel, Literal(column)))
+                graph.add((field, SKOS.inScheme, scheme))
+                graph.add((field, SKOS.broader, term))
+                graph.add((field, WS.concept, concept(descriptor, column)))
+                graph.add((concept(descriptor, column), RDF.type, SKOS.Concept))
+                graph.add((concept(descriptor, column), SKOS.prefLabel, Literal(column)))
                 graph.add((field, SKOS.definition, Literal(metadata["meaning"], lang="fr")))
                 if "quantity" in metadata:
                     graph.add((field, WS.quantity, Literal(metadata["quantity"])))
@@ -110,22 +158,39 @@ def vocabulary(descriptor, qualification=None):
 
 def describe(name, descriptor):
     graph = vocabulary(descriptor)
-    return tuple(str(graph.value(WS[name], predicate)) for predicate in (SKOS.prefLabel, WS.unitSymbol, SKOS.definition))
+    return tuple(str(graph.value(concept(descriptor, name), predicate)) for predicate in (SKOS.prefLabel, WS.unitSymbol, SKOS.definition))
 
 
 def export_semantics(scenario, qualification, target, descriptor):
-    graph = Graph()
-    for triple in vocabulary(descriptor, qualification):
-        graph.add(triple)
+    graph = vocabulary(descriptor, qualification)
     node = WS["scenario/" + target.name]
     graph.add((node, RDF.type, WS.Scenario))
+    graph.add((node, WS.request, Literal(scenario.request)))
+    graph.add((node, WS.task, Literal(scenario.task)))
+    activity = WS['run/' + target.name]
+    software = descriptor.get('software', {})
+    agent = WS['software/' + sha256(json.dumps(software, sort_keys=True).encode()).hexdigest()[:16]]
+    graph.add((activity, RDF.type, PROV.Activity))
+    graph.add((activity, PROV.used, node))
+    graph.add((activity, PROV.wasAssociatedWith, agent))
+    graph.add((agent, RDF.type, PROV.SoftwareAgent))
+    graph.add((agent, RDFS.label, Literal(software.get('name', 'Scientific software'))))
+    if software.get('commit'):
+        graph.add((agent, WS.revision, Literal(software['commit'])))
+    if software.get('repository'):
+        graph.add((agent, WS.repository, URIRef(software['repository'])))
     for group in ("inputs", "experiment"):
         for name, record in getattr(scenario, group).items():
             parameter = WS[f"{target.name}/{group}/{name}"]
             graph.add((node, WS.hasParameter, parameter))
             graph.add((parameter, RDF.type, WS.Parameter))
-            graph.add((parameter, RDF.type, WS.UserValue if record.origin == 'provided' else WS.Hypothesis))
-            graph.add((parameter, WS.concept, WS[name]))
+            if descriptor[group][name].get('operational_default'):
+                graph.add((parameter, RDF.type, WS.OperationalSetting))
+            if record.origin == 'provided':
+                graph.add((parameter, RDF.type, WS.UserValue))
+            elif not descriptor[group][name].get('operational_default'):
+                graph.add((parameter, RDF.type, WS.Hypothesis))
+            graph.add((parameter, WS.concept, concept(descriptor, name)))
             graph.add((parameter, WS.value, Literal(record.value)))
             graph.add((parameter, WS.unitSymbol, Literal(describe(name, descriptor)[1])))
             graph.add((parameter, WS.accepted, Literal(record.accepted)))
@@ -143,10 +208,14 @@ def export_semantics(scenario, qualification, target, descriptor):
         output = WS[f"{target.name}/outputs/{table}"]
         graph.add((output, RDF.type, WS.SimulationOutput))
         graph.add((output, PROV.wasDerivedFrom, node))
+        graph.add((output, PROV.wasGeneratedBy, activity))
+        graph.add((output, PROV.atLocation, URIRef((target / info.get('file', table + '.csv')).resolve().as_uri())))
         graph.add((output, WS.aggregation, Literal(info["aggregation"], lang="fr")))
         for name, metadata in info["columns"].items():
             column = WS[f"{target.name}/outputs/{table}/{name}"]
             graph.add((output, WS.hasColumn, column))
+            if metadata.get("quantity"):
+                graph.add((column, WS.quantity, Literal(metadata["quantity"])))
             graph.add((column, WS.meaning, Literal(metadata["meaning"], lang="fr")))
             if metadata["unit"]:
                 graph.add((column, WS.unitSymbol, Literal(metadata["unit"])))
