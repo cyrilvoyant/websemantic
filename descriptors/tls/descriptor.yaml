@@ -623,9 +623,10 @@ interpretation:
     - mix
     - moyenn
     propose_profile: true
-    accept_profile: true
-    message: Le profil de démonstration est accepté pour les champs manquants. Les
-      catégories ne se moyennent pas.
+    clarify: true
+    message: Le profil de démonstration est proposé pour les champs manquants, sans
+      acceptation. Les catégories ne se moyennent pas ; vérifiez les choix avec /d
+      puis acceptez les hypothèses avec /v.
   - patterns:
     - (plus|moins).*co[uû]teu|plus.*energet|plus.*energivo
     propose_profile: true

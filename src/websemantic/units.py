@@ -19,6 +19,18 @@ NUMBER_WORDS = {
 }
 
 
+def reject_ambiguous_number(text):
+    compact = re.sub(r"\s", "", text)
+    # A leading zero is a decimal fraction, e.g. 0,015, not a thousands group.
+    if re.fullmatch(r"[+-]?[1-9]\d{0,2},\d{3}", compact):
+        raise ValueError("Nombre ambigu : précisez 1500 pour mille cinq cents, ou 1.5 pour un et demi ; ne mélangez pas virgule décimale et séparateur de milliers.")
+
+
+def numeric_literal(text):
+    reject_ambiguous_number(text)
+    return float(re.sub(r"\s", "", text).replace(",", "."))
+
+
 def parse_number(value, kind):
     if type(value) not in (str, int, float):
         raise ValueError('Valeur numérique non reconnue ; précisez un nombre en chiffres.')
@@ -27,13 +39,16 @@ def parse_number(value, kind):
         number = NUMBER_WORDS[text]
         result = number if kind == 'int' else float(number)
         return result, f'Number word normalisation: {value!r} -> {result}.'
+    if isinstance(value, str):
+        # Check ambiguity before the generic conversion error handler.
+        reject_ambiguous_number(value)
     try:
         if kind == 'int':
             # Reject a fractional value rather than truncate a count.
             if type(value) is float and not value.is_integer():
                 raise ValueError
             return int(value), None
-        return float(str(value).replace(',', '.')), None
+        return numeric_literal(str(value)), None
     except (ValueError, OverflowError):
         raise ValueError('Valeur numérique non reconnue ; précisez un nombre en chiffres.') from None
 
@@ -54,9 +69,18 @@ def normalize(value, unit, evidence, spec):
         if len(matches) != 1:
             raise ValueError('Fournir une preuve avec une seule valeur et une unité explicitement déclarée.')
         number, symbol = matches[0]
-        original = float(re.sub(r'\s', '', number).replace(',', '.'))
+        original = numeric_literal(number)
         factor = units[symbol]
-        return original * factor, canonical, f'Exact normalisation: {original} {symbol} x {factor} -> {canonical}'
+        source = f'Exact normalisation: {original} {symbol} x {factor} -> {canonical}'
+        if unit == canonical or unit in spec.get('unit_aliases', []):
+            interpreted = value
+        elif unit in units:
+            interpreted = value * units[unit]
+        else:
+            interpreted = None
+        if interpreted is not None and interpreted != original * factor:
+            source += f'; Extraction divergence: LLM value {value!r} {unit!r} -> {interpreted!r} {canonical}; evidence {evidence!r} -> {original * factor!r} {canonical}; exact evidence takes precedence.'
+        return original * factor, canonical, source
     if unit != canonical and unit in spec.get('unit_aliases', []):
         return value, canonical, f'Unit label normalisation: {unit!r} -> {canonical!r}; numeric value unchanged.'
     return value, unit, None

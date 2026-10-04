@@ -6,7 +6,7 @@
 
 ## For repository-reading agents
 
-Start with [the agent execution contract](docs/agent-contract.md), [all parameter and output definitions](docs/tls-reference.md), the [machine-readable JSON contract](ontology/tls-contract.json) and [RDF/SKOS vocabulary](ontology/tls-vocabulary.ttl). A complete accepted fictitious scenario is available in [examples/tls-complete.json](examples/tls-complete.json). Execute it without Gemini with `python -m websemantic.replay examples/tls-complete.json --model tls` after installing `.[tls]` and cloning the pinned submodules. Missing or unaccepted values are blocked; no implicit defaults are added.
+Start with [the agent execution contract](docs/agent-contract.md), [all parameter and output definitions](docs/tls-reference.md), the [machine-readable JSON contract](ontology/tls-contract.json) and [RDF/SKOS vocabulary](ontology/tls-vocabulary.ttl). A complete accepted fictitious scenario is available in [examples/tls-complete.json](examples/tls-complete.json). For the general-agent experiment, the user gives a prompt to a tool-enabled assistant, which retrieves the repository, reads the contract and TLS API, constructs the scenario and executes its own Python script through the reviewed validator and adapter. No PowerShell application or Gemini key is required. Missing or unaccepted values are blocked; no implicit defaults are added.
 
 ## Try the terminal PoC
 
@@ -47,7 +47,7 @@ The local development environment is `.venv/`; `requirements-tested.txt` records
 
 - **Non-intrusive**: target software is never modified, locally or on GitHub. TLS and LQL-Equiv are linked as git submodules pinned to exact commits (read-only references); pvlib is a pinned PyPI dependency. Only their public APIs are called.
 - **Non-invention**: an unsupported value that is not an accepted assumption cannot reach the simulator.
-- **LLM as interpreter, not as calculator**: Gemini receives the descriptor and returns a structured interpretation. Local Python performs validation, approved adapter dispatch and annotation. In the dedicated Gemini workflow it never executes code and never computes results. An external tool-enabled agent may invoke the reviewed replay command. Any explanation must read qualified computed outputs.
+- **LLM as interpreter, not as calculator**: Gemini receives the descriptor and returns a structured interpretation. Local Python performs validation, approved adapter dispatch and annotation. In the dedicated Gemini workflow it never executes code and never computes results. An external tool-enabled agent constructs and executes its Python script using the reviewed contract and adapter. Any explanation must read qualified computed outputs.
 - **Model comparisons planned**: Gemini is implemented; Claude/GPT repository-reading baselines and within-model comparisons remain prospective. Ranking models alone is not the research objective.
 - **Standards**: RDF/SKOS vocabulary and PROV-O derivations are implemented, along with a JSON Schema scenario contract. QUDT alignment, SHACL execution validation, JSON-LD dataset records and broader ontology reasoning remain planned. CodeMeta and CITATION.cff describe the software.
 

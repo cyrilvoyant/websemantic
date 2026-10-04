@@ -35,3 +35,6 @@ testpaths = ["tests"]
 
 [tool.setuptools.package-data]
 websemantic = ["environments.json"]
+
+[tool.ruff]
+extend-exclude = ["external"]

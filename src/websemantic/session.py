@@ -41,13 +41,22 @@ class Session:
     def local_intent(self, request):
         """Common profile acceptance plus optional reviewed model policy."""
         text = ''.join(c for c in unicodedata.normalize('NFD', request.lower()) if not unicodedata.combining(c))
-        if re.search(r'\b(prend|prends|utilise|choisis|mets|valide|accepte|calcule|calculer|simule|simuler)\b', text) and re.search(r'moyenn|defaut|profil|hypothes', text):
+        # Only a standalone, affirmative instruction can accept defaults locally.
+        acceptance = (
+            r"\s*(?:(?:prends?|accepte|utilise|choisis|mets|valide)\s+"
+            r"|(?:calcule|simule)\s+avec\s+)"
+            r"(?:les|des)\s+valeurs\s+(?:par\s+defaut|moyennes|du\s+profil(?:\s+de\s+demonstration)?)"
+            r"\s*[.!]?\s*"
+        )
+        if re.fullmatch(acceptance, text):
             self.propose_profile()
             self.accept_profile()
             self.pending_clarification = None
             message = 'Les valeurs manquantes du profil de démonstration sont acceptées à votre demande. Ce ne sont pas des moyennes mesurées. Le calcul demandé attend les contrôles.'
             self.history.append({'user': request, 'assistant': message})
             return message
+        if "?" in text or re.match(r"\s*(pourquoi|comment|explique|que signifie|qu.est)", text) or re.search(r"\b(?:ne|pas|sans|refuse)\b|\bn['’]", text) or re.search(r"\d", text):
+            return None
         for rule in self.descriptor.get('interpretation', {}).get('local_rules', []):
             if not all(re.search(pattern, text) for pattern in rule['patterns']):
                 continue
@@ -62,8 +71,6 @@ class Session:
                 current = getattr(self.scenario, group).get(name)
                 if not rule.get('preserve_provided') or current is None or current.origin != 'provided':
                     getattr(self.scenario, group)[name] = Parameter(value, self.descriptor[group][name].get('unit'), 'assumption', source=rule.get('source'))
-            if rule.get('accept_profile'):
-                self.accept_profile()
             message = rule['message']
             self.pending_clarification = message if rule.get('clarify') else None
             self.history.append({'user': request, 'assistant': message})
