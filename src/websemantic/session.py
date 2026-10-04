@@ -122,6 +122,9 @@ class Session:
             experiment=dict(self.scenario.experiment),
         )
         for group, name, record in updates:
+            previous = getattr(self.scenario, group).get(name)
+            if previous is None or previous.value != record.value or previous.unit != record.unit:
+                self.run_requested = True
             getattr(self.scenario, group)[name] = record
         self.history.append({"user": request, "assistant": parsed.get("message", "")})
         self.pending_clarification = None
@@ -146,12 +149,17 @@ class Session:
             records = getattr(self.scenario, group)
             for name, record in list(records.items()):
                 if record.origin in ('default', 'assumption') and record.source:
+                    if not record.accepted:
+                        self.run_requested = True
                     records[name] = replace(record, accepted=True)
 
     def set_value(self, path, text):
         group, name = path.split(".")
+        if group not in ('inputs', 'experiment'):
+            raise ValueError('Groupe de paramètres inconnu.')
         spec = self.descriptor[group][name]
         value = json.loads(text)
+        self.run_requested = True
         getattr(self.scenario, group)[name] = Parameter(
             value,
             spec.get("unit"),

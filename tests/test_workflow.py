@@ -108,25 +108,25 @@ def test_requested_calculation_waits_for_acceptance_then_runs_once(monkeypatch, 
     monkeypatch.setattr('builtins.input', lambda _: next(lines))
     assert main(['chat', '--direct', '--model', 'tls', '--workspace', str(ROOT), '--output-dir', str(tmp_path)]) == 0
     assert len(list(tmp_path.iterdir())) == 1
-    assert capsys.readouterr().out.count('lancement du calcul demandé') == 1
+    assert capsys.readouterr().out.count('Calcul en cours') == 1
 
 
-def test_no_calculation_without_request(monkeypatch, tmp_path):
-    lines = iter(['prends les valeurs par défaut', '/d', '/v', '/s', '/q'])
+def test_read_only_and_unaccepted_profile_do_not_calculate(monkeypatch, tmp_path):
+    lines = iter(['/profile', '/d', '/s', '/q'])
     monkeypatch.setattr('builtins.input', lambda _: next(lines))
     assert main(['chat', '--direct', '--model', 'tls', '--workspace', str(ROOT), '--output-dir', str(tmp_path)]) == 0
     assert list(tmp_path.iterdir()) == []
 
 
 def test_cancel_pending_calculation(monkeypatch, tmp_path):
-    lines = iter(['calcule', 'annule le calcul', 'prends les valeurs par défaut', '/q'])
+    lines = iter(['calcule', 'annule le calcul', '/profile', '/q'])
     monkeypatch.setattr('builtins.input', lambda _: next(lines))
     assert main(['chat', '--direct', '--model', 'tls', '--workspace', str(ROOT), '--output-dir', str(tmp_path)]) == 0
     assert list(tmp_path.iterdir()) == []
 
 
 def test_invalid_configuration_never_autoruns(monkeypatch, tmp_path):
-    lines = iter(['prends les valeurs par défaut', '/set inputs.n_tubes 0', 'calcule', '/v', '/q'])
+    lines = iter(['/profile', '/set inputs.n_tubes 0', 'calcule', '/v', '/q'])
     monkeypatch.setattr('builtins.input', lambda _: next(lines))
     assert main(['chat', '--direct', '--model', 'tls', '--workspace', str(ROOT), '--output-dir', str(tmp_path)]) == 0
     assert list(tmp_path.iterdir()) == []
@@ -173,6 +173,6 @@ def test_replay_user_conversation_and_open_results(monkeypatch, capsys, tmp_path
     assert 'Médiane' in text and 'Moyenne' in text
     assert 'unit:M' not in text
     assert 'Commande inconnue' not in text
-    assert len(list(tmp_path.iterdir())) == 1
+    assert len(list(tmp_path.iterdir())) == 4
     if cli.os.name == 'nt':
         assert opened[0].parent == tmp_path

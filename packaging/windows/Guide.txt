@@ -15,7 +15,7 @@ Saisissez une phrase ou une commande, puis Entrée :
 /v : accepte les hypothèses ; /set GROUPE.VARIABLE VALEUR : fixe un choix ;
 /web QUESTION : recherche documentaire ; /q : quitte.
 
-Demandez « calcule » après vérification. Le calcul démarre seulement si les informations sont suffisantes et les hypothèses acceptées. « Prends les valeurs moyennes » accepte le profil de démonstration : ce ne sont pas des moyennes mesurées. Une recherche documentaire ne valide aucun paramètre. Si Gemini est indisponible, les commandes locales restent utilisables.
+Validez avec /v : le calcul démarre si les informations sont suffisantes. Une modification d’un scénario validé lance un nouveau calcul ; /d et /e consultent seulement les paramètres. « Prends les valeurs moyennes » accepte le profil de démonstration : ce ne sont pas des moyennes mesurées. Une recherche documentaire ne valide aucun paramètre. Si Gemini est indisponible, les commandes locales restent utilisables.
 
 Les sorties indiquent énergie en MWh, puissance en kW et énergie spécifique en kWh/(m·an), par mètre de tunnel tous tubes compris. Les paramètres ont chacun leur unité dans /d et /e. L'énergie annualisée multiplie l'énergie de la période par 365/nombre de jours ; elle n'est pas une mesure annuelle. La dispersion des réalisations ne couvre pas toutes les incertitudes. Le manifeste et les CSV permettent de retrouver les hypothèses et les résultats.
 
@@ -37,7 +37,6 @@ La période commence le 2025-01-01 et dure 30 jours. Le pas est de 15 minutes, a
 Vérifiez les valeurs et les unités. Les champs restants proviennent du profil de démonstration : j'accepte cette hypothèse pour l'exercice.
 
 /v
-calcule
 
 L'énergie couvre 30 jours ; le pic est évalué au pas de 15 min. L'annualisation applique 365/30. Vérifiez le scénario enregistré dans le manifeste, puis quittez avec /q.
 
@@ -73,7 +72,6 @@ Regardez les cinq suggestions, les options et les sources. « Ancien » ne défi
 Longueurs en m, pente en %, durée en jours, pas en min. Examinez aussi les auxiliaires en kW/(km·tube), la charge fixe en kW et le trafic relatif sans dimension. Sans comptages locaux, les pics à 8 h et 18 h restent des hypothèses. Les événements synthétiques ne représentent pas des mesures de pollution ou d'accidents. /e permet de comprendre un paramètre avant de l'accepter.
 
 /v
-calcule
 
 L'énergie couvre 14 jours et l'annualisation applique 365/14. Le résultat décrit le scénario choisi, pas un tunnel réel de Montpellier. Retrouvez les hypothèses et les sources dans les fichiers du calcul. Pour tester une autre ventilation, consultez /e ventilation_type, modifiez votre choix et demandez un nouveau calcul. Terminez avec /q.
 

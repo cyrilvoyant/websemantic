@@ -53,22 +53,8 @@ def show(session):
         print(session.pending_clarification)
         return
     result = session.result()
-    ui = presentation(session)
-    print("\nDemande -> paramètres -> contrôle -> " + ui.get('short_name', 'simulateur') + " -> résultats")
-    decisions = {
-        'execute': 'Les paramètres passent les contrôles. ' + ('Le calcul demandé peut démarrer.' if session.run_requested else 'Vous pouvez demander le calcul en une phrase.'),
-        'clarify': 'Il reste des informations à préciser avant le calcul.',
-        'refuse': 'Le logiciel ne permet pas de traiter cette demande.',
-    }
-    print(decisions.get(result.decision, result.decision))
-    summary = []
-    for name in ui.get('summary_fields', []):
-        record = session.scenario.inputs.get(name)
-        if record:
-            label, unit, _ = describe(name, session.descriptor)
-            summary.append(f'{label} : {record.value} {unit}')
-    if summary:
-        print(ui.get('summary_title', 'Scénario') + ' : ' + '; '.join(summary) + '.')
+    if result.decision == 'refuse':
+        print('Le logiciel ne permet pas de traiter cette demande.')
     missing = [issue.field for issue in result.issues if issue.code == 'missing']
     if missing:
         names = [describe(field.split('.')[1], session.descriptor)[0] for field in missing[:4]]
@@ -83,11 +69,13 @@ def show(session):
             print(f'À vérifier : {issue.field} ({issue.code}).')
 
 
-def details(session):
+def details(session, full=False):
     print(f"{'Paramètre':28} | {'Valeur':22} | {'Unité':16} | État")
     print('-' * 90)
     for group in ('inputs', 'experiment'):
-        for name in session.descriptor.get(group, {}):
+        for name, spec in session.descriptor.get(group, {}).items():
+            if spec.get('display_hidden') and not full:
+                continue
             record = getattr(session.scenario, group).get(name)
             label, unit, _ = describe(name, session.descriptor)
             status = 'manquant' if not record else ('fourni' if record.origin == 'provided' else ('hypothèse validée' if record.accepted else 'à valider'))
@@ -115,25 +103,39 @@ def explain(session, name):
 
 
 def results_table(session, target, medians):
-    ui = presentation(session)
-    config = ui.get('results', {})
+    config = presentation(session).get('results', {})
     manifest = json.loads((target / 'manifest.json').read_text(encoding='utf-8'))
-    recorded = manifest['scenario']['experiment']
-    context = [f"{describe(name, session.descriptor)[0]} : {recorded[name]['value']} {describe(name, session.descriptor)[1]}"
-               for name in config.get('context_fields', []) if name in recorded]
-    print('\nRésultats simulés' + (': ' + '; '.join(context) if context else '') + '.')
+    scenario = manifest['scenario']
+    context_path = target / 'geographic-context.json'
+    context = json.loads(context_path.read_text(encoding='utf-8')) if context_path.is_file() else {}
+    headline = config.get('headline')
+    if headline:
+        location_text = headline.get('location_template', ' à {city}').format(city=context['city']) if context.get('city') else ''
+        print('\n' + headline['template'].format(value=medians[headline['indicator']], location=location_text))
+    recap = []
+    for group, names in (('inputs', config.get('recap_fields', [])), ('experiment', config.get('context_fields', []))):
+        for name in names:
+            if name in scenario[group]:
+                label, unit, _ = describe(name, session.descriptor)
+                record = scenario[group][name]
+                value = record['value']
+                if type(value) in (int, float):
+                    value = f'{value:g}'
+                recap.append(f'{label.lower()} {value}' + ('' if unit in ('nombre', 'catégorie', 'identifiant') else ' ' + unit))
+    if recap:
+        print('Hypothèses retenues : ' + '; '.join(recap) + '.')
     if config.get('table'):
         import pandas as pd
 
         means = pd.read_csv(target / config['table']).mean(numeric_only=True)
         print(f"{'Indicateur':30} | {'Médiane':12} | {'Moyenne':12} | Unité")
+        selected = config.get('display_indicators')
         for name, label, unit in config.get('indicators', []):
-            print(f'{label:30} | {medians[name]:12.3f} | {means[name]:12.3f} | {unit}')
+            if selected is None or name in selected:
+                print(f'{label:30} | {medians[name]:12.3f} | {means[name]:12.3f} | {unit}')
     for note in config.get('notes', []):
         print(note)
-    print('Résultats et provenance :', target)
-    url = os.environ.get(config.get('url_environment', 'WEBSEMANTIC_SIMULATOR_URL'), session.descriptor['software']['repository'])
-    print('Pour une étude plus détaillée, utiliser le simulateur complet : ' + url)
+    print('Dossier des résultats :', target)
 
 
 def suggestions(session, has_results=False):
@@ -160,7 +162,7 @@ def run_if_ready(session, args, descriptor):
     if not session.run_requested or session.pending_clarification or session.geographic_pending or session.result().decision != 'execute':
         return None
 
-    print('Les informations sont suffisantes : lancement du calcul demandé.')
+    print('Calcul en cours…')
     target, medians = execute(session.scenario, descriptor, args.workspace, args.output_dir)
     session.run_requested = False
     if getattr(session, 'geographic_context', None):
@@ -253,7 +255,7 @@ def main(argv=None):
     )
     print('Outils : /s 5 suggestions | /d tableau | /e variable | /web question | /p proposer | /v valider | /r calculer | /q quitter')
     print(
-        "Un calcul demandé démarre dès que les informations et validations sont suffisantes. /s pour vous guider."
+        "La validation ou une modification déclenche le calcul dès que le scénario est complet. /s pour vous guider."
     )
     while True:
         try:
@@ -283,7 +285,7 @@ def main(argv=None):
                 print('Pour préciser votre objectif ou le scénario :')
                 for number, (label, _) in enumerate(choices, 1):
                     print(f'{number}. {label}')
-                print('Saisissez 1 à 5, ou écrivez votre question. Les choix 1–3 demandent un calcul, soumis aux contrôles et à la validation des hypothèses.')
+                print('Saisissez 1 à 5, ou écrivez votre question.')
             elif line == '/events':
                 for field in presentation(session).get('events', []):
                     explain(session, field)
@@ -298,6 +300,8 @@ def main(argv=None):
                 show(session)
             elif line == "/details":
                 details(session)
+            elif line == '/details-all':
+                details(session, full=True)
             elif line.startswith('/e '):
                 explain(session, line.split(maxsplit=1)[1])
             elif line.startswith('/web '):
@@ -306,6 +310,7 @@ def main(argv=None):
                 print('Exemple : /web ' + presentation(session).get('web_example', 'sources scientifiques du modèle'))
             elif line == "/profile":
                 session.propose_profile()
+                session.history.append({'user': '/profile', 'assistant': 'Profil de démonstration proposé, à valider.'})
                 may_run = True
                 print(
                     "Profil DEMONSTRATION propose, jamais des mesures reelles. Verifiez ci-dessous puis /accept."
@@ -317,8 +322,14 @@ def main(argv=None):
                     if args.once:
                         return 1
                     continue
+                if session.pending_clarification:
+                    print(session.pending_clarification)
+                    if args.once:
+                        return 1
+                    continue
                 session.accept_profile()
-                session.pending_clarification = None
+                session.run_requested = True
+                session.history.append({'user': '/accept', 'assistant': 'Hypothèses acceptées ; calcul automatique soumis aux contrôles.'})
                 print(
                     "Hypothèses proposées acceptées."
                 )
@@ -327,6 +338,7 @@ def main(argv=None):
             elif line.startswith("/set "):
                 _, path, text = line.split(" ", 2)
                 session.set_value(path, text)
+                session.history.append({'user': line, 'assistant': 'Paramètre modifié ; calcul automatique soumis aux contrôles.'})
                 show(session)
                 may_run = True
             elif line == "/run":
@@ -399,21 +411,20 @@ def main(argv=None):
                         return 1
                     continue
                 session.calls += 1
-                print("Gemini interprete la demande...")
                 load_private_key(args.workspace)
                 state = {group: {name: {'value': record.value, 'accepted': record.accepted, 'origin': record.origin} for name, record in getattr(session.scenario, group).items()} for group in ('inputs', 'experiment')}
                 parsed, _usage = extract(line, descriptor, session.history, args.llm, state=state)
                 if parsed.get('needs_web') is True:
+                    if session.run_requested and not previous_run_requested:
+                        session.pending_clarification = 'Cette demande de calcul nécessite des informations externes. Précisez et validez les paramètres concernés ; /v seul ne résout pas cette demande.'
                     session.run_requested = previous_run_requested
                     answer_from_web(session, line, args)
                     if args.once:
                         return 0
                     continue
                 session.apply(line, parsed)
-                print("Gemini >", parsed.get("message", ""))
-                print(
-                    f"Appels Gemini : {session.calls}" + (f"/{args.max_calls}." if args.max_calls else '.')
-                )
+                if not (session.run_requested and session.result().decision == 'execute'):
+                    print("WebSemantic >", parsed.get("message", ""))
                 show(session)
                 may_run = True
             if may_run:

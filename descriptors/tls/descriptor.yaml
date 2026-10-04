@@ -472,6 +472,7 @@ experiment:
     - nombre
     - number
     - unit:NUM
+    display_hidden: true
 outputs:
   representative: time series of run 0, load decomposition
   kpis: one row per Monte Carlo run (annual energy uses 365/n_days extrapolation)
@@ -555,11 +556,24 @@ presentation:
       - Facteur de charge
       - 1 (sans dimension)
     notes:
-    - Moyenne et médiane entre réalisations. Annualisation par 365/durée ; spécifique
-      tous tubes, par mètre de tunnel.
-    - 'Données synthétiques sans calibration terrain. p10–p90 : dispersion horaire,
-      pas intervalle de confiance.'
+    - 'Simulation synthétique : annualisation de la période par 365/durée, sans calibration
+      terrain.'
     url_environment: WEBSEMANTIC_TLS_URL
+    headline:
+      indicator: annualized_mwh
+      template: Dans ce scénario{location}, la consommation annuelle extrapolée est
+        de {value:.2f} MWh/an (médiane).
+      location_template: ' pour un tunnel à {city}'
+    recap_fields:
+    - length_m
+    - n_tubes
+    - n_lanes_per_tube
+    - lighting_type
+    - ventilation_type
+    display_indicators:
+    - total_mwh
+    - annualized_mwh
+    - peak_kw
 semantics:
   intent_indicators:
     energy_demand: total_mwh

@@ -79,7 +79,7 @@ def test_documentary_cli_never_launches_calculation(monkeypatch, line, automatic
 def test_web_needed_calculation_does_not_arm_old_profile(monkeypatch):
     from websemantic.adapters import tls
 
-    lines = iter(['prends les valeurs par défaut', 'Estime un tunnel selon une norme externe', '/v', '/q'])
+    lines = iter(['/profile', 'Estime un tunnel selon une norme externe', '/v', '/q'])
     monkeypatch.setattr('builtins.input', lambda _: next(lines))
     monkeypatch.setattr(cli, 'load_private_key', lambda _: None)
     monkeypatch.setattr(cli, 'extract', lambda *args, **kwargs: ({'needs_web': True, 'task': 'unsupported', 'updates': []}, {}))

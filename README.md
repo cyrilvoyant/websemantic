@@ -17,7 +17,7 @@ cd C:\Users\cvoyant\Documents\websemantic\semantic-sim-layer
 & .\.venv\Scripts\websemantic.exe chat --model tls
 ```
 
-Write a request, inspect `/show`, then optionally `/profile`, `/accept` and `/run`. No local conversation ceiling by default; Gemini project quotas still apply. No automatic retry. Original backend sources stay unchanged. API credentials are read locally from GEMINI_API_KEY or a private .env file, never versioned.
+Write a request, propose missing values with `/profile`, inspect `/d` and accept with `/v`: a valid scenario runs automatically. Explicit parameter changes also request a new run; read-only questions do not. `/details-all` retains access to technical parameters. No local conversation ceiling by default; Gemini project quotas still apply. No automatic retry. Original backend sources stay unchanged. API credentials are read locally from GEMINI_API_KEY or a private .env file, never versioned.
 
 
 ## Purpose
