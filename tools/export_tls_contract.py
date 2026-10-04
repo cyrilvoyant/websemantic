@@ -42,7 +42,7 @@ def main():
                 "model_coefficients": descriptor.get('model_coefficients', {}),
                 "comparison": descriptor.get('comparison', {}),
                 "execution_policy": {"validator": "websemantic.core.validation:validate",
-                    "additional_adapter_checks": ["Pinned and unchanged backend", "freq_minutes in 5,10,15,30,60",
+                    "additional_adapter_checks": ["Pinned simulator module verified by SHA-256 (LF); Git checks when checkout available", "freq_minutes in 5,10,15,30,60",
                         "n_days * 1440 / freq_minutes * n_runs <= 2000000", "peak_width_h > 0",
                         "0 <= morning_peak_hour, evening_peak_hour < 24",
                         "Nonnegative max_depth_m, gradient_percent, aux_kw_per_km_tube, base_fixed_kw, traffic_level, traffic_sensitivity, pollution_sensitivity, accident_sensitivity"],
@@ -140,3 +140,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+    from export_agent_files import main as export_agent_files
+
+    export_agent_files()

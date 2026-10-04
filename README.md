@@ -2,6 +2,10 @@
 
 Préparer une simulation TLS en phrases, examiner les hypothèses et obtenir des résultats avec leurs unités et leur provenance.
 
+## Avec un agent Python
+
+Lisez [le point d’entrée agent](agent/README.md). Il indique les fichiers à lire, leurs empreintes et la commande de calcul. Ce parcours utilise les fichiers sources, sans Git ni clé Gemini.
+
 ## Utiliser
 
 Dans le package Windows, ouvrez `Installer.cmd` une fois, puis `WebSemantic.cmd` et choisissez TLS.

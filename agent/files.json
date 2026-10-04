@@ -1,0 +1,77 @@
+{
+  "schema_version": "websemantic-agent-files-1",
+  "model": "tls",
+  "dependencies": [
+    "numpy",
+    "pandas",
+    "rdflib"
+  ],
+  "backend_commit": "748e053e129669cf3e896d381e3c0ac01c763edd",
+  "files": [
+    {
+      "path": "agent/run_tls.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/agent/run_tls.py",
+      "sha256_lf": "095ef184ef82421038a6c691b33709565432aa945b8d0f76bf8e45afa639a030"
+    },
+    {
+      "path": "src/websemantic/__init__.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/__init__.py",
+      "sha256_lf": "220a73c915e7d09981abc75e80ee1fb122abd6e7bf09021a5e802b9d0243522b"
+    },
+    {
+      "path": "src/websemantic/core/__init__.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/core/__init__.py",
+      "sha256_lf": "5f71e16fc85ce99befa26d975eab06287be71ce5f2b1964a5aa639789d7bbadf"
+    },
+    {
+      "path": "src/websemantic/core/validation.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/core/validation.py",
+      "sha256_lf": "c1ed6ea568d78b75e93a19ff15690e17040c06a4a209b6f089fc7fcc8d3daaff"
+    },
+    {
+      "path": "src/websemantic/adapters/__init__.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/adapters/__init__.py",
+      "sha256_lf": "f7fcc68a7c07d2e431732b4c2d4f2169dc88147e302a66538207020f18eca2d9"
+    },
+    {
+      "path": "src/websemantic/adapters/tls.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/adapters/tls.py",
+      "sha256_lf": "60a66e43a0325743a453b93c8d9089f9c431510d983f12a1178f622d4ad1746f"
+    },
+    {
+      "path": "src/websemantic/adapters/tls_outputs.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/adapters/tls_outputs.py",
+      "sha256_lf": "0de3f390ee3a0e49185249b61728a515ecb57153e1ba13c06cac0fc9dd4595f6"
+    },
+    {
+      "path": "src/websemantic/semantics.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/semantics.py",
+      "sha256_lf": "c9351ee88859cc424e327c72e3a3e229e108a04e8142958ccbde294e67d4e8a4"
+    },
+    {
+      "path": "ontology/tls-contract.json",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/tls-contract.json",
+      "sha256_lf": "064b0512757fa75506e666d62b6f97eb5243a43917f0baef5cd4908eb35a50d1"
+    },
+    {
+      "path": "examples/tls-complete.json",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/examples/tls-complete.json",
+      "sha256_lf": "2ed38407dda8d27aeb88de55e488febf0bdfbf589139b7bd78aee02a50efa978"
+    },
+    {
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/LICENSE",
+      "sha256_lf": "45ee8c16c0bcb29337d6549cd074f07ea18577e9840140333318e4a593d7317b"
+    },
+    {
+      "path": "external/tunnel-load-simulator/src/tunnel_load_simulator/simulator.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/tunnel-load-simulator/748e053e129669cf3e896d381e3c0ac01c763edd/src/tunnel_load_simulator/simulator.py",
+      "sha256_lf": "8377b8a26e18d060a7a217721100512625f53fbd4d8aa9d7a3b085bd14663464"
+    },
+    {
+      "path": "external/tunnel-load-simulator/LICENSE",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/tunnel-load-simulator/748e053e129669cf3e896d381e3c0ac01c763edd/LICENSE",
+      "sha256_lf": "ac6d2078d2f2e805440689e70340f59858217f645301217048fea4145abb99fc"
+    }
+  ]
+}

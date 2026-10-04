@@ -2,7 +2,9 @@
 
 ## Accès
 
-Vérifier séparément lecture web/GitHub, récupération des sources, exécution Python et dépendances disponibles. Un échec Git ne suffit pas à conclure que la navigation est indisponible. Privilégier le clonage avec sous-modules ; conserver les révisions et les fichiers complets. Signaler toute ressource indispensable manquante avant le calcul.
+Commencer par [agent/README.md](../agent/README.md). Le fichier `agent/files.json` indique les sources et leurs empreintes. Lire les fichiers avec les outils web puis les écrire aux chemins indiqués dans l’espace Python. Ce parcours requiert numpy, pandas et rdflib ; le projet et Git n’ont pas besoin d’être installés.
+
+L’adaptateur vérifie l’empreinte du module TLS exécuté, avec normalisation CRLF/LF, et conserve la méthode dans le manifeste. Un checkout présent ajoute les contrôles Git. La provenance par fichiers décrit un module correspondant à la révision publiée, pas un checkout authentifié.
 
 ## Contrat
 

@@ -1,7 +1,9 @@
 """Pinned, read-only TLS adapter with a validation gate at every run."""
 
+import hashlib
 import importlib.util
 import json
+import shutil
 import subprocess
 import uuid
 from dataclasses import asdict
@@ -40,24 +42,32 @@ def run(scenario, descriptor, workspace, output_root=None):
     if any(not 0 <= config[k] < 24 for k in ("morning_peak_hour", "evening_peak_hour")):
         raise ValueError("Heures de pointe attendues entre 0 inclus et 24 exclu.")
     backend = Path(workspace) / "external/tunnel-load-simulator"
-    commit = subprocess.run(
-        ["git", "-C", str(backend), "rev-parse", "HEAD"],
-        capture_output=True,
-        text=True,
-        check=True,
-    ).stdout.strip()
-    if commit != descriptor["software"]["commit"]:
+    expected_commit = "748e053e129669cf3e896d381e3c0ac01c763edd"
+    expected_digest = "8377b8a26e18d060a7a217721100512625f53fbd4d8aa9d7a3b085bd14663464"
+    if descriptor["software"]["commit"] != expected_commit:
         raise ValueError("La revision TLS ne correspond pas au descripteur.")
-    dirty = subprocess.run(
-        ["git", "-C", str(backend), "status", "--porcelain", "--untracked-files=no"],
-        capture_output=True,
-        text=True,
-        check=True,
-    ).stdout
-    if dirty:
-        raise ValueError(
-            "Le backend comporte des modifications suivies; execution refusee."
-        )
+    source_path = backend / "src/tunnel_load_simulator/simulator.py"
+    source_bytes = source_path.read_bytes().replace(b"\r\n", b"\n")
+    digest = hashlib.sha256(source_bytes).hexdigest()
+    if digest != expected_digest:
+        raise ValueError("Empreinte du code TLS incorrecte; execution refusee.")
+    verification = {"method": "sha256_lf", "commit": expected_commit,
+                    "file": "src/tunnel_load_simulator/simulator.py", "sha256": digest,
+                    "scope": "Executed simulator module; CRLF normalized to LF."}
+    if (backend / ".git").exists() and shutil.which("git"):
+        commit = subprocess.run(
+            ["git", "-C", str(backend), "rev-parse", "HEAD"],
+            capture_output=True, text=True, check=True,
+        ).stdout.strip()
+        if commit != expected_commit:
+            raise ValueError("La revision TLS ne correspond pas au descripteur.")
+        dirty = subprocess.run(
+            ["git", "-C", str(backend), "status", "--porcelain", "--untracked-files=no"],
+            capture_output=True, text=True, check=True,
+        ).stdout
+        if dirty:
+            raise ValueError("Le backend comporte des modifications suivies; execution refusee.")
+        verification["method"] = "git_and_sha256_lf"
     import pandas as pd
 
     spec = importlib.util.spec_from_file_location(
@@ -98,13 +108,14 @@ def run(scenario, descriptor, workspace, output_root=None):
         table.to_csv(target / f"{name}.csv", index=False)
     manifest = {
         "software": descriptor["software"],
+        "source_verification": verification,
         "scenario": asdict(scenario),
         "nature": descriptor["nature"],
         "uncertainty": descriptor["uncertainty"],
         "validity_notes": descriptor["validity_notes"],
         "outputs": list(outputs),
         "output_qualification": qualification,
-        "note": "Computational synthetic outputs, not field validation; JSON-LD not yet implemented.",
+        "note": "Synthetic simulation outputs.",
     }
     (target / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2, allow_nan=False),
