@@ -1,79 +1,60 @@
-﻿WEBSEMANTIC — ESSAIS ENTRE COLLÈGUES
+WEBSEMANTIC — ESSAIS ENTRE COLLÈGUES
 
-Bonjour à tous,
-Je vous propose deux essais de WebSemantic pour préparer un scénario en français, examiner ses hypothèses et lancer TLS. Vos retours m'aideront à améliorer ce prototype.
+Bonjour,
+Voici trois essais pour préparer un scénario, vérifier ses hypothèses et obtenir les résultats de TLS. Merci de me transmettre vos remarques avec la phrase saisie et la réponse obtenue.
 
-PARTIE 1 — INSTALLER ET UTILISER
+1 — INSTALLATION ET UTILISATION
 
-Décompressez le package, puis double-cliquez sur Installer.cmd : il vérifie les composants et installe ce qui manque. Les versions compatibles déjà présentes sont conservées. Ensuite, utilisez uniquement WebSemantic_TLS.cmd ; ce lanceur n'installe rien. S'il manque un composant, relancez Installer.cmd.
+Décompressez le package et double-cliquez sur Installer.cmd, une seule fois.
+Ensuite, double-cliquez sur WebSemantic_TLS.cmd et choisissez 1 (TLS).
+Le lanceur n'installe rien. S'il signale un composant manquant, relancez Installer.cmd. LQL et pvlib sont encore en préparation.
 
-Au menu, choisissez 1 pour TLS. Les choix 2 (LQL) et 3 (pvlib) affichent « Work in progress ». La clé Gemini est fournie dans ce package privé : ne le publiez pas. Internet est nécessaire pour Gemini et les recherches ; le simulateur est fourni dans une version fixée.
+Internet est nécessaire. La clé est déjà fournie pour cet essai privé : ne diffusez pas ce package publiquement.
+Collez votre demande, puis Entrée. Le calcul démarre dès que les informations sont complètes et les hypothèses acceptées. Une modification relance le calcul.
 
-Saisissez une phrase ou une commande, puis Entrée :
-/s : cinq suggestions ; /d : tableau des paramètres et unités ;
-/e VARIABLE : définition, unité et options ; /p : propose les valeurs manquantes ;
-/v : accepte les hypothèses ; /set GROUPE.VARIABLE VALEUR : fixe un choix ;
-/web QUESTION : recherche documentaire ; /q : quitte.
+Commandes utiles : /s propose cinq pistes ; /d affiche les paramètres et unités ; /e ventilation_type explique les options ; /p propose les valeurs manquantes ; /v les accepte et calcule ; /q quitte.
 
-Validez avec /v : le calcul démarre si les informations sont suffisantes. Une modification d’un scénario validé lance un nouveau calcul ; /d et /e consultent seulement les paramètres. « Prends les valeurs moyennes » accepte le profil de démonstration : ce ne sont pas des moyennes mesurées. Une recherche documentaire ne valide aucun paramètre. Si Gemini est indisponible, les commandes locales restent utilisables.
+Le dossier des résultats apparaît après chaque calcul. Les consommations sont en MWh, les puissances en kW. Les données sont simulées : « moyen » et « ancien » demandent des hypothèses, pas des chiffres inventés. Une recherche apporte des sources ; elle ne transforme pas une hypothèse en mesure.
 
-Les sorties indiquent énergie en MWh, puissance en kW et énergie spécifique en kWh/(m·an), par mètre de tunnel tous tubes compris. Les paramètres ont chacun leur unité dans /d et /e. L'énergie annualisée multiplie l'énergie de la période par 365/nombre de jours ; elle n'est pas une mesure annuelle. La dispersion des réalisations ne couvre pas toutes les incertitudes. Le manifeste et les CSV permettent de retrouver les hypothèses et les résultats.
+Code : https://github.com/cyrilvoyant/websemantic
+TLS : https://github.com/cyrilvoyant/tunnel-load-simulator
 
-Code et documentation : https://github.com/cyrilvoyant/websemantic
-Simulateur TLS : https://github.com/cyrilvoyant/tunnel-load-simulator
-WebSemantic : PolyForm Noncommercial 1.0.0, conditions dans application/LICENSE. Les composants tiers conservent leurs licences.
+2 — TROIS ESSAIS
 
-PARTIE 2 — DEUX EXEMPLES COMPLETS
+EXEMPLE 1 — JE SAIS CE QUE JE VEUX
 
-Ouvrez une nouvelle conversation pour chaque exemple et choisissez 1. Saisissez chaque ligne séparément.
+Lancez WebSemantic_TLS.cmd, choisissez 1. Copiez le paragraphe entier en un seul message :
 
-1. OBJECTIF PRÉCIS : ÉNERGIE SUR 30 JOURS ET PIC DE PUISSANCE
+Calcule ce scénario fictif dont j'accepte tous les paramètres : longueur 2000 m ; 2 tubes ; 2 voies par tube ; altitude 300 m ; profondeur maximale 80 m ; pente 2 % ; contexte peri-urban ; éclairage LED fixed ; ventilation longitudinal ; auxiliaires 35 kW/(km·tube) ; charge fixe 40 kW ; trafic relatif 1 ; pointes à 8 h et 18 h ; largeur des pics 1,4 h ; sensibilité au trafic 0,65 ; bruit relatif 0,06 ; probabilité quotidienne de pollution 0,05 et d'accident 0,015 ; sensibilité à la pollution 0,55 et aux accidents 0,75. Début 2025-01-01 ; durée 30 jours ; pas 15 minutes ; 10 réalisations ; graine 42.
 
-Le tunnel mesure 2000 m, possède deux tubes et deux voies par tube. Le contexte est périurbain, l’éclairage est LED fixed et la ventilation est longitudinal.
-La période commence le 2025-01-01 et dure 30 jours. Le pas est de 15 minutes, avec 10 réalisations et une graine de 42.
-/p
-/d
+Tous les paramètres sont fournis. Vous devez obtenir l'énergie sur 30 jours et le pic de puissance. L'énergie annuelle affichée est une extrapolation × 365/30. /d permet de vérifier les paramètres ; /q termine l'essai.
 
-Vérifiez les valeurs et les unités. Les champs restants proviennent du profil de démonstration : j'accepte cette hypothèse pour l'exercice.
+EXEMPLE 2 — JE PRÉCISE UNE IDÉE VAGUE
 
-/v
+Lancez WebSemantic_TLS.cmd, choisissez 1 dans une nouvelle conversation.
+Copiez les six instructions suivantes, une par une ; attendez la réponse entre deux instructions.
 
-L'énergie couvre 30 jours ; le pic est évalué au pas de 15 min. L'annualisation applique 365/30. Vérifiez le scénario enregistré dans le manifeste, puis quittez avec /q.
+1) /web Je souhaite étudier un tunnel moyen à Montpellier avec une ventilation ancienne et obtenir une série annuelle journalière. Quelles sources locales et quelles hypothèses dois-je distinguer ?
 
-2. IDÉE VAGUE : TUNNEL URBAIN À MONTPELLIER, VENTILATION ANCIENNE
+2) Pour cet exercice fictif à Montpellier, retiens un tunnel urban de 1500 m, 2 tubes et 2 voies par tube, une ventilation semi-transverse et un éclairage sodium fixed. Fixe le début au 2025-01-01, la durée à 365 jours, le pas interne à 60 minutes, 3 réalisations et la graine à 42. Je souhaite une restitution quotidienne de l'énergie et de la puissance moyenne. Propose les autres paramètres sans les accepter.
 
-Je voudrais étudier un tunnel urbain à Montpellier avec un ancien système de ventilation. Je ne connais pas encore ses dimensions ni le type exact de ventilation.
-/s
-/e length_m
-/e ventilation_type
-/e lighting_type
-/web Montpellier mobilité trafic heures de pointe sources officielles
-/web CETU types de ventilation des tunnels routiers
+3) /s
 
-Regardez les cinq suggestions, les options et les sources. « Ancien » ne définit pas un type de ventilation ; Montpellier ne définit pas la géométrie. Pour cet exercice, choisissez explicitement les hypothèses fictives suivantes :
+4) /p
 
-/set inputs.tunnel_context "urban"
-/set inputs.length_m 1200
-/set inputs.n_tubes 1
-/set inputs.n_lanes_per_tube 2
-/set inputs.altitude_m 40
-/set inputs.max_depth_m 30
-/set inputs.gradient_percent 1
-/set inputs.ventilation_type "semi-transverse"
-/set inputs.lighting_type "sodium fixed"
-/set experiment.start_date "2025-01-01"
-/set experiment.n_days 14
-/set experiment.freq_minutes 30
-/set experiment.n_runs 10
-/set experiment.base_seed 42
-/p
-/d
+5) /d
 
-Longueurs en m, pente en %, durée en jours, pas en min. Examinez aussi les auxiliaires en kW/(km·tube), la charge fixe en kW et le trafic relatif sans dimension. Sans comptages locaux, les pics à 8 h et 18 h restent des hypothèses. Les événements synthétiques ne représentent pas des mesures de pollution ou d'accidents. /e permet de comprendre un paramètre avant de l'accepter.
+6) /v
 
-/v
+Les numéros servent uniquement à lire le guide : ne les collez pas.
+À l'étape 3, regardez les pistes d'affinement. À l'étape 5, vérifiez les hypothèses et les unités ; /e NOM_VARIABLE permet d'en comprendre une avant de valider. Les valeurs proposées sont celles du profil de démonstration, pas des moyennes mesurées à Montpellier. Vous pouvez modifier un choix avant /v.
 
-L'énergie couvre 14 jours et l'annualisation applique 365/14. Le résultat décrit le scénario choisi, pas un tunnel réel de Montpellier. Retrouvez les hypothèses et les sources dans les fichiers du calcul. Pour tester une autre ventilation, consultez /e ventilation_type, modifiez votre choix et demandez un nouveau calcul. Terminez avec /q.
+Après /v, ouvrez le dossier affiché : daily.csv contient 365 journées, avec l'énergie en kWh et la puissance moyenne en kW. TLS calcule à l'heure ; WebSemantic additionne ensuite les énergies par jour. Cette série décrit la réalisation 0 ; les indicateurs affichés résument les trois réalisations. Le manifeste conserve les hypothèses et la méthode.
 
-Merci de me transmettre la phrase saisie, la réponse et ce que vous attendiez.
+EXEMPLE 3 — LE MÊME ESSAI AVEC MON LLM HABITUEL
+
+Ouvrez Claude, GPT ou votre autre assistant dans un environnement disposant d'Internet et d'outils Python. Copiez ce prompt entier. Aucune clé Gemini n'est nécessaire pour exécuter directement TLS.
+
+En te référant au dépôt https://github.com/cyrilvoyant/websemantic et à tous les fichiers utiles, reproduis le scénario ci-dessous. Clone le dépôt avec ses sous-modules ; lis le README, le descripteur descriptors/tls/descriptor.yaml, les contrats et l'adaptateur src/websemantic/adapters/tls.py. Utilise le simulateur TLS fourni, sans modifier son code, à la révision 748e053e129669cf3e896d381e3c0ac01c763edd. Installe les dépendances dans un environnement isolé. Exécute réellement le calcul avec tes outils Python, sans appeler Gemini. Scénario fictif entièrement accepté : longueur 2000 m ; 2 tubes ; 2 voies par tube ; altitude 300 m ; profondeur maximale 80 m ; pente 2 % ; contexte peri-urban ; éclairage LED fixed ; ventilation longitudinal ; auxiliaires 35 kW/(km·tube) ; charge fixe 40 kW ; trafic relatif 1 ; pointes à 8 h et 18 h ; largeur des pics 1,4 h ; sensibilité au trafic 0,65 ; bruit relatif 0,06 ; probabilité quotidienne de pollution 0,05 et d'accident 0,015 ; sensibilité à la pollution 0,55 et aux accidents 0,75. Début 2025-01-01 ; durée 30 jours ; pas 15 minutes ; 10 réalisations ; graine 42. Restitue en français les médianes de l'énergie totale en MWh, de l'énergie annualisée en MWh/an et du pic en kW. Fournis aussi un JSON avec les paramètres, leurs unités, les indicateurs, les révisions utilisées et les chemins des fichiers calculés. Qualifie les hypothèses et précise que l'annualisation est une extrapolation, sans validation terrain. Conserve les CSV et le manifeste pour comparer avec l'exemple 1. Si tu ne peux pas exécuter du code, dis-le et ne fabrique pas de résultats.
+
 Cyril

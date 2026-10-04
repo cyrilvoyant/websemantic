@@ -76,6 +76,12 @@ def run(scenario, descriptor, workspace, output_root=None):
         exp["n_runs"],
         exp["base_seed"],
     )
+    # Preserve native TLS tables; derive daily energy from its first trajectory.
+    outputs["daily"] = (
+        outputs["representative"].set_index("timestamp")
+        .resample("1D").agg({"energy_kwh": "sum", "power_kw": "mean"})
+        .rename(columns={"power_kw": "mean_kw"}).reset_index()
+    )
     qualification = qualify(outputs, exp)
     target = (
         (Path(output_root) if output_root else Path(workspace) / "runs")

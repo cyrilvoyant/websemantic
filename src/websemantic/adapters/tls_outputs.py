@@ -2,6 +2,10 @@
 
 
 def column_metadata(name, table):
+    if table == "daily" and name == "energy_kwh":
+        return {"quantity": "energy", "unit": "kWh", "meaning": "Somme des énergies des pas natifs de la journée, réalisation 0."}
+    if table == "daily" and name == "mean_kw":
+        return {"quantity": "power", "unit": "kW", "meaning": "Moyenne des puissances des pas natifs de la journée, réalisation 0."}
     if name.endswith("_kw") or (table == "envelope" and name in ("median", "p10", "p90", "mean")):
         return {"quantity": "power", "unit": "kW", "meaning": "Puissance électrique calculée."}
     definitions = {
@@ -31,6 +35,7 @@ def column_metadata(name, table):
 
 def qualify(outputs, experiment):
     aggregations = {
+        "daily": "Agrégation journalière de la réalisation 0 : somme de l'énergie et moyenne de la puissance ; pas une médiane Monte Carlo. Les dates suivent le calendrier sans fuseau déclaré.",
         "representative": "Réalisation 0 au pas natif ; exemple de trajectoire, pas la médiane.",
         "kpis": "Une ligne par réalisation sur toute la période simulée.",
         "envelope": "Puissances moyennées par heure dans chaque réalisation, puis statistiques entre réalisations. p10/p90 sont des quantiles empiriques, pas un intervalle de confiance.",
