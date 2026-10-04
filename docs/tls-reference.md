@@ -68,18 +68,339 @@ Les défauts scientifiques sont des propositions non calibrées, à accepter exp
 - `experiment.freq_minutes` — experiment ; duration_minutes. Pas admis : 5, 10, 15, 30 ou 60 min. Une sortie quotidienne est une agrégation, pas un calcul à minuit.
 - `experiment.n_runs` — experiment ; count. Augmenter ce nombre décrit mieux la variabilité du modèle, sans ajouter une validation terrain.
 - `experiment.base_seed` — operational ; identifier. Valeur fixe 42 selon la politique d’essai, modifiable explicitement ; ce n’est pas un paramètre physique.
+### Convention qualitative — `inputs.length_m`
+
+Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| faible | Valeur déclarée | 375.0 | m |
+| courant | Valeur déclarée | 1500 | m |
+| élevé | 0.75 × 12000.0 | 9000.0 | m |
+| très élevé | 1.0 × 12000.0 | 12000.0 | m |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `inputs.n_tubes`
+
+Comptages entiers de scénario, à valider ; références discrètes de l’interface TLS, pas maxima du moteur.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| peu | Valeur déclarée | 1 | nombre |
+| courant | Valeur déclarée | 2 | nombre |
+| beaucoup | Valeur déclarée | 3 | nombre |
+| maximum de référence | Valeur déclarée | 4 | nombre |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `inputs.n_lanes_per_tube`
+
+Comptage par tube, à valider ; ne pas le confondre avec le total de voies.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| peu | Valeur déclarée | 1 | nombre |
+| courant | Valeur déclarée | 2 | nombre |
+| beaucoup | Valeur déclarée | 3 | nombre |
+| maximum de référence | Valeur déclarée | 4 | nombre |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `inputs.altitude_m`
+
+Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| faible | Valeur déclarée | 75.0 | m |
+| courant | Valeur déclarée | 300 | m |
+| élevé | 0.75 × 3000.0 | 2250.0 | m |
+| très élevé | 1.0 × 3000.0 | 3000.0 | m |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `inputs.max_depth_m`
+
+Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| faible | Valeur déclarée | 20.0 | m |
+| courant | Valeur déclarée | 80 | m |
+| élevé | 0.75 × 1000.0 | 750.0 | m |
+| très élevé | 1.0 × 1000.0 | 1000.0 | m |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `inputs.gradient_percent`
+
+Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| faible | Valeur déclarée | 0.5 | % |
+| courant | Valeur déclarée | 2.0 | % |
+| élevé | 0.75 × 12.0 | 9.0 | % |
+| très élevé | 1.0 × 12.0 | 12.0 | % |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Interprétation — `inputs.tunnel_context`
+
+Catégories sans ordre universel : utiliser uniquement les catégories déclarées et leurs synonymes non ambigus. « Ancien », « moderne », « fort » ou « faible » seuls demandent une précision ; l’âge ne détermine pas une technologie ni ses performances.
+
+### Interprétation — `inputs.lighting_type`
+
+Catégories sans ordre universel : utiliser uniquement les catégories déclarées et leurs synonymes non ambigus. « Ancien », « moderne », « fort » ou « faible » seuls demandent une précision ; l’âge ne détermine pas une technologie ni ses performances.
+
+### Interprétation — `inputs.ventilation_type`
+
+Catégories sans ordre universel : utiliser uniquement les catégories déclarées et leurs synonymes non ambigus. « Ancien », « moderne », « fort » ou « faible » seuls demandent une précision ; l’âge ne détermine pas une technologie ni ses performances.
+
+### Convention qualitative — `inputs.aux_kw_per_km_tube`
+
+Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| faible | Valeur déclarée | 8.75 | kW/(km·tube) |
+| courant | Valeur déclarée | 35.0 | kW/(km·tube) |
+| élevé | 0.75 × 120.0 | 90.0 | kW/(km·tube) |
+| très élevé | 1.0 × 120.0 | 120.0 | kW/(km·tube) |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `inputs.base_fixed_kw`
+
+Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| faible | Valeur déclarée | 10.0 | kW |
+| courant | Valeur déclarée | 40.0 | kW |
+| élevé | 0.75 × 500.0 | 375.0 | kW |
+| très élevé | 1.0 × 500.0 | 500.0 | kW |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
 ### Convention qualitative — `inputs.traffic_level`
 
 Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.
 
-| Expression | Fraction de la référence haute | Valeur sans unité |
-|---|---|---|
-| beaucoup | 0.75 | 1.5 |
-| énormément | 1.0 | 2 |
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| beaucoup | 0.75 × 2.0 | 1.5 | 1 |
+| énormément | 1.0 × 2.0 | 2.0 | 1 |
+| faible | Valeur déclarée | 0.3 | 1 |
+| courant | Valeur déclarée | 1.0 | 1 |
 
 TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum.
 
 La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `inputs.morning_peak_hour`
+
+Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| tôt | Valeur déclarée | 5 | h du jour |
+| courant | Valeur déclarée | 8 | h du jour |
+| tard | Valeur déclarée | 11 | h du jour |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `inputs.evening_peak_hour`
+
+Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| tôt | Valeur déclarée | 15 | h du jour |
+| courant | Valeur déclarée | 18 | h du jour |
+| tard | Valeur déclarée | 22 | h du jour |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `inputs.peak_width_h`
+
+Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| faible | Valeur déclarée | 0.35 | h |
+| courant | Valeur déclarée | 1.4 | h |
+| élevé | 0.75 × 4.0 | 3.0 | h |
+| très élevé | 1.0 × 4.0 | 4.0 | h |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `inputs.traffic_sensitivity`
+
+Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| faible | Valeur déclarée | 0.1625 | 1 |
+| courant | Valeur déclarée | 0.65 | 1 |
+| élevé | 0.75 × 1.5 | 1.125 | 1 |
+| très élevé | 1.0 × 1.5 | 1.5 | 1 |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `inputs.noise_sigma`
+
+Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| faible | Valeur déclarée | 0.015 | 1 |
+| courant | Valeur déclarée | 0.06 | 1 |
+| élevé | 0.75 × 0.5 | 0.375 | 1 |
+| très élevé | 1.0 × 0.5 | 0.5 | 1 |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `inputs.pollution_probability_per_day`
+
+Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| faible | Valeur déclarée | 0.0125 | 1 |
+| courant | Valeur déclarée | 0.05 | 1 |
+| élevé | 0.75 × 0.5 | 0.375 | 1 |
+| très élevé | 1.0 × 0.5 | 0.5 | 1 |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `inputs.accident_probability_per_day`
+
+Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| faible | Valeur déclarée | 0.00375 | 1 |
+| courant | Valeur déclarée | 0.015 | 1 |
+| élevé | 0.75 × 0.2 | 0.15000000000000002 | 1 |
+| très élevé | 1.0 × 0.2 | 0.2 | 1 |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `inputs.pollution_sensitivity`
+
+Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| faible | Valeur déclarée | 0.1375 | 1 |
+| courant | Valeur déclarée | 0.55 | 1 |
+| élevé | 0.75 × 2.0 | 1.5 | 1 |
+| très élevé | 1.0 × 2.0 | 2.0 | 1 |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `inputs.accident_sensitivity`
+
+Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| faible | Valeur déclarée | 0.1875 | 1 |
+| courant | Valeur déclarée | 0.75 | 1 |
+| élevé | 0.75 × 2.0 | 1.5 | 1 |
+| très élevé | 1.0 × 2.0 | 2.0 | 1 |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Interprétation — `experiment.start_date`
+
+Demander une date ou une référence temporelle explicite. « Tôt », « tard » et « début d’année » sans année ne déterminent pas une date. Ne pas choisir silencieusement la date du jour. Le défaut est une proposition acceptée seulement sur accord.
+
+### Convention qualitative — `experiment.n_days`
+
+Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| court | Valeur déclarée | 1 | jours |
+| courant | Valeur déclarée | 7 | jours |
+| long | Valeur déclarée | 365 | jours |
+| très long | Valeur déclarée | 1095 | jours |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `experiment.freq_minutes`
+
+Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| très fin | Valeur déclarée | 5 | min |
+| fin | Valeur déclarée | 10 | min |
+| intermédiaire | Valeur déclarée | 15 | min |
+| large | Valeur déclarée | 30 | min |
+| grossier | Valeur déclarée | 60 | min |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Convention qualitative — `experiment.n_runs`
+
+Comptages Monte Carlo conventionnels, à valider ; beaucoup = 30 et énormément = 50 selon une échelle entière. Plus de réalisations augmente le coût ; cela ne valide pas le modèle.
+
+| Expression | Règle | Valeur | Unité ou type |
+|---|---|---|---|
+| peu | Valeur déclarée | 1 | nombre |
+| courant | Valeur déclarée | 3 | nombre |
+| beaucoup | Valeur déclarée | 30 | nombre |
+| maximum de référence | Valeur déclarée | 50 | nombre |
+
+Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
+### Interprétation — `experiment.base_seed`
+
+Identifiant technique fixe à 42 par autorisation antérieure, modifiable uniquement sur demande explicite chiffrée. Faible, forte, meilleure ou nouvelle graine ne désignent pas une intensité physique ; demander une valeur. Ne pas proposer de graine qualitative.
 
 
 ## Sorties

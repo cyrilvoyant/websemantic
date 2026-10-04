@@ -75,3 +75,5 @@ Cyril Voyant, Haytham El-Houari, Daniel Julian et Nicolas Fichaux. Les informati
 Le code WebSemantic courant est sous [PolyForm Noncommercial 1.0.0](LICENSE). Les simulateurs et dépendances conservent leurs licences. Les révisions antérieures publiées sous MIT jusqu’au commit `c00914c` conservent ces permissions. Cette licence comporte des restrictions commerciales et n’est pas une licence open source au sens de l’OSI.
 
 Les formulations « beaucoup de trafic » et « énormément de trafic » proposent respectivement 1,5 et 2, sans unité : 75 % et 100 % de la référence haute du curseur TLS. Cette convention est déclarée dans le contrat et contrôlée localement. Les propositions restent à valider ; elles ne représentent pas des comptages de véhicules.
+
+Chaque variable possède une règle d’interprétation : 21 échelles de scénario pour les quantités et 5 politiques pour les catégories, la date et la graine. Les expressions, valeurs, unités et références figurent dans [le référentiel](docs/tls-reference.md). Les qualificatifs inconnus ou ambigus demandent une précision ; une valeur explicite reste prioritaire.

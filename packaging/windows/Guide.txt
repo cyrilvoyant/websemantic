@@ -12,7 +12,7 @@ LQL et pvlib sont encore en préparation. Si un composant manque, le lanceur vou
 Internet est nécessaire. La clé Gemini est fournie pour cet essai : c’est ma clé, ne diffusez pas le package publiquement.
 Écrivez comme vous parleriez à un collègue, puis Entrée. Vous pouvez demander une explication, des suggestions, un tableau, une recherche de sources ou une modification. Le calcul démarre quand les paramètres sont suffisants et les hypothèses acceptées. Les raccourcis restent accessibles avec /help, mais les exemples n’en demandent aucun.
 
-Vous pouvez écrire « beaucoup de trafic » (proposition : 1,5) ou « énormément de trafic » (proposition : 2). Ces multiplicateurs sans unité correspondent à 75 % et 100 % de la référence haute du curseur TLS. Ce sont des conventions de simulation à valider, pas des comptages ni une capacité routière. Une valeur chiffrée explicite reste prioritaire.
+Vous pouvez écrire « beaucoup de trafic » (proposition : 1,5) ou « énormément de trafic » (proposition : 2). Ces multiplicateurs sans unité correspondent à 75 % et 100 % de la référence haute du curseur TLS. Ce sont des conventions de simulation à valider, pas des comptages ni une capacité routière. Une valeur chiffrée explicite reste prioritaire. Les autres variables ont également leurs règles : « forte pente » propose 9 %, « pointe du matin tardive » propose 11 h et « pas fin » propose 10 min. Demandez une définition ou le tableau pour connaître la convention. Un qualificatif ne constitue pas une mesure ; les catégories ambiguës comme « ventilation ancienne » et les dates imprécises demandent une clarification.
 
 Code : https://github.com/cyrilvoyant/websemantic
 TLS : https://github.com/cyrilvoyant/tunnel-load-simulator

@@ -98,10 +98,14 @@ def main():
         for name, spec in descriptor[group].items():
             scale = spec.get('qualitative_scale')
             if scale:
-                lines += [f"### Convention qualitative — `{group}.{name}`", "", scale['interpretation'], "", "| Expression | Fraction de la référence haute | Valeur sans unité |", "|---|---|---|"]
+                lines += [f"### Convention qualitative — `{group}.{name}`", "", scale['interpretation'], "", "| Expression | Règle | Valeur | Unité ou type |", "|---|---|---|---|"]
                 for label, level in scale['levels'].items():
-                    lines.append(f"| {label} | {level['fraction']} | {scale['reference_upper'] * level['fraction']:g} |")
+                    value = level.get('value') if 'value' in level else scale['reference_upper'] * level['fraction']
+                    rule = 'Valeur déclarée' if 'value' in level else f"{level['fraction']} × {scale['reference_upper']}"
+                    lines.append(f"| {label} | {rule} | {value} | {spec['display_unit']} |")
                 lines += ["", scale['authority'], "", "La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.", ""]
+            elif spec.get('qualitative_policy'):
+                lines += [f"### Interprétation — `{group}.{name}`", "", spec['qualitative_policy'], ""]
     lines += ["", "## Sorties", "", "Les quantités concernent tous les tubes. Les séries ne déclarent pas de fuseau horaire.", ""]
     for name,info in tables.items():
         lines += [f"### {name}.csv", "", info["aggregation"], "", "| Colonne | Unité | Sens |", "|---|---|---|"]

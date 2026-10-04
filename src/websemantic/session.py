@@ -126,7 +126,8 @@ class Session:
                 symbol = spec.get('display_unit', 'sans unité')
                 if symbol == '1':
                     symbol = 'sans unité'
-                notices.append(f"{spec.get('label', name)} proposé : {value:g} ({symbol}), selon la convention déclarée ; à valider. Ce n’est pas une mesure locale.")
+                shown = format(value, 'g') if isinstance(value, (int, float)) else str(value)
+                notices.append(f"{spec.get('label', name)} proposé : {shown} ({symbol}), selon la convention déclarée ; à valider. Ce n’est pas une mesure locale.")
                 continue
             value = update["value"]
             unit = update["unit"] or None

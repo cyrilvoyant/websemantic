@@ -57,3 +57,44 @@ def test_undeclared_qualifier_is_not_a_numeric_default():
     with pytest.raises(ValueError):
         apply(state, 'trafic moyen', 'moyen')
     assert 'traffic_level' not in state.scenario.inputs
+
+
+DESCRIPTOR = load_descriptor(Path(__file__).resolve().parents[1], 'tls')
+CASES = [(group, name, label, alias, level.get('value') if 'value' in level
+          else spec['qualitative_scale']['reference_upper'] * level['fraction'])
+         for group in ('inputs', 'experiment') for name, spec in DESCRIPTOR[group].items()
+         for label, level in spec.get('qualitative_scale', {}).get('levels', {}).items()
+         for alias in level['aliases']]
+
+
+@pytest.mark.parametrize('group,name,label,alias,expected', CASES)
+def test_every_declared_alias_has_a_typed_traceable_value(group, name, label, alias, expected):
+    state = session()
+    parsed = {'task': state.scenario.task, 'message': '', 'updates': [
+        {'field': f'{group}.{name}', 'value': label, 'unit': '', 'evidence': alias}]}
+    state.apply(alias, parsed)
+    record = getattr(state.scenario, group)[name]
+    assert record.value == expected
+    if DESCRIPTOR[group][name]['type'] == 'int':
+        assert type(record.value) is int
+    assert record.unit == DESCRIPTOR[group][name]['unit']
+    assert record.origin == 'assumption' and not record.accepted
+    assert 'Convention qualitative' in record.source
+    state.propose_profile()
+    state.accept_profile()
+    assert state.result().decision == 'execute'
+
+
+def test_all_parameters_have_an_interpretation_policy_and_seed_stays_fixed():
+    for group in ('inputs', 'experiment'):
+        for spec in DESCRIPTOR[group].values():
+            assert bool(spec.get('qualitative_scale')) != bool(spec.get('qualitative_policy'))
+    state = session()
+    assert state.scenario.experiment['base_seed'].value == 42
+    assert not DESCRIPTOR['experiment']['base_seed'].get('qualitative_scale')
+
+
+def test_repeating_synonyms_of_one_level_is_not_a_conflict():
+    state = session()
+    apply(state, 'beaucoup de trafic, un fort trafic', 'beaucoup')
+    assert state.scenario.inputs['traffic_level'].value == 1.5

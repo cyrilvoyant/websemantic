@@ -52,6 +52,33 @@ inputs:
     aliases:
     - longueur du tunnel
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      reference_upper: 12000.0
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré
+        ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne
+        sont pas des statistiques observées.
+      levels:
+        faible:
+          value: 375.0
+          aliases:
+          - tunnel court
+          - faible longueur
+        courant:
+          value: 1500
+          aliases:
+          - longueur courante
+        élevé:
+          fraction: 0.75
+          aliases:
+          - tunnel long
+          - grande longueur
+        très élevé:
+          fraction: 1.0
+          aliases:
+          - tunnel très long
+          - très grande longueur
   n_tubes:
     type: int
     unit: unit:NUM
@@ -81,6 +108,28 @@ inputs:
     aliases:
     - nombre de tubes
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Comptages entiers de scénario, à valider ; références discrètes de l’interface TLS,
+        pas maxima du moteur.
+      levels:
+        peu:
+          value: 1
+          aliases:
+          - peu de tubes
+        courant:
+          value: 2
+          aliases:
+          - nombre courant de tubes
+        beaucoup:
+          value: 3
+          aliases:
+          - beaucoup de tubes
+        maximum de référence:
+          value: 4
+          aliases:
+          - énormément de tubes
   n_lanes_per_tube:
     type: int
     unit: unit:NUM
@@ -109,6 +158,27 @@ inputs:
     aliases:
     - nombre de voies par tube
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Comptage par tube, à valider ; ne pas le confondre avec le total de voies.
+      levels:
+        peu:
+          value: 1
+          aliases:
+          - peu de voies par tube
+        courant:
+          value: 2
+          aliases:
+          - nombre courant de voies par tube
+        beaucoup:
+          value: 3
+          aliases:
+          - beaucoup de voies par tube
+        maximum de référence:
+          value: 4
+          aliases:
+          - énormément de voies par tube
   altitude_m:
     type: float
     unit: unit:M
@@ -129,6 +199,33 @@ inputs:
     aliases:
     - altitude du tunnel
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      reference_upper: 3000.0
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré
+        ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne
+        sont pas des statistiques observées.
+      levels:
+        faible:
+          value: 75.0
+          aliases:
+          - faible altitude
+          - basse altitude
+        courant:
+          value: 300
+          aliases:
+          - altitude courante
+        élevé:
+          fraction: 0.75
+          aliases:
+          - haute altitude
+          - altitude élevée
+        très élevé:
+          fraction: 1.0
+          aliases:
+          - très haute altitude
+          - altitude très élevée
   max_depth_m:
     type: float
     unit: unit:M
@@ -148,6 +245,33 @@ inputs:
     aliases:
     - profondeur maximale
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      reference_upper: 1000.0
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré
+        ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne
+        sont pas des statistiques observées.
+      levels:
+        faible:
+          value: 20.0
+          aliases:
+          - faible profondeur
+          - tunnel peu profond
+        courant:
+          value: 80
+          aliases:
+          - profondeur courante
+        élevé:
+          fraction: 0.75
+          aliases:
+          - grande profondeur
+          - tunnel profond
+        très élevé:
+          fraction: 1.0
+          aliases:
+          - très grande profondeur
+          - tunnel très profond
   gradient_percent:
     type: float
     unit: unit:PERCENT
@@ -166,6 +290,33 @@ inputs:
     aliases:
     - pente du tunnel
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      reference_upper: 12.0
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré
+        ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne
+        sont pas des statistiques observées.
+      levels:
+        faible:
+          value: 0.5
+          aliases:
+          - faible pente
+          - pente faible
+        courant:
+          value: 2.0
+          aliases:
+          - pente courante
+        élevé:
+          fraction: 0.75
+          aliases:
+          - forte pente
+          - pente forte
+        très élevé:
+          fraction: 1.0
+          aliases:
+          - très forte pente
+          - pente très forte
   tunnel_context:
     type: category
     values:
@@ -197,6 +348,9 @@ inputs:
     aliases:
     - contexte du tunnel
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_policy: 'Catégories sans ordre universel : utiliser uniquement les catégories déclarées
+      et leurs synonymes non ambigus. « Ancien », « moderne », « fort » ou « faible » seuls demandent
+      une précision ; l’âge ne détermine pas une technologie ni ses performances.'
   lighting_type:
     type: category
     values:
@@ -230,6 +384,9 @@ inputs:
     aliases:
     - type d’éclairage
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_policy: 'Catégories sans ordre universel : utiliser uniquement les catégories déclarées
+      et leurs synonymes non ambigus. « Ancien », « moderne », « fort » ou « faible » seuls demandent
+      une précision ; l’âge ne détermine pas une technologie ni ses performances.'
   ventilation_type:
     type: category
     values:
@@ -263,6 +420,9 @@ inputs:
     aliases:
     - type de ventilation
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_policy: 'Catégories sans ordre universel : utiliser uniquement les catégories déclarées
+      et leurs synonymes non ambigus. « Ancien », « moderne », « fort » ou « faible » seuls demandent
+      une précision ; l’âge ne détermine pas une technologie ni ses performances.'
   aux_kw_per_km_tube:
     type: float
     unit: unit:KiloW per km per tube
@@ -283,6 +443,33 @@ inputs:
     aliases:
     - charge des auxiliaires
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      reference_upper: 120.0
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré
+        ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne
+        sont pas des statistiques observées.
+      levels:
+        faible:
+          value: 8.75
+          aliases:
+          - faible charge auxiliaire
+          - auxiliaires peu puissants
+        courant:
+          value: 35.0
+          aliases:
+          - charge auxiliaire courante
+        élevé:
+          fraction: 0.75
+          aliases:
+          - forte charge auxiliaire
+          - auxiliaires puissants
+        très élevé:
+          fraction: 1.0
+          aliases:
+          - très forte charge auxiliaire
+          - auxiliaires très puissants
   base_fixed_kw:
     type: float
     unit: unit:KiloW
@@ -302,6 +489,33 @@ inputs:
     aliases:
     - charge fixe
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      reference_upper: 500.0
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré
+        ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne
+        sont pas des statistiques observées.
+      levels:
+        faible:
+          value: 10.0
+          aliases:
+          - faible charge fixe
+          - charge fixe faible
+        courant:
+          value: 40.0
+          aliases:
+          - charge fixe courante
+        élevé:
+          fraction: 0.75
+          aliases:
+          - forte charge fixe
+          - charge fixe élevée
+        très élevé:
+          fraction: 1.0
+          aliases:
+          - très forte charge fixe
+          - charge fixe très élevée
   traffic_level:
     type: float
     unit: unit:UNITLESS
@@ -346,6 +560,16 @@ inputs:
           - énormément de traffic
           - trafic très élevé
           - trafic énorme
+        faible:
+          value: 0.3
+          aliases:
+          - peu de trafic
+          - faible trafic
+          - trafic faible
+        courant:
+          value: 1.0
+          aliases:
+          - trafic courant
   morning_peak_hour:
     type: float
     unit: unit:HR
@@ -366,6 +590,26 @@ inputs:
     aliases:
     - pointe du matin
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée
+        ni un horaire local observé.
+      levels:
+        tôt:
+          value: 5
+          aliases:
+          - pointe du matin tôt
+          - pic du matin précoce
+        courant:
+          value: 8
+          aliases:
+          - pointe du matin courante
+        tard:
+          value: 11
+          aliases:
+          - pointe du matin tardive
+          - pic du matin tardif
   evening_peak_hour:
     type: float
     unit: unit:HR
@@ -386,6 +630,26 @@ inputs:
     aliases:
     - pointe du soir
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée
+        ni un horaire local observé.
+      levels:
+        tôt:
+          value: 15
+          aliases:
+          - pointe du soir tôt
+          - pic du soir précoce
+        courant:
+          value: 18
+          aliases:
+          - pointe du soir courante
+        tard:
+          value: 22
+          aliases:
+          - pointe du soir tardive
+          - pic du soir tardif
   peak_width_h:
     type: float
     unit: unit:HR
@@ -407,6 +671,33 @@ inputs:
     aliases:
     - largeur des pointes
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      reference_upper: 4.0
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré
+        ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne
+        sont pas des statistiques observées.
+      levels:
+        faible:
+          value: 0.35
+          aliases:
+          - pics de trafic étroits
+          - pointes étroites
+        courant:
+          value: 1.4
+          aliases:
+          - largeur de pointe courante
+        élevé:
+          fraction: 0.75
+          aliases:
+          - pics de trafic larges
+          - pointes larges
+        très élevé:
+          fraction: 1.0
+          aliases:
+          - pics de trafic très larges
+          - pointes très larges
   traffic_sensitivity:
     type: float
     unit: unit:UNITLESS
@@ -428,6 +719,30 @@ inputs:
     aliases:
     - sensibilité au trafic
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      reference_upper: 1.5
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré
+        ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne
+        sont pas des statistiques observées.
+      levels:
+        faible:
+          value: 0.1625
+          aliases:
+          - faible sensibilité au trafic
+        courant:
+          value: 0.65
+          aliases:
+          - sensibilité au trafic courante
+        élevé:
+          fraction: 0.75
+          aliases:
+          - forte sensibilité au trafic
+        très élevé:
+          fraction: 1.0
+          aliases:
+          - très forte sensibilité au trafic
   noise_sigma:
     type: float
     unit: unit:UNITLESS
@@ -453,6 +768,33 @@ inputs:
     aliases:
     - bruit relatif
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      reference_upper: 0.5
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré
+        ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne
+        sont pas des statistiques observées.
+      levels:
+        faible:
+          value: 0.015
+          aliases:
+          - faible bruit relatif
+          - faible bruit gaussien
+        courant:
+          value: 0.06
+          aliases:
+          - bruit relatif courant
+        élevé:
+          fraction: 0.75
+          aliases:
+          - fort bruit relatif
+          - bruit gaussien élevé
+        très élevé:
+          fraction: 1.0
+          aliases:
+          - très fort bruit relatif
+          - bruit gaussien très élevé
   pollution_probability_per_day:
     type: float
     unit: unit:UNITLESS
@@ -479,6 +821,33 @@ inputs:
     aliases:
     - probabilité de pollution
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      reference_upper: 0.5
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré
+        ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne
+        sont pas des statistiques observées.
+      levels:
+        faible:
+          value: 0.0125
+          aliases:
+          - faible probabilité de pollution
+          - événements de pollution rares
+        courant:
+          value: 0.05
+          aliases:
+          - probabilité de pollution courante
+        élevé:
+          fraction: 0.75
+          aliases:
+          - forte probabilité de pollution
+          - événements de pollution fréquents
+        très élevé:
+          fraction: 1.0
+          aliases:
+          - très forte probabilité de pollution
+          - événements de pollution très fréquents
   accident_probability_per_day:
     type: float
     unit: unit:UNITLESS
@@ -505,6 +874,33 @@ inputs:
     aliases:
     - probabilité d’accident
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      reference_upper: 0.2
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré
+        ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne
+        sont pas des statistiques observées.
+      levels:
+        faible:
+          value: 0.00375
+          aliases:
+          - faible probabilité d’accident
+          - accidents rares
+        courant:
+          value: 0.015
+          aliases:
+          - probabilité d’accident courante
+        élevé:
+          fraction: 0.75
+          aliases:
+          - forte probabilité d’accident
+          - accidents fréquents
+        très élevé:
+          fraction: 1.0
+          aliases:
+          - très forte probabilité d’accident
+          - accidents très fréquents
   pollution_sensitivity:
     type: float
     unit: unit:UNITLESS
@@ -527,6 +923,30 @@ inputs:
     aliases:
     - sensibilité à la pollution
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      reference_upper: 2.0
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré
+        ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne
+        sont pas des statistiques observées.
+      levels:
+        faible:
+          value: 0.1375
+          aliases:
+          - faible sensibilité à la pollution
+        courant:
+          value: 0.55
+          aliases:
+          - sensibilité à la pollution courante
+        élevé:
+          fraction: 0.75
+          aliases:
+          - forte sensibilité à la pollution
+        très élevé:
+          fraction: 1.0
+          aliases:
+          - très forte sensibilité à la pollution
   accident_sensitivity:
     type: float
     unit: unit:UNITLESS
@@ -549,6 +969,30 @@ inputs:
     aliases:
     - sensibilité aux accidents
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      reference_upper: 2.0
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré
+        ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne
+        sont pas des statistiques observées.
+      levels:
+        faible:
+          value: 0.1875
+          aliases:
+          - faible sensibilité aux accidents
+        courant:
+          value: 0.75
+          aliases:
+          - sensibilité aux accidents courante
+        élevé:
+          fraction: 0.75
+          aliases:
+          - forte sensibilité aux accidents
+        très élevé:
+          fraction: 1.0
+          aliases:
+          - très forte sensibilité aux accidents
 experiment:
   start_date:
     type: date
@@ -576,6 +1020,9 @@ experiment:
     aliases:
     - date de début
     reference_implementation: simulator.py:run_monte_carlo
+    qualitative_policy: Demander une date ou une référence temporelle explicite. « Tôt », « tard » et
+      « début d’année » sans année ne déterminent pas une date. Ne pas choisir silencieusement la date
+      du jour. Le défaut est une proposition acceptée seulement sur accord.
   n_days:
     type: int
     unit: unit:DAY
@@ -599,6 +1046,31 @@ experiment:
     aliases:
     - durée de simulation
     reference_implementation: simulator.py:run_monte_carlo
+    qualitative_scale:
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: 'Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent
+        être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.'
+      levels:
+        court:
+          value: 1
+          aliases:
+          - courte période de simulation
+          - simulation courte
+        courant:
+          value: 7
+          aliases:
+          - durée de simulation courante
+        long:
+          value: 365
+          aliases:
+          - longue période de simulation
+          - simulation longue
+        très long:
+          value: 1095
+          aliases:
+          - très longue période de simulation
+          - simulation très longue
   freq_minutes:
     type: int
     unit: unit:MIN
@@ -621,6 +1093,35 @@ experiment:
     - pas temporel
     - pas interne
     reference_implementation: simulator.py:run_monte_carlo
+    qualitative_scale:
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie
+        journalière est une agrégation et ne fixe pas ce pas interne.
+      levels:
+        très fin:
+          value: 5
+          aliases:
+          - pas très fin
+          - résolution temporelle très fine
+        fin:
+          value: 10
+          aliases:
+          - pas fin
+          - résolution temporelle fine
+        intermédiaire:
+          value: 15
+          aliases:
+          - pas intermédiaire
+        large:
+          value: 30
+          aliases:
+          - pas large
+        grossier:
+          value: 60
+          aliases:
+          - pas grossier
+          - résolution temporelle grossière
   n_runs:
     type: int
     unit: unit:NUM
@@ -650,6 +1151,28 @@ experiment:
     aliases:
     - nombre de réalisations
     reference_implementation: simulator.py:run_monte_carlo
+    qualitative_scale:
+      authority: Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd.
+        Ni limite physique ni calibration terrain.
+      interpretation: Comptages Monte Carlo conventionnels, à valider ; beaucoup = 30 et énormément =
+        50 selon une échelle entière. Plus de réalisations augmente le coût ; cela ne valide pas le modèle.
+      levels:
+        peu:
+          value: 1
+          aliases:
+          - peu de réalisations
+        courant:
+          value: 3
+          aliases:
+          - nombre courant de réalisations
+        beaucoup:
+          value: 30
+          aliases:
+          - beaucoup de réalisations
+        maximum de référence:
+          value: 50
+          aliases:
+          - énormément de réalisations
   base_seed:
     operational_default: true
     operational_default_source: 'Politique de reproductibilité des essais : graine initiale fixe à 42,
@@ -687,6 +1210,9 @@ experiment:
     scope_note: Valeur fixe 42 selon la politique d’essai, modifiable explicitement ; ce n’est pas un
       paramètre physique.
     reference_implementation: simulator.py:run_monte_carlo
+    qualitative_policy: Identifiant technique fixe à 42 par autorisation antérieure, modifiable uniquement
+      sur demande explicite chiffrée. Faible, forte, meilleure ou nouvelle graine ne désignent pas une
+      intensité physique ; demander une valeur. Ne pas proposer de graine qualitative.
 outputs:
   daily: derived daily energy sum (kWh) and mean power (kW) of realization 0, not ensemble median
   representative: time series of run 0, load decomposition
@@ -804,15 +1330,21 @@ semantics:
     length_efficiency: specific_kwh_m_year
     peak_demand: peak_kw
 interpretation:
-  guidance: Pour length_m, citer une longueur en m ou km et conserver le nombre source. Trafic élevé ne
-    fixe pas traffic_level. Un éclairage fort/faible ne définit pas lighting_type et ne doit pas devenir
+  guidance: 'Pour length_m, citer une longueur en m ou km et conserver le nombre source. Trafic élevé
+    ne fixe pas traffic_level. Un éclairage fort/faible ne définit pas lighting_type et ne doit pas devenir
     une puissance inventée. Une comparaison de scénarios exige des configurations séparées. Les comptages
     ont unit:NUM ; start_date et base_seed n’ont pas d’unité physique. Pour un paramètre disposant de
     qualitative_scale, une qualification déclarée peut être extraite comme value=nom du niveau (pas un
     nombre), avec evidence=citation exacte contenant la qualification. Explique la valeur proposée, sans
     unité physique et sans prétendre à un comptage mesuré. Les valeurs numériques explicites restent prioritaires.
     Les qualificatifs absents de cette échelle restent à clarifier ; une question de définition ou une
-    négation ne change aucun paramètre.
+    négation ne change aucun paramètre. Consulte qualitative_policy aussi : aucune échelle ordinale pour
+    les catégories, dates ou graines. Pour une expression déclarée, cite le qualificatif ET le nom de
+    la variable dans evidence, sans englober les chiffres d’autres paramètres. Pour courant, utilise le
+    niveau déclaré ; moyen seul reste ambigu, les valeurs moyennes demandées comme défauts suivent la
+    politique de profil. Pollution importante sans mention de probabilité ou de sensibilité ne permet
+    pas de choisir entre ces deux variables : clarifie. Ne transforme pas une question de définition en
+    modification.'
   comparison_tasks:
   - compare configurations (lighting, ventilation, traffic) with controlled seeds
   comparison_message: 'Votre demande contient plusieurs configurations ou plusieurs valeurs pour un même
