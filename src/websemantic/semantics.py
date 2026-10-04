@@ -53,6 +53,17 @@ def vocabulary(descriptor, qualification=None):
     graph.add((WS.OperationalSetting, RDFS.subClassOf, WS.Parameter))
     graph.add((WS.Hypothesis, RDFS.subClassOf, WS.Parameter))
     graph.add((WS.UserValue, RDFS.subClassOf, WS.Parameter))
+    if descriptor.get('comparison', {}).get('enabled'):
+        comparison = concept(descriptor, 'comparison')
+        graph.add((comparison, RDF.type, SKOS.Concept))
+        graph.add((comparison, SKOS.inScheme, scheme))
+        graph.add((comparison, SKOS.prefLabel, Literal('Comparaison de deux scénarios', lang='fr')))
+        graph.add((comparison, SKOS.definition, Literal(descriptor['comparison']['output_policy'], lang='fr')))
+        graph.add((comparison, WS.scenarioCount, Literal(2)))
+        graph.add((WS.ComparisonActivity, RDF.type, RDFS.Class))
+        graph.add((WS.ComparisonActivity, RDFS.subClassOf, PROV.Activity))
+        for path in descriptor['comparison']['controlled_fields']:
+            graph.add((comparison, WS.controlledParameter, concept(descriptor, path.split('.')[-1])))
     property_definitions = {
         "request": "Demande ayant produit la configuration.",
         "task": "Tâche déclarée du scénario.",

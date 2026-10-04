@@ -1572,7 +1572,13 @@ interpretation:
     niveau déclaré ; moyen seul reste ambigu, les valeurs moyennes demandées comme défauts suivent la
     politique de profil. Pollution importante sans mention de probabilité ou de sensibilité ne permet
     pas de choisir entre ces deux variables : clarifie. Ne transforme pas une question de définition en
-    modification.'
+    modification. Comparaison : séparer strictement les tubes, voies par tube, longueurs et équipements
+    de scenario_1 et scenario_2. « Ancien éclairage » ne suffit pas pour choisir sodium fixed ; poser
+    une question de catégorie dans le scénario concerné. « Même longueur » autorise shared_from uniquement
+    si une longueur est déjà donnée, avec citation exacte de cette égalité. Pour une demande relative
+    (« plus que », « comparons », « ou » entre deux tunnels), activer comparison=true et la tâche comparative
+    ; ne calculer ni résultat ni classement. Garder la comparaison active pour les précisions, tableaux,
+    accords et modifications suivants.'
   comparison_tasks:
   - compare configurations (lighting, ventilation, traffic) with controlled seeds
   comparison_message: 'Votre demande contient plusieurs configurations ou plusieurs valeurs pour un même
@@ -1851,3 +1857,33 @@ coefficient_display:
       k_v: 200
     transverse:
       k_v: 320
+comparison:
+  enabled: true
+  scenario_ids:
+  - scenario_1
+  - scenario_2
+  controlled_fields:
+  - experiment.start_date
+  - experiment.n_days
+  - experiment.freq_minutes
+  - experiment.n_runs
+  - experiment.base_seed
+  indicators:
+  - total_mwh
+  - annualized_mwh
+  - peak_kw
+  primary_indicator: total_mwh
+  indicator_labels:
+    total_mwh:
+      label: Énergie de la période
+      unit: MWh
+    annualized_mwh:
+      label: Énergie annualisée
+      unit: MWh/an
+    peak_kw:
+      label: Pic de puissance
+      unit: kW
+  output_policy: Deux exécutions indépendantes après validation complète. CSV réunis avec une colonne
+    scenario valant scenario_1 ou scenario_2 ; aucune moyenne entre scénarios. Conserver les sorties et
+    manifestes individuels. Écarts entre médianes ; pourcentage relatif au scénario 2, indéfini si référence
+    nulle. Graines communes, sans garantie de tirages identiques après modification de configuration.

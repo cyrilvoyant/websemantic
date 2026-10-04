@@ -50,6 +50,26 @@ def presentation(session):
 
 
 def show(session):
+    if session.scenarios:
+        questions = []
+        seen = set()
+        for label, child in session.scenarios.items():
+            for question in child.questions:
+                key = question['question']
+                if question['blocking'] and key not in seen:
+                    questions.append((label, question))
+                    seen.add(key)
+        if questions:
+            for label, question in questions[:2]:
+                print(f'{label} : {question["question"]}')
+            return
+        for label, child in session.scenarios.items():
+            print(label + ' :')
+            show(child)
+        for issue in session.result().issues:
+            if issue.code == 'comparison_control':
+                print('À harmoniser :', describe(issue.field.split('.')[-1], session.descriptor)[0], '— même valeur pour les deux scénarios.')
+        return
     if session.pending_clarification:
         print(session.pending_clarification)
         return
@@ -71,6 +91,11 @@ def show(session):
 
 
 def details(session, full=False):
+    if session.scenarios:
+        for label, child in session.scenarios.items():
+            print('\n' + label)
+            details(child, full=full)
+        return
     print(f"{'Paramètre':28} | {'Défaut':16} | {'Retenue':16} | {'Unité':16} | Origine / état")
     print('-' * 110)
     for group in ('inputs', 'experiment'):
@@ -88,6 +113,11 @@ def details(session, full=False):
 
 
 def formulas(session):
+    if session.scenarios:
+        for label, child in session.scenarios.items():
+            print('\n' + label)
+            formulas(child)
+        return
     entries = session.descriptor.get('model_equations', [])
     if not entries:
         print('Les formules de cet environnement ne sont pas encore documentées.')
@@ -135,6 +165,31 @@ def explain(session, name):
 
 
 def results_table(session, target, medians):
+    if medians.get('comparison') is True:
+        print('\nComparaison des médianes des réalisations :')
+        print(f"{'Indicateur':24} | {'Scénario 1':16} | {'Scénario 2':16} | {'Écart 1−2':16} | Unité")
+        manifest = json.loads((target / 'manifest.json').read_text(encoding='utf-8'))
+        for indicator, values in medians['differences'].items():
+            spec = session.descriptor['comparison']['indicator_labels'][indicator]
+            print(f"{spec['label']:24} | {values['scenario_1']:16.3f} | {values['scenario_2']:16.3f} | {values['difference_1_minus_2']:16.3f} | {spec['unit']}")
+        primary = medians['differences'][session.descriptor['comparison']['primary_indicator']]
+        difference = primary['difference_1_minus_2']
+        if difference == 0:
+            print('Les deux scénarios ont la même consommation médiane sur la période simulée.')
+        else:
+            direction = 'plus' if difference > 0 else 'moins'
+            relative = primary['relative_percent_vs_2']
+            suffix = f'{abs(relative):.1f} % de {direction}' if relative is not None else f'{direction} (référence nulle : pourcentage indéfini)'
+            print(f'Dans cette simulation, le scénario 1 consomme {suffix} que le scénario 2.')
+        print('La comparaison dépend de tous les paramètres retenus ; elle ne démontre pas l’effet isolé d’un seul équipement. Données synthétiques ; annualisation par extrapolation. Mêmes graines, sans garantie de tirages identiques après changement de configuration.')
+        print('Dossier des résultats :', target)
+        for path in manifest['controlled_fields']:
+            group, name = path.split('.')
+            record = manifest['scenarios']['scenario_1'][group][name]
+            if not session.descriptor[group][name].get('display_hidden'):
+                label, unit, _ = describe(name, session.descriptor)
+                print(f'Commun aux deux scénarios : {label} = {record["value"]} {unit}.')
+        return
     config = presentation(session).get('results', {})
     manifest = json.loads((target / 'manifest.json').read_text(encoding='utf-8'))
     scenario = manifest['scenario']
@@ -195,7 +250,14 @@ def run_if_ready(session, args, descriptor):
         return None
 
     print('Calcul en cours…')
-    target, medians = execute(session.scenario, descriptor, args.workspace, args.output_dir)
+    if session.scenarios:
+        from websemantic.comparison import run
+
+        target, medians = run(session.scenarios, descriptor, args.workspace, args.output_dir)
+        for child in session.scenarios.values():
+            child.run_requested = False
+    else:
+        target, medians = execute(session.scenario, descriptor, args.workspace, args.output_dir)
     session.run_requested = False
     if getattr(session, 'geographic_context', None):
         (target / 'geographic-context.json').write_text(json.dumps(session.geographic_context, ensure_ascii=False, indent=2), encoding='utf-8')
@@ -216,7 +278,7 @@ def answer_from_web(session, question, args):
         raise GeminiError('Plafond local atteint ; la recherche documentaire nécessite un appel Gemini.')
     load_private_key(args.workspace)
     session.calls += 1
-    state = {name: {'value': record.value, 'unit': record.unit} for name, record in session.scenario.inputs.items()}
+    state = session.state()
     report = web_research.research(question, args.llm, state, descriptor=session.descriptor)
     session.add_questions(report.get('questions', []))
     session.web_reports.append(report)
@@ -419,7 +481,7 @@ def main(argv=None):
                         raise GeminiError('Ce contexte nécessite deux appels Gemini ; plafond local insuffisant.')
                     load_private_key(args.workspace)
                     session.calls += 1
-                    parsed, _usage = extract(line, descriptor, session.history, args.llm)
+                    parsed, _usage = extract(line, descriptor, session.history, args.llm, state=session.state())
                     session.apply(line, parsed)
                     session.pending_clarification = 'Analyse géographique en attente ; aucun calcul.'
                     session.calls += 1
@@ -449,8 +511,7 @@ def main(argv=None):
                     continue
                 session.calls += 1
                 load_private_key(args.workspace)
-                state = {group: {name: {'value': record.value, 'accepted': record.accepted, 'origin': record.origin} for name, record in getattr(session.scenario, group).items()} for group in ('inputs', 'experiment')}
-                state['questions'] = session.questions
+                state = session.state()
                 parsed, _usage = extract(line, descriptor, session.history, args.llm, state=state)
                 if parsed.get('needs_web') is True:
                     if session.run_requested and not previous_run_requested:
@@ -463,7 +524,7 @@ def main(argv=None):
                 actions = requested_actions(parsed)
                 unresolved = session.pending_clarification
                 session.apply(line, parsed)
-                if unresolved and not parsed['updates'] and actions:
+                if unresolved and not session.scenarios and not parsed['updates'] and actions:
                     session.pending_clarification = unresolved
                 if 'quit' in actions:
                     return 0
@@ -494,6 +555,11 @@ def main(argv=None):
                 elif session.pending_clarification:
                     print(session.pending_clarification)
                 ask_questions(session, parsed.get('questions', []))
+                for chunk in parsed.get('scenario_updates', []):
+                    child = session.scenarios.get(chunk['scenario'])
+                    if child and any(not item['blocking'] for item in chunk.get('questions', [])):
+                        print(chunk['scenario'] + ' :')
+                        ask_questions(child, chunk.get('questions', []))
                 may_run = True
             if may_run:
                 output = run_if_ready(session, args, descriptor)

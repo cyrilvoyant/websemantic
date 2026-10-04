@@ -128,6 +128,18 @@ def research(place, model, descriptor):
 
 def apply_report(session, request, report):
     """Validate all proposals before mutation. Explicit user values take precedence."""
+    if session.scenarios:
+        from copy import deepcopy
+
+        candidates = deepcopy(session.scenarios)
+        for child in candidates.values():
+            apply_report(child, request, report)
+        session.scenarios = candidates
+        session.geographic_context = report
+        session.geographic_pending = False
+        session.refresh_comparison()
+        session.history.append({'user': request, 'assistant': report['summary'], 'geographic_context': report})
+        return
     config = session.descriptor['geography']
     questions = validate_questions(report.get('questions', []), session.descriptor)
     updates = {}
@@ -180,6 +192,11 @@ def apply_report(session, request, report):
 
 
 def show_report(session):
+    if session.scenarios:
+        for label, child in session.scenarios.items():
+            print(label + ' :')
+            show_report(child)
+        return
     from websemantic.semantics import describe
 
     report = session.geographic_context

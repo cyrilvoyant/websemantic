@@ -402,6 +402,14 @@ La valeur numérique explicite reste prioritaire. Les qualificatifs non déclar�
 
 Identifiant technique fixe à 42 par autorisation antérieure, modifiable uniquement sur demande explicite chiffrée. Faible, forte, meilleure ou nouvelle graine ne désignent pas une intensité physique ; demander une valeur. Ne pas proposer de graine qualitative.
 
+## Comparer deux scénarios
+
+Deux exécutions indépendantes après validation complète. CSV réunis avec une colonne scenario valant scenario_1 ou scenario_2 ; aucune moyenne entre scénarios. Conserver les sorties et manifestes individuels. Écarts entre médianes ; pourcentage relatif au scénario 2, indéfini si référence nulle. Graines communes, sans garantie de tirages identiques après modification de configuration.
+
+Champs contrôlés identiques : experiment.start_date, experiment.n_days, experiment.freq_minutes, experiment.n_runs, experiment.base_seed.
+
+La longueur ou les équipements manquants du second cas ne sont pas copiés sans instruction explicite. Chaque hypothèse est validée par scénario.
+
 
 ## Formules du modèle
 

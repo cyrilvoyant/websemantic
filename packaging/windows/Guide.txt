@@ -1,7 +1,7 @@
 WEBSEMANTIC — ESSAIS ENTRE COLLÈGUES
 
 Bonjour,
-Je vous propose trois essais. Merci de me transmettre la phrase saisie, la réponse obtenue et ce que vous attendiez.
+Je vous propose quatre essais. Merci de me transmettre la phrase saisie, la réponse obtenue et ce que vous attendiez.
 
 1 — INSTALLER ET UTILISER
 
@@ -17,7 +17,7 @@ Vous pouvez écrire « beaucoup de trafic » (proposition : 1,5) ou « énormém
 Code : https://github.com/cyrilvoyant/websemantic
 TLS : https://github.com/cyrilvoyant/tunnel-load-simulator
 
-2 — TROIS ESSAIS
+2 — QUATRE ESSAIS
 
 EXEMPLE 1 — JE SAIS CE QUE JE VEUX
 
@@ -67,7 +67,21 @@ J’accepte les hypothèses proposées, lance le calcul.
 
 Les choix de trafic et d’accident sont des hypothèses de cet exercice, pas des statistiques d’Ajaccio. Le dialogue peut demander de choisir entre garder un défaut, modifier une hypothèse ou fournir une donnée locale. Une ambiguïté bloquante doit être précisée avant la dernière phrase.
 
-EXEMPLE 3 — JE DONNE LA MÊME DEMANDE À MON LLM HABITUEL
+EXEMPLE 3 — COMPARER DEUX TUNNELS
+
+Lancez WebSemantic.cmd et choisissez 1 dans une nouvelle conversation. Collez ces quatre textes séparément. Répondez aux questions éventuelles avant de poursuivre.
+
+Je veux comparer deux tunnels fictifs. Pour les deux : longueur 5 km, deux tubes, contexte périurbain et ventilation longitudinale. Scénario 1 : trois voies par tube et éclairage LED fixe. Scénario 2 : deux voies par tube et ancien système d’éclairage. Demande-moi les précisions nécessaires avant de calculer.
+
+Pour le scénario 2, par ancien éclairage j’entends sodium fixe. Pour les deux scénarios, simule 30 jours à partir du 1er janvier 2025, au pas de 15 minutes, avec dix réalisations. Propose les paramètres manquants sans les accepter.
+
+Montre pour les deux scénarios les tableaux des valeurs par défaut et des valeurs retenues, avec les unités et les origines. Explique les formules utilisées et les coefficients des éclairages retenus.
+
+J’accepte les hypothèses proposées pour les deux scénarios, lance le calcul.
+
+La réponse donne la consommation de chaque scénario, l’écart et le pourcentage relatif au scénario 2. Les cinq CSV réunis portent la colonne scenario : scenario_1 ou scenario_2. Les sous-dossiers conservent les résultats individuels ; comparison.json contient les écarts. Calendrier, pas, nombre de réalisations et graine restent identiques. La comparaison porte sur l’ensemble des configurations, pas sur l’effet isolé du nombre de voies ou de l’éclairage. Les énergies annualisées sont des extrapolations.
+
+EXEMPLE 4 — JE DONNE LA MÊME DEMANDE À MON LLM HABITUEL
 
 Cet essai demande un accès au dépôt et un véritable environnement Python : soit un service avec exécution de code activée, soit un agent local ayant accès à un ordinateur équipé de Python. Une conversation seule, même capable de lire GitHub, ne suffit pas. L’environnement doit pouvoir récupérer le code et installer ses dépendances. Vous n’avez pas besoin de lancer WebSemantic.cmd pour cet essai. Collez ce prompt entier :
 

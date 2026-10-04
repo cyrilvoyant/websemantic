@@ -46,3 +46,9 @@ Le contrôle interne de répétition utilise la configuration acceptée et le ba
 ## Portée
 
 Les tests logiciels ne démontrent ni une meilleure utilisabilité ni la fidélité d’une consommation réelle. Le transfert LQL/pvlib demande des intégrations scientifiques effectives ; les contrats fictifs ne suffisent pas. Le protocole sera figé avant les comparaisons réservées et ses écarts seront consignés.
+
+## Essais de comparaison de configurations
+
+Inclure des demandes de deux scénarios et leurs clarifications : paramètres communs, différences correctement affectées, longueur du second inconnue, équipement décrit seulement comme ancien, accords et modifications ciblés. Vérifier que les deux configurations sont validées avant le calcul, que les champs contrôlés sont identiques et que chaque ligne CSV garde son identifiant de scénario. Les résultats individuels doivent correspondre exactement aux lignes réunies. Contrôler les écarts contre les médianes des CSV, les références nulles et l’absence de résultat achevé après un échec partiel.
+
+Une comparaison entre configurations ne constitue pas un test causal d’un seul paramètre lorsque plusieurs champs changent. Les graines sont communes ; documenter les changements de séquence aléatoire possibles. Ces essais de développement restent hors corpus réservé.

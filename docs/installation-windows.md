@@ -6,7 +6,7 @@
 2. Double-cliquez sur `Installer.cmd` et attendez la fin de la vérification.
 3. Ouvrez `WebSemantic.cmd` et choisissez TLS.
 
-Les composants compatibles présents sont conservés. Le lanceur n’installe rien ; s’il détecte un manque, il invite à relancer l’installateur. Le guide fourni propose les trois essais de validation.
+Les composants compatibles présents sont conservés. Le lanceur n’installe rien ; s’il détecte un manque, il invite à relancer l’installateur. Le guide fourni propose les quatre essais de validation.
 
 La configuration privée fournie pour l’essai est lue automatiquement. Ne publiez pas l’archive ni son fichier `.env`.
 

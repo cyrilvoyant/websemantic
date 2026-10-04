@@ -15,6 +15,7 @@ def validate_questions(questions, descriptor):
         if (not isinstance(question, dict) or not isinstance(question.get('question'), str)
                 or not question['question'].strip() or type(question.get('blocking')) is not bool
                 or not isinstance(question.get('fields'), list) or not question['fields']
+                or question.get('scenario', 'common') not in ('common', 'scenario_1', 'scenario_2')
                 or any(field not in fields for field in question['fields'])):
             raise ValueError('Question de clarification non conforme.')
     return questions
@@ -39,4 +40,5 @@ def explicit_consent(request, evidence):
         r"\s*(?:j['’]accepte|je valide|accepte|valide|prends|utilise)\s+"
         r"(?:(?:toutes?|tous)\s+)?(?:les|ces|des)\s+"
         r"(?:hypotheses(?: proposees)?|parametres(?: proposes)?|valeurs(?: proposees| par defaut| moyennes| du profil)?)"
+        r"(?:\s+pour les deux scenarios)?"
         r"(?:\s*(?:[,;]|et|puis)\s*(?:lance le calcul|calcule|simule))?\s*[.!]?\s*", fold(evidence)))

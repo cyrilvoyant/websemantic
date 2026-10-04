@@ -34,14 +34,31 @@ class Session:
         self.geographic_context = None
         self.web_reports = []
         self.questions = []
+        self.scenarios = {}
+
+    def refresh_comparison(self):
+        messages = [f'{label} : {child.pending_clarification}' for label, child in self.scenarios.items() if child.pending_clarification]
+        self.pending_clarification = ' '.join(messages) or None
+
+    def state(self):
+        if self.scenarios:
+            return {'comparison': True, 'scenarios': {label: child.state() for label, child in self.scenarios.items()}}
+        return {**{group: {name: {'value': record.value, 'accepted': record.accepted, 'origin': record.origin}
+                              for name, record in getattr(self.scenario, group).items()}
+                   for group in ('inputs', 'experiment')}, 'questions': self.questions}
 
     def refresh_questions(self):
         blocking = [item['question'] for item in self.questions if item['blocking']]
         if blocking:
-            self.pending_clarification = ' '.join(blocking)
+            self.pending_clarification = ' '.join(blocking[:2])
 
     def add_questions(self, questions):
         validated = validate_questions(questions, self.descriptor)
+        if self.scenarios:
+            for child in self.scenarios.values():
+                child.add_questions(validated)
+            self.refresh_comparison()
+            return
         existing = {item['question'] for item in self.questions}
         self.questions.extend(item for item in validated if item['question'] not in existing)
         self.refresh_questions()
@@ -70,7 +87,7 @@ class Session:
             r"\s*[.!]?\s*"
         )
         if re.fullmatch(acceptance, text) or re.fullmatch(r"\s*(?:prends|utilise|accepte)\s+le\s+reste\s+par\s+defaut\s*[.!]?\s*", text):
-            if any(item['blocking'] for item in self.questions):
+            if any(item['blocking'] for item in self.questions) or (self.scenarios and any(child.pending_clarification or child.geographic_pending for child in self.scenarios.values())):
                 self.refresh_questions()
                 return self.pending_clarification
             self.propose_profile()
@@ -103,6 +120,11 @@ class Session:
 
     def apply(self, request, parsed):
         """Validate the entire extraction before changing state (atomic update)."""
+        if self.scenarios or parsed.get('comparison') is True:
+            from websemantic.comparison import apply
+
+            apply(self, request, parsed)
+            return
         updates = []
         notices = []
         questions = validate_questions(parsed.get('questions', []), self.descriptor)
@@ -179,6 +201,11 @@ class Session:
         self.add_questions(questions)
 
     def propose_profile(self):
+        if self.scenarios:
+            for child in self.scenarios.values():
+                child.propose_profile()
+            self.refresh_comparison()
+            return
         for group in ("inputs", "experiment"):
             records = getattr(self.scenario, group)
             for name, spec in self.descriptor.get(group, {}).items():
@@ -194,6 +221,12 @@ class Session:
                     )
 
     def accept_profile(self):
+        if self.scenarios:
+            for child in self.scenarios.values():
+                child.accept_profile()
+            self.run_requested = True
+            self.refresh_comparison()
+            return
         for group in ("inputs", "experiment"):
             records = getattr(self.scenario, group)
             for name, record in list(records.items()):
@@ -203,6 +236,16 @@ class Session:
                     records[name] = replace(record, accepted=True)
 
     def set_value(self, path, text):
+        if self.scenarios:
+            prefix, _, rest = path.partition('.')
+            if prefix in self.scenarios:
+                self.scenarios[prefix].set_value(rest, text)
+            else:
+                for child in self.scenarios.values():
+                    child.set_value(path, text)
+            self.run_requested = True
+            self.refresh_comparison()
+            return
         group, name = path.split(".")
         if group not in ('inputs', 'experiment'):
             raise ValueError('Groupe de paramètres inconnu.')
@@ -221,4 +264,8 @@ class Session:
         self.refresh_questions()
 
     def result(self):
+        if self.scenarios:
+            from websemantic.comparison import validation
+
+            return validation(self.scenarios, self.descriptor)
         return validate(self.scenario, self.descriptor)

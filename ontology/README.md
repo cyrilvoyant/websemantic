@@ -17,3 +17,5 @@ Le vocabulaire est organisé en paramètres d’entrée, réglages d’expérien
 Les formats suivent les vocabulaires [SKOS](https://www.w3.org/TR/skos-reference/) et [PROV-O](https://www.w3.org/TR/prov-o/). Le namespace du projet n’est pas enregistré à w3id. Les jetons d’unité utilisés par le contrôle Python ne sont pas un alignement QUDT validé.
 
 Le référentiel couvre le contrat actuel de TLS, sans prétendre décrire toute l’ingénierie des tunnels. Les contrôles Python font autorité ; aucun raisonnement OWL, contrôle SHACL d’exécution ou export JSON-LD n’est encore utilisé. Les bornes logicielles ne constituent pas une calibration physique.
+
+`tls-comparison.schema.json` décrit deux scénarios complets, `scenario_1` et `scenario_2`. Les invariants de comparaison sont contrôlés en Python. Le contrat indique les champs identiques, les indicateurs et la qualification de la colonne `scenario` ajoutée aux CSV réunis. La provenance des deux calculs est conservée ; le regroupement des tables est une activité distincte.

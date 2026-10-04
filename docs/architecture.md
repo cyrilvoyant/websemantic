@@ -33,3 +33,7 @@ La couche de données commune est utilisée avec des descripteurs indépendants 
 ## Périmètre
 
 Les formats disponibles sont YAML, JSON, JSON Schema et RDF/Turtle. L’export JSON-LD, le contrôle SHACL et l’alignement QUDT ne sont pas encore implémentés. Aucun serveur MCP ni ensemble de fonctions distantes n’est exposé par cette version.
+
+## Comparaison
+
+Le cœur conserve deux sessions indépendantes. Les mises à jour communes, propres à chaque scénario et les égalités explicitement demandées sont séparées et appliquées de façon atomique. Les règles communes vérifient les champs contrôlés du descripteur. L’orchestrateur lance ensuite deux fois l’adaptateur relu ; il ne modifie pas le backend. Les CSV natifs restent intacts, leurs copies concaténées sont qualifiées par `scenario`. Le manifeste relie les configurations et les exécutions ; le RDF réunit leurs provenances et distingue l’activité de regroupement du calcul scientifique.
