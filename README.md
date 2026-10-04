@@ -54,7 +54,7 @@ Les définitions sont maintenues dans le [descripteur TLS](descriptors/tls/descr
 
 Les contrôles Python et l’adaptateur font autorité avant le calcul. Le graphe apporte les relations et la provenance ; il n’exécute pas un contrôle SHACL ni un raisonnement OWL. L’alignement QUDT et les exports JSON-LD restent à développer.
 
-Pour un accès programmatique ou l’essai avec un agent externe, consulter le [contrat d’exécution](docs/agent-contract.md). L’essai demande à l’agent de lire le dépôt, de préparer son script Python et d’exécuter réellement TLS ; aucun résultat précalculé ne remplace cette étape.
+Pour un accès programmatique ou l’essai avec un agent externe, consulter le [contrat d’exécution](docs/agent-contract.md). L’essai demande à l’agent de lire le dépôt, de préparer son script Python et d’exécuter réellement TLS ; aucun résultat précalculé ne remplace cette étape. Il faut un service avec exécution Python activée ou un agent local ayant accès à Python, au dépôt et à l’installation des dépendances ; une conversation seule ne suffit pas.
 
 ## Validation et développement
 

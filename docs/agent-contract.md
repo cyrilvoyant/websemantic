@@ -28,7 +28,7 @@ Le format JSON complet est décrit par `ontology/tls-scenario.schema.json`. Ce s
 
 ## L'agent découvre GitHub et exécute lui-même TLS
 
-Cet essai se fait dans Claude, GPT ou un autre assistant disposant de récupération de fichiers et d'exécution Python. L'utilisateur donne un prompt ; il n'installe pas l'application PowerShell pour cet essai.
+Cet essai nécessite un service avec exécution Python activée, ou un agent local ayant accès à un ordinateur équipé de Python. Le nom du service ne garantit pas ces capacités : une conversation avec accès à GitHub seul ne suffit pas. L'environnement doit permettre de récupérer le dépôt et d'installer les dépendances dans un environnement isolé. L'utilisateur donne un prompt ; il n'a pas besoin de lancer l'application PowerShell pour cet essai. Avant toute simulation, l'agent vérifie ces capacités et signale précisément les moyens manquants.
 
 L'agent récupère le dépôt avec ses sous-modules, consigne les révisions, lit le contrat et le code TLS, puis construit lui-même la configuration correspondant à la demande. Il prépare son environnement Python et son script d'exécution. `examples/tls-complete.json` illustre le format et les valeurs de l'exemple 1 ; ce n'est pas un résultat précalculé ni un scénario imposé aux autres demandes.
 
