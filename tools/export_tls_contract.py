@@ -42,7 +42,7 @@ def main():
                         "n_days * 1440 / freq_minutes * n_runs <= 2000000", "peak_width_h > 0",
                         "0 <= morning_peak_hour, evening_peak_hour < 24",
                         "Nonnegative max_depth_m, gradient_percent, aux_kw_per_km_tube, base_fixed_kw, traffic_level, traffic_sensitivity, pollution_sensitivity, accident_sensitivity"],
-                    "assumptions": "Source plus explicit acceptance required; defaults do not imply approval",
+                    "assumptions": "Scientific hypotheses require source plus explicit acceptance; operational_default technical settings carry prior user authorization",
                     "evidence": "Provided values require an exact span in request; presence is not semantic proof",
                     "comparisons": "One scenario per run; compare separately with controlled seeds",
                     "geography": "No inferred geometry; ambient air and road accidents do not determine TLS event probabilities",
@@ -82,7 +82,7 @@ def main():
     examples=ROOT / "examples"; examples.mkdir(exist_ok=True)
     (examples / "tls-complete.json").write_text(json.dumps(asdict(scenario),ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     lines=["# Paramètres et sorties TLS", "", "Document généré par tools/export_tls_contract.py. Le descripteur et les contrôles Python font autorité.", "",
-           "Les défauts sont des propositions non calibrées, à accepter explicitement. Tous les paramètres sont obligatoires.", ""]
+           "Les défauts scientifiques sont des propositions non calibrées, à accepter explicitement. Tous les paramètres sont requis dans la configuration ; les réglages operational_default sont fournis automatiquement selon la politique utilisateur.", ""]
     for group in groups:
         lines += [f"## {group}", "", "| Champ | Définition | Type | Unité canonique / lisible | Défaut proposé | Contraintes déclarées |", "|---|---|---|---|---|---|"]
         for name,spec in descriptor[group].items():

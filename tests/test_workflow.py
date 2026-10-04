@@ -71,7 +71,7 @@ def test_cli_short_commands_and_default_phrase(monkeypatch, capsys):
     assert main(['chat', '--direct', '--model', 'tls', '--workspace', str(ROOT)]) == 0
     output = capsys.readouterr().out
     assert 'hypothèse validée' in output
-    assert 'kW/(km·tube)' in output
+    assert 'Longueur' in output
     assert 'Altitude — unité : m' in output
     assert 'WebSemantic — TLS' in output
     assert 'Outils :' not in output

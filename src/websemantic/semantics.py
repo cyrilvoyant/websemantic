@@ -34,6 +34,8 @@ def vocabulary(descriptor, qualification=None):
         "evidence": "Extrait exact de la demande ; présence ne prouve pas la justesse sémantique.",
         "dataType": "Type attendu par le contrôle déterministe.",
         "fieldPath": "Chemin exact inputs.nom ou experiment.nom.",
+        "operationalDefault": "Réglage technique préautorisé par la politique utilisateur, sans hypothèse physique nouvelle.",
+        "defaultAuthorization": "Source de l’autorisation du défaut technique fixe.",
         "defaultValue": "Proposition du profil ; jamais acceptée automatiquement par le graphe.",
         "allowedValue": "Valeur catégorielle autorisée.",
         "unitAlias": "Unité reconnue à l'interprétation ; conversion avant validation.",
@@ -66,6 +68,9 @@ def vocabulary(descriptor, qualification=None):
         graph.add((term, WS.dataType, Literal(spec["type"])))
         if spec.get("unit"):
             graph.add((term, WS.canonicalUnitToken, Literal(spec["unit"])))
+        if spec.get("operational_default"):
+            graph.add((term, WS.operationalDefault, Literal(True)))
+            graph.add((term, WS.defaultAuthorization, Literal(spec["operational_default_source"])))
         if "default" in spec:
             graph.add((term, WS.defaultValue, Literal(spec["default"])))
         for value in spec.get("choices", spec.get("values", [])):

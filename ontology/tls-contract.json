@@ -522,6 +522,8 @@
         ]
       },
       "base_seed": {
+        "operational_default": true,
+        "operational_default_source": "Fixed technical setting 42, authorised by Cyril; retain unless explicitly changed. Not a calibrated scientific parameter.",
         "aliases": [
           "seed",
           "graine aléatoire"
@@ -708,6 +710,11 @@
           "quantity": "transition_count",
           "unit": "1",
           "meaning": "Nombre de transitions 0 vers 1 dans la série accident_event ; un événement actif au premier pas n'est pas compté."
+        },
+        "base_seed": {
+          "quantity": "identifier",
+          "unit": null,
+          "meaning": "Graine de base fixe de l’expérience ; 42 par défaut, modifiable explicitement."
         }
       }
     },
@@ -800,7 +807,7 @@
       "0 <= morning_peak_hour, evening_peak_hour < 24",
       "Nonnegative max_depth_m, gradient_percent, aux_kw_per_km_tube, base_fixed_kw, traffic_level, traffic_sensitivity, pollution_sensitivity, accident_sensitivity"
     ],
-    "assumptions": "Source plus explicit acceptance required; defaults do not imply approval",
+    "assumptions": "Scientific hypotheses require source plus explicit acceptance; operational_default technical settings carry prior user authorization",
     "evidence": "Provided values require an exact span in request; presence is not semantic proof",
     "comparisons": "One scenario per run; compare separately with controlled seeds",
     "geography": "No inferred geometry; ambient air and road accidents do not determine TLS event probabilities",

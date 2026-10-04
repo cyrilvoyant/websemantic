@@ -449,6 +449,8 @@ experiment:
     - réalisations
     - realisations
   base_seed:
+    operational_default: true
+    operational_default_source: Fixed technical setting 42, authorised by Cyril; retain unless explicitly changed. Not a calibrated scientific parameter.
     aliases:
     - seed
     - graine aléatoire
@@ -505,12 +507,24 @@ validity_notes:
 - engineering constants are placeholders to calibrate against measured data
 profile:
   source: TLS interface defaults @748e053; experiment websemantic quick-demo-v1 (7
-    days, hourly, 3 runs, seed 42)
+    days, hourly, 3 runs)
 runtime:
   adapter: websemantic.adapters.tls:run
   backend_path: external/tunnel-load-simulator
   backend_marker: src/tunnel_load_simulator/simulator.py
 presentation:
+  primary_fields:
+  - inputs.length_m
+  - inputs.n_tubes
+  - inputs.n_lanes_per_tube
+  - inputs.tunnel_context
+  - inputs.lighting_type
+  - inputs.ventilation_type
+  - inputs.traffic_level
+  - experiment.start_date
+  - experiment.n_days
+  - experiment.freq_minutes
+  - experiment.n_runs
   namespace: websemantic.tls
   short_name: TLS
   summary_title: Tunnel

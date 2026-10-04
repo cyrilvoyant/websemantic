@@ -2,7 +2,7 @@
 
 Document généré par tools/export_tls_contract.py. Le descripteur et les contrôles Python font autorité.
 
-Les défauts sont des propositions non calibrées, à accepter explicitement. Tous les paramètres sont obligatoires.
+Les défauts scientifiques sont des propositions non calibrées, à accepter explicitement. Tous les paramètres sont requis dans la configuration ; les réglages operational_default sont fournis automatiquement selon la politique utilisateur.
 
 ## inputs
 
@@ -80,6 +80,7 @@ Une ligne par réalisation sur toute la période simulée.
 | `specific_kwh_m_year` | kWh/(m·an) | annualized_mwh × 1000 / length_m ; ensemble des tubes, par mètre de longueur du tunnel, pas par mètre-tube. |
 | `n_pollution_events` | 1 | Nombre de transitions 0 vers 1 dans la série pollution_event ; un événement actif au premier pas n'est pas compté. |
 | `n_accident_events` | 1 | Nombre de transitions 0 vers 1 dans la série accident_event ; un événement actif au premier pas n'est pas compté. |
+| `base_seed` | sans unité | Graine de base fixe de l’expérience ; 42 par défaut, modifiable explicitement. |
 
 ### envelope.csv
 

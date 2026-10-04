@@ -19,13 +19,13 @@ TLS : https://github.com/cyrilvoyant/tunnel-load-simulator
 
 EXEMPLE 1 — JE SAIS CE QUE JE VEUX
 
-Lancez WebSemantic.cmd et choisissez 1. Collez chacun de ces deux textes séparément, en attendant la réponse :
+Lancez WebSemantic.cmd et choisissez 1. Collez ces deux textes séparément, en attendant la réponse :
 
-Calcule la consommation de ce tunnel fictif : longueur 2000 m, deux tubes et deux voies par tube, altitude 300 m, profondeur maximale 80 m et pente 2 %. Il est en contexte périurbain, avec un éclairage LED fixe et une ventilation longitudinale. Les auxiliaires consomment 35 kW/(km·tube), avec une charge fixe de 40 kW. Le trafic relatif vaut 1, les pointes se situent à 8 h et 18 h et leur largeur est de 1,4 h. La sensibilité au trafic vaut 0,65, le bruit relatif 0,06, la probabilité quotidienne de pollution 0,05 et celle d’accident 0,015 ; les sensibilités correspondantes valent 0,55 et 0,75. Simule 30 jours à partir du 1er janvier 2025, au pas de 15 minutes, avec 10 réalisations.
+Je voudrais connaître la consommation d’un tunnel fictif de 2 km, avec deux tubes et deux voies par tube, en contexte périurbain, un éclairage LED fixe et une ventilation longitudinale. Étudie 30 jours à partir du 1er janvier 2025, au pas de 15 minutes, avec dix réalisations. Propose les paramètres manquants sans les accepter.
 
 Prends le reste par défaut.
 
-Vous devez obtenir la consommation des 30 jours, le pic de puissance et le dossier des résultats. L’énergie annuelle affichée est une extrapolation × 365/30. Pour comprendre un choix, écrivez par exemple « Explique-moi la graine aléatoire » ou « Montre-moi les paramètres et leurs unités ». La graine est un réglage technique pour retrouver la même réalisation simulée ; elle peut rester au défaut proposé.
+Vous devez obtenir la consommation des 30 jours, le pic de puissance et le dossier des résultats. L’énergie annuelle affichée est une extrapolation × 365/30. Pour comprendre ou affiner un choix, demandez une explication ou le tableau des paramètres. Le dialogue montre les choix principaux ; vous pouvez demander tous les détails si nécessaire.
 
 EXEMPLE 2 — JE PRÉCISE UNE IDÉE VAGUE
 
@@ -54,3 +54,5 @@ Ouvrez Claude, GPT ou un autre assistant capable de récupérer des fichiers et 
 En te référant au dépôt https://github.com/cyrilvoyant/websemantic et à tous les fichiers utiles, reproduis le scénario ci-dessous. Clone le dépôt avec ses sous-modules ; lis AGENTS.md, docs/agent-contract.md, ontology/tls-contract.json, puis le README et le descripteur descriptors/tls/descriptor.yaml, les contrats et l'adaptateur src/websemantic/adapters/tls.py. Utilise le simulateur TLS fourni, sans modifier son code, à la révision 748e053e129669cf3e896d381e3c0ac01c763edd. Installe les dépendances dans un environnement isolé. Exécute réellement le calcul avec tes outils Python, sans appeler Gemini. Scénario fictif entièrement accepté : longueur 2000 m ; 2 tubes ; 2 voies par tube ; altitude 300 m ; profondeur maximale 80 m ; pente 2 % ; contexte peri-urban ; éclairage LED fixed ; ventilation longitudinal ; auxiliaires 35 kW/(km·tube) ; charge fixe 40 kW ; trafic relatif 1 ; pointes à 8 h et 18 h ; largeur des pics 1,4 h ; sensibilité au trafic 0,65 ; bruit relatif 0,06 ; probabilité quotidienne de pollution 0,05 et d'accident 0,015 ; sensibilité à la pollution 0,55 et aux accidents 0,75. Début 2025-01-01 ; durée 30 jours ; pas 15 minutes ; 10 réalisations. Pour les paramètres techniques restants, utilise les défauts déclarés du contrat, que j’accepte pour cet exercice fictif. Restitue en français les médianes de l'énergie totale en MWh, de l'énergie annualisée en MWh/an et du pic en kW. Fournis aussi un JSON avec les paramètres, leurs unités, les indicateurs, les révisions utilisées et les chemins des fichiers calculés. Qualifie les hypothèses et précise que l'annualisation est une extrapolation, sans validation terrain. Conserve les CSV et le manifeste pour comparer avec l'exemple 1. Si tu ne peux pas exécuter du code, dis-le et ne fabrique pas de résultats.
 
 Cyril
+
+Pour les essais comparatifs, les réglages techniques restent fixes sauf demande explicite. La graine de base est 42 ; chaque réalisation utilise 42 + son indice. Ces valeurs figurent dans kpis.csv (colonnes base_seed et seed) et dans le manifeste, sans être demandées pendant le dialogue courant.

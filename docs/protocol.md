@@ -67,3 +67,7 @@ Begin with 20–30 TLS requests to refine the protocol and references. Before th
 Human-reviewed reference data include values, unknowns, conflicts, admissible decisions and correct annotations. Group paraphrases and repeated calls by underlying scenario. Report null and adverse effects as well as improvements. No usability benefit is established without an appropriate interaction study. No measured tunnel data are available or required for this interface-level evaluation.
 
 The statistical test will be selected for the outcome and dependence structure; Wilcoxon is not automatically appropriate for binary decisions. Paired categorical comparisons and scenario-level confidence intervals may require other methods. Three integrations provide bounded transfer evidence, not proof of support for arbitrary software.
+
+## Fixed technical setting for conversational tests
+
+The default base seed is 42 and remains unchanged unless the user explicitly requests another value. Each Monte Carlo realization uses base_seed + run. Record both columns from kpis.csv and the configuration in manifest.json for every test. This technical setting is omitted from ordinary dialogue; changing it is an explicit experimental change, not a new physical assumption. Use identical seeds when comparing trajectories.

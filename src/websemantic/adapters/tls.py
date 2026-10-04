@@ -76,7 +76,9 @@ def run(scenario, descriptor, workspace, output_root=None):
         exp["n_runs"],
         exp["base_seed"],
     )
-    # Preserve native TLS tables; derive daily energy from its first trajectory.
+    # Add explicit operational provenance without changing numerical indicators.
+    outputs["kpis"]["base_seed"] = exp["base_seed"]
+    # Preserve native TLS trajectories; derive daily energy from its first trajectory.
     outputs["daily"] = (
         outputs["representative"].set_index("timestamp")
         .resample("1D").agg({"energy_kwh": "sum", "power_kw": "mean"})

@@ -75,14 +75,15 @@ def details(session, full=False):
     print('-' * 90)
     for group in ('inputs', 'experiment'):
         for name, spec in session.descriptor.get(group, {}).items():
-            if spec.get('display_hidden') and not full:
+            primary = presentation(session).get('primary_fields')
+            if not full and (spec.get('display_hidden') or (primary and f'{group}.{name}' not in primary)):
                 continue
             record = getattr(session.scenario, group).get(name)
             label, unit, _ = describe(name, session.descriptor)
             status = 'manquant' if not record else ('fourni' if record.origin == 'provided' else ('hypothèse validée' if record.accepted else 'à valider'))
             print(f"{label:28} | {record.value if record else '?'!s:22} | {unit:16} | {status}")
-    print('\nComprendre une variable : /e NOM_VARIABLE ; modifier : /set GROUPE.VARIABLE VALEUR.')
-    for source in sorted({record.source for group in ('inputs', 'experiment') for record in getattr(session.scenario, group).values() if record.source}):
+    print('Pour aller plus loin, demandez le détail complet, une définition ou une modification en une phrase.')
+    for source in sorted({record.source for group in ('inputs', 'experiment') for name, record in getattr(session.scenario, group).items() if record.source and (full or not session.descriptor[group][name].get('operational_default'))}):
         print('Source des hypothèses :', source)
 
 
@@ -448,7 +449,7 @@ def main(argv=None):
                     session.run_requested = True
                     session.history.append({'user': line, 'assistant': 'Hypothèses explicitement acceptées après extraction des valeurs fournies.'})
                 if 'details' in actions:
-                    details(session)
+                    details(session, full=parsed.get('detail_level') == 'full')
                 if 'explain' in actions:
                     explain(session, parsed.get('parameter', ''))
                 if 'suggest' in actions:

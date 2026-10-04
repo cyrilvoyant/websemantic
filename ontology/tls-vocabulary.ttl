@@ -101,31 +101,6 @@ ws:base_fixed_kw a skos:Concept ;
         "kw" ;
     ws:unitSymbol "kW" .
 
-ws:base_seed a skos:Concept ;
-    skos:altLabel "graine aléatoire"@fr,
-        "seed"@fr ;
-    skos:definition "Graine pseudo-aléatoire pour reproduire le calcul."@fr ;
-    skos:prefLabel "Graine"@fr ;
-    ws:boundAuthority "policy" ;
-    ws:dataType "int" ;
-    ws:defaultValue 42 ;
-    ws:fieldPath "experiment.base_seed" ;
-    ws:minimum 0 ;
-    ws:unitAlias "",
-        "1",
-        "None",
-        "id",
-        "identifiant",
-        "identifier",
-        "nombre",
-        "null",
-        "number",
-        "sans dimension",
-        "sans unité",
-        "unit:NUM",
-        "unit:UNITLESS" ;
-    ws:unitSymbol "identifiant" .
-
 ws:boundAuthority a rdf:Property ;
     rdfs:comment "Origine déclarée de la borne ; code ou politique du prototype."@fr .
 
@@ -137,6 +112,9 @@ ws:concept a rdf:Property ;
 
 ws:dataType a rdf:Property ;
     rdfs:comment "Type attendu par le contrôle déterministe."@fr .
+
+ws:defaultAuthorization a rdf:Property ;
+    rdfs:comment "Source de l’autorisation du défaut technique fixe."@fr .
 
 ws:defaultValue a rdf:Property ;
     rdfs:comment "Proposition du profil ; jamais acceptée automatiquement par le graphe."@fr .
@@ -378,6 +356,9 @@ ws:noise_sigma a skos:Concept ;
         "unit:NUM" ;
     ws:unitSymbol "1" .
 
+ws:operationalDefault a rdf:Property ;
+    rdfs:comment "Réglage technique préautorisé par la politique utilisateur, sans hypothèse physique nouvelle."@fr .
+
 ws:origin a rdf:Property ;
     rdfs:comment "Origine : provided, default, assumption ou missing."@fr .
 
@@ -401,6 +382,7 @@ ws:origin a rdf:Property ;
     skos:prefLabel "kpis" ;
     ws:aggregation "Une ligne par réalisation sur toute la période simulée."@fr ;
     ws:hasColumn <https://github.com/cyrilvoyant/websemantic/ns#outputs/kpis/annualized_mwh>,
+        <https://github.com/cyrilvoyant/websemantic/ns#outputs/kpis/base_seed>,
         <https://github.com/cyrilvoyant/websemantic/ns#outputs/kpis/load_factor>,
         <https://github.com/cyrilvoyant/websemantic/ns#outputs/kpis/mean_kw>,
         <https://github.com/cyrilvoyant/websemantic/ns#outputs/kpis/n_accident_events>,
@@ -597,6 +579,34 @@ ws:accident_event a skos:Concept ;
 ws:auxiliary_kw a skos:Concept ;
     skos:prefLabel "auxiliary_kw" .
 
+ws:base_seed a skos:Concept ;
+    skos:altLabel "graine aléatoire"@fr,
+        "seed"@fr ;
+    skos:definition "Graine pseudo-aléatoire pour reproduire le calcul."@fr ;
+    skos:prefLabel "base_seed",
+        "Graine"@fr ;
+    ws:boundAuthority "policy" ;
+    ws:dataType "int" ;
+    ws:defaultAuthorization "Fixed technical setting 42, authorised by Cyril; retain unless explicitly changed. Not a calibrated scientific parameter." ;
+    ws:defaultValue 42 ;
+    ws:fieldPath "experiment.base_seed" ;
+    ws:minimum 0 ;
+    ws:operationalDefault true ;
+    ws:unitAlias "",
+        "1",
+        "None",
+        "id",
+        "identifiant",
+        "identifier",
+        "nombre",
+        "null",
+        "number",
+        "sans dimension",
+        "sans unité",
+        "unit:NUM",
+        "unit:UNITLESS" ;
+    ws:unitSymbol "identifiant" .
+
 ws:day_type a skos:Concept ;
     skos:prefLabel "day_type" .
 
@@ -674,6 +684,11 @@ ws:n_pollution_events a skos:Concept ;
     ws:concept ws:annualized_mwh ;
     ws:quantity "annualized_energy" ;
     ws:unitSymbol "MWh/an" .
+
+<https://github.com/cyrilvoyant/websemantic/ns#outputs/kpis/base_seed> a skos:Concept ;
+    skos:definition "Graine de base fixe de l’expérience ; 42 par défaut, modifiable explicitement."@fr ;
+    ws:concept ws:base_seed ;
+    ws:quantity "identifier" .
 
 <https://github.com/cyrilvoyant/websemantic/ns#outputs/kpis/load_factor> a skos:Concept ;
     skos:definition "mean_kw / peak_kw par réalisation ; sans dimension, 0,6 équivaut à 60 %."@fr ;

@@ -68,6 +68,7 @@ def extract(request, descriptor, history, model="gemini-3.5-flash-lite", state=N
         "properties": {
             "message": {"type": "string"},
             "needs_web": {"type": "boolean"},
+            "detail_level": {"type": "string", "enum": ["summary", "full"]},
             "actions": {"type": "array", "items": {"type": "string", "enum": ["propose", "accept", "details", "explain", "suggest", "quit"]}},
             "parameter": {"type": "string", "enum": ["", *fields]},
             "acceptance_evidence": {"type": "string"},
@@ -89,7 +90,7 @@ def extract(request, descriptor, history, model="gemini-3.5-flash-lite", state=N
                 },
             },
         },
-        "required": ["message", "needs_web", "task", "updates", "actions", "parameter", "acceptance_evidence"],
+        "required": ["message", "needs_web", "task", "updates", "actions", "parameter", "acceptance_evidence", "detail_level"],
     }
     instructions = (
         "Tu interprètes un scénario scientifique pour le logiciel décrit. Réponds en français, sobrement, en deux à quatre phrases. "
@@ -102,6 +103,11 @@ def extract(request, descriptor, history, model="gemini-3.5-flash-lite", state=N
         "Pour plusieurs scénarios, ne fusionne pas leurs paramètres ; demande une clarification. "
         "task correspond à une tâche déclarée, ou unsupported hors périmètre. Une précision conserve la tâche courante. "
         "Consulte l'état actuel : ne redemande pas les paramètres déjà présents ; les hypothèses nécessitent une acceptation explicite. "
+        "Reste au niveau de l'objectif et des choix principaux. Les réglages operational_default sont déjà autorisés "
+        "et fixes : ne les redemande pas, n'en parle pas sauf question explicite, ne les change pas sans valeur fournie. "
+        "detail_level=summary par défaut ; full seulement si l'utilisateur demande tous les détails/paramètres, "
+        "y compris techniques. Une graine fixe rend le calcul reproductible ; elle affecte les tirages stochastiques, "
+        "pas la physique déterministe. "
         "Comprends les demandes en langage naturel : actions=propose pour proposer les valeurs manquantes, "
         "details pour afficher le tableau avec unités, explain pour définir un paramètre (parameter=chemin exact, "
         "identifie aussi les libellés et alias), suggest pour cinq pistes, accept pour une acceptation EXPLICITE "

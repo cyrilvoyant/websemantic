@@ -17,6 +17,13 @@ class Session:
     def __init__(self, descriptor):
         self.descriptor = descriptor
         self.scenario = Scenario("", descriptor["tasks"]["supported"][0])
+        for group in ("inputs", "experiment"):
+            for name, spec in descriptor.get(group, {}).items():
+                if spec.get("operational_default") and "default" in spec:
+                    getattr(self.scenario, group)[name] = Parameter(
+                        value=spec["default"], unit=spec.get("unit"), origin="default",
+                        source=spec["operational_default_source"], accepted=True,
+                    )
         self.history = []
         self.calls = 0
         self.pending_clarification = None

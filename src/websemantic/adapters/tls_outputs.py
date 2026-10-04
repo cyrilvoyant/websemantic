@@ -23,6 +23,7 @@ def column_metadata(name, table):
         "n_pollution_events": ("transition_count", "1", "Nombre de transitions 0 vers 1 dans la série pollution_event ; un événement actif au premier pas n'est pas compté."),
         "n_accident_events": ("transition_count", "1", "Nombre de transitions 0 vers 1 dans la série accident_event ; un événement actif au premier pas n'est pas compté."),
         "run": ("identifier", None, "Identifiant de réalisation Monte Carlo, à partir de 0."),
+        "base_seed": ("identifier", None, "Graine de base fixe de l’expérience ; 42 par défaut, modifiable explicitement."),
         "seed": ("identifier", None, "Graine pseudo-aléatoire : base_seed + run."),
         "season": ("category", None, "Saison du calendrier simulé ; ne prouve pas une couverture annuelle."),
         "day_type": ("category", None, "Jour de semaine ou week-end du calendrier simulé."),
