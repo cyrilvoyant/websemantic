@@ -51,7 +51,7 @@
     {
       "path": "ontology/tls-contract.json",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/tls-contract.json",
-      "sha256_lf": "064b0512757fa75506e666d62b6f97eb5243a43917f0baef5cd4908eb35a50d1"
+      "sha256_lf": "72c22ec05fd51c7ed20b42746504593d841dab18550f497aaa2493a8ffc0deda"
     },
     {
       "path": "examples/tls-complete.json",

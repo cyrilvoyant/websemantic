@@ -19,3 +19,9 @@ Lisez les CSV et `manifest.json`. Répondez avec les médianes, les unités, la 
 ## Réponse courte
 
 Par défaut, afficher les trois médianes (énergie totale, énergie annualisée, pic), leurs unités, la période et le lien vers les fichiers. Indiquer brièvement « simulation ; annualisation extrapolée ». Conserver paramètres, hypothèses, sources, empreintes, versions et graines dans les fichiers de traçabilité. Donner les détails sur demande. Si le parcours exécuté diffère du parcours prévu, le signaler en une phrase et consigner les détails dans la note d’exécution.
+
+## Lieu et contexte
+
+Si une ville est citée, consulter les sources locales avec les outils web de l’agent. `geography` dans le contrat donne le catalogue des lieux, URL, champs proposés et règles utilisés par le dialogue local. Pour un autre lieu, rechercher des sources adaptées. Tracer URL, date, faits consultés et hypothèses dans `geographical_context.json` avec les résultats.
+
+Conserver les caractéristiques explicites du tunnel. Pour « le même tunnel », conserver sa configuration ; proposer séparément les adaptations locales justifiées et demander leur acceptation avant de les appliquer. Une ville ne détermine ni la géométrie ni les probabilités d’événements. Si les sources manquent, conserver les hypothèses acceptées en le signalant brièvement. La date simulée détermine le facteur saisonnier ; le nom de ville seul ne modifie pas le calcul TLS.
