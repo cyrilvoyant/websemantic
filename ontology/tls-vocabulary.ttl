@@ -132,7 +132,7 @@ ws:task a rdf:Property ;
     ws:maximum 1 ;
     ws:minimum 0 ;
     ws:modelComponent "stochastic" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"probabilité d’accident courante\"], \"value\": 0.015}, \"faible\": {\"aliases\": [\"faible probabilité d’accident\", \"accidents rares\"], \"value\": 0.00375}, \"très élevé\": {\"aliases\": [\"très forte probabilité d’accident\", \"accidents très fréquents\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte probabilité d’accident\", \"accidents fréquents\"], \"fraction\": 0.75}}, \"reference_upper\": 0.2}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"probabilité d’accident courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.015}, \"faible\": {\"aliases\": [\"faible probabilité d’accident\", \"accidents rares\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.00375}, \"très élevé\": {\"aliases\": [\"très forte probabilité d’accident\", \"accidents très fréquents\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte probabilité d’accident\", \"accidents fréquents\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 0.2}"^^rdf:JSON ;
     ws:quantity "daily_event_probability" ;
     ws:unitAlias "1",
         "UNITLESS",
@@ -155,7 +155,7 @@ ws:task a rdf:Property ;
     ws:fieldPath "inputs.accident_sensitivity" ;
     ws:implementationReference "simulator.py:simulate_one_realization" ;
     ws:modelComponent "ventilation" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"sensibilité aux accidents courante\"], \"value\": 0.75}, \"faible\": {\"aliases\": [\"faible sensibilité aux accidents\"], \"value\": 0.1875}, \"très élevé\": {\"aliases\": [\"très forte sensibilité aux accidents\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte sensibilité aux accidents\"], \"fraction\": 0.75}}, \"reference_upper\": 2.0}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"sensibilité aux accidents courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.75}, \"faible\": {\"aliases\": [\"faible sensibilité aux accidents\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.1875}, \"très élevé\": {\"aliases\": [\"très forte sensibilité aux accidents\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte sensibilité aux accidents\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 2.0}"^^rdf:JSON ;
     ws:quantity "dimensionless_coefficient" ;
     ws:unitAlias "1",
         "UNITLESS",
@@ -178,7 +178,7 @@ ws:task a rdf:Property ;
     ws:fieldPath "inputs.altitude_m" ;
     ws:implementationReference "simulator.py:simulate_one_realization" ;
     ws:modelComponent "ventilation" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"altitude courante\"], \"value\": 300}, \"faible\": {\"aliases\": [\"faible altitude\", \"basse altitude\"], \"value\": 75.0}, \"très élevé\": {\"aliases\": [\"très haute altitude\", \"altitude très élevée\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"haute altitude\", \"altitude élevée\"], \"fraction\": 0.75}}, \"reference_upper\": 3000.0}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"altitude courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 300}, \"faible\": {\"aliases\": [\"faible altitude\", \"basse altitude\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 75.0}, \"très élevé\": {\"aliases\": [\"très haute altitude\", \"altitude très élevée\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"haute altitude\", \"altitude élevée\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 3000.0}"^^rdf:JSON ;
     ws:quantity "length" ;
     ws:unitAlias "m",
         "metre",
@@ -205,7 +205,7 @@ ws:task a rdf:Property ;
     ws:fieldPath "inputs.aux_kw_per_km_tube" ;
     ws:implementationReference "simulator.py:simulate_one_realization" ;
     ws:modelComponent "auxiliaries" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"charge auxiliaire courante\"], \"value\": 35.0}, \"faible\": {\"aliases\": [\"faible charge auxiliaire\", \"auxiliaires peu puissants\"], \"value\": 8.75}, \"très élevé\": {\"aliases\": [\"très forte charge auxiliaire\", \"auxiliaires très puissants\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte charge auxiliaire\", \"auxiliaires puissants\"], \"fraction\": 0.75}}, \"reference_upper\": 120.0}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"charge auxiliaire courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 35.0}, \"faible\": {\"aliases\": [\"faible charge auxiliaire\", \"auxiliaires peu puissants\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 8.75}, \"très élevé\": {\"aliases\": [\"très forte charge auxiliaire\", \"auxiliaires très puissants\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte charge auxiliaire\", \"auxiliaires puissants\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 120.0}"^^rdf:JSON ;
     ws:quantity "linear_power_per_tube" ;
     ws:unitAlias "kW par km et par tube",
         "kW/(km.tube)",
@@ -227,7 +227,7 @@ ws:task a rdf:Property ;
     ws:fieldPath "inputs.base_fixed_kw" ;
     ws:implementationReference "simulator.py:simulate_one_realization" ;
     ws:modelComponent "base_load" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"charge fixe courante\"], \"value\": 40.0}, \"faible\": {\"aliases\": [\"faible charge fixe\", \"charge fixe faible\"], \"value\": 10.0}, \"très élevé\": {\"aliases\": [\"très forte charge fixe\", \"charge fixe très élevée\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte charge fixe\", \"charge fixe élevée\"], \"fraction\": 0.75}}, \"reference_upper\": 500.0}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"charge fixe courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 40.0}, \"faible\": {\"aliases\": [\"faible charge fixe\", \"charge fixe faible\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 10.0}, \"très élevé\": {\"aliases\": [\"très forte charge fixe\", \"charge fixe très élevée\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte charge fixe\", \"charge fixe élevée\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 500.0}"^^rdf:JSON ;
     ws:quantity "power" ;
     ws:unitAlias "kW",
         "kilowatt",
@@ -238,6 +238,78 @@ ws:task a rdf:Property ;
 <https://github.com/cyrilvoyant/websemantic/ns#tls/energy_demand> a ws:Intent ;
     skos:related <https://github.com/cyrilvoyant/websemantic/ns#tls/total_mwh> ;
     ws:requiresIndicator <https://github.com/cyrilvoyant/websemantic/ns#tls/total_mwh> .
+
+<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-1> a skos:Concept ;
+    skos:definition "R est le profil de pointes et de nuit ; Q98 est sa référence déterministe au 98e percentile, C le contexte, S la saison, W le jour de semaine et D_j un tirage journalier normal de moyenne 1 et écart-type 0,06. Aucun comptage de véhicules."@fr ;
+    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:prefLabel "Trafic"@fr ;
+    ws:expression "T(t) = clip((R(t)/Q98) × C × S × W × traffic_level × D_j, 0, 2)" ;
+    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    ws:unitSymbol "sans unité" .
+
+<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-2> a skos:Concept ;
+    skos:definition "h, c et w sont en heures ; A est sans unité. R = 0,16 + 0,06 cos(2π(h-3)/24) + G(h;c_m,w,1) + G(h;c_s,1,15w,1,1), plus G(h;18,7;2,5;0,25) en contexte urbain. w est un écart-type temporel."@fr ;
+    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:prefLabel "Pointes"@fr ;
+    ws:expression "G(h;c,w,A) = A × exp(-0,5 × ((h-c)/w)^2)" ;
+    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    ws:unitSymbol "sans unité" .
+
+<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-3> a skos:Concept ;
+    skos:definition "Altitude et profondeur en m ; pente saisie en %, donc 2 pour 2 %. Le plafond de profondeur concerne le facteur, pas la longueur ni la validité géologique."@fr ;
+    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:prefLabel "Facteurs géométriques"@fr ;
+    ws:expression "F_alt = 1 + max(altitude_m-500,0)/6000 ; F_pente = 1 + abs(gradient_percent)/20 ; F_profondeur = 1 + min(max_depth_m,800)/6000" ;
+    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    ws:unitSymbol "sans unité" .
+
+<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-4> a skos:Concept ;
+    skos:definition "L = length_m/1000 en km. k_l en kW/(km·voie), f_min et c_l sans unité dépendent de la catégorie. J(t) est le profil synthétique de lumière du jour, sans éphéméride locale ; même une catégorie fixed est modulée."@fr ;
+    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:prefLabel "Éclairage"@fr ;
+    ws:expression "P_lumière(t) = k_l × L × N_tubes × N_voies × min(f_min + (1-f_min)(1-J(t)) + c_l T(t), 1)" ;
+    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    ws:unitSymbol "kW" .
+
+<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-5> a skos:Concept ;
+    skos:definition "k_v est en kW/(km·tube). I_p et I_a sont des indicateurs 0/1 d’événements synthétiques. Les deux coefficients s’ajoutent si les deux événements sont actifs ; ce n’est pas un modèle de sécurité."@fr ;
+    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:prefLabel "Ventilation"@fr ;
+    ws:expression "P_vent(t) = k_v × L × N_tubes × (0,15 + traffic_sensitivity × T(t)) × F_alt × F_pente × (1 + pollution_sensitivity × I_p(t) + accident_sensitivity × I_a(t))" ;
+    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    ws:unitSymbol "kW" .
+
+<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-6> a skos:Concept ;
+    skos:definition "Z(t) suit une loi normale de moyenne 1 et d’écart-type 0,025 ; ce tirage reste actif même si noise_sigma vaut zéro."@fr ;
+    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:prefLabel "Auxiliaires"@fr ;
+    ws:expression "P_aux(t) = aux_kw_per_km_tube × L × N_tubes × F_profondeur × Z(t)" ;
+    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    ws:unitSymbol "kW" .
+
+<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-7> a skos:Concept ;
+    skos:definition "ε suit une loi normale de moyenne zéro et d’écart-type noise_sigma. La graine fixe rend les trajectoires reproductibles, sans supprimer les tirages."@fr ;
+    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:prefLabel "Puissance totale"@fr ;
+    ws:expression "P(t) = max((base_fixed_kw + P_lumière(t) + P_vent(t) + P_aux(t)) × (1 + ε(t)), 0)" ;
+    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    ws:unitSymbol "kW" .
+
+<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-8> a skos:Concept ;
+    skos:definition "L’énergie journalière somme les pas d’une journée. La puissance quotidienne est la moyenne des puissances. E_ann est une extrapolation de la période simulée ; aucune mesure annuelle terrain."@fr ;
+    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:prefLabel "Énergie et annualisation"@fr ;
+    ws:expression "E_pas = P(t) × freq_minutes/60 ; E_MWh = somme(E_pas)/1000 ; E_ann = E_MWh × 365/n_days" ;
+    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    ws:unitSymbol "kWh ; MWh ; MWh/an" .
+
+<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-9> a skos:Concept ;
+    skos:definition "p est la probabilité journalière déclarée, pas un taux par véhicule. Pollution : début uniforme de 7 à 18 h, durée de 2 à 8 h. Accident : début de 6,5 à 20 h, durée de 0,5 à 3 h. Un événement peut déborder sur le lendemain."@fr ;
+    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:prefLabel "Événements"@fr ;
+    ws:expression "B_j ~ Bernoulli(p) ; I(t) = 1 pendant l’événement si B_j = 1" ;
+    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    ws:unitSymbol "probabilité sans unité ; durée en h" .
 
 <https://github.com/cyrilvoyant/websemantic/ns#tls/evening_peak_hour> a skos:Concept ;
     skos:altLabel "pointe du soir"@fr ;
@@ -253,7 +325,7 @@ ws:task a rdf:Property ;
     ws:fieldPath "inputs.evening_peak_hour" ;
     ws:implementationReference "simulator.py:simulate_one_realization" ;
     ws:modelComponent "traffic" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.\", \"levels\": {\"courant\": {\"aliases\": [\"pointe du soir courante\"], \"value\": 18}, \"tard\": {\"aliases\": [\"pointe du soir tardive\", \"pic du soir tardif\"], \"value\": 22}, \"tôt\": {\"aliases\": [\"pointe du soir tôt\", \"pic du soir précoce\"], \"value\": 15}}}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.\", \"levels\": {\"courant\": {\"aliases\": [\"pointe du soir courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 18}, \"tard\": {\"aliases\": [\"pointe du soir tardive\", \"pic du soir tardif\"], \"answer_aliases\": [\"tard\"], \"value\": 22}, \"tôt\": {\"aliases\": [\"pointe du soir tôt\", \"pic du soir précoce\"], \"answer_aliases\": [\"tôt\"], \"value\": 15}}}"^^rdf:JSON ;
     ws:quantity "time_of_day" ;
     ws:unitAlias "h",
         "h du jour",
@@ -280,7 +352,7 @@ ws:task a rdf:Property ;
     ws:implementationReference "simulator.py:run_monte_carlo" ;
     ws:minimum 1 ;
     ws:modelComponent "experiment" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.\", \"levels\": {\"fin\": {\"aliases\": [\"pas fin\", \"résolution temporelle fine\"], \"value\": 10}, \"grossier\": {\"aliases\": [\"pas grossier\", \"résolution temporelle grossière\"], \"value\": 60}, \"intermédiaire\": {\"aliases\": [\"pas intermédiaire\"], \"value\": 15}, \"large\": {\"aliases\": [\"pas large\"], \"value\": 30}, \"très fin\": {\"aliases\": [\"pas très fin\", \"résolution temporelle très fine\"], \"value\": 5}}}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.\", \"levels\": {\"fin\": {\"aliases\": [\"pas fin\", \"résolution temporelle fine\"], \"answer_aliases\": [\"fin\"], \"value\": 10}, \"grossier\": {\"aliases\": [\"pas grossier\", \"résolution temporelle grossière\"], \"answer_aliases\": [\"grossier\"], \"value\": 60}, \"intermédiaire\": {\"aliases\": [\"pas intermédiaire\"], \"answer_aliases\": [\"intermédiaire\"], \"value\": 15}, \"large\": {\"aliases\": [\"pas large\"], \"answer_aliases\": [\"large\"], \"value\": 30}, \"très fin\": {\"aliases\": [\"pas très fin\", \"résolution temporelle très fine\"], \"answer_aliases\": [\"très fin\"], \"value\": 5}}}"^^rdf:JSON ;
     ws:quantity "duration_minutes" ;
     ws:unitAlias "min",
         "minute",
@@ -301,7 +373,7 @@ ws:task a rdf:Property ;
     ws:fieldPath "inputs.gradient_percent" ;
     ws:implementationReference "simulator.py:simulate_one_realization" ;
     ws:modelComponent "ventilation" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"pente courante\"], \"value\": 2.0}, \"faible\": {\"aliases\": [\"faible pente\", \"pente faible\"], \"value\": 0.5}, \"très élevé\": {\"aliases\": [\"très forte pente\", \"pente très forte\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte pente\", \"pente forte\"], \"fraction\": 0.75}}, \"reference_upper\": 12.0}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"pente courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 2.0}, \"faible\": {\"aliases\": [\"faible pente\", \"pente faible\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.5}, \"très élevé\": {\"aliases\": [\"très forte pente\", \"pente très forte\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte pente\", \"pente forte\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 12.0}"^^rdf:JSON ;
     ws:quantity "percentage" ;
     ws:unitAlias "%",
         "percent",
@@ -329,7 +401,7 @@ ws:task a rdf:Property ;
     ws:implementationReference "simulator.py:simulate_one_realization" ;
     ws:minimumExclusive 0 ;
     ws:modelComponent "geometry" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"longueur courante\"], \"value\": 1500}, \"faible\": {\"aliases\": [\"tunnel court\", \"faible longueur\"], \"value\": 375.0}, \"très élevé\": {\"aliases\": [\"tunnel très long\", \"très grande longueur\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"tunnel long\", \"grande longueur\"], \"fraction\": 0.75}}, \"reference_upper\": 12000.0}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"longueur courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 1500}, \"faible\": {\"aliases\": [\"tunnel court\", \"faible longueur\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 375.0}, \"très élevé\": {\"aliases\": [\"tunnel très long\", \"très grande longueur\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"tunnel long\", \"grande longueur\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 12000.0}"^^rdf:JSON ;
     ws:quantity "length" ;
     ws:unitAlias "m",
         "metre",
@@ -384,7 +456,7 @@ ws:task a rdf:Property ;
     ws:fieldPath "inputs.max_depth_m" ;
     ws:implementationReference "simulator.py:simulate_one_realization" ;
     ws:modelComponent "auxiliaries" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"profondeur courante\"], \"value\": 80}, \"faible\": {\"aliases\": [\"faible profondeur\", \"tunnel peu profond\"], \"value\": 20.0}, \"très élevé\": {\"aliases\": [\"très grande profondeur\", \"tunnel très profond\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"grande profondeur\", \"tunnel profond\"], \"fraction\": 0.75}}, \"reference_upper\": 1000.0}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"profondeur courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 80}, \"faible\": {\"aliases\": [\"faible profondeur\", \"tunnel peu profond\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 20.0}, \"très élevé\": {\"aliases\": [\"très grande profondeur\", \"tunnel très profond\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"grande profondeur\", \"tunnel profond\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 1000.0}"^^rdf:JSON ;
     ws:quantity "length" ;
     ws:unitAlias "m",
         "metre",
@@ -407,7 +479,7 @@ ws:task a rdf:Property ;
     ws:fieldPath "inputs.morning_peak_hour" ;
     ws:implementationReference "simulator.py:simulate_one_realization" ;
     ws:modelComponent "traffic" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.\", \"levels\": {\"courant\": {\"aliases\": [\"pointe du matin courante\"], \"value\": 8}, \"tard\": {\"aliases\": [\"pointe du matin tardive\", \"pic du matin tardif\"], \"value\": 11}, \"tôt\": {\"aliases\": [\"pointe du matin tôt\", \"pic du matin précoce\"], \"value\": 5}}}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.\", \"levels\": {\"courant\": {\"aliases\": [\"pointe du matin courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 8}, \"tard\": {\"aliases\": [\"pointe du matin tardive\", \"pic du matin tardif\"], \"answer_aliases\": [\"tard\"], \"value\": 11}, \"tôt\": {\"aliases\": [\"pointe du matin tôt\", \"pic du matin précoce\"], \"answer_aliases\": [\"tôt\"], \"value\": 5}}}"^^rdf:JSON ;
     ws:quantity "time_of_day" ;
     ws:unitAlias "h",
         "h du jour",
@@ -433,7 +505,7 @@ ws:task a rdf:Property ;
     ws:implementationReference "simulator.py:run_monte_carlo" ;
     ws:minimum 1 ;
     ws:modelComponent "experiment" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.\", \"levels\": {\"courant\": {\"aliases\": [\"durée de simulation courante\"], \"value\": 7}, \"court\": {\"aliases\": [\"courte période de simulation\", \"simulation courte\"], \"value\": 1}, \"long\": {\"aliases\": [\"longue période de simulation\", \"simulation longue\"], \"value\": 365}, \"très long\": {\"aliases\": [\"très longue période de simulation\", \"simulation très longue\"], \"value\": 1095}}}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.\", \"levels\": {\"courant\": {\"aliases\": [\"durée de simulation courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 7}, \"court\": {\"aliases\": [\"courte période de simulation\", \"simulation courte\"], \"answer_aliases\": [\"court\"], \"value\": 1}, \"long\": {\"aliases\": [\"longue période de simulation\", \"simulation longue\"], \"answer_aliases\": [\"long\"], \"value\": 365}, \"très long\": {\"aliases\": [\"très longue période de simulation\", \"simulation très longue\"], \"answer_aliases\": [\"très long\"], \"value\": 1095}}}"^^rdf:JSON ;
     ws:quantity "duration_days" ;
     ws:unitAlias "day",
         "days",
@@ -459,7 +531,7 @@ ws:task a rdf:Property ;
     ws:maximum 6 ;
     ws:minimum 1 ;
     ws:modelComponent "geometry" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Comptage par tube, à valider ; ne pas le confondre avec le total de voies.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de voies par tube\"], \"value\": 3}, \"courant\": {\"aliases\": [\"nombre courant de voies par tube\"], \"value\": 2}, \"maximum de référence\": {\"aliases\": [\"énormément de voies par tube\"], \"value\": 4}, \"peu\": {\"aliases\": [\"peu de voies par tube\"], \"value\": 1}}}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Comptage par tube, à valider ; ne pas le confondre avec le total de voies.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de voies par tube\"], \"answer_aliases\": [\"beaucoup\"], \"value\": 3}, \"courant\": {\"aliases\": [\"nombre courant de voies par tube\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 2}, \"maximum de référence\": {\"aliases\": [\"énormément de voies par tube\"], \"answer_aliases\": [\"énormément\"], \"value\": 4}, \"peu\": {\"aliases\": [\"peu de voies par tube\"], \"answer_aliases\": [\"peu\"], \"value\": 1}}}"^^rdf:JSON ;
     ws:quantity "count" ;
     ws:unitAlias "1",
         "count",
@@ -488,7 +560,7 @@ ws:task a rdf:Property ;
     ws:implementationReference "simulator.py:run_monte_carlo" ;
     ws:minimum 1 ;
     ws:modelComponent "experiment" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Comptages Monte Carlo conventionnels, à valider ; beaucoup = 30 et énormément = 50 selon une échelle entière. Plus de réalisations augmente le coût ; cela ne valide pas le modèle.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de réalisations\"], \"value\": 30}, \"courant\": {\"aliases\": [\"nombre courant de réalisations\"], \"value\": 3}, \"maximum de référence\": {\"aliases\": [\"énormément de réalisations\"], \"value\": 50}, \"peu\": {\"aliases\": [\"peu de réalisations\"], \"value\": 1}}}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Comptages Monte Carlo conventionnels, à valider ; beaucoup = 30 et énormément = 50 selon une échelle entière. Plus de réalisations augmente le coût ; cela ne valide pas le modèle.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de réalisations\"], \"answer_aliases\": [\"beaucoup\"], \"value\": 30}, \"courant\": {\"aliases\": [\"nombre courant de réalisations\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 3}, \"maximum de référence\": {\"aliases\": [\"énormément de réalisations\"], \"answer_aliases\": [\"énormément\"], \"value\": 50}, \"peu\": {\"aliases\": [\"peu de réalisations\"], \"answer_aliases\": [\"peu\"], \"value\": 1}}}"^^rdf:JSON ;
     ws:quantity "count" ;
     ws:unitAlias "1",
         "count",
@@ -518,7 +590,7 @@ ws:task a rdf:Property ;
     ws:maximum 8 ;
     ws:minimum 1 ;
     ws:modelComponent "geometry" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Comptages entiers de scénario, à valider ; références discrètes de l’interface TLS, pas maxima du moteur.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de tubes\"], \"value\": 3}, \"courant\": {\"aliases\": [\"nombre courant de tubes\"], \"value\": 2}, \"maximum de référence\": {\"aliases\": [\"énormément de tubes\"], \"value\": 4}, \"peu\": {\"aliases\": [\"peu de tubes\"], \"value\": 1}}}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Comptages entiers de scénario, à valider ; références discrètes de l’interface TLS, pas maxima du moteur.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de tubes\"], \"answer_aliases\": [\"beaucoup\"], \"value\": 3}, \"courant\": {\"aliases\": [\"nombre courant de tubes\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 2}, \"maximum de référence\": {\"aliases\": [\"énormément de tubes\"], \"answer_aliases\": [\"énormément\"], \"value\": 4}, \"peu\": {\"aliases\": [\"peu de tubes\"], \"answer_aliases\": [\"peu\"], \"value\": 1}}}"^^rdf:JSON ;
     ws:quantity "count" ;
     ws:unitAlias "1",
         "count",
@@ -547,7 +619,7 @@ ws:task a rdf:Property ;
     ws:implementationReference "simulator.py:simulate_one_realization" ;
     ws:minimum 0 ;
     ws:modelComponent "stochastic" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"bruit relatif courant\"], \"value\": 0.06}, \"faible\": {\"aliases\": [\"faible bruit relatif\", \"faible bruit gaussien\"], \"value\": 0.015}, \"très élevé\": {\"aliases\": [\"très fort bruit relatif\", \"bruit gaussien très élevé\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"fort bruit relatif\", \"bruit gaussien élevé\"], \"fraction\": 0.75}}, \"reference_upper\": 0.5}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"bruit relatif courant\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.06}, \"faible\": {\"aliases\": [\"faible bruit relatif\", \"faible bruit gaussien\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.015}, \"très élevé\": {\"aliases\": [\"très fort bruit relatif\", \"bruit gaussien très élevé\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"fort bruit relatif\", \"bruit gaussien élevé\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 0.5}"^^rdf:JSON ;
     ws:quantity "relative_standard_deviation" ;
     ws:unitAlias "1",
         "UNITLESS",
@@ -574,7 +646,7 @@ ws:task a rdf:Property ;
     ws:fieldPath "inputs.peak_width_h" ;
     ws:implementationReference "simulator.py:simulate_one_realization" ;
     ws:modelComponent "traffic" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"largeur de pointe courante\"], \"value\": 1.4}, \"faible\": {\"aliases\": [\"pics de trafic étroits\", \"pointes étroites\"], \"value\": 0.35}, \"très élevé\": {\"aliases\": [\"pics de trafic très larges\", \"pointes très larges\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"pics de trafic larges\", \"pointes larges\"], \"fraction\": 0.75}}, \"reference_upper\": 4.0}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"largeur de pointe courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 1.4}, \"faible\": {\"aliases\": [\"pics de trafic étroits\", \"pointes étroites\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.35}, \"très élevé\": {\"aliases\": [\"pics de trafic très larges\", \"pointes très larges\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"pics de trafic larges\", \"pointes larges\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 4.0}"^^rdf:JSON ;
     ws:quantity "duration" ;
     ws:unitAlias "h",
         "h du jour",
@@ -601,7 +673,7 @@ ws:task a rdf:Property ;
     ws:maximum 1 ;
     ws:minimum 0 ;
     ws:modelComponent "stochastic" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"probabilité de pollution courante\"], \"value\": 0.05}, \"faible\": {\"aliases\": [\"faible probabilité de pollution\", \"événements de pollution rares\"], \"value\": 0.0125}, \"très élevé\": {\"aliases\": [\"très forte probabilité de pollution\", \"événements de pollution très fréquents\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte probabilité de pollution\", \"événements de pollution fréquents\"], \"fraction\": 0.75}}, \"reference_upper\": 0.5}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"probabilité de pollution courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.05}, \"faible\": {\"aliases\": [\"faible probabilité de pollution\", \"événements de pollution rares\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.0125}, \"très élevé\": {\"aliases\": [\"très forte probabilité de pollution\", \"événements de pollution très fréquents\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte probabilité de pollution\", \"événements de pollution fréquents\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 0.5}"^^rdf:JSON ;
     ws:quantity "daily_event_probability" ;
     ws:unitAlias "1",
         "UNITLESS",
@@ -624,7 +696,7 @@ ws:task a rdf:Property ;
     ws:fieldPath "inputs.pollution_sensitivity" ;
     ws:implementationReference "simulator.py:simulate_one_realization" ;
     ws:modelComponent "ventilation" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"sensibilité à la pollution courante\"], \"value\": 0.55}, \"faible\": {\"aliases\": [\"faible sensibilité à la pollution\"], \"value\": 0.1375}, \"très élevé\": {\"aliases\": [\"très forte sensibilité à la pollution\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte sensibilité à la pollution\"], \"fraction\": 0.75}}, \"reference_upper\": 2.0}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"sensibilité à la pollution courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.55}, \"faible\": {\"aliases\": [\"faible sensibilité à la pollution\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.1375}, \"très élevé\": {\"aliases\": [\"très forte sensibilité à la pollution\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte sensibilité à la pollution\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 2.0}"^^rdf:JSON ;
     ws:quantity "dimensionless_coefficient" ;
     ws:unitAlias "1",
         "UNITLESS",
@@ -674,7 +746,7 @@ ws:task a rdf:Property ;
     ws:fieldPath "inputs.traffic_level" ;
     ws:implementationReference "simulator.py:simulate_one_realization" ;
     ws:modelComponent "traffic" ;
-    ws:qualitativeScale "{\"authority\": \"TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum.\", \"interpretation\": \"Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de trafic\", \"beaucoup de traffic\", \"trafic important\", \"trafic élevé\", \"fort trafic\"], \"fraction\": 0.75}, \"courant\": {\"aliases\": [\"trafic courant\"], \"value\": 1.0}, \"faible\": {\"aliases\": [\"peu de trafic\", \"faible trafic\", \"trafic faible\"], \"value\": 0.3}, \"énormément\": {\"aliases\": [\"énormément de trafic\", \"énormément de traffic\", \"trafic très élevé\", \"trafic énorme\"], \"fraction\": 1.0}}, \"reference_upper\": 2.0}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum.\", \"interpretation\": \"Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de trafic\", \"beaucoup de traffic\", \"trafic important\", \"trafic élevé\", \"fort trafic\"], \"answer_aliases\": [\"beaucoup\"], \"fraction\": 0.75}, \"courant\": {\"aliases\": [\"trafic courant\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 1.0}, \"faible\": {\"aliases\": [\"peu de trafic\", \"faible trafic\", \"trafic faible\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.3}, \"énormément\": {\"aliases\": [\"énormément de trafic\", \"énormément de traffic\", \"trafic très élevé\", \"trafic énorme\"], \"answer_aliases\": [\"énormément\"], \"fraction\": 1.0}}, \"reference_upper\": 2.0}"^^rdf:JSON ;
     ws:quantity "dimensionless_multiplier" ;
     ws:unitAlias "1",
         "UNITLESS",
@@ -697,7 +769,7 @@ ws:task a rdf:Property ;
     ws:fieldPath "inputs.traffic_sensitivity" ;
     ws:implementationReference "simulator.py:simulate_one_realization" ;
     ws:modelComponent "ventilation" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"sensibilité au trafic courante\"], \"value\": 0.65}, \"faible\": {\"aliases\": [\"faible sensibilité au trafic\"], \"value\": 0.1625}, \"très élevé\": {\"aliases\": [\"très forte sensibilité au trafic\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte sensibilité au trafic\"], \"fraction\": 0.75}}, \"reference_upper\": 1.5}"^^rdf:JSON ;
+    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"sensibilité au trafic courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.65}, \"faible\": {\"aliases\": [\"faible sensibilité au trafic\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.1625}, \"très élevé\": {\"aliases\": [\"très forte sensibilité au trafic\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte sensibilité au trafic\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 1.5}"^^rdf:JSON ;
     ws:quantity "dimensionless_coefficient" ;
     ws:unitAlias "1",
         "UNITLESS",

@@ -21,9 +21,13 @@ TLS : https://github.com/cyrilvoyant/tunnel-load-simulator
 
 EXEMPLE 1 — JE SAIS CE QUE JE VEUX
 
-Lancez WebSemantic.cmd et choisissez 1. Collez ces deux textes séparément, en attendant la réponse :
+Lancez WebSemantic.cmd et choisissez 1. Collez ces quatre textes séparément, en attendant la réponse :
 
 Je voudrais connaître la consommation d’un tunnel fictif de 2 km, avec deux tubes et deux voies par tube, en contexte périurbain, un éclairage LED fixe et une ventilation longitudinale. Étudie 30 jours à partir du 1er janvier 2025, au pas de 15 minutes, avec dix réalisations. Propose les paramètres manquants sans les accepter.
+
+Montre les paramètres de l’étude dans un tableau : valeur par défaut, valeur retenue, unité et origine.
+
+Explique les formules utilisées pour la puissance, l’énergie et l’annualisation, avec les coefficients retenus.
 
 Prends le reste par défaut.
 
@@ -41,19 +45,33 @@ Lancez WebSemantic.cmd, choisissez 1 dans une nouvelle conversation. Collez les 
 
 4. Explique-moi les options de ventilation et ce que signifie le trafic relatif.
 
-5. Montre-moi le tableau des paramètres avec leurs unités et distingue mes choix des hypothèses proposées.
+5. Montre tous les paramètres dans un tableau : valeur par défaut, valeur retenue pour cette étude, unité et origine. Explique les formules et les coefficients utilisés.
 
 6. J’accepte les hypothèses proposées, lance le calcul.
 
-Avant le dernier texte, vous pouvez corriger un choix en une phrase. « Moyen » et « ancien » ne déterminent pas des chiffres : les valeurs proposées sont celles du profil de démonstration, pas des mesures de Montpellier. Les sources documentaires ne valident pas automatiquement les paramètres.
+Répondez aux questions utiles avant de poursuivre : le logiciel peut demander une précision sur le site ou sur un qualificatif. Si les sources ne permettent pas de qualifier les accidents localement, choisissez une hypothèse de simulation ou gardez explicitement le défaut, sans en faire un fait observé. Avant le dernier texte, vous pouvez corriger un choix en une phrase. « Moyen » et « ancien » ne déterminent pas des chiffres : les valeurs proposées sont celles du profil de démonstration, pas des mesures de Montpellier. Les sources documentaires ne valident pas automatiquement les paramètres.
 
 Dans le dossier affiché, daily.csv contient 365 journées : énergie en kWh et puissance moyenne en kW. Le calcul se fait à l’heure, puis les énergies sont additionnées par jour. Cette série correspond à la réalisation 0 ; les indicateurs affichés résument les trois réalisations. Les données sont simulées, sans validation terrain.
+
+VARIANTE DE L’EXEMPLE 2 — AFFINER UN CAS À AJACCIO
+
+Lancez WebSemantic.cmd, choisissez 1 dans une nouvelle conversation. Collez les quatre textes séparément et répondez aux questions affichées avant de poursuivre :
+
+Je voudrais étudier un tunnel fictif à Ajaccio. Recherche des sources sur le trafic et les accidents ; distingue les faits documentés des informations manquantes et pose-moi les questions utiles pour définir l’étude.
+
+Pour cet essai fictif, retiens beaucoup de trafic et une faible probabilité journalière d’accident. Propose le profil de démonstration pour les autres paramètres sans les accepter.
+
+Montre tous les paramètres dans un tableau avec les valeurs par défaut, les valeurs retenues, les unités et les origines. Explique les formules utilisées et les coefficients retenus.
+
+J’accepte les hypothèses proposées, lance le calcul.
+
+Les choix de trafic et d’accident sont des hypothèses de cet exercice, pas des statistiques d’Ajaccio. Le dialogue peut demander de choisir entre garder un défaut, modifier une hypothèse ou fournir une donnée locale. Une ambiguïté bloquante doit être précisée avant la dernière phrase.
 
 EXEMPLE 3 — JE DONNE LA MÊME DEMANDE À MON LLM HABITUEL
 
 Cet essai demande un accès au dépôt et un véritable environnement Python : soit un service avec exécution de code activée, soit un agent local ayant accès à un ordinateur équipé de Python. Une conversation seule, même capable de lire GitHub, ne suffit pas. L’environnement doit pouvoir récupérer le code et installer ses dépendances. Vous n’avez pas besoin de lancer WebSemantic.cmd pour cet essai. Collez ce prompt entier :
 
-Vérifie d’abord que tu peux récupérer des fichiers, exécuter Python et installer les dépendances. Si un de ces moyens manque, indique lequel et arrête-toi avant le calcul. En te référant au dépôt https://github.com/cyrilvoyant/websemantic et à tous les fichiers utiles, reproduis le scénario ci-dessous. Clone le dépôt avec ses sous-modules ; lis AGENTS.md, docs/agent-contract.md, ontology/tls-contract.json, puis le README et le descripteur descriptors/tls/descriptor.yaml, les contrats et l'adaptateur src/websemantic/adapters/tls.py. Utilise le simulateur TLS fourni, sans modifier son code, à la révision 748e053e129669cf3e896d381e3c0ac01c763edd. Installe les dépendances dans un environnement isolé. Exécute réellement le calcul avec tes outils Python, sans appeler Gemini. Scénario fictif entièrement accepté : longueur 2000 m ; 2 tubes ; 2 voies par tube ; altitude 300 m ; profondeur maximale 80 m ; pente 2 % ; contexte peri-urban ; éclairage LED fixed ; ventilation longitudinal ; auxiliaires 35 kW/(km·tube) ; charge fixe 40 kW ; trafic relatif 1 ; pointes à 8 h et 18 h ; largeur des pics 1,4 h ; sensibilité au trafic 0,65 ; bruit relatif 0,06 ; probabilité quotidienne de pollution 0,05 et d'accident 0,015 ; sensibilité à la pollution 0,55 et aux accidents 0,75. Début 2025-01-01 ; durée 30 jours ; pas 15 minutes ; 10 réalisations. Pour les paramètres techniques restants, utilise les défauts déclarés du contrat, que j’accepte pour cet exercice fictif. Restitue en français les médianes de l'énergie totale en MWh, de l'énergie annualisée en MWh/an et du pic en kW. Fournis aussi un JSON avec les paramètres, leurs unités, les indicateurs, les révisions utilisées et les chemins des fichiers calculés. Qualifie les hypothèses et précise que l'annualisation est une extrapolation, sans validation terrain. Conserve les CSV et le manifeste pour comparer avec l'exemple 1. Si tu ne peux pas exécuter du code, dis-le et ne fabrique pas de résultats.
+Vérifie d’abord que tu peux récupérer des fichiers, exécuter Python et installer les dépendances. Si un de ces moyens manque, indique lequel et arrête-toi avant le calcul. En te référant au dépôt https://github.com/cyrilvoyant/websemantic et à tous les fichiers utiles, reproduis le scénario ci-dessous. Clone le dépôt avec ses sous-modules ; lis AGENTS.md, docs/agent-contract.md, ontology/tls-contract.json, puis le README et le descripteur descriptors/tls/descriptor.yaml, les contrats et l'adaptateur src/websemantic/adapters/tls.py. Utilise le simulateur TLS fourni, sans modifier son code, à la révision 748e053e129669cf3e896d381e3c0ac01c763edd. Installe les dépendances dans un environnement isolé. Exécute réellement le calcul avec tes outils Python, sans appeler Gemini. Scénario fictif entièrement accepté : longueur 2000 m ; 2 tubes ; 2 voies par tube ; altitude 300 m ; profondeur maximale 80 m ; pente 2 % ; contexte peri-urban ; éclairage LED fixed ; ventilation longitudinal ; auxiliaires 35 kW/(km·tube) ; charge fixe 40 kW ; trafic relatif 1 ; pointes à 8 h et 18 h ; largeur des pics 1,4 h ; sensibilité au trafic 0,65 ; bruit relatif 0,06 ; probabilité quotidienne de pollution 0,05 et d'accident 0,015 ; sensibilité à la pollution 0,55 et aux accidents 0,75. Début 2025-01-01 ; durée 30 jours ; pas 15 minutes ; 10 réalisations. Pour les paramètres techniques restants, utilise les défauts déclarés du contrat, que j’accepte pour cet exercice fictif. Restitue en français les médianes de l'énergie totale en MWh, de l'énergie annualisée en MWh/an et du pic en kW. Présente un tableau des paramètres avec les défauts du modèle, les valeurs retenues, les unités et les origines, puis les formules réellement utilisées avec leurs coefficients et références au code. Si un choix est ambigu, pose une question avant de calculer. Fournis aussi un JSON avec les paramètres, leurs unités, les indicateurs, les révisions utilisées et les chemins des fichiers calculés. Qualifie les hypothèses et précise que l'annualisation est une extrapolation, sans validation terrain. Conserve les CSV et le manifeste pour comparer avec l'exemple 1. Si tu ne peux pas exécuter du code, dis-le et ne fabrique pas de résultats.
 
 Cyril
 

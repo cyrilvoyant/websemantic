@@ -57,3 +57,7 @@ Répondre en français avec le résultat essentiel, ses unités, la période, le
 Limite actuelle de la recherche documentaire : les IP privées littérales sont filtrées par la recherche, mais les résolutions DNS et redirections ne sont pas toutes contrôlées. Le mécanisme actuel n’est pas une isolation réseau complète.
 
 Réglage technique fixé par la politique utilisateur : la graine de base vaut 42, sans demande ni rappel dans le dialogue courant. Elle reste inchangée sauf modification explicite. Le descripteur la marque operational_default ; cette autorisation ne s’étend pas aux hypothèses physiques. Pour comparer les agents, noter la graine de base et les graines de chaque réalisation dans les traces de test ; kpis.csv les conserve dans seed et le manifeste conserve base_seed. La graine affecte les tirages stochastiques ; elle n’ajoute pas une incertitude physique mesurée.
+
+## Restitution de l’étude
+
+En cas d’ambiguïté, poser une question ciblée avec des choix compréhensibles ; ne pas remplir le champ incertain. Présenter à la demande un tableau « défaut / valeur retenue / unité / origine », en distinguant les défauts non acceptés des choix effectifs. Les équations et coefficients vérifiés sont dans `model_equations` et `model_coefficients` du contrat : les restituer avec leur portée et les catégories réellement retenues. Les formules servent à expliquer le calcul du backend ; elles ne remplacent pas son exécution.

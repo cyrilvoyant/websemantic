@@ -78,6 +78,12 @@ def research(question, model, state=None, descriptor=None):
         'limits': {'type': 'string'},
         'citations': {'type': 'array', 'items': {'type': 'integer'}},
     }, 'required': ['answer', 'limits', 'citations']}
+    fields = [f'{group}.{name}' for group in ('inputs', 'experiment') for name in (descriptor or {}).get(group, {})]
+    if fields:
+        schema['properties']['questions'] = {'type': 'array', 'items': {'type': 'object', 'properties': {
+            'question': {'type': 'string'}, 'fields': {'type': 'array', 'items': {'type': 'string', 'enum': fields}},
+            'blocking': {'type': 'boolean'}}, 'required': ['question', 'fields', 'blocking']}}
+        schema['required'].append('questions')
     prompt = (
         'Réponds à la question en français, avec un ton scientifique sobre. Recherche documentaire liée à un logiciel scientifique. '
         'Les étapes et le raisonnement restent internes. Donne 2 à 5 phrases utiles, avec les unités des grandeurs '
@@ -91,6 +97,11 @@ def research(question, model, state=None, descriptor=None):
         'ne valide pas des hypothèses, ne modifie aucun paramètre. Si une valeur ou règle n’est pas établie, dis-le. '
         'Au plus 80 mots dérivés par source et 200 mots au total ; aucune longue citation. '
         'citations contient les indices de pages consultées utilisées.\nQUESTION:\n' + question
+        + '\nSi une précision aiderait à définir l’étude, questions contient une question ciblée (au plus deux), '
+        'ses fields canoniques et blocking=true seulement si l’ambiguïté empêche un choix de scénario. '
+        'Propose des choix intelligibles ; aucune inférence de probabilité en tunnel à partir d’accidents routiers '
+        'ou de pollution ambiante. Ne classe pas un lieu en risque faible/fort sans référence comparative de même '
+        'période et périmètre. questions=[] si aucune question utile. Champs possibles : ' + json.dumps(fields)
         + '\nPARAMÈTRES ACTUELS (contexte seulement):\n' + json.dumps(state or {}, ensure_ascii=False)
         + '\nPAGES:\n' + json.dumps([{'index': i, **page} for i, page in enumerate(pages)], ensure_ascii=False)
     )

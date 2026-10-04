@@ -403,6 +403,102 @@ La valeur numérique explicite reste prioritaire. Les qualificatifs non déclar�
 Identifiant technique fixe à 42 par autorisation antérieure, modifiable uniquement sur demande explicite chiffrée. Faible, forte, meilleure ou nouvelle graine ne désignent pas une intensité physique ; demander une valeur. Ne pas proposer de graine qualitative.
 
 
+## Formules du modèle
+
+### Trafic
+
+`T(t) = clip((R(t)/Q98) × C × S × W × traffic_level × D_j, 0, 2)` — sans unité
+
+R est le profil de pointes et de nuit ; Q98 est sa référence déterministe au 98e percentile, C le contexte, S la saison, W le jour de semaine et D_j un tirage journalier normal de moyenne 1 et écart-type 0,06. Aucun comptage de véhicules.
+
+TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+
+### Pointes
+
+`G(h;c,w,A) = A × exp(-0,5 × ((h-c)/w)^2)` — sans unité
+
+h, c et w sont en heures ; A est sans unité. R = 0,16 + 0,06 cos(2π(h-3)/24) + G(h;c_m,w,1) + G(h;c_s,1,15w,1,1), plus G(h;18,7;2,5;0,25) en contexte urbain. w est un écart-type temporel.
+
+TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+
+### Facteurs géométriques
+
+`F_alt = 1 + max(altitude_m-500,0)/6000 ; F_pente = 1 + abs(gradient_percent)/20 ; F_profondeur = 1 + min(max_depth_m,800)/6000` — sans unité
+
+Altitude et profondeur en m ; pente saisie en %, donc 2 pour 2 %. Le plafond de profondeur concerne le facteur, pas la longueur ni la validité géologique.
+
+TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+
+### Éclairage
+
+`P_lumière(t) = k_l × L × N_tubes × N_voies × min(f_min + (1-f_min)(1-J(t)) + c_l T(t), 1)` — kW
+
+L = length_m/1000 en km. k_l en kW/(km·voie), f_min et c_l sans unité dépendent de la catégorie. J(t) est le profil synthétique de lumière du jour, sans éphéméride locale ; même une catégorie fixed est modulée.
+
+TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+
+### Ventilation
+
+`P_vent(t) = k_v × L × N_tubes × (0,15 + traffic_sensitivity × T(t)) × F_alt × F_pente × (1 + pollution_sensitivity × I_p(t) + accident_sensitivity × I_a(t))` — kW
+
+k_v est en kW/(km·tube). I_p et I_a sont des indicateurs 0/1 d’événements synthétiques. Les deux coefficients s’ajoutent si les deux événements sont actifs ; ce n’est pas un modèle de sécurité.
+
+TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+
+### Auxiliaires
+
+`P_aux(t) = aux_kw_per_km_tube × L × N_tubes × F_profondeur × Z(t)` — kW
+
+Z(t) suit une loi normale de moyenne 1 et d’écart-type 0,025 ; ce tirage reste actif même si noise_sigma vaut zéro.
+
+TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+
+### Puissance totale
+
+`P(t) = max((base_fixed_kw + P_lumière(t) + P_vent(t) + P_aux(t)) × (1 + ε(t)), 0)` — kW
+
+ε suit une loi normale de moyenne zéro et d’écart-type noise_sigma. La graine fixe rend les trajectoires reproductibles, sans supprimer les tirages.
+
+TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+
+### Énergie et annualisation
+
+`E_pas = P(t) × freq_minutes/60 ; E_MWh = somme(E_pas)/1000 ; E_ann = E_MWh × 365/n_days` — kWh ; MWh ; MWh/an
+
+L’énergie journalière somme les pas d’une journée. La puissance quotidienne est la moyenne des puissances. E_ann est une extrapolation de la période simulée ; aucune mesure annuelle terrain.
+
+TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+
+### Événements
+
+`B_j ~ Bernoulli(p) ; I(t) = 1 pendant l’événement si B_j = 1` — probabilité sans unité ; durée en h
+
+p est la probabilité journalière déclarée, pas un taux par véhicule. Pollution : début uniforme de 7 à 18 h, durée de 2 à 8 h. Accident : début de 6,5 à 20 h, durée de 0,5 à 3 h. Un événement peut déborder sur le lendemain.
+
+TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+
+### Coefficients des catégories
+
+| Éclairage | k_l [kW/(km·voie)] | c_l [1] | f_min [1] |
+|---|---|---|---|
+| LED adaptive | 16 | 0.18 | 0.2 |
+| LED fixed | 22 | 0.06 | 0.28 |
+| mixed | 28 | 0.04 | 0.32 |
+| sodium fixed | 35 | 0.03 | 0.4 |
+
+| Ventilation | k_v [kW/(km·tube)] |
+|---|---|
+| natural/low ventilation | 45 |
+| longitudinal | 120 |
+| semi-transverse | 200 |
+| transverse | 320 |
+
+Facteurs `context` sans unité : urban=1.2, peri-urban=1.0, rural=0.78.
+
+Facteurs `season` sans unité : winter=1.12, spring=0.98, summer=0.92, autumn=1.03.
+
+Facteurs `weekday` sans unité : weekday=1.0, saturday=0.86, sunday=0.78.
+
 ## Sorties
 
 Les quantités concernent tous les tubes. Les séries ne déclarent pas de fuseau horaire.

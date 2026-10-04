@@ -38,6 +38,8 @@ def main():
                 "tasks": descriptor["tasks"], "nature": descriptor["nature"],
                 "uncertainty": descriptor["uncertainty"], "validity_notes": descriptor["validity_notes"],
                 "output_tables": tables,
+                "model_equations": descriptor.get('model_equations', []),
+                "model_coefficients": descriptor.get('model_coefficients', {}),
                 "execution_policy": {"validator": "websemantic.core.validation:validate",
                     "additional_adapter_checks": ["Pinned and unchanged backend", "freq_minutes in 5,10,15,30,60",
                         "n_days * 1440 / freq_minutes * n_runs <= 2000000", "peak_width_h > 0",
@@ -106,6 +108,17 @@ def main():
                 lines += ["", scale['authority'], "", "La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.", ""]
             elif spec.get('qualitative_policy'):
                 lines += [f"### Interprétation — `{group}.{name}`", "", spec['qualitative_policy'], ""]
+    lines += ["", "## Formules du modèle", ""]
+    for entry in descriptor.get('model_equations', []):
+        lines += [f"### {entry['label']}", "", f"`{entry['expression']}` — {entry['unit']}", "", entry['meaning'], "", entry['reference'], ""]
+    coefficients = descriptor.get('model_coefficients', {})
+    if coefficients:
+        lines += ["### Coefficients des catégories", "", "| Éclairage | k_l [kW/(km·voie)] | c_l [1] | f_min [1] |", "|---|---|---|---|"]
+        lines += [f"| {name} | {values[0]} | {values[1]} | {values[2]} |" for name, values in coefficients['lighting'].items()]
+        lines += ["", "| Ventilation | k_v [kW/(km·tube)] |", "|---|---|"]
+        lines += [f"| {name} | {value} |" for name, value in coefficients['ventilation_kw_per_km_tube'].items()]
+        for key in ('context', 'season', 'weekday'):
+            lines += ["", f"Facteurs `{key}` sans unité : " + ', '.join(f'{name}={value}' for name,value in coefficients[key].items()) + '.']
     lines += ["", "## Sorties", "", "Les quantités concernent tous les tubes. Les séries ne déclarent pas de fuseau horaire.", ""]
     for name,info in tables.items():
         lines += [f"### {name}.csv", "", info["aggregation"], "", "| Colonne | Unité | Sens |", "|---|---|---|"]

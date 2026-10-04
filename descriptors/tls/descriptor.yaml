@@ -65,20 +65,32 @@ inputs:
           aliases:
           - tunnel court
           - faible longueur
+          answer_aliases:
+          - faible
+          - peu
         courant:
           value: 1500
           aliases:
           - longueur courante
+          answer_aliases:
+          - courant
+          - habituel
         élevé:
           fraction: 0.75
           aliases:
           - tunnel long
           - grande longueur
+          answer_aliases:
+          - élevé
+          - fort
         très élevé:
           fraction: 1.0
           aliases:
           - tunnel très long
           - très grande longueur
+          answer_aliases:
+          - très élevé
+          - très fort
   n_tubes:
     type: int
     unit: unit:NUM
@@ -118,18 +130,27 @@ inputs:
           value: 1
           aliases:
           - peu de tubes
+          answer_aliases:
+          - peu
         courant:
           value: 2
           aliases:
           - nombre courant de tubes
+          answer_aliases:
+          - courant
+          - habituel
         beaucoup:
           value: 3
           aliases:
           - beaucoup de tubes
+          answer_aliases:
+          - beaucoup
         maximum de référence:
           value: 4
           aliases:
           - énormément de tubes
+          answer_aliases:
+          - énormément
   n_lanes_per_tube:
     type: int
     unit: unit:NUM
@@ -167,18 +188,27 @@ inputs:
           value: 1
           aliases:
           - peu de voies par tube
+          answer_aliases:
+          - peu
         courant:
           value: 2
           aliases:
           - nombre courant de voies par tube
+          answer_aliases:
+          - courant
+          - habituel
         beaucoup:
           value: 3
           aliases:
           - beaucoup de voies par tube
+          answer_aliases:
+          - beaucoup
         maximum de référence:
           value: 4
           aliases:
           - énormément de voies par tube
+          answer_aliases:
+          - énormément
   altitude_m:
     type: float
     unit: unit:M
@@ -212,20 +242,32 @@ inputs:
           aliases:
           - faible altitude
           - basse altitude
+          answer_aliases:
+          - faible
+          - peu
         courant:
           value: 300
           aliases:
           - altitude courante
+          answer_aliases:
+          - courant
+          - habituel
         élevé:
           fraction: 0.75
           aliases:
           - haute altitude
           - altitude élevée
+          answer_aliases:
+          - élevé
+          - fort
         très élevé:
           fraction: 1.0
           aliases:
           - très haute altitude
           - altitude très élevée
+          answer_aliases:
+          - très élevé
+          - très fort
   max_depth_m:
     type: float
     unit: unit:M
@@ -258,20 +300,32 @@ inputs:
           aliases:
           - faible profondeur
           - tunnel peu profond
+          answer_aliases:
+          - faible
+          - peu
         courant:
           value: 80
           aliases:
           - profondeur courante
+          answer_aliases:
+          - courant
+          - habituel
         élevé:
           fraction: 0.75
           aliases:
           - grande profondeur
           - tunnel profond
+          answer_aliases:
+          - élevé
+          - fort
         très élevé:
           fraction: 1.0
           aliases:
           - très grande profondeur
           - tunnel très profond
+          answer_aliases:
+          - très élevé
+          - très fort
   gradient_percent:
     type: float
     unit: unit:PERCENT
@@ -303,20 +357,32 @@ inputs:
           aliases:
           - faible pente
           - pente faible
+          answer_aliases:
+          - faible
+          - peu
         courant:
           value: 2.0
           aliases:
           - pente courante
+          answer_aliases:
+          - courant
+          - habituel
         élevé:
           fraction: 0.75
           aliases:
           - forte pente
           - pente forte
+          answer_aliases:
+          - élevé
+          - fort
         très élevé:
           fraction: 1.0
           aliases:
           - très forte pente
           - pente très forte
+          answer_aliases:
+          - très élevé
+          - très fort
   tunnel_context:
     type: category
     values:
@@ -456,20 +522,32 @@ inputs:
           aliases:
           - faible charge auxiliaire
           - auxiliaires peu puissants
+          answer_aliases:
+          - faible
+          - peu
         courant:
           value: 35.0
           aliases:
           - charge auxiliaire courante
+          answer_aliases:
+          - courant
+          - habituel
         élevé:
           fraction: 0.75
           aliases:
           - forte charge auxiliaire
           - auxiliaires puissants
+          answer_aliases:
+          - élevé
+          - fort
         très élevé:
           fraction: 1.0
           aliases:
           - très forte charge auxiliaire
           - auxiliaires très puissants
+          answer_aliases:
+          - très élevé
+          - très fort
   base_fixed_kw:
     type: float
     unit: unit:KiloW
@@ -502,20 +580,32 @@ inputs:
           aliases:
           - faible charge fixe
           - charge fixe faible
+          answer_aliases:
+          - faible
+          - peu
         courant:
           value: 40.0
           aliases:
           - charge fixe courante
+          answer_aliases:
+          - courant
+          - habituel
         élevé:
           fraction: 0.75
           aliases:
           - forte charge fixe
           - charge fixe élevée
+          answer_aliases:
+          - élevé
+          - fort
         très élevé:
           fraction: 1.0
           aliases:
           - très forte charge fixe
           - charge fixe très élevée
+          answer_aliases:
+          - très élevé
+          - très fort
   traffic_level:
     type: float
     unit: unit:UNITLESS
@@ -553,6 +643,8 @@ inputs:
           - trafic important
           - trafic élevé
           - fort trafic
+          answer_aliases:
+          - beaucoup
         énormément:
           fraction: 1.0
           aliases:
@@ -560,16 +652,24 @@ inputs:
           - énormément de traffic
           - trafic très élevé
           - trafic énorme
+          answer_aliases:
+          - énormément
         faible:
           value: 0.3
           aliases:
           - peu de trafic
           - faible trafic
           - trafic faible
+          answer_aliases:
+          - faible
+          - peu
         courant:
           value: 1.0
           aliases:
           - trafic courant
+          answer_aliases:
+          - courant
+          - habituel
   morning_peak_hour:
     type: float
     unit: unit:HR
@@ -601,15 +701,22 @@ inputs:
           aliases:
           - pointe du matin tôt
           - pic du matin précoce
+          answer_aliases:
+          - tôt
         courant:
           value: 8
           aliases:
           - pointe du matin courante
+          answer_aliases:
+          - courant
+          - habituel
         tard:
           value: 11
           aliases:
           - pointe du matin tardive
           - pic du matin tardif
+          answer_aliases:
+          - tard
   evening_peak_hour:
     type: float
     unit: unit:HR
@@ -641,15 +748,22 @@ inputs:
           aliases:
           - pointe du soir tôt
           - pic du soir précoce
+          answer_aliases:
+          - tôt
         courant:
           value: 18
           aliases:
           - pointe du soir courante
+          answer_aliases:
+          - courant
+          - habituel
         tard:
           value: 22
           aliases:
           - pointe du soir tardive
           - pic du soir tardif
+          answer_aliases:
+          - tard
   peak_width_h:
     type: float
     unit: unit:HR
@@ -684,20 +798,32 @@ inputs:
           aliases:
           - pics de trafic étroits
           - pointes étroites
+          answer_aliases:
+          - faible
+          - peu
         courant:
           value: 1.4
           aliases:
           - largeur de pointe courante
+          answer_aliases:
+          - courant
+          - habituel
         élevé:
           fraction: 0.75
           aliases:
           - pics de trafic larges
           - pointes larges
+          answer_aliases:
+          - élevé
+          - fort
         très élevé:
           fraction: 1.0
           aliases:
           - pics de trafic très larges
           - pointes très larges
+          answer_aliases:
+          - très élevé
+          - très fort
   traffic_sensitivity:
     type: float
     unit: unit:UNITLESS
@@ -731,18 +857,30 @@ inputs:
           value: 0.1625
           aliases:
           - faible sensibilité au trafic
+          answer_aliases:
+          - faible
+          - peu
         courant:
           value: 0.65
           aliases:
           - sensibilité au trafic courante
+          answer_aliases:
+          - courant
+          - habituel
         élevé:
           fraction: 0.75
           aliases:
           - forte sensibilité au trafic
+          answer_aliases:
+          - élevé
+          - fort
         très élevé:
           fraction: 1.0
           aliases:
           - très forte sensibilité au trafic
+          answer_aliases:
+          - très élevé
+          - très fort
   noise_sigma:
     type: float
     unit: unit:UNITLESS
@@ -781,20 +919,32 @@ inputs:
           aliases:
           - faible bruit relatif
           - faible bruit gaussien
+          answer_aliases:
+          - faible
+          - peu
         courant:
           value: 0.06
           aliases:
           - bruit relatif courant
+          answer_aliases:
+          - courant
+          - habituel
         élevé:
           fraction: 0.75
           aliases:
           - fort bruit relatif
           - bruit gaussien élevé
+          answer_aliases:
+          - élevé
+          - fort
         très élevé:
           fraction: 1.0
           aliases:
           - très fort bruit relatif
           - bruit gaussien très élevé
+          answer_aliases:
+          - très élevé
+          - très fort
   pollution_probability_per_day:
     type: float
     unit: unit:UNITLESS
@@ -834,20 +984,32 @@ inputs:
           aliases:
           - faible probabilité de pollution
           - événements de pollution rares
+          answer_aliases:
+          - faible
+          - peu
         courant:
           value: 0.05
           aliases:
           - probabilité de pollution courante
+          answer_aliases:
+          - courant
+          - habituel
         élevé:
           fraction: 0.75
           aliases:
           - forte probabilité de pollution
           - événements de pollution fréquents
+          answer_aliases:
+          - élevé
+          - fort
         très élevé:
           fraction: 1.0
           aliases:
           - très forte probabilité de pollution
           - événements de pollution très fréquents
+          answer_aliases:
+          - très élevé
+          - très fort
   accident_probability_per_day:
     type: float
     unit: unit:UNITLESS
@@ -887,20 +1049,32 @@ inputs:
           aliases:
           - faible probabilité d’accident
           - accidents rares
+          answer_aliases:
+          - faible
+          - peu
         courant:
           value: 0.015
           aliases:
           - probabilité d’accident courante
+          answer_aliases:
+          - courant
+          - habituel
         élevé:
           fraction: 0.75
           aliases:
           - forte probabilité d’accident
           - accidents fréquents
+          answer_aliases:
+          - élevé
+          - fort
         très élevé:
           fraction: 1.0
           aliases:
           - très forte probabilité d’accident
           - accidents très fréquents
+          answer_aliases:
+          - très élevé
+          - très fort
   pollution_sensitivity:
     type: float
     unit: unit:UNITLESS
@@ -935,18 +1109,30 @@ inputs:
           value: 0.1375
           aliases:
           - faible sensibilité à la pollution
+          answer_aliases:
+          - faible
+          - peu
         courant:
           value: 0.55
           aliases:
           - sensibilité à la pollution courante
+          answer_aliases:
+          - courant
+          - habituel
         élevé:
           fraction: 0.75
           aliases:
           - forte sensibilité à la pollution
+          answer_aliases:
+          - élevé
+          - fort
         très élevé:
           fraction: 1.0
           aliases:
           - très forte sensibilité à la pollution
+          answer_aliases:
+          - très élevé
+          - très fort
   accident_sensitivity:
     type: float
     unit: unit:UNITLESS
@@ -981,18 +1167,30 @@ inputs:
           value: 0.1875
           aliases:
           - faible sensibilité aux accidents
+          answer_aliases:
+          - faible
+          - peu
         courant:
           value: 0.75
           aliases:
           - sensibilité aux accidents courante
+          answer_aliases:
+          - courant
+          - habituel
         élevé:
           fraction: 0.75
           aliases:
           - forte sensibilité aux accidents
+          answer_aliases:
+          - élevé
+          - fort
         très élevé:
           fraction: 1.0
           aliases:
           - très forte sensibilité aux accidents
+          answer_aliases:
+          - très élevé
+          - très fort
 experiment:
   start_date:
     type: date
@@ -1057,20 +1255,29 @@ experiment:
           aliases:
           - courte période de simulation
           - simulation courte
+          answer_aliases:
+          - court
         courant:
           value: 7
           aliases:
           - durée de simulation courante
+          answer_aliases:
+          - courant
+          - habituel
         long:
           value: 365
           aliases:
           - longue période de simulation
           - simulation longue
+          answer_aliases:
+          - long
         très long:
           value: 1095
           aliases:
           - très longue période de simulation
           - simulation très longue
+          answer_aliases:
+          - très long
   freq_minutes:
     type: int
     unit: unit:MIN
@@ -1104,24 +1311,34 @@ experiment:
           aliases:
           - pas très fin
           - résolution temporelle très fine
+          answer_aliases:
+          - très fin
         fin:
           value: 10
           aliases:
           - pas fin
           - résolution temporelle fine
+          answer_aliases:
+          - fin
         intermédiaire:
           value: 15
           aliases:
           - pas intermédiaire
+          answer_aliases:
+          - intermédiaire
         large:
           value: 30
           aliases:
           - pas large
+          answer_aliases:
+          - large
         grossier:
           value: 60
           aliases:
           - pas grossier
           - résolution temporelle grossière
+          answer_aliases:
+          - grossier
   n_runs:
     type: int
     unit: unit:NUM
@@ -1161,18 +1378,27 @@ experiment:
           value: 1
           aliases:
           - peu de réalisations
+          answer_aliases:
+          - peu
         courant:
           value: 3
           aliases:
           - nombre courant de réalisations
+          answer_aliases:
+          - courant
+          - habituel
         beaucoup:
           value: 30
           aliases:
           - beaucoup de réalisations
+          answer_aliases:
+          - beaucoup
         maximum de référence:
           value: 50
           aliases:
           - énormément de réalisations
+          answer_aliases:
+          - énormément
   base_seed:
     operational_default: true
     operational_default_source: 'Politique de reproductibilité des essais : graine initiale fixe à 42,
@@ -1322,6 +1548,8 @@ presentation:
     - total_mwh
     - annualized_mwh
     - peak_kw
+  formula_note: Formules du modèle synthétique épinglé, sans calibration terrain. Coefficients selon les
+    catégories retenues ; valeurs et symboles dans docs/tls-reference.md.
 semantics:
   namespace: tls
   intent_indicators:
@@ -1448,7 +1676,17 @@ geography:
     corporels, l’air ambiant ne détermine pas des événements de ventilation en tunnel; les probabilités
     TLS restent des défauts de démonstration. Ne prétends pas disposer de mesures en temps réel. Justifie
     chaque proposition en une phrase, cite uniquement des indices de sources consultées. Au plus 100 mots
-    dérivés de chaque source.'
+    dérivés de chaque source. Pilote ensuite l’échange avec questions : une question prioritaire, au plus
+    deux, rattachées à leurs fields canoniques et blocking (false pour affinement facultatif). Demande
+    le type de site ou le choix d’une hypothèse si cela aiderait. Pour les accidents : si les sources
+    ne permettent pas une comparaison locale, dis-le et demande, pour ce tunnel fictif, de garder le défaut,
+    de définir une faible/forte probabilité journalière ou de fournir une donnée locale. Ne demande pas
+    au lecteur d’inventer un fait mesuré. Une commune ne permet pas de classer un tunnel en peu/beaucoup
+    d’accidents ; seule une source avec période, périmètre, exposition et comparaison peut soutenir une
+    qualification documentaire. Aucun transfert direct de BAAC vers les probabilités TLS. Questions ouvertes,
+    choix intelligibles et unités ; questions=[] si rien d’utile. Formule les questions comme pour un
+    collègue : noms français et unités, pas d’identifiants internes entre parenthèses, ni de catalogue
+    de paramètres.'
   display_fields:
   - tunnel_context
   - traffic_level
@@ -1472,3 +1710,144 @@ geography:
       max_exclusive: 24
     peak_width_h:
       min_exclusive: 0
+model_equations:
+- id: equation-1
+  label: Trafic
+  expression: T(t) = clip((R(t)/Q98) × C × S × W × traffic_level × D_j, 0, 2)
+  unit: sans unité
+  meaning: R est le profil de pointes et de nuit ; Q98 est sa référence déterministe au 98e percentile,
+    C le contexte, S la saison, W le jour de semaine et D_j un tirage journalier normal de moyenne 1 et
+    écart-type 0,06. Aucun comptage de véhicules.
+  reference: TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+- id: equation-2
+  label: Pointes
+  expression: G(h;c,w,A) = A × exp(-0,5 × ((h-c)/w)^2)
+  unit: sans unité
+  meaning: h, c et w sont en heures ; A est sans unité. R = 0,16 + 0,06 cos(2π(h-3)/24) + G(h;c_m,w,1)
+    + G(h;c_s,1,15w,1,1), plus G(h;18,7;2,5;0,25) en contexte urbain. w est un écart-type temporel.
+  reference: TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+- id: equation-3
+  label: Facteurs géométriques
+  expression: F_alt = 1 + max(altitude_m-500,0)/6000 ; F_pente = 1 + abs(gradient_percent)/20 ; F_profondeur
+    = 1 + min(max_depth_m,800)/6000
+  unit: sans unité
+  meaning: Altitude et profondeur en m ; pente saisie en %, donc 2 pour 2 %. Le plafond de profondeur
+    concerne le facteur, pas la longueur ni la validité géologique.
+  reference: TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+- id: equation-4
+  label: Éclairage
+  expression: P_lumière(t) = k_l × L × N_tubes × N_voies × min(f_min + (1-f_min)(1-J(t)) + c_l T(t), 1)
+  unit: kW
+  meaning: L = length_m/1000 en km. k_l en kW/(km·voie), f_min et c_l sans unité dépendent de la catégorie.
+    J(t) est le profil synthétique de lumière du jour, sans éphéméride locale ; même une catégorie fixed
+    est modulée.
+  reference: TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+- id: equation-5
+  label: Ventilation
+  expression: P_vent(t) = k_v × L × N_tubes × (0,15 + traffic_sensitivity × T(t)) × F_alt × F_pente ×
+    (1 + pollution_sensitivity × I_p(t) + accident_sensitivity × I_a(t))
+  unit: kW
+  meaning: k_v est en kW/(km·tube). I_p et I_a sont des indicateurs 0/1 d’événements synthétiques. Les
+    deux coefficients s’ajoutent si les deux événements sont actifs ; ce n’est pas un modèle de sécurité.
+  reference: TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+- id: equation-6
+  label: Auxiliaires
+  expression: P_aux(t) = aux_kw_per_km_tube × L × N_tubes × F_profondeur × Z(t)
+  unit: kW
+  meaning: Z(t) suit une loi normale de moyenne 1 et d’écart-type 0,025 ; ce tirage reste actif même si
+    noise_sigma vaut zéro.
+  reference: TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+- id: equation-7
+  label: Puissance totale
+  expression: P(t) = max((base_fixed_kw + P_lumière(t) + P_vent(t) + P_aux(t)) × (1 + ε(t)), 0)
+  unit: kW
+  meaning: ε suit une loi normale de moyenne zéro et d’écart-type noise_sigma. La graine fixe rend les
+    trajectoires reproductibles, sans supprimer les tirages.
+  reference: TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+- id: equation-8
+  label: Énergie et annualisation
+  expression: E_pas = P(t) × freq_minutes/60 ; E_MWh = somme(E_pas)/1000 ; E_ann = E_MWh × 365/n_days
+  unit: kWh ; MWh ; MWh/an
+  meaning: L’énergie journalière somme les pas d’une journée. La puissance quotidienne est la moyenne
+    des puissances. E_ann est une extrapolation de la période simulée ; aucune mesure annuelle terrain.
+  reference: TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+- id: equation-9
+  label: Événements
+  expression: B_j ~ Bernoulli(p) ; I(t) = 1 pendant l’événement si B_j = 1
+  unit: probabilité sans unité ; durée en h
+  meaning: 'p est la probabilité journalière déclarée, pas un taux par véhicule. Pollution : début uniforme
+    de 7 à 18 h, durée de 2 à 8 h. Accident : début de 6,5 à 20 h, durée de 0,5 à 3 h. Un événement peut
+    déborder sur le lendemain.'
+  reference: TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+model_coefficients:
+  lighting:
+    LED adaptive:
+    - 16
+    - 0.18
+    - 0.2
+    LED fixed:
+    - 22
+    - 0.06
+    - 0.28
+    mixed:
+    - 28
+    - 0.04
+    - 0.32
+    sodium fixed:
+    - 35
+    - 0.03
+    - 0.4
+  lighting_columns:
+  - k_l [kW/(km·voie)]
+  - c_l [1]
+  - f_min [1]
+  ventilation_kw_per_km_tube:
+    natural/low ventilation: 45
+    longitudinal: 120
+    semi-transverse: 200
+    transverse: 320
+  context:
+    urban: 1.2
+    peri-urban: 1.0
+    rural: 0.78
+  season:
+    winter: 1.12
+    spring: 0.98
+    summer: 0.92
+    autumn: 1.03
+  weekday:
+    weekday: 1.0
+    saturday: 0.86
+    sunday: 0.78
+  reference: TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd.
+coefficient_display:
+- field: inputs.lighting_type
+  template: 'Éclairage retenu {choice} : k_l={k_l} kW/(km·voie), c_l={c_l}, f_min={f_min} (sans unité).'
+  values:
+    LED adaptive:
+      k_l: 16
+      c_l: 0.18
+      f_min: 0.2
+    LED fixed:
+      k_l: 22
+      c_l: 0.06
+      f_min: 0.28
+    mixed:
+      k_l: 28
+      c_l: 0.04
+      f_min: 0.32
+    sodium fixed:
+      k_l: 35
+      c_l: 0.03
+      f_min: 0.4
+- field: inputs.ventilation_type
+  template: 'Ventilation retenue {choice} : k_v={k_v} kW/(km·tube).'
+  values:
+    natural/low ventilation:
+      k_v: 45
+    longitudinal:
+      k_v: 120
+    semi-transverse:
+      k_v: 200
+    transverse:
+      k_v: 320

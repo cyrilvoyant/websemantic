@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from html.parser import HTMLParser
 from math import isfinite
 
+from websemantic.conversation import validate_questions
 from websemantic.core.validation import Parameter
 from websemantic.gemini import GeminiError, api_key
 
@@ -91,6 +92,11 @@ def research(place, model, descriptor):
             'sources': {'type': 'array', 'items': {'type': 'integer'}},
         }, 'required': ['field', 'value', 'rationale', 'sources']}},
     }, 'required': ['summary', 'topics', 'proposals']}
+    fields = [f'{group}.{name}' for group in ('inputs', 'experiment') for name in descriptor[group]]
+    schema['properties']['questions'] = {'type': 'array', 'items': {'type': 'object', 'properties': {
+        'question': {'type': 'string'}, 'fields': {'type': 'array', 'items': {'type': 'string', 'enum': fields}},
+        'blocking': {'type': 'boolean'}}, 'required': ['question', 'fields', 'blocking']}}
+    schema['required'].append('questions')
     prompt = (
         config['guidance'].replace('{city}', city)
         + '\nPARAMETRES ET UNITES:\n' + json.dumps({name: descriptor['inputs'][name] for name in config['fields']}, ensure_ascii=False)
@@ -123,6 +129,7 @@ def research(place, model, descriptor):
 def apply_report(session, request, report):
     """Validate all proposals before mutation. Explicit user values take precedence."""
     config = session.descriptor['geography']
+    questions = validate_questions(report.get('questions', []), session.descriptor)
     updates = {}
     sources = report['sources']
     if {topic['topic'] for topic in report['topics']} != set(config['topics']) or not isinstance(report['summary'], str):
@@ -168,6 +175,7 @@ def apply_report(session, request, report):
     session.geographic_context = report
     session.geographic_pending = False
     session.pending_clarification = None
+    session.add_questions(questions)
     session.history.append({'user': request, 'assistant': report['summary'], 'geographic_context': report})
 
 
@@ -194,3 +202,5 @@ def show_report(session):
     for i, source in enumerate(report['sources']):
         status = 'consulté' if source['status'] == 'consulted' else 'inaccessible'
         print(f"[{i}] {source['url']} — {status}, {source['retrieved_at'][:10]}")
+    for question in session.questions:
+        print('Pour préciser :', question['question'])

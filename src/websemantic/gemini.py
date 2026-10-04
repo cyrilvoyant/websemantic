@@ -69,7 +69,10 @@ def extract(request, descriptor, history, model="gemini-3.5-flash-lite", state=N
             "message": {"type": "string"},
             "needs_web": {"type": "boolean"},
             "detail_level": {"type": "string", "enum": ["summary", "full"]},
-            "actions": {"type": "array", "items": {"type": "string", "enum": ["propose", "accept", "details", "explain", "suggest", "quit"]}},
+            "actions": {"type": "array", "items": {"type": "string", "enum": ["propose", "accept", "details", "explain", "suggest", "formulas", "quit"]}},
+            "questions": {"type": "array", "items": {"type": "object", "properties": {
+                "question": {"type": "string"}, "fields": {"type": "array", "items": {"type": "string", "enum": fields}},
+                "blocking": {"type": "boolean"}}, "required": ["question", "fields", "blocking"]}},
             "parameter": {"type": "string", "enum": ["", *fields]},
             "acceptance_evidence": {"type": "string"},
             "task": {
@@ -90,7 +93,7 @@ def extract(request, descriptor, history, model="gemini-3.5-flash-lite", state=N
                 },
             },
         },
-        "required": ["message", "needs_web", "task", "updates", "actions", "parameter", "acceptance_evidence", "detail_level"],
+        "required": ["message", "needs_web", "task", "updates", "actions", "parameter", "acceptance_evidence", "detail_level", "questions"],
     }
     instructions = (
         "Tu interprètes un scénario scientifique pour le logiciel décrit. Réponds en français, sobrement, en deux à quatre phrases. "
@@ -102,22 +105,32 @@ def extract(request, descriptor, history, model="gemini-3.5-flash-lite", state=N
         "l'unité source si une conversion sur preuve est déclarée. Un type catégorie/date/identifiant n'est pas une unité physique. "
         "needs_web=true pour références, normes, chiffres externes ou explications nécessitant des sources ; false pour valeurs, "
         "défauts, définitions déclarées et simulations couvertes. Avec needs_web=true, ne prétends pas avoir consulté des sources. "
+        "Les équations et coefficients présents dans model_equations/model_coefficients sont internes au contrat : "
+        "actions=formulas et needs_web=false pour leur explication ; pas de recherche externe pour le tableau ou ces formules. "
         "Pour plusieurs scénarios, ne fusionne pas leurs paramètres ; demande une clarification. "
         "task correspond à une tâche déclarée, ou unsupported hors périmètre. Une précision conserve la tâche courante. "
         "Consulte l'état actuel : ne redemande pas les paramètres déjà présents ; les hypothèses nécessitent une acceptation explicite. "
+        "Pilote l'échange : questions contient au plus deux questions ciblées, prioritairement une, avec les champs concernés. "
+        "Si un doute change le scénario (sens ambigu, contradiction, unité inconnue), blocking=true et aucun chiffre inventé "
+        "pour ce champ. Une piste facultative d'affinement a blocking=false. Donne des choix compréhensibles et leurs unités, "
+        "sans imposer de jargon. N'interroge pas à nouveau un choix clair ; pas de questions pour une consultation seule. "
+        "Les questions ouvertes sont dans l'état courant. Utilise leur contexte pour interpréter une réponse courte, "
+        "Une réponse ciblée choisissant le défaut d'un champ interrogé peut fournir ce défaut déclaré dans updates, "
+        "avec evidence citant exactement le choix du défaut ; ce n'est pas une acceptation globale des autres champs. "
+        "mais evidence reste la citation exacte du nouveau message. questions=[] quand il n'y a pas de doute. "
         "Reste au niveau de l'objectif et des choix principaux. Les réglages operational_default sont déjà autorisés "
         "et fixes : ne les redemande pas, n'en parle pas sauf question explicite, ne les change pas sans valeur fournie. "
         "detail_level=summary par défaut ; full seulement si l'utilisateur demande tous les détails/paramètres, "
         "y compris techniques. Une graine fixe rend le calcul reproductible ; elle affecte les tirages stochastiques, "
         "pas la physique déterministe. "
         "Comprends les demandes en langage naturel : actions=propose pour proposer les valeurs manquantes, "
-        "details pour afficher le tableau avec unités, explain pour définir un paramètre (parameter=chemin exact, "
+        "details pour afficher défaut et valeur retenue avec unités, formulas pour les formules vérifiées du modèle, explain pour définir un paramètre (parameter=chemin exact, "
         "identifie aussi les libellés et alias), suggest pour cinq pistes, accept pour une acceptation EXPLICITE "
         "des hypothèses proposées ou des valeurs par défaut, quit pour quitter. Sinon actions=[]. "
         "Pour accept, acceptance_evidence est la citation exacte affirmative de l'accord (ex. J'accepte ces hypothèses). "
         "Une négation, une question ou proposer sans accepter n'est jamais un accord ; acceptance_evidence='' sinon. "
         "Prends le reste par défaut signifie actions=[propose,accept] avec cette phrase comme acceptance_evidence. "
-        "actions=propose n'autorise pas à ajouter des défauts dans updates ; les défauts sont ajoutés localement, non acceptés. "
+        "actions=propose n'autorise pas à ajouter des défauts dans updates, sauf réponse ciblée explicitement choisie ; les défauts manquants sont ajoutés localement, non acceptés. "
         "Extrais d'abord TOUS les paramètres explicitement donnés même si une autre action est demandée. "
         "Ne donne jamais une valeur inventée pour moyen/ancien ; une recherche documentaire peut être nécessaire. "
         "Les diagnostics de validation et le calcul demandé seront effectués localement. "

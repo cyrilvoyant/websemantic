@@ -5,6 +5,7 @@ import re
 import unicodedata
 from dataclasses import replace
 
+from websemantic.conversation import validate_questions
 from websemantic.core.validation import Parameter, Scenario, validate
 from websemantic.qualitative import resolve as resolve_qualitative
 from websemantic.units import normalize, parse_number
@@ -32,6 +33,18 @@ class Session:
         self.geographic_pending = False
         self.geographic_context = None
         self.web_reports = []
+        self.questions = []
+
+    def refresh_questions(self):
+        blocking = [item['question'] for item in self.questions if item['blocking']]
+        if blocking:
+            self.pending_clarification = ' '.join(blocking)
+
+    def add_questions(self, questions):
+        validated = validate_questions(questions, self.descriptor)
+        existing = {item['question'] for item in self.questions}
+        self.questions.extend(item for item in validated if item['question'] not in existing)
+        self.refresh_questions()
 
     def request_calculation(self, request):
         text = ''.join(c for c in unicodedata.normalize('NFD', request.lower()) if not unicodedata.combining(c))
@@ -57,6 +70,9 @@ class Session:
             r"\s*[.!]?\s*"
         )
         if re.fullmatch(acceptance, text) or re.fullmatch(r"\s*(?:prends|utilise|accepte)\s+le\s+reste\s+par\s+defaut\s*[.!]?\s*", text):
+            if any(item['blocking'] for item in self.questions):
+                self.refresh_questions()
+                return self.pending_clarification
             self.propose_profile()
             self.accept_profile()
             self.pending_clarification = None
@@ -89,6 +105,7 @@ class Session:
         """Validate the entire extraction before changing state (atomic update)."""
         updates = []
         notices = []
+        questions = validate_questions(parsed.get('questions', []), self.descriptor)
         seen = set()
         task = parsed.get("task")
         if task not in self.descriptor["tasks"]["supported"] + ["unsupported"]:
@@ -119,7 +136,8 @@ class Session:
             if not evidence or evidence not in request:
                 raise ValueError("Preuve absente du nouveau message.")
             spec = self.descriptor[group][name]
-            qualitative = resolve_qualitative(evidence, spec)
+            contextual = any(path in question['fields'] for question in self.questions)
+            qualitative = resolve_qualitative(evidence, spec, contextual=contextual)
             if qualitative:
                 value, source = qualitative
                 updates.append((group, name, Parameter(value, spec.get('unit'), 'assumption', evidence, source)))
@@ -154,8 +172,11 @@ class Session:
             getattr(self.scenario, group)[name] = record
         if notices:
             parsed['message'] = ' '.join(notices)
-        self.history.append({"user": request, "assistant": parsed.get("message", "")})
+        self.history.append({"user": request, "assistant": parsed.get("message", ""), "questions": questions})
         self.pending_clarification = None
+        answered = {f'{group}.{name}' for group, name, _ in updates}
+        self.questions = [question for question in self.questions if not answered.intersection(question['fields'])]
+        self.add_questions(questions)
 
     def propose_profile(self):
         for group in ("inputs", "experiment"):
@@ -195,6 +216,9 @@ class Session:
             source="Explicit terminal /set",
             accepted=True,
         )
+        self.questions = [question for question in self.questions if path not in question['fields']]
+        self.pending_clarification = None
+        self.refresh_questions()
 
     def result(self):
         return validate(self.scenario, self.descriptor)

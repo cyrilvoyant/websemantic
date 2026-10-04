@@ -9,13 +9,18 @@ def fold(text):
                             if not unicodedata.combining(c)).split())
 
 
-def resolve(evidence, spec):
-    scale = spec.get('qualitative_scale')
-    if not scale:
-        return None
+def resolve(evidence, spec, contextual=False):
     text = fold(evidence)
     # A numeric instruction takes precedence; this resolver does not reinterpret it.
     if re.search(r'\d', text):
+        return None
+    default_choice = text in {'defaut', 'le defaut', 'valeur par defaut', 'la valeur par defaut'} or re.search(r'\b(?:garde|conserve|utilise|prends|retiens)\s+(?:le defaut|la valeur par defaut)\b', text)
+    if contextual and default_choice and 'default' in spec:
+        if re.search(r"\b(?:pas|sans|refuse)\b|\bn['’]", text) or '?' in text:
+            raise ValueError('Confirmez le choix du défaut pour le paramètre concerné.')
+        return spec['default'], 'Défaut déclaré choisi en réponse à une question ciblée ; hypothèse à valider.'
+    scale = spec.get('qualitative_scale')
+    if not scale:
         return None
     matches = []
     for label, level in scale['levels'].items():
@@ -26,6 +31,10 @@ def resolve(evidence, spec):
     matches = [item for item in matches if not any(
         other[2] <= item[2] and other[3] >= item[3]
         and other[3] - other[2] > item[3] - item[2] for other in matches)]
+    if not matches and contextual:
+        for label, level in scale['levels'].items():
+            if text in {fold(alias) for alias in level.get('answer_aliases', [label])}:
+                matches.append((label, level, 0, len(text)))
     if not matches:
         return None
     remaining = list(text)

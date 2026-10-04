@@ -4,7 +4,20 @@ import re
 
 from websemantic.units import fold
 
-ACTIONS = {"propose", "accept", "details", "explain", "suggest", "quit"}
+ACTIONS = {"propose", "accept", "details", "explain", "suggest", "formulas", "quit"}
+
+
+def validate_questions(questions, descriptor):
+    fields = {f'{group}.{name}' for group in ('inputs', 'experiment') for name in descriptor.get(group, {})}
+    if not isinstance(questions, list) or len(questions) > 2:
+        raise ValueError('Une ou deux questions ciblées sont attendues.')
+    for question in questions:
+        if (not isinstance(question, dict) or not isinstance(question.get('question'), str)
+                or not question['question'].strip() or type(question.get('blocking')) is not bool
+                or not isinstance(question.get('fields'), list) or not question['fields']
+                or any(field not in fields for field in question['fields'])):
+            raise ValueError('Question de clarification non conforme.')
+    return questions
 
 
 def requested_actions(parsed):

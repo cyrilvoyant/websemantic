@@ -71,8 +71,8 @@ def show(session):
 
 
 def details(session, full=False):
-    print(f"{'Paramètre':28} | {'Valeur':22} | {'Unité':16} | État")
-    print('-' * 90)
+    print(f"{'Paramètre':28} | {'Défaut':16} | {'Retenue':16} | {'Unité':16} | Origine / état")
+    print('-' * 110)
     for group in ('inputs', 'experiment'):
         for name, spec in session.descriptor.get(group, {}).items():
             primary = presentation(session).get('primary_fields')
@@ -81,10 +81,32 @@ def details(session, full=False):
             record = getattr(session.scenario, group).get(name)
             label, unit, _ = describe(name, session.descriptor)
             status = 'manquant' if not record else ('fourni' if record.origin == 'provided' else ('hypothèse validée' if record.accepted else 'à valider'))
-            print(f"{label:28} | {record.value if record else '?'!s:22} | {unit:16} | {status}")
+            print(f"{label:28} | {spec.get('default', '—')!s:16} | {record.value if record else 'à préciser'!s:16} | {unit:16} | {status}")
     print('Pour aller plus loin, demandez le détail complet, une définition ou une modification en une phrase.')
     for source in sorted({record.source for group in ('inputs', 'experiment') for name, record in getattr(session.scenario, group).items() if record.source and (full or not session.descriptor[group][name].get('operational_default'))}):
         print('Source des hypothèses :', source)
+
+
+def formulas(session):
+    entries = session.descriptor.get('model_equations', [])
+    if not entries:
+        print('Les formules de cet environnement ne sont pas encore documentées.')
+        return
+    for entry in entries:
+        print(f"{entry['label']} [{entry['unit']}] : {entry['expression']}")
+        print(entry['meaning'])
+    for table in session.descriptor.get('coefficient_display', []):
+        group, name = table['field'].split('.')
+        record = getattr(session.scenario, group).get(name)
+        if record and record.value in table['values']:
+            print(table['template'].format(choice=record.value, **table['values'][record.value]))
+    print(presentation(session).get('formula_note', 'Les formules et leurs limites sont documentées dans le référentiel du modèle.'))
+
+
+def ask_questions(session, questions=None):
+    for question in session.questions if questions is None else questions:
+        if not question['blocking']:
+            print('Pour préciser :', question['question'])
 
 
 def explain(session, name):
@@ -169,7 +191,7 @@ def suggestions(session, has_results=False):
 
 
 def run_if_ready(session, args, descriptor):
-    if not session.run_requested or session.pending_clarification or session.geographic_pending or session.result().decision != 'execute':
+    if not session.run_requested or session.pending_clarification or session.geographic_pending or any(item['blocking'] for item in session.questions) or session.result().decision != 'execute':
         return None
 
     print('Calcul en cours…')
@@ -196,6 +218,7 @@ def answer_from_web(session, question, args):
     session.calls += 1
     state = {name: {'value': record.value, 'unit': record.unit} for name, record in session.scenario.inputs.items()}
     report = web_research.research(question, args.llm, state, descriptor=session.descriptor)
+    session.add_questions(report.get('questions', []))
     session.web_reports.append(report)
     session.history.append({'user': question, 'assistant': report['answer'], 'web_context': report})
     output_root = Path(getattr(args, 'output_dir', None) or args.workspace / 'runs')
@@ -203,6 +226,8 @@ def answer_from_web(session, question, args):
     with (output_root / 'documentation.jsonl').open('a', encoding='utf-8') as journal:
         journal.write(json.dumps(report, ensure_ascii=False) + '\n')
     web_research.show_report(report, presentation(session).get("short_name", "WebSemantic"))
+    for item in report.get('questions', []):
+        print('Pour préciser :', item['question'])
 
 
 def main(argv=None):
@@ -302,7 +327,7 @@ def main(argv=None):
             elif line == "/help":
                 print(
                     "/s (5 suggestions); /show (explication); /details (paramètres techniques); /profile (propose le profil); /accept (accepte ses valeurs); "
-                    "/web question (recherche documentaire); /set GROUPE.VARIABLE VALEUR; /run; /quit"
+                    "/web question (recherche documentaire); /formulas (formules); /set GROUPE.VARIABLE VALEUR; /run; /quit"
                 )
             elif line == "/show":
                 show(session)
@@ -310,6 +335,8 @@ def main(argv=None):
                 details(session)
             elif line == '/details-all':
                 details(session, full=True)
+            elif line == '/formulas':
+                formulas(session)
             elif line.startswith('/e '):
                 explain(session, line.split(maxsplit=1)[1])
             elif line.startswith('/web '):
@@ -383,6 +410,8 @@ def main(argv=None):
                         return 0
                     continue
                 place = location(line, descriptor)
+                if place and session.geographic_context and session.geographic_context.get('city') == descriptor['geography']['places'][place]['city'] and not any(word in line.lower() for word in ('recherche', 'internet', 'sources', 'actualise', 'documente')):
+                    place = None
                 if place:
                     session.geographic_pending = True
                     session.pending_clarification = 'Le contexte géographique demandé doit être consulté et validé avant le calcul.'
@@ -421,6 +450,7 @@ def main(argv=None):
                 session.calls += 1
                 load_private_key(args.workspace)
                 state = {group: {name: {'value': record.value, 'accepted': record.accepted, 'origin': record.origin} for name, record in getattr(session.scenario, group).items()} for group in ('inputs', 'experiment')}
+                state['questions'] = session.questions
                 parsed, _usage = extract(line, descriptor, session.history, args.llm, state=state)
                 if parsed.get('needs_web') is True:
                     if session.run_requested and not previous_run_requested:
@@ -455,10 +485,15 @@ def main(argv=None):
                 if 'suggest' in actions:
                     for number, (label, _) in enumerate(suggestions(session, last_output is not None), 1):
                         print(f'{number}. {label}')
+                if 'formulas' in actions:
+                    formulas(session)
                 if not (session.run_requested and session.result().decision == 'execute'):
                     print("WebSemantic >", parsed.get("message", ""))
                 if parsed["updates"] or session.run_requested or actions & {"propose", "accept"}:
                     show(session)
+                elif session.pending_clarification:
+                    print(session.pending_clarification)
+                ask_questions(session, parsed.get('questions', []))
                 may_run = True
             if may_run:
                 output = run_if_ready(session, args, descriptor)

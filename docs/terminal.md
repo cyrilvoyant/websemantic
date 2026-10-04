@@ -41,3 +41,9 @@ Les commandes locales restent utilisables en cas d’indisponibilité du service
 ## Limites
 
 L’interprétation conversationnelle utilise Gemini et les quotas du projet configuré. Il n’y a pas de plafond local par défaut ni de relance automatique après une erreur HTTP. La recherche publique peut être indisponible. Les comparaisons multiples se préparent en scénarios séparés. La transcription et la synthèse vocale restent des évolutions envisagées.
+
+## Examiner et préciser l’étude
+
+« Montre le tableau des défauts et des valeurs retenues » distingue le profil déclaré du scénario courant, avec les unités et l’origine. « Explique les formules utilisées » affiche les équations vérifiées et les coefficients des catégories retenues ; `/formulas` donne le même accès local. Les formules et leurs limites figurent dans le référentiel.
+
+En cas de doute, le dialogue pose au plus deux questions ciblées. Une question bloquante survit à une simple consultation et à une acceptation globale ; il faut préciser le champ concerné. Une réponse courte à un niveau proposé est interprétée seulement dans le contexte de la question ouverte, puis reste une hypothèse à valider. Une question facultative aide à affiner l’étude sans bloquer un scénario déjà clair. Une recherche peut expliquer ce que les sources établissent et ce qu’elles laissent inconnu ; elle ne déduit pas une probabilité en tunnel des accidents recensés dans une commune.

@@ -33,6 +33,15 @@ def vocabulary(descriptor, qualification=None):
     scheme = WS['vocabulary/' + sha256(json.dumps(descriptor.get('software', {}), sort_keys=True).encode()).hexdigest()[:16]]
     graph.add((scheme, RDF.type, SKOS.ConceptScheme))
     graph.add((scheme, SKOS.prefLabel, Literal(descriptor.get('software', {}).get('name', 'Scientific software'))))
+    for entry in descriptor.get('model_equations', []):
+        equation = concept(descriptor, entry['id'])
+        graph.add((equation, RDF.type, SKOS.Concept))
+        graph.add((equation, SKOS.inScheme, scheme))
+        graph.add((equation, SKOS.prefLabel, Literal(entry['label'], lang='fr')))
+        graph.add((equation, SKOS.definition, Literal(entry['meaning'], lang='fr')))
+        graph.add((equation, WS.expression, Literal(entry['expression'])))
+        graph.add((equation, WS.unitSymbol, Literal(entry['unit'])))
+        graph.add((equation, WS.implementationReference, Literal(entry['reference'])))
     for group in ('inputs', 'experiment', 'outputs'):
         category = concept(descriptor, 'group/' + group)
         graph.add((category, RDF.type, SKOS.Concept))
