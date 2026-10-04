@@ -68,6 +68,19 @@ Les défauts scientifiques sont des propositions non calibrées, à accepter exp
 - `experiment.freq_minutes` — experiment ; duration_minutes. Pas admis : 5, 10, 15, 30 ou 60 min. Une sortie quotidienne est une agrégation, pas un calcul à minuit.
 - `experiment.n_runs` — experiment ; count. Augmenter ce nombre décrit mieux la variabilité du modèle, sans ajouter une validation terrain.
 - `experiment.base_seed` — operational ; identifier. Valeur fixe 42 selon la politique d’essai, modifiable explicitement ; ce n’est pas un paramètre physique.
+### Convention qualitative — `inputs.traffic_level`
+
+Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.
+
+| Expression | Fraction de la référence haute | Valeur sans unité |
+|---|---|---|
+| beaucoup | 0.75 | 1.5 |
+| énormément | 1.0 | 2 |
+
+TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum.
+
+La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.
+
 
 ## Sorties
 

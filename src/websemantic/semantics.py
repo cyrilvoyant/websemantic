@@ -105,6 +105,8 @@ def vocabulary(descriptor, qualification=None):
                 graph.add((term, predicate, Literal(spec[key])))
         if spec.get('scope_note'):
             graph.add((term, SKOS.scopeNote, Literal(spec['scope_note'], lang='fr')))
+        if spec.get('qualitative_scale'):
+            graph.add((term, WS.qualitativeScale, Literal(json.dumps(spec['qualitative_scale'], ensure_ascii=False, sort_keys=True), datatype=RDF.JSON)))
         for alias in spec.get("aliases", []):
             graph.add((term, SKOS.altLabel, Literal(alias, lang="fr")))
         graph.add((term, WS.fieldPath, Literal(f"{group}.{name}")))

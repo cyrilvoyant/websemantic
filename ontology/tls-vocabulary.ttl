@@ -653,6 +653,7 @@ ws:task a rdf:Property ;
     ws:fieldPath "inputs.traffic_level" ;
     ws:implementationReference "simulator.py:simulate_one_realization" ;
     ws:modelComponent "traffic" ;
+    ws:qualitativeScale "{\"authority\": \"TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum.\", \"interpretation\": \"Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de trafic\", \"beaucoup de traffic\", \"trafic important\", \"trafic élevé\", \"fort trafic\"], \"fraction\": 0.75}, \"énormément\": {\"aliases\": [\"énormément de trafic\", \"énormément de traffic\", \"trafic très élevé\", \"trafic énorme\"], \"fraction\": 1.0}}, \"reference_upper\": 2.0}"^^rdf:JSON ;
     ws:quantity "dimensionless_multiplier" ;
     ws:unitAlias "1",
         "UNITLESS",

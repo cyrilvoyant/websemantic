@@ -94,6 +94,14 @@ def main():
     for group in groups:
         for name, spec in descriptor[group].items():
             lines += [f"- `{group}.{name}` — {spec.get('model_component', group)} ; {spec.get('quantity_kind', spec['type'])}. {spec.get('scope_note', '')}"]
+    for group in groups:
+        for name, spec in descriptor[group].items():
+            scale = spec.get('qualitative_scale')
+            if scale:
+                lines += [f"### Convention qualitative — `{group}.{name}`", "", scale['interpretation'], "", "| Expression | Fraction de la référence haute | Valeur sans unité |", "|---|---|---|"]
+                for label, level in scale['levels'].items():
+                    lines.append(f"| {label} | {level['fraction']} | {scale['reference_upper'] * level['fraction']:g} |")
+                lines += ["", scale['authority'], "", "La valeur numérique explicite reste prioritaire. Les qualificatifs non déclarés demandent une clarification.", ""]
     lines += ["", "## Sorties", "", "Les quantités concernent tous les tubes. Les séries ne déclarent pas de fuseau horaire.", ""]
     for name,info in tables.items():
         lines += [f"### {name}.csv", "", info["aggregation"], "", "| Colonne | Unité | Sens |", "|---|---|---|"]

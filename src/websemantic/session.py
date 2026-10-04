@@ -6,6 +6,7 @@ import unicodedata
 from dataclasses import replace
 
 from websemantic.core.validation import Parameter, Scenario, validate
+from websemantic.qualitative import resolve as resolve_qualitative
 from websemantic.units import normalize, parse_number
 
 
@@ -87,6 +88,7 @@ class Session:
     def apply(self, request, parsed):
         """Validate the entire extraction before changing state (atomic update)."""
         updates = []
+        notices = []
         seen = set()
         task = parsed.get("task")
         if task not in self.descriptor["tasks"]["supported"] + ["unsupported"]:
@@ -117,6 +119,15 @@ class Session:
             if not evidence or evidence not in request:
                 raise ValueError("Preuve absente du nouveau message.")
             spec = self.descriptor[group][name]
+            qualitative = resolve_qualitative(evidence, spec)
+            if qualitative:
+                value, source = qualitative
+                updates.append((group, name, Parameter(value, spec.get('unit'), 'assumption', evidence, source)))
+                symbol = spec.get('display_unit', 'sans unité')
+                if symbol == '1':
+                    symbol = 'sans unité'
+                notices.append(f"{spec.get('label', name)} proposé : {value:g} ({symbol}), selon la convention déclarée ; à valider. Ce n’est pas une mesure locale.")
+                continue
             value = update["value"]
             unit = update["unit"] or None
             source = None
@@ -140,6 +151,8 @@ class Session:
             if previous is None or previous.value != record.value or previous.unit != record.unit:
                 self.run_requested = True
             getattr(self.scenario, group)[name] = record
+        if notices:
+            parsed['message'] = ' '.join(notices)
         self.history.append({"user": request, "assistant": parsed.get("message", "")})
         self.pending_clarification = None
 

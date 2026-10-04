@@ -324,6 +324,28 @@ inputs:
     aliases:
     - niveau de trafic
     reference_implementation: simulator.py:simulate_one_realization
+    qualitative_scale:
+      reference_upper: 2.0
+      authority: TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd;
+        upper interface reference, not physical capacity or adapter maximum.
+      interpretation: 'Convention de scénario autorisée pour les essais : fraction de la référence haute
+        2 ; hypothèse à valider, sans comptage local.'
+      levels:
+        beaucoup:
+          fraction: 0.75
+          aliases:
+          - beaucoup de trafic
+          - beaucoup de traffic
+          - trafic important
+          - trafic élevé
+          - fort trafic
+        énormément:
+          fraction: 1.0
+          aliases:
+          - énormément de trafic
+          - énormément de traffic
+          - trafic très élevé
+          - trafic énorme
   morning_peak_hour:
     type: float
     unit: unit:HR
@@ -785,7 +807,12 @@ interpretation:
   guidance: Pour length_m, citer une longueur en m ou km et conserver le nombre source. Trafic élevé ne
     fixe pas traffic_level. Un éclairage fort/faible ne définit pas lighting_type et ne doit pas devenir
     une puissance inventée. Une comparaison de scénarios exige des configurations séparées. Les comptages
-    ont unit:NUM ; start_date et base_seed n’ont pas d’unité physique.
+    ont unit:NUM ; start_date et base_seed n’ont pas d’unité physique. Pour un paramètre disposant de
+    qualitative_scale, une qualification déclarée peut être extraite comme value=nom du niveau (pas un
+    nombre), avec evidence=citation exacte contenant la qualification. Explique la valeur proposée, sans
+    unité physique et sans prétendre à un comptage mesuré. Les valeurs numériques explicites restent prioritaires.
+    Les qualificatifs absents de cette échelle restent à clarifier ; une question de définition ou une
+    négation ne change aucun paramètre.
   comparison_tasks:
   - compare configurations (lighting, ventilation, traffic) with controlled seeds
   comparison_message: 'Votre demande contient plusieurs configurations ou plusieurs valeurs pour un même

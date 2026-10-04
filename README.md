@@ -73,3 +73,5 @@ Le [protocole](docs/protocol.md) précise les comparaisons prévues, les graines
 Cyril Voyant, Haytham El-Houari, Daniel Julian et Nicolas Fichaux. Les informations de citation sont dans [CITATION.cff](CITATION.cff).
 
 Le code WebSemantic courant est sous [PolyForm Noncommercial 1.0.0](LICENSE). Les simulateurs et dépendances conservent leurs licences. Les révisions antérieures publiées sous MIT jusqu’au commit `c00914c` conservent ces permissions. Cette licence comporte des restrictions commerciales et n’est pas une licence open source au sens de l’OSI.
+
+Les formulations « beaucoup de trafic » et « énormément de trafic » proposent respectivement 1,5 et 2, sans unité : 75 % et 100 % de la référence haute du curseur TLS. Cette convention est déclarée dans le contrat et contrôlée localement. Les propositions restent à valider ; elles ne représentent pas des comptages de véhicules.

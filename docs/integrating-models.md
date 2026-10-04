@@ -20,3 +20,5 @@ Les règles locales qualitatives sont des données dans `interpretation.local_ru
 Le même cœur traite deux contrats fictifs indépendants (dose et puissance), propose leurs defaults, normalise leurs alias, valide, appelle un adaptateur de test et exporte la provenance. Ces fixtures sont des tests structurels : elles ne constituent pas une intégration LQL-Equiv/pvlib ni une validation clinique ou photovoltaïque.
 
 TLS est disponible. LQL et pvlib restent « Work in progress ». Le prochain transfert doit compléter leurs descripteurs et adaptateurs, puis mesurer les changements nécessaires par rapport à la révision du cœur retenue. Un gel formel n’est pas encore déclaré.
+
+Une échelle `qualitative_scale` peut associer des expressions précises à une fraction d’une référence haute documentée. Déclarer ses alias, sa source et sa portée ; la conversion locale crée une hypothèse à valider. Ne pas généraliser cette échelle à des paramètres ou qualificatifs absents du descripteur.

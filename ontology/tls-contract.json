@@ -395,7 +395,33 @@
         "aliases": [
           "niveau de trafic"
         ],
-        "reference_implementation": "simulator.py:simulate_one_realization"
+        "reference_implementation": "simulator.py:simulate_one_realization",
+        "qualitative_scale": {
+          "reference_upper": 2.0,
+          "authority": "TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum.",
+          "interpretation": "Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+          "levels": {
+            "beaucoup": {
+              "fraction": 0.75,
+              "aliases": [
+                "beaucoup de trafic",
+                "beaucoup de traffic",
+                "trafic important",
+                "trafic élevé",
+                "fort trafic"
+              ]
+            },
+            "énormément": {
+              "fraction": 1.0,
+              "aliases": [
+                "énormément de trafic",
+                "énormément de traffic",
+                "trafic très élevé",
+                "trafic énorme"
+              ]
+            }
+          }
+        }
       },
       "morning_peak_hour": {
         "type": "float",
