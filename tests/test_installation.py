@@ -42,3 +42,13 @@ def test_missing_backend_does_not_launch_or_install(tmp_path):
 def test_missing_git_is_identified(monkeypatch):
     monkeypatch.setattr(check.shutil, 'which', lambda _: None)
     assert 'Git' in check.runtime(ROOT)[0]
+
+
+def test_installer_runs_real_tls_smoke_without_llm(monkeypatch):
+    from websemantic import gemini
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("No LLM call during installation")
+
+    monkeypatch.setattr(gemini, "extract", forbidden)
+    assert check.smoke(ROOT) == []

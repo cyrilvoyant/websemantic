@@ -119,6 +119,8 @@ s = subprocess.check_output(['git', '-C', p, 'status', '--porcelain', '--untrack
 assert c == d['software']['commit'] and not s, 'Version TLS incorrecte ou sources modifiees'
 "@ | & $pythonExecutable -
     if ($LASTEXITCODE -ne 0) { throw 'Le contrôle du simulateur TLS a échoué.' }
+    & $pythonExecutable (Join-Path $PSScriptRoot 'verifier-installation.py') --smoke
+    if ($LASTEXITCODE -ne 0) { throw 'Le test de calcul TLS a échoué. L installation reste à vérifier.' }
     Write-Host 'Vérification terminée. Ouvrez WebSemantic.cmd pour utiliser le programme.'
     exit 0
 } catch {

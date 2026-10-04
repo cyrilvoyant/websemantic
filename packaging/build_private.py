@@ -9,10 +9,16 @@ if not archive_path.is_file() or not (root / '.env').is_file():
     raise SystemExit('Archive de référence ou configuration privée absente.')
 temporary = archive_path.with_suffix('.tmp.zip')
 with zipfile.ZipFile(archive_path) as old, zipfile.ZipFile(temporary, 'w', compression=zipfile.ZIP_DEFLATED) as new:
-    # Preserve only the pinned backend and its self-contained Git metadata.
+    # Accept an extra outer folder after a private archive has been repacked.
+    marker = "application/external/tunnel-load-simulator/"
+    preserved = 0
     for item in old.infolist():
-        if item.filename.startswith('WebSemantic_TLS/application/external/tunnel-load-simulator/'):
-            new.writestr(item, old.read(item.filename))
+        position = item.filename.find(marker)
+        if position >= 0 and not item.is_dir():
+            new.writestr("WebSemantic_TLS/" + item.filename[position:], old.read(item.filename))
+            preserved += 1
+    if not preserved:
+        raise SystemExit("Sources TLS absentes de l’archive de référence ; reconstruction arrêtée.")
     for directory in ('src', 'descriptors', 'ontology', 'docs', 'examples', 'tools', 'agent'):
         for path in (root / directory).rglob('*'):
             if path.is_file() and '__pycache__' not in path.parts and not path.name.endswith('.pyc'):

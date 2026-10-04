@@ -3,10 +3,13 @@
 import argparse
 import importlib
 import importlib.metadata
+import json
+import math
 import shutil
 import subprocess
 import sys
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 REQUIRED = {
     'pydantic': ('2.6', 'pydantic'),
@@ -76,11 +79,46 @@ def runtime(root):
     return []
 
 
+
+def smoke(root):
+    """Run the installed TLS adapter on one fictitious day; no LLM or saved study."""
+    try:
+        from websemantic.adapters.tls import run
+        from websemantic.core.validation import Parameter, Scenario
+        from websemantic.registry import load_descriptor
+
+        descriptor = load_descriptor(root, "tls")
+        records = {group: {name: Parameter(value=spec["default"], unit=spec.get("unit"),
+                    origin="assumption", source="Fictitious installation check", accepted=True)
+                    for name, spec in descriptor[group].items()} for group in ("inputs", "experiment")}
+        for name, value in {"n_days": 1, "freq_minutes": 60, "n_runs": 1}.items():
+            records["experiment"][name] = Parameter(value=value, unit=descriptor["experiment"][name].get("unit"),
+                origin="assumption", source="Fictitious installation check", accepted=True)
+        scenario = Scenario(request="Fictitious installation check", task=descriptor["tasks"]["supported"][0], **records)
+        with TemporaryDirectory(prefix="websemantic-check-") as temporary:
+            target, medians = run(scenario, descriptor, root, temporary)
+            manifest = json.loads((target / "manifest.json").read_text(encoding="utf-8"))
+            assert manifest["output_qualification"]["tables"]["representative"]["rows"] == 24
+            assert manifest["output_qualification"]["tables"]["kpis"]["rows"] == 1
+            assert all(math.isfinite(value) for value in medians.values())
+            assert medians["total_mwh"] > 0
+            assert all((target / (name + ".csv")).is_file() for name in manifest["outputs"])
+            assert (target / "semantics.ttl").is_file()
+    except (ImportError, OSError, ValueError, KeyError, TypeError, AssertionError,
+            subprocess.SubprocessError, RuntimeError, ArithmeticError) as error:
+        return ["Le test de calcul TLS a échoué : " + type(error).__name__ + "."]
+    return []
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dependencies-only', action='store_true')
+    parser.add_argument('--smoke', action='store_true')
     args = parser.parse_args()
     problems = dependencies() if args.dependencies_only else runtime(Path(__file__).resolve().parent)
+    if not problems and args.smoke:
+        problems = smoke(Path(__file__).resolve().parent)
+        if not problems:
+            print('Test de calcul TLS réussi : 24 pas horaires, une réalisation, fichiers vérifiés.')
     if problems:
         for problem in problems:
             print(problem)

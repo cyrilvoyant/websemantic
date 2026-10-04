@@ -5,6 +5,7 @@ Quatre essais à copier. Pour un retour, indiquez la demande, la réponse et le 
 1 — INSTALLER ET UTILISER
 
 Décompressez le package, puis double-cliquez sur Installer.cmd, une seule fois.
+L’installation vérifie aussi un court calcul TLS, sans appel au LLM.
 Pour chaque utilisation, ouvrez WebSemantic.cmd et choisissez 1 (TLS).
 Si un composant manque, le lanceur vous invite à relancer Installer.cmd.
 
