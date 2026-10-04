@@ -195,3 +195,16 @@ def test_external_comparison_cannot_ignore_a_third_scenario(tmp_path):
     with pytest.raises(ValueError):
         run(state.scenarios,state.descriptor,ROOT,tmp_path)
     assert not list(tmp_path.iterdir())
+
+
+def test_comparison_reads_rdf_as_data_without_url_loader(tmp_path, monkeypatch):
+    import rdflib.parser
+
+    def forbidden_url(*args, **kwargs):
+        raise AssertionError("RDF must be read through the filesystem, not URL loading")
+
+    monkeypatch.setattr(rdflib.parser, "_urlopen", forbidden_url)
+    state = ready()
+    target, _ = run(state.scenarios, DESCRIPTOR, ROOT, tmp_path)
+    assert json.loads((target / "manifest.json").read_text())["status"] == "complete"
+    assert (target / "semantics.ttl").is_file()

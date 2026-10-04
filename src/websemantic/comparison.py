@@ -157,7 +157,10 @@ def run(sessions, descriptor, workspace, output_root):
         graph.add((activity, RDF.type, WS.ComparisonActivity))
         graph.add((activity, WS.method, Literal('Separate executions; concatenate tables, no pooled statistics.')))
         for label in IDS:
-            graph.parse(paths[label] / 'semantics.ttl', format='turtle')
+            # Read through the filesystem: URL loading drops the host on Windows UNC paths.
+            source = paths[label] / 'semantics.ttl'
+            graph.parse(data=source.read_text(encoding='utf-8'), format='turtle',
+                        publicID=source.resolve().as_uri())
         for table in tables:
             frames = []
             for label in IDS:
