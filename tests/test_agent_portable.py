@@ -65,3 +65,85 @@ def test_changed_contract_refused_before_execution(tmp_path):
     assert result.returncode != 0
     assert "Source incomplete or changed" in result.stderr
     assert not (root / "runs").exists()
+
+
+def invoke(root, document, *options):
+    path = root / "study.json"
+    path.write_text(json.dumps(document), encoding="utf-8")
+    return subprocess.run([sys.executable, str(root / "agent/run_tls.py"), str(path), *map(str, options)],
+                          capture_output=True, text=True, check=False)
+
+
+def test_city_requires_context_before_run(tmp_path):
+    root = materialize(tmp_path)
+    document = json.loads((root / "examples/tls-complete.json").read_text())
+    document["request"] += " Ajaccio."
+    process = invoke(root, document)
+    assert process.returncode != 0
+    assert "fournir --context" in process.stderr
+    assert not (root / "runs").exists()
+
+
+def test_summer_followup_preserves_runs_and_traces_context(tmp_path):
+    root = materialize(tmp_path)
+    document = json.loads((root / "examples/tls-complete.json").read_text())
+    first = invoke(root, document)
+    assert first.returncode == 0, first.stderr
+    previous = Path(json.loads(first.stdout)["result_directory"]) / "manifest.json"
+    document["request"] += " Même tunnel à Ajaccio pour juillet 2025."
+    document["experiment"]["start_date"]["value"] = "2025-07-01"
+    document["experiment"]["n_days"]["value"] = 31
+    context = root / "context.json"
+    report = {"city": "Ajaccio", "summary": "Test fixture: sources unavailable; preserve accepted synthetic assumptions.",
+              "sources": [{"url": "https://example.org/fixture", "retrieved_at": "2026-10-04", "status": "unavailable"}],
+              "facts": [], "hypotheses": ["Existing fictitious tunnel profile"], "accepted": True}
+    context.write_text(json.dumps(report), encoding="utf-8")
+    process = invoke(root, document, "--context", context, "--previous", previous)
+    assert process.returncode == 0, process.stderr
+    target = Path(json.loads(process.stdout)["result_directory"])
+    assert len(pd.read_csv(target / "representative.csv")) == 2976
+    assert len(pd.read_csv(target / "daily.csv")) == 31
+    assert len(pd.read_csv(target / "kpis.csv")) == 10
+    manifest = json.loads((target / "manifest.json").read_text())
+    assert {item["field"] for item in manifest["previous_study"]["changes"]} == {"experiment.start_date", "experiment.n_days"}
+    assert json.loads((target / "geographical_context.json").read_text()) == report
+
+
+def test_unaccepted_local_hypothesis_blocks(tmp_path):
+    root = materialize(tmp_path)
+    document = json.loads((root / "examples/tls-complete.json").read_text())
+    report = {"city": "Ajaccio", "summary": "Fixture only", "sources": [{"url": "https://example.org/fixture",
+              "retrieved_at": "2026-10-04", "status": "unavailable"}], "facts": [], "hypotheses": ["Unaccepted fixture"]}
+    context = root / "context.json"
+    context.write_text(json.dumps(report))
+    process = invoke(root, document, "--place", "Ajaccio", "--context", context)
+    assert process.returncode != 0
+    assert "restent à accepter" in process.stderr
+    assert not (root / "runs").exists()
+
+
+def test_comparison_runs_without_git_or_yaml(tmp_path):
+    root = materialize(tmp_path)
+    document = json.loads((root / "examples/tls-complete.json").read_text())
+    document["experiment"]["n_days"]["value"] = 1
+    document["experiment"]["n_runs"]["value"] = 2
+    second = json.loads(json.dumps(document))
+    second["inputs"]["lighting_type"]["value"] = "sodium fixed"
+    process = invoke(root, {"scenario_1": document, "scenario_2": second})
+    assert process.returncode == 0, process.stderr
+    target = Path(json.loads(process.stdout)["result_directory"])
+    assert set(pd.read_csv(target / "kpis.csv")["scenario"]) == {"scenario_1", "scenario_2"}
+    assert json.loads((target / "manifest.json").read_text())["status"] == "complete"
+    assert (target / "comparison.json").exists()
+
+
+def test_followup_rejects_implicit_change_of_realizations(tmp_path):
+    root = materialize(tmp_path)
+    document = json.loads((root / "examples/tls-complete.json").read_text())
+    previous = root / "previous.json"
+    previous.write_text(json.dumps({"scenario": document}))
+    document["experiment"]["n_runs"]["value"] = 1
+    process = invoke(root, document, "--previous", previous)
+    assert process.returncode != 0
+    assert "n_runs" in process.stderr
+    assert not (root / "runs").exists()

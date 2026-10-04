@@ -51,3 +51,9 @@ Par défaut, afficher les trois médianes (énergie totale, énergie annualisée
 Si une ville est citée, consulter les sources locales avec les outils web de l’agent. `geography` dans le contrat donne le catalogue des lieux, URL, champs proposés et règles utilisés par le dialogue local. Pour un autre lieu, rechercher des sources adaptées. Tracer URL, date, faits consultés et hypothèses dans `geographical_context.json` avec les résultats.
 
 Conserver les caractéristiques explicites du tunnel. Pour « le même tunnel », conserver sa configuration ; proposer séparément les adaptations locales justifiées et demander leur acceptation avant de les appliquer. Une ville ne détermine ni la géométrie ni les probabilités d’événements. Si les sources manquent, conserver les hypothèses acceptées en le signalant brièvement. La date simulée détermine le facteur saisonnier ; le nom de ville seul ne modifie pas le calcul TLS.
+
+## Suivi et comparaison
+
+Le parcours détaillé est dans [agent/README.md](../agent/README.md). Le lanceur accepte deux scénarios complets et utilise le même orchestrateur que le dialogue local. Pour une suite d’étude, `--previous` conserve le lien au manifeste et trace les différences ; pas interne, réalisations et graine ne changent que sur demande explicite. Conserver les demandes pertinentes dans `request`, afin que les preuves restent exactes ; ne pas inventer de citations.
+
+Un lieu connu cité dans la demande nécessite un contexte fourni par l’agent via `--context`. Pour un autre lieu, utiliser aussi `--place`. L’agent réalise la recherche avec ses outils web ; le lanceur vérifie les champs et l’acceptation, puis conserve le rapport. Ces contrôles ne prouvent pas la vérité des sources. Le format est décrit dans `agent/context.schema.json`.

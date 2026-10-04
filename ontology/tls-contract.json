@@ -2260,6 +2260,70 @@
       }
     }
   },
+  "interpretation": {
+    "guidance": "Pour length_m, citer une longueur en m ou km et conserver le nombre source. Trafic élevé ne fixe pas traffic_level. Un éclairage fort/faible ne définit pas lighting_type et ne doit pas devenir une puissance inventée. Une comparaison de scénarios exige des configurations séparées. Les comptages ont unit:NUM ; start_date et base_seed n’ont pas d’unité physique. Pour un paramètre disposant de qualitative_scale, une qualification déclarée peut être extraite comme value=nom du niveau (pas un nombre), avec evidence=citation exacte contenant la qualification. Explique la valeur proposée, sans unité physique et sans prétendre à un comptage mesuré. Les valeurs numériques explicites restent prioritaires. Les qualificatifs absents de cette échelle restent à clarifier ; une question de définition ou une négation ne change aucun paramètre. Consulte qualitative_policy aussi : aucune échelle ordinale pour les catégories, dates ou graines. Pour une expression déclarée, cite le qualificatif ET le nom de la variable dans evidence, sans englober les chiffres d’autres paramètres. Pour courant, utilise le niveau déclaré ; moyen seul reste ambigu, les valeurs moyennes demandées comme défauts suivent la politique de profil. Pollution importante sans mention de probabilité ou de sensibilité ne permet pas de choisir entre ces deux variables : clarifie. Ne transforme pas une question de définition en modification. Comparaison : séparer strictement les tubes, voies par tube, longueurs et équipements de scenario_1 et scenario_2. « Ancien éclairage » ne suffit pas pour choisir sodium fixed ; poser une question de catégorie dans le scénario concerné. « Même longueur » autorise shared_from uniquement si une longueur est déjà donnée, avec citation exacte de cette égalité. Pour une demande relative (« plus que », « comparons », « ou » entre deux tunnels), activer comparison=true et la tâche comparative ; ne calculer ni résultat ni classement. Garder la comparaison active pour les précisions, tableaux, accords et modifications suivants.",
+    "comparison_tasks": [
+      "compare configurations (lighting, ventilation, traffic) with controlled seeds"
+    ],
+    "comparison_message": "Votre demande contient plusieurs configurations ou plusieurs valeurs pour un même paramètre. Le terminal gère actuellement un seul scénario à la fois. Décrivez le scénario A, puis le scénario B dans une nouvelle session. Précisez le type d’éclairage : LED adaptive, LED fixed, mixed ou sodium fixed. TLS ne possède pas de paramètre d’intensité lumineuse fort/faible dans ce PoC. Aucun paramètre courant n’a été modifié.",
+    "calculation_intent_patterns": [
+      "\\bje (souhaite|veux|voudrais).*obtenir.*(energie|puissance)"
+    ],
+    "local_rules": [
+      {
+        "patterns": [
+          "\\b(moins|plus|entre|environ)\\b",
+          "\\b(km|kilometres?|metres?)\\b"
+        ],
+        "clarify": true,
+        "message": "Une borne ou une approximation ne fixe pas une longueur précise. Indiquez une longueur de calcul (avec m ou km), ou demandez un profil de démonstration."
+      },
+      {
+        "patterns": [
+          "\\bajaccio\\b"
+        ],
+        "propose_profile": true,
+        "preserve_provided": true,
+        "proposals": {
+          "inputs.altitude_m": 10.0,
+          "inputs.tunnel_context": "urban"
+        },
+        "source": "Ajaccio coastal demonstration proxy, reviewed 2026-10-03. https://www.insee.fr/fr/metadonnees/geographie/commune/2A004-ajaccio ; https://www.corse.developpement-durable.gouv.fr/IMG/pdf/210706-dle_finosello_ajacciu.pdf . Local study site spans 5.5–18 m NGF; 10 m is a chosen proxy, not a city mean or tunnel observation.",
+        "message": "Pour un cas urbain littoral à Ajaccio, je propose 10 m d’altitude et un contexte urbain, à valider avec /v. Ce sont des hypothèses : 10 m n’est ni l’altitude moyenne d’Ajaccio ni celle d’un tunnel identifié. Les valeurs fournies restent prioritaires."
+      },
+      {
+        "patterns": [
+          "mix",
+          "moyenn"
+        ],
+        "propose_profile": true,
+        "clarify": true,
+        "message": "Le profil de démonstration est proposé pour les champs manquants, sans acceptation. Les catégories ne se moyennent pas ; vérifiez les choix avec /d puis acceptez les hypothèses avec /v."
+      },
+      {
+        "patterns": [
+          "(plus|moins).*co[uû]teu|plus.*energet|plus.*energivo"
+        ],
+        "propose_profile": true,
+        "proposals": {
+          "inputs.lighting_type": "sodium fixed",
+          "inputs.ventilation_type": "transverse"
+        },
+        "alternative": {
+          "pattern": "moins",
+          "proposals": {
+            "inputs.lighting_type": "LED adaptive",
+            "inputs.ventilation_type": "natural/low ventilation"
+          }
+        },
+        "source": "TLS @748e053 category coefficients; scenario proposal, not proof of global optimum.",
+        "message": "Je propose les catégories aux coefficients élevés ou faibles dans TLS. /v valide ces hypothèses. Ce choix ne prouve pas un optimum énergétique ni la faisabilité technique."
+      }
+    ]
+  },
+  "profile": {
+    "source": "TLS interface defaults @748e053; experiment websemantic quick-demo-v1 (7 days, hourly, 3 runs)"
+  },
   "execution_policy": {
     "validator": "websemantic.core.validation:validate",
     "additional_adapter_checks": [

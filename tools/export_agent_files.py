@@ -10,6 +10,7 @@ FILES = [
     "src/websemantic/core/__init__.py", "src/websemantic/core/validation.py",
     "src/websemantic/adapters/__init__.py", "src/websemantic/adapters/tls.py",
     "src/websemantic/adapters/tls_outputs.py", "src/websemantic/semantics.py",
+    "src/websemantic/comparison.py", "src/websemantic/registry.py", "src/websemantic/units.py",
     "ontology/tls-contract.json", "examples/tls-complete.json", "LICENSE",
     "external/tunnel-load-simulator/src/tunnel_load_simulator/simulator.py",
     "external/tunnel-load-simulator/LICENSE",

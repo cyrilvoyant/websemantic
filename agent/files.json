@@ -11,7 +11,7 @@
     {
       "path": "agent/run_tls.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/agent/run_tls.py",
-      "sha256_lf": "095ef184ef82421038a6c691b33709565432aa945b8d0f76bf8e45afa639a030"
+      "sha256_lf": "ec1fad7caf73b3d422256afb29edfa95cbde276fbaec1cb34175b0f5f961b6c2"
     },
     {
       "path": "src/websemantic/__init__.py",
@@ -49,9 +49,24 @@
       "sha256_lf": "c9351ee88859cc424e327c72e3a3e229e108a04e8142958ccbde294e67d4e8a4"
     },
     {
+      "path": "src/websemantic/comparison.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/comparison.py",
+      "sha256_lf": "32ff1bd8937fe67937d0b14e411502a7a326ed3a8ef8f0dfb6b26adc0f629819"
+    },
+    {
+      "path": "src/websemantic/registry.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/registry.py",
+      "sha256_lf": "ec92768ee8f8b64e0ee4480ed716e26e6777e26f557597823898f1a6eece88e5"
+    },
+    {
+      "path": "src/websemantic/units.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/units.py",
+      "sha256_lf": "9a782b26ad6a1afd2325b5046e2b1fff0ec514a9329f9fa202ecc748ff9a72f0"
+    },
+    {
       "path": "ontology/tls-contract.json",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/tls-contract.json",
-      "sha256_lf": "72c22ec05fd51c7ed20b42746504593d841dab18550f497aaa2493a8ffc0deda"
+      "sha256_lf": "aa5ce2fd401e0b6f233d93abc4740470baf49f1ebe88564afa3b66d996cfc672"
     },
     {
       "path": "examples/tls-complete.json",

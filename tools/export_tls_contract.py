@@ -42,6 +42,8 @@ def main():
                 "model_coefficients": descriptor.get('model_coefficients', {}),
                 "comparison": descriptor.get('comparison', {}),
                 "geography": descriptor.get('geography', {}),
+                "interpretation": descriptor.get('interpretation', {}),
+                "profile": descriptor.get('profile', {}),
                 "execution_policy": {"validator": "websemantic.core.validation:validate",
                     "additional_adapter_checks": ["Pinned simulator module verified by SHA-256 (LF); Git checks when checkout available", "freq_minutes in 5,10,15,30,60",
                         "n_days * 1440 / freq_minutes * n_runs <= 2000000", "peak_width_h > 0",

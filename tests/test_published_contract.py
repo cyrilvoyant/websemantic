@@ -84,4 +84,6 @@ def test_published_geography_matches_local_descriptor():
     contract = json.loads((root / "ontology/tls-contract.json").read_text(encoding="utf-8"))
     descriptor = yaml.safe_load((root / "descriptors/tls/descriptor.yaml").read_text(encoding="utf-8"))
     assert contract["geography"] == descriptor["geography"]
+    assert contract["interpretation"] == descriptor["interpretation"]
+    assert contract["profile"] == descriptor["profile"]
     assert "ajaccio" in contract["geography"]["places"]

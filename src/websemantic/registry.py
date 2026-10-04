@@ -4,14 +4,14 @@ import importlib
 import json
 from pathlib import Path
 
-import yaml
-
 
 def environments():
     return json.loads(Path(__file__).with_name('environments.json').read_text(encoding='utf-8'))
 
 
 def load_descriptor(workspace, model):
+    import yaml
+
     item = next((item for item in environments() if item['id'] == model), None)
     if item is None:
         raise ValueError('Environnement non déclaré.')
