@@ -7,7 +7,6 @@
   "dateCreated": "2026-10-03",
   "license": "https://spdx.org/licenses/PolyForm-Noncommercial-1.0.0.html",
   "codeRepository": "https://github.com/cyrilvoyant/websemantic",
-  "url": "https://www.cyrilvoyant.com",
   "developmentStatus": "https://www.repostatus.org/#wip",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
@@ -16,39 +15,8 @@
   },
   "author": [
     {
-      "@type": "Person",
-      "@id": "https://orcid.org/0000-0003-0242-7377",
-      "givenName": "Cyril",
-      "familyName": "Voyant",
-      "email": "cyril.voyant@minesparis.psl.eu",
-      "url": "https://person.cyrilvoyant.com",
-      "affiliation": {
-        "@type": "Organization",
-        "name": "Mines Paris, PSL University, O.I.E."
-      }
-    },
-    {
-      "@type": "Person",
-      "givenName": "Haytham",
-      "familyName": "El-Houari",
-      "affiliation": {
-        "@type": "Organization",
-        "name": "Université Sidi Mohamed Ben Abdellah (USMBA), Fès, Morocco"
-      }
-    },
-    {
-      "@type": "Person",
-      "givenName": "Daniel",
-      "familyName": "Julian",
-      "affiliation": {
-        "@type": "Organization",
-        "name": "Centre de Cancérologie du Grand Montpellier, Montpellier, France"
-      }
-    },
-    {
-      "@type": "Person",
-      "givenName": "Nicolas",
-      "familyName": "Fichaux"
+      "@type": "Organization",
+      "name": "WebSemantic contributors"
     }
   ],
   "keywords": [

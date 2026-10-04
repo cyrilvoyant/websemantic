@@ -388,8 +388,9 @@ def main(argv=None):
                 print(presentation(session).get('uncertainty_text', 'Consultez les limites et incertitudes déclarées du modèle.'))
             elif line == "/help":
                 print(
-                    "/s (5 suggestions); /show (explication); /details (paramètres techniques); /profile (propose le profil); /accept (accepte ses valeurs); "
-                    "/web question (recherche documentaire); /formulas (formules); /set GROUPE.VARIABLE VALEUR; /run; /quit"
+                    "/s suggestions | /show résumé | /d tableau | /details-all tous les paramètres | "
+                    "/e NOM définition | /formulas formules | /p proposer | /v accepter | "
+                    "/web QUESTION sources | /set GROUPE.NOM VALEUR modifier | /r calculer | /q quitter"
                 )
             elif line == "/show":
                 show(session)

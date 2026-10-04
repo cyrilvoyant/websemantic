@@ -1,18 +1,14 @@
 # Installation Windows
 
-## Package de validation
+## Package
 
-1. Décompressez complètement l’archive.
-2. Double-cliquez sur `Installer.cmd` et attendez la fin de la vérification.
-3. Ouvrez `WebSemantic.cmd` et choisissez TLS.
+Décompressez l’archive et ouvrez `Installer.cmd` une fois. Ensuite, ouvrez `WebSemantic.cmd` et choisissez TLS. Le lanceur indique si un composant manque ; l’installation conserve les composants compatibles.
 
-Les composants compatibles présents sont conservés. Le lanceur n’installe rien ; s’il détecte un manque, il invite à relancer l’installateur. Le guide fourni propose les quatre essais de validation.
+La configuration de l’essai est lue automatiquement. Gardez l’archive et le fichier `.env` privés.
 
-La configuration privée fournie pour l’essai est lue automatiquement. Ne publiez pas l’archive ni son fichier `.env`.
+## Dépôt public
 
-## Installation depuis GitHub
-
-Python 3.10 ou plus récent et Git sont nécessaires. Depuis le répertoire choisi :
+Python 3.10+ et Git sont nécessaires.
 
 ```powershell
 git clone --recurse-submodules https://github.com/cyrilvoyant/websemantic.git
@@ -21,14 +17,12 @@ python -m venv .venv
 & .\.venv\Scripts\python.exe -m pip install -e ".[tls]"
 ```
 
-Le clone public ne contient aucune clé. Configurez `GEMINI_API_KEY` dans les variables d’environnement utilisateur Windows, ou dans un fichier `.env` privé à la racine du clone. Fermez puis rouvrez le terminal après une modification des variables utilisateur. N’incluez jamais la clé dans un retour de test ou un commit.
+Configurez `GEMINI_API_KEY` dans vos variables d’environnement ou dans un `.env` privé. Rouvrez le terminal après une modification des variables Windows.
 
 ```powershell
 & .\.venv\Scripts\python.exe -m websemantic.cli chat
 ```
 
-L’interprétation nécessite Internet et un accès au service Gemini. Le simulateur TLS est fourni dans une révision fixée. Pour vérifier uniquement le calcul local, ouvrez TLS puis utilisez `/p`, `/v`, `/q` : aucune phrase n’est envoyée au service et la validation admissible lance le calcul.
+Le dialogue utilise Internet. Pour vérifier le calcul local avec les commandes, choisissez TLS puis `/p`, `/v`, `/q`.
 
-## Retour de validation
-
-Transmettez la demande, la réponse, le résultat attendu et le dossier du calcul. Les CSV et le manifeste permettent de retrouver les paramètres et les unités. Ne joignez aucun fichier de configuration contenant une clé.
+Pour un retour de test, joignez la demande, la réponse et le dossier du calcul, sans fichier contenant une clé.

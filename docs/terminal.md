@@ -1,55 +1,39 @@
-# Utilisation du terminal
+# Dialogue
 
-Ouvrez `WebSemantic.cmd`, puis choisissez TLS. LQL et pvlib sont en préparation. Décrivez l’étude en phrases ; aucun raccourci n’est nécessaire pour les exemples du guide.
+Ouvrez `WebSemantic.cmd` et choisissez TLS. Décrivez l’étude, précisez les choix, puis acceptez les hypothèses. Le calcul démarre si les contrôles sont satisfaits ; une modification explicite le relance. Le dossier des résultats apparaît après chaque calcul.
 
-## Dialogue
+Exemples :
 
-- « Propose les paramètres manquants sans les accepter. »
-- « Montre les choix principaux avec leurs unités. »
-- « Explique les options de ventilation. »
-- « Propose cinq questions pour affiner mon étude. »
-- « J’accepte les hypothèses proposées, lance le calcul. »
-- « Passe la longueur à 2,5 km. »
+- « Propose les paramètres manquants. »
+- « Montre le tableau : défaut, valeur retenue, unité et origine. »
+- « Explique les formules utilisées. »
+- « Propose cinq questions pour affiner l’étude. »
+- « J’accepte les hypothèses, lance le calcul. »
 
-Les informations explicites sont traitées avant une éventuelle acceptation. Une négation ou une question n’autorise pas les hypothèses. « Prends le reste par défaut » accepte le profil proposé pour les champs manquants ; ses valeurs restent des hypothèses de démonstration.
-
-Un scénario complet et admissible est calculé après accord. Une modification explicite lance un nouveau calcul si les contrôles sont satisfaits. Une consultation ne relance pas une simulation. Le dossier des résultats est indiqué après chaque calcul.
-
-## Détails
-
-Le tableau courant présente les choix principaux. Demandez tous les paramètres pour afficher également les réglages techniques, ou demandez une définition par son nom français. La graine de base vaut 42 sauf modification explicite ; `base_seed` et `seed` restent dans les CSV et le manifeste.
-
-La recherche documentaire s’active sur demande explicite ou si l’interprétation indique un besoin de sources externes. Elle n’est pas systématique. Les pages indisponibles sont signalées ; une source ne valide aucun paramètre et ne calibre pas le tunnel.
+Une question bloquante demande une réponse sur le choix concerné. La graine reste 42 sauf demande explicite ; elle figure dans les résultats.
 
 ## Raccourcis facultatifs
 
 | Commande | Fonction |
 |---|---|
-| `/s` | Cinq pistes d’affinement |
+| `/help` ou `/a` | Aide |
+| `/s` | Cinq suggestions |
+| `/show` | Résumé |
 | `/d` | Tableau courant |
-| `/details-all` | Tableau complet |
-| `/e NOM` | Définition, unité et options |
-| `/p` | Proposition des valeurs manquantes |
-| `/v` | Accord sur les hypothèses et calcul admissible |
+| `/details-all` | Tous les paramètres |
+| `/e NOM` | Définition et unité |
+| `/formulas` | Formules et coefficients |
+| `/p` | Proposer les défauts manquants |
+| `/v` | Accepter les hypothèses et calculer si admissible |
 | `/web QUESTION` | Recherche documentaire |
-| `/set GROUPE.NOM VALEUR` | Modification explicite en unité canonique, valeur JSON |
-| `/r` | Demande de calcul |
-| `/q` | Fin de la session |
+| `/set GROUPE.NOM VALEUR` | Modifier en unité canonique, valeur JSON |
+| `/r` | Calculer la configuration courante |
+| `/q` | Quitter |
 
-Les commandes locales restent utilisables en cas d’indisponibilité du service conversationnel. Depuis le clone installé, `python -m websemantic.cli chat --direct --model tls` ouvre TLS directement ; sans `--direct`, le menu est affiché.
+Les formes longues sont `/suggest`, `/details`, `/profile`, `/accept`, `/run`, `/quit`. Le préfixe `\` est aussi accepté.
 
-## Limites
+## Deux scénarios
 
-L’interprétation conversationnelle utilise Gemini et les quotas du projet configuré. Il n’y a pas de plafond local par défaut ni de relance automatique après une erreur HTTP. La recherche publique peut être indisponible. Les comparaisons multiples se préparent en scénarios séparés. La transcription et la synthèse vocale restent des évolutions envisagées.
+Nommez « scénario 1 » et « scénario 2 », les valeurs communes et leurs différences. « Même longueur » reprend une longueur déjà définie. Acceptez les hypothèses des deux cas avant le calcul.
 
-## Examiner et préciser l’étude
-
-« Montre le tableau des défauts et des valeurs retenues » distingue le profil déclaré du scénario courant, avec les unités et l’origine. « Explique les formules utilisées » affiche les équations vérifiées et les coefficients des catégories retenues ; `/formulas` donne le même accès local. Les formules et leurs limites figurent dans le référentiel.
-
-En cas de doute, le dialogue pose au plus deux questions ciblées. Une question bloquante survit à une simple consultation et à une acceptation globale ; il faut préciser le champ concerné. Une réponse courte à un niveau proposé est interprétée seulement dans le contexte de la question ouverte, puis reste une hypothèse à valider. Une question facultative aide à affiner l’étude sans bloquer un scénario déjà clair. Une recherche peut expliquer ce que les sources établissent et ce qu’elles laissent inconnu ; elle ne déduit pas une probabilité en tunnel des accidents recensés dans une commune.
-
-## Comparer deux scénarios
-
-Décrivez les deux cas en une phrase ou plusieurs messages : « scénario 1 » et « scénario 2 ». Les valeurs communes doivent être explicites ; une longueur absente n’est pas copiée silencieusement. « Même longueur » permet une égalité traçable depuis une valeur déjà définie. Les tableaux et les formules sont accessibles pour chaque cas. L’accord porte sur les hypothèses des deux configurations avant le double calcul. Une modification ciblée (« pour le scénario 2… ») conserve le premier et recalcule la comparaison quand les contrôles sont satisfaits.
-
-Début, durée, pas interne, nombre de réalisations et graine doivent être identiques. Les comparaisons de périodes différentes et de trois scénarios ou plus demandent une reformulation. Le résumé donne les médianes des deux cas et leur écart ; les réalisations ne sont pas regroupées en une moyenne globale. Le dossier contient les cinq CSV avec `scenario`, `comparison.json`, un manifeste de comparaison et les deux dossiers natifs. Si une exécution échoue, le marqueur `INCOMPLETE.txt` interdit de considérer le dossier comme une comparaison achevée. Redémarrez une conversation pour revenir à une étude simple.
+Début, durée, pas, nombre de réalisations et graine sont communs. Les CSV réunis portent `scenario` ; les sous-dossiers conservent les calculs individuels. Les écarts concernent les configurations complètes. Redémarrez la conversation pour revenir à une étude simple.
