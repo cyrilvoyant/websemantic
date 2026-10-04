@@ -41,3 +41,7 @@ Une comparaison achevée a un manifeste `complete`, deux `scenario_runs` et aucu
 ## Maintenance
 
 `python tools/export_tls_contract.py` régénère contrat, vocabulaire, référentiel et exemple depuis le descripteur. Cette commande exécute un petit scénario pour inventorier les colonnes.
+
+## Réponse courte
+
+Par défaut, afficher les trois médianes (énergie totale, énergie annualisée, pic), leurs unités, la période et le lien vers les fichiers. Indiquer brièvement « simulation ; annualisation extrapolée ». Conserver paramètres, hypothèses, sources, empreintes, versions et graines dans les fichiers de traçabilité. Donner les détails sur demande. Si le parcours exécuté diffère du parcours prévu, le signaler en une phrase et consigner les détails dans la note d’exécution.

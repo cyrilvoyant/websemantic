@@ -70,7 +70,7 @@ EXEMPLE 4 — AVEC UN AGENT PYTHON
 
 Ouvrez votre service habituel avec navigation et exécution Python, puis collez :
 
-À partir de https://github.com/cyrilvoyant/websemantic, suis le parcours agent et calcule avec Python la consommation d’un tunnel fictif de 2 km, 2 tubes, 2 voies par tube, périurbain, éclairage LED fixe et ventilation longitudinale. Simule 30 jours dès le 01/01/2025, pas de 15 min, 10 réalisations. J’accepte les autres défauts du contrat. Donne en français les médianes d’énergie (MWh), d’énergie annualisée (MWh/an) et de pic (kW), les paramètres avec unités et les fichiers calculés.
+Utilise TLS depuis https://github.com/cyrilvoyant/websemantic avec tes outils Python. Calcule la consommation d’un tunnel fictif de 2 km, 2 tubes, 2 voies par tube, périurbain, LED fixe et ventilation longitudinale, sur 30 jours dès le 01/01/2025, au pas de 15 min, avec 10 réalisations. J’accepte les autres défauts. Réponds brièvement en français : énergie (MWh), énergie annualisée (MWh/an, extrapolation), pic (kW) et lien vers les fichiers. Trace les paramètres, hypothèses, sources et détails d’exécution dans les fichiers, sans les détailler à l’écran.
 
 Le dépôt décrit les fichiers nécessaires et leur vérification. Le calcul utilise les sources dans l’espace Python de l’agent. Les résultats restent des simulations ; l’énergie annualisée est une extrapolation.
 

@@ -15,3 +15,7 @@ python agent/run_tls.py scenario.json
 Le script vérifie les fichiers, valide la configuration et appelle le simulateur original. L’empreinte du module exécuté est liée à sa révision publiée ; aucun checkout Git n’est requis. Les fins de ligne CRLF sont normalisées en LF pour cette vérification.
 
 Lisez les CSV et `manifest.json`. Répondez avec les médianes, les unités, la période, les hypothèses et les fichiers produits. L’énergie annualisée est une extrapolation. Conservez configuration, traces et résultats. Signalez un fichier incomplet ou une dépendance manquante sans inventer de chiffres.
+
+## Réponse courte
+
+Par défaut, afficher les trois médianes (énergie totale, énergie annualisée, pic), leurs unités, la période et le lien vers les fichiers. Indiquer brièvement « simulation ; annualisation extrapolée ». Conserver paramètres, hypothèses, sources, empreintes, versions et graines dans les fichiers de traçabilité. Donner les détails sur demande. Si le parcours exécuté diffère du parcours prévu, le signaler en une phrase et consigner les détails dans la note d’exécution.
