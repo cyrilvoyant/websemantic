@@ -20,7 +20,7 @@ with zipfile.ZipFile(archive_path) as old, zipfile.ZipFile(temporary, 'w', compr
     for name in ('pyproject.toml', 'LICENSE', 'AGENTS.md', '.env', 'installer-et-lancer.ps1', 'verifier-installation.py'):
         new.write(root / name, 'WebSemantic_TLS/application/' + name)
     new.writestr('WebSemantic_TLS/application/README.md', 'WebSemantic TLS. Voir ../Guide.txt.\n')
-    for name in ('Installer.cmd', 'WebSemantic_TLS.cmd', 'Guide.txt'):
+    for name in ('Installer.cmd', 'WebSemantic.cmd', 'Guide.txt'):
         new.write(root / 'packaging/windows' / name, 'WebSemantic_TLS/' + name)
 temporary.replace(archive_path)
 print('Archive privée mise à jour (aucune clé affichée).')

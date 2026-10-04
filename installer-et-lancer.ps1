@@ -119,7 +119,7 @@ s = subprocess.check_output(['git', '-C', p, 'status', '--porcelain', '--untrack
 assert c == d['software']['commit'] and not s, 'Version TLS incorrecte ou sources modifiees'
 "@ | & $pythonExecutable -
     if ($LASTEXITCODE -ne 0) { throw 'Le contrôle du simulateur TLS a échoué.' }
-    Write-Host 'Vérification terminée. Ouvrez WebSemantic_TLS.cmd pour utiliser le programme.'
+    Write-Host 'Vérification terminée. Ouvrez WebSemantic.cmd pour utiliser le programme.'
     exit 0
 } catch {
     Write-Host ('Erreur : ' + $_.Exception.Message) -ForegroundColor Red

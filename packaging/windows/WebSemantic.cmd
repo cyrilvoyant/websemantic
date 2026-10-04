@@ -3,7 +3,7 @@ set "appPath=%~dp0application"
 set "WEBSEMANTIC_OUTPUT_DIR=%~dp0Resultats"
 if "%appPath:~0,2%"=="\\" set "appPath=%LOCALAPPDATA%\WebSemantic_TLS\application"
 if not exist "%appPath%\.venv\Scripts\python.exe" (
- echo L environnement Python de WebSemantic_TLS est absent.
+ echo L environnement Python de WebSemantic est absent.
  echo Lancez Installer.cmd pour installer les composants necessaires.
  pause
  exit /b 1

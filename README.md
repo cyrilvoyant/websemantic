@@ -10,7 +10,7 @@ Start with [the agent execution contract](docs/agent-contract.md), [all paramete
 
 ## Try the terminal PoC
 
-**Windows :** décompressez entièrement le package privé, puis double-cliquez sur `Installer.cmd`. Pour les usages suivants, ouvrez `WebSemantic_TLS.cmd` : ce lanceur ne réalise aucune installation. Le menu propose TLS (disponible), LQL et pvlib (Work in progress). Les composants compatibles déjà présents sont conservés. Le `.env` du package privé est lu automatiquement ; le clone GitHub ne contient aucune clé. Ne lancez pas directement depuis le ZIP et ne publiez pas l’archive privée.
+**Windows :** décompressez entièrement le package privé, puis double-cliquez sur `Installer.cmd`. Pour les usages suivants, ouvrez `WebSemantic.cmd` : ce lanceur ne réalise aucune installation. Le menu propose TLS (disponible), LQL et pvlib (Work in progress). Les composants compatibles déjà présents sont conservés. Le `.env` du package privé est lu automatiquement ; le clone GitHub ne contient aucune clé. Ne lancez pas directement depuis le ZIP et ne publiez pas l’archive privée.
 
 **Installation on another Windows PC:** [French step-by-step guide](docs/installation-windows.md). Clone with submodules, install `.[tls]`, configure your own Gemini key, then run the terminal. No activation or GUI is required.
 
@@ -195,7 +195,7 @@ Exemple : `Calcule un tunnel de 1500 m comme Ajaccio avec des hypothèses de tra
 
 ### Lancement sans installation
 
-`WebSemantic_TLS.cmd` effectue uniquement des contrôles avant d’ouvrir la conversation : environnement Python, versions minimales des dépendances, imports et révision TLS. Si quelque chose manque, il indique de lancer `Installer.cmd` ; aucun installateur n’est appelé par le lanceur.
+`WebSemantic.cmd` effectue uniquement des contrôles avant d’ouvrir la conversation : environnement Python, versions minimales des dépendances, imports et révision TLS. Si quelque chose manque, il indique de lancer `Installer.cmd` ; aucun installateur n’est appelé par le lanceur.
 
 `Installer.cmd` vérifie l’environnement réel, sans se baser sur un fichier témoin. Python >=3.10 et les bibliothèques plus récentes compatibles sont conservés. `pip install -e .[tls]` n’est exécuté que si une dépendance manque, est trop ancienne ou ne se charge pas ; sans option `--upgrade` ni réinstallation forcée. L’installateur n’ouvre jamais la conversation. Le backend TLS reste fixé au commit scientifique déclaré, indépendamment des versions des outils d’installation.
 

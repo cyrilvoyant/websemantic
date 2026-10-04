@@ -6,7 +6,7 @@ Voici trois essais pour préparer un scénario, vérifier ses hypothèses et obt
 1 — INSTALLATION ET UTILISATION
 
 Décompressez le package et double-cliquez sur Installer.cmd, une seule fois.
-Ensuite, double-cliquez sur WebSemantic_TLS.cmd et choisissez 1 (TLS).
+Ensuite, double-cliquez sur WebSemantic.cmd et choisissez 1 (TLS).
 Le lanceur n'installe rien. S'il signale un composant manquant, relancez Installer.cmd. LQL et pvlib sont encore en préparation.
 
 Internet est nécessaire. La clé est déjà fournie pour cet essai privé : ne diffusez pas ce package publiquement.
@@ -23,7 +23,7 @@ TLS : https://github.com/cyrilvoyant/tunnel-load-simulator
 
 EXEMPLE 1 — JE SAIS CE QUE JE VEUX
 
-Lancez WebSemantic_TLS.cmd, choisissez 1. Copiez le paragraphe entier en un seul message :
+Lancez WebSemantic.cmd, choisissez 1. Copiez le paragraphe entier en un seul message :
 
 Calcule ce scénario fictif dont j'accepte tous les paramètres : longueur 2000 m ; 2 tubes ; 2 voies par tube ; altitude 300 m ; profondeur maximale 80 m ; pente 2 % ; contexte peri-urban ; éclairage LED fixed ; ventilation longitudinal ; auxiliaires 35 kW/(km·tube) ; charge fixe 40 kW ; trafic relatif 1 ; pointes à 8 h et 18 h ; largeur des pics 1,4 h ; sensibilité au trafic 0,65 ; bruit relatif 0,06 ; probabilité quotidienne de pollution 0,05 et d'accident 0,015 ; sensibilité à la pollution 0,55 et aux accidents 0,75. Début 2025-01-01 ; durée 30 jours ; pas 15 minutes ; 10 réalisations ; graine 42.
 
@@ -31,7 +31,7 @@ Tous les paramètres sont fournis. Vous devez obtenir l'énergie sur 30 jours et
 
 EXEMPLE 2 — JE PRÉCISE UNE IDÉE VAGUE
 
-Lancez WebSemantic_TLS.cmd, choisissez 1 dans une nouvelle conversation.
+Lancez WebSemantic.cmd, choisissez 1 dans une nouvelle conversation.
 Copiez les six instructions suivantes, une par une ; attendez la réponse entre deux instructions.
 
 1) /web Je souhaite étudier un tunnel moyen à Montpellier avec une ventilation ancienne et obtenir une série annuelle journalière. Quelles sources locales et quelles hypothèses dois-je distinguer ?
