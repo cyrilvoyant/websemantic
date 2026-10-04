@@ -9,7 +9,13 @@ cd C:\Users\cvoyant\Documents\websemantic\semantic-sim-layer
 & .\.venv\Scripts\websemantic.exe chat --model tls
 ```
 
-La variable utilisateur Windows GEMINI_API_KEY est lue sans afficher la cle, meme si le processus n'a pas encore recharge ses variables. Modele initial : gemini-3.5-flash-lite. Maximum cinq tentatives API par session, y compris les appels echoues. Pas de relance automatique ni de changement automatique de modele. L'historique de la session et le descripteur sont transmis a Gemini avec chaque phrase; ne pas saisir de donnees sensibles dans ce PoC.
+La variable utilisateur Windows GEMINI_API_KEY est lue sans afficher la cle, meme si le processus n'a pas encore recharge ses variables. Modele initial : gemini-3.5-flash-lite. Pas de plafond local par défaut ; les quotas du projet Gemini restent applicables. Pas de relance automatique ni de changement automatique de modele. L'historique de la session et le descripteur sont transmis a Gemini avec chaque phrase; ne pas saisir de donnees sensibles dans ce PoC.
+
+## Parler naturellement
+
+Le guide livré dans le package propose trois essais avec des phrases à copier. Par exemple : « Propose les valeurs manquantes sans les accepter », « Explique-moi la graine », « Montre le tableau des paramètres avec leurs unités », « Propose cinq questions pour affiner mon étude », puis « J’accepte les hypothèses proposées, lance le calcul ». Gemini propose les actions ; les opérations et le consentement sont contrôlés localement. « Prends le reste par défaut » reste une acceptation explicite et autonome du profil pour les champs manquants.
+
+La recherche n’est pas systématique pour chaque phrase : elle se déclenche sur une demande documentaire explicite ou lorsque Gemini indique que des sources externes sont nécessaires. Les définitions du contrat restent locales. Les raccourcis ci-dessous sont facultatifs.
 
 ## Premier parcours
 

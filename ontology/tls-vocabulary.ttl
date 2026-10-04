@@ -102,6 +102,8 @@ ws:base_fixed_kw a skos:Concept ;
     ws:unitSymbol "kW" .
 
 ws:base_seed a skos:Concept ;
+    skos:altLabel "graine aléatoire"@fr,
+        "seed"@fr ;
     skos:definition "Graine pseudo-aléatoire pour reproduire le calcul."@fr ;
     skos:prefLabel "Graine"@fr ;
     ws:boundAuthority "policy" ;

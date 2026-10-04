@@ -17,7 +17,7 @@ def test_future_choices_repeat_menu_without_llm_or_backend(monkeypatch, capsys):
     assert 'websemantic.lql — Work in progress.' in output
     assert 'websemantic.pvlib — Work in progress.' in output
     assert output.count('choisissez votre environnement') == 4
-    assert output.count('websemantic.tls /') == 1
+    assert output.count('WebSemantic — TLS') == 1
 
 
 def test_quit_menu_does_not_load_descriptor(monkeypatch, tmp_path, capsys):

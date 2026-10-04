@@ -60,6 +60,8 @@ def vocabulary(descriptor, qualification=None):
         graph.add((term, SKOS.definition, Literal(definition, lang="fr")))
         graph.add((term, WS.unitSymbol, Literal(unit)))
         group, spec = specs[name]
+        for alias in spec.get("aliases", []):
+            graph.add((term, SKOS.altLabel, Literal(alias, lang="fr")))
         graph.add((term, WS.fieldPath, Literal(f"{group}.{name}")))
         graph.add((term, WS.dataType, Literal(spec["type"])))
         if spec.get("unit"):

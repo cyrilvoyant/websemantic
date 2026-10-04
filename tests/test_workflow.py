@@ -73,7 +73,8 @@ def test_cli_short_commands_and_default_phrase(monkeypatch, capsys):
     assert 'hypothèse validée' in output
     assert 'kW/(km·tube)' in output
     assert 'Altitude — unité : m' in output
-    assert 'Sans plafond local' in output
+    assert 'WebSemantic — TLS' in output
+    assert 'Outils :' not in output
     assert 'Commande inconnue' not in output
 
 

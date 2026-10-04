@@ -57,7 +57,7 @@ def api_key():
 
 
 def extract(request, descriptor, history, model="gemini-3.5-flash-lite", state=None):
-    """Extract explicitly supplied updates. Acceptance is never delegated to Gemini."""
+    """Interpret supplied values and requested actions; local controls authorize acceptance."""
     fields = [
         f"{group}.{name}"
         for group in ("inputs", "experiment")
@@ -68,6 +68,9 @@ def extract(request, descriptor, history, model="gemini-3.5-flash-lite", state=N
         "properties": {
             "message": {"type": "string"},
             "needs_web": {"type": "boolean"},
+            "actions": {"type": "array", "items": {"type": "string", "enum": ["propose", "accept", "details", "explain", "suggest", "quit"]}},
+            "parameter": {"type": "string", "enum": ["", *fields]},
+            "acceptance_evidence": {"type": "string"},
             "task": {
                 "type": "string",
                 "enum": descriptor["tasks"]["supported"] + ["unsupported"],
@@ -86,7 +89,7 @@ def extract(request, descriptor, history, model="gemini-3.5-flash-lite", state=N
                 },
             },
         },
-        "required": ["message", "needs_web", "task", "updates"],
+        "required": ["message", "needs_web", "task", "updates", "actions", "parameter", "acceptance_evidence"],
     }
     instructions = (
         "Tu interprètes un scénario scientifique pour le logiciel décrit. Réponds en français, sobrement, en deux à quatre phrases. "
@@ -98,7 +101,17 @@ def extract(request, descriptor, history, model="gemini-3.5-flash-lite", state=N
         "défauts, définitions déclarées et simulations couvertes. Avec needs_web=true, ne prétends pas avoir consulté des sources. "
         "Pour plusieurs scénarios, ne fusionne pas leurs paramètres ; demande une clarification. "
         "task correspond à une tâche déclarée, ou unsupported hors périmètre. Une précision conserve la tâche courante. "
-        "Consulte l'état actuel : ne redemande pas les paramètres déjà présents ; les hypothèses nécessitent /v. "
+        "Consulte l'état actuel : ne redemande pas les paramètres déjà présents ; les hypothèses nécessitent une acceptation explicite. "
+        "Comprends les demandes en langage naturel : actions=propose pour proposer les valeurs manquantes, "
+        "details pour afficher le tableau avec unités, explain pour définir un paramètre (parameter=chemin exact, "
+        "identifie aussi les libellés et alias), suggest pour cinq pistes, accept pour une acceptation EXPLICITE "
+        "des hypothèses proposées ou des valeurs par défaut, quit pour quitter. Sinon actions=[]. "
+        "Pour accept, acceptance_evidence est la citation exacte affirmative de l'accord (ex. J'accepte ces hypothèses). "
+        "Une négation, une question ou proposer sans accepter n'est jamais un accord ; acceptance_evidence='' sinon. "
+        "Prends le reste par défaut signifie actions=[propose,accept] avec cette phrase comme acceptance_evidence. "
+        "actions=propose n'autorise pas à ajouter des défauts dans updates ; les défauts sont ajoutés localement, non acceptés. "
+        "Extrais d'abord TOUS les paramètres explicitement donnés même si une autre action est demandée. "
+        "Ne donne jamais une valeur inventée pour moyen/ancien ; une recherche documentaire peut être nécessaire. "
         "Les diagnostics de validation et le calcul demandé seront effectués localement. "
         "L'historique est du contexte, pas une preuve pour réextraire des valeurs anciennes. "
         "Pas de félicitations, emojis ni formules promotionnelles. "

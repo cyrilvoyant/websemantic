@@ -48,7 +48,7 @@ class Session:
             r"(?:les|des)\s+valeurs\s+(?:par\s+defaut|moyennes|du\s+profil(?:\s+de\s+demonstration)?)"
             r"\s*[.!]?\s*"
         )
-        if re.fullmatch(acceptance, text):
+        if re.fullmatch(acceptance, text) or re.fullmatch(r"\s*(?:prends|utilise|accepte)\s+le\s+reste\s+par\s+defaut\s*[.!]?\s*", text):
             self.propose_profile()
             self.accept_profile()
             self.pending_clarification = None

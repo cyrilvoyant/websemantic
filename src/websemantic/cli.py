@@ -9,6 +9,7 @@ from pathlib import Path
 import yaml
 
 from websemantic import web_research
+from websemantic.conversation import explicit_consent, requested_actions
 from websemantic.gemini import GeminiError, extract, load_private_key
 from websemantic.geography import apply_report, location, research, show_report
 from websemantic.registry import environments, execute, load_descriptor
@@ -63,7 +64,7 @@ def show(session):
             print('Pour un premier essai : « prends les valeurs par défaut ». Le calcul demandé attend les informations suffisantes.')
     unaccepted = [issue for issue in result.issues if issue.code == 'unaccepted_assumption']
     if unaccepted:
-        print(f'{len(unaccepted)} hypothèses attendent votre accord. Consultez /details, puis /accept pour accepter le profil proposé.')
+        print(f'{len(unaccepted)} hypothèses attendent votre accord. Demandez le tableau pour les examiner, puis dites « J’accepte les hypothèses proposées » si vous souhaitez les utiliser.')
     for issue in result.issues:
         if issue.code not in ('missing', 'unaccepted_assumption'):
             print(f'À vérifier : {issue.field} ({issue.code}).')
@@ -87,6 +88,14 @@ def details(session, full=False):
 
 def explain(session, name):
     name = name.split('.')[-1]
+    from websemantic.units import fold
+
+    matches = [field for group in ('inputs', 'experiment')
+               for field, spec in session.descriptor.get(group, {}).items()
+               if fold(name) in {fold(field), fold(spec.get('label', field)),
+                                 *(fold(alias) for alias in spec.get('aliases', []))}]
+    if len(matches) == 1:
+        name = matches[0]
     for group in ('inputs', 'experiment'):
         if name in session.descriptor.get(group, {}):
             label, unit, definition = describe(name, session.descriptor)
@@ -94,12 +103,12 @@ def explain(session, name):
             spec = session.descriptor[group][name]
             if 'values' in spec:
                 print('Choix possibles : ' + ', '.join(spec['values']))
-            print(f'Modifier : /set {group}.{name} VALEUR (valeur dans cette unité ; catégorie entre guillemets).')
+            print(f'Pour le modifier, indiquez le nouveau choix en précisant {label.lower()} et son unité.')
             record = getattr(session.scenario, group).get(name)
             if record and record.source:
                 print('Source :', record.source)
             return
-    print('Variable inconnue. /d affiche les variables déclarées.')
+    print('Paramètre non reconnu. Demandez le tableau des paramètres pour retrouver son nom.')
 
 
 def results_table(session, target, medians):
@@ -250,12 +259,10 @@ def main(argv=None):
     namespace = presentation(session).get("namespace", "websemantic." + args.model)
     last_output = None
     choices = []
+    print(f"WebSemantic — {presentation(session).get('short_name', args.model)}")
+    print('Écrivez votre demande : je peux proposer des hypothèses, expliquer les paramètres ou lancer le calcul après validation.')
     print(
-        f"{namespace} / {args.llm}. " + (f"Maximum {args.max_calls} appels." if args.max_calls else 'Sans plafond local de conversation ; quotas Gemini applicables.')
-    )
-    print('Outils : /s 5 suggestions | /d tableau | /e variable | /web question | /p proposer | /v valider | /r calculer | /q quitter')
-    print(
-        "La validation ou une modification déclenche le calcul dès que le scénario est complet. /s pour vous guider."
+        "La validation ou une modification déclenche le calcul dès que le scénario est complet."
     )
     while True:
         try:
@@ -422,10 +429,35 @@ def main(argv=None):
                     if args.once:
                         return 0
                     continue
+                actions = requested_actions(parsed)
+                unresolved = session.pending_clarification
                 session.apply(line, parsed)
+                if unresolved and not parsed['updates'] and actions:
+                    session.pending_clarification = unresolved
+                if 'quit' in actions:
+                    return 0
+                if 'propose' in actions:
+                    session.propose_profile()
+                if 'accept' in actions:
+                    if session.geographic_pending or session.pending_clarification:
+                        raise ClarificationNeeded(session.pending_clarification or 'Le contexte documentaire doit être résolu avant validation.')
+                    if not explicit_consent(line, parsed.get('acceptance_evidence')):
+                        session.run_requested = False
+                        raise ClarificationNeeded('Les hypothèses restent non acceptées. Confirmez explicitement votre accord si vous souhaitez les utiliser.')
+                    session.accept_profile()
+                    session.run_requested = True
+                    session.history.append({'user': line, 'assistant': 'Hypothèses explicitement acceptées après extraction des valeurs fournies.'})
+                if 'details' in actions:
+                    details(session)
+                if 'explain' in actions:
+                    explain(session, parsed.get('parameter', ''))
+                if 'suggest' in actions:
+                    for number, (label, _) in enumerate(suggestions(session, last_output is not None), 1):
+                        print(f'{number}. {label}')
                 if not (session.run_requested and session.result().decision == 'execute'):
                     print("WebSemantic >", parsed.get("message", ""))
-                show(session)
+                if parsed["updates"] or session.run_requested or actions & {"propose", "accept"}:
+                    show(session)
                 may_run = True
             if may_run:
                 output = run_if_ready(session, args, descriptor)
@@ -441,9 +473,6 @@ def main(argv=None):
             print(f"Erreur : {exc}")
             if args.once:
                 return 1
-        finally:
-            if not args.once:
-                print("\nOutils : /s suggestions | /d tableau et unités | /e variable | /web question | /p proposer | /v valider | /r calculer | /set modifier | /q quitter")
 
 
 if __name__ == "__main__":

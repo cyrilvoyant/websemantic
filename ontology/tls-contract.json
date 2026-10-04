@@ -522,6 +522,10 @@
         ]
       },
       "base_seed": {
+        "aliases": [
+          "seed",
+          "graine aléatoire"
+        ],
         "type": "int",
         "bounds": {
           "min": 0,
