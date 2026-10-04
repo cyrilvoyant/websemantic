@@ -13,11 +13,11 @@ with zipfile.ZipFile(archive_path) as old, zipfile.ZipFile(temporary, 'w', compr
     for item in old.infolist():
         if item.filename.startswith('WebSemantic_TLS/application/external/tunnel-load-simulator/'):
             new.writestr(item, old.read(item.filename))
-    for directory in ('src', 'descriptors', 'ontology'):
+    for directory in ('src', 'descriptors', 'ontology', 'docs', 'examples', 'tools'):
         for path in (root / directory).rglob('*'):
             if path.is_file() and '__pycache__' not in path.parts and not path.name.endswith('.pyc'):
                 new.write(path, 'WebSemantic_TLS/application/' + path.relative_to(root).as_posix())
-    for name in ('pyproject.toml', 'LICENSE', '.env', 'installer-et-lancer.ps1', 'verifier-installation.py'):
+    for name in ('pyproject.toml', 'LICENSE', 'AGENTS.md', '.env', 'installer-et-lancer.ps1', 'verifier-installation.py'):
         new.write(root / name, 'WebSemantic_TLS/application/' + name)
     new.writestr('WebSemantic_TLS/application/README.md', 'WebSemantic TLS. Voir ../Guide.txt.\n')
     for name in ('Installer.cmd', 'WebSemantic_TLS.cmd', 'Guide.txt'):

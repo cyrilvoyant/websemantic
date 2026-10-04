@@ -474,6 +474,7 @@ experiment:
     - unit:NUM
     display_hidden: true
 outputs:
+  daily: derived daily energy sum (kWh) and mean power (kW) of realization 0, not ensemble median
   representative: time series of run 0, load decomposition
   kpis: one row per Monte Carlo run (annual energy uses 365/n_days extrapolation)
   envelope: hourly median, p10, p90 and mean of total power across runs

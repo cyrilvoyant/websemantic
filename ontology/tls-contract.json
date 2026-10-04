@@ -1,0 +1,805 @@
+{
+  "schema_version": "websemantic-tls-contract-1",
+  "software": {
+    "name": "Tunnel Load Simulator",
+    "version": "v1.0.1+748e053",
+    "repository": "https://github.com/cyrilvoyant/tunnel-load-simulator",
+    "commit": "748e053e129669cf3e896d381e3c0ac01c763edd",
+    "doi": "10.5281/zenodo.20080042",
+    "licence": "MIT",
+    "entry_point": "tunnel_load_simulator.simulator:run_monte_carlo",
+    "config_class": "tunnel_load_simulator.simulator:TunnelConfig"
+  },
+  "runtime": {
+    "adapter": "websemantic.adapters.tls:run",
+    "backend_path": "external/tunnel-load-simulator",
+    "backend_marker": "src/tunnel_load_simulator/simulator.py"
+  },
+  "parameters": {
+    "inputs": {
+      "length_m": {
+        "type": "float",
+        "unit": "unit:M",
+        "bounds": {
+          "min_exclusive": 0,
+          "authority": "code"
+        },
+        "label": "Longueur",
+        "display_unit": "m",
+        "definition": "Longueur du tunnel, commune aux tubes.",
+        "default": 1500,
+        "unit_aliases": [
+          "m",
+          "metre",
+          "metres",
+          "mètre",
+          "mètres"
+        ],
+        "evidence_conversion": {
+          "units": {
+            "km": 1000,
+            "kilometre": 1000,
+            "kilometres": 1000,
+            "m": 1,
+            "metre": 1,
+            "metres": 1
+          },
+          "word_numbers": {
+            "un": 1,
+            "une": 1,
+            "deux": 2,
+            "trois": 3,
+            "quatre": 4,
+            "cinq": 5,
+            "six": 6,
+            "sept": 7,
+            "huit": 8,
+            "neuf": 9,
+            "dix": 10
+          }
+        }
+      },
+      "n_tubes": {
+        "type": "int",
+        "unit": "unit:NUM",
+        "bounds": {
+          "min": 1,
+          "max": 8,
+          "authority": "code"
+        },
+        "label": "Tubes",
+        "display_unit": "nombre",
+        "definition": "Nombre de tubes du tunnel.",
+        "default": 2,
+        "unit_aliases": [
+          null,
+          "unit:UNITLESS",
+          "tubes",
+          "voies",
+          "nombre",
+          "number",
+          "count",
+          "1",
+          "réalisations",
+          "realisations"
+        ]
+      },
+      "n_lanes_per_tube": {
+        "type": "int",
+        "unit": "unit:NUM",
+        "bounds": {
+          "min": 1,
+          "max": 6,
+          "authority": "code"
+        },
+        "label": "Voies par tube",
+        "display_unit": "nombre",
+        "definition": "Nombre de voies dans chaque tube.",
+        "default": 2,
+        "unit_aliases": [
+          null,
+          "unit:UNITLESS",
+          "tubes",
+          "voies",
+          "nombre",
+          "number",
+          "count",
+          "1",
+          "réalisations",
+          "realisations"
+        ]
+      },
+      "altitude_m": {
+        "type": "float",
+        "unit": "unit:M",
+        "label": "Altitude",
+        "display_unit": "m",
+        "definition": "Altitude du tunnel ; une ville ne fixe pas celle du site.",
+        "default": 300,
+        "unit_aliases": [
+          "m",
+          "metre",
+          "metres",
+          "mètre",
+          "mètres"
+        ]
+      },
+      "max_depth_m": {
+        "type": "float",
+        "unit": "unit:M",
+        "label": "Couverture maximale",
+        "display_unit": "m",
+        "definition": "Épaisseur maximale au-dessus du tunnel dans TLS.",
+        "default": 80,
+        "unit_aliases": [
+          "m",
+          "metre",
+          "metres",
+          "mètre",
+          "mètres"
+        ]
+      },
+      "gradient_percent": {
+        "type": "float",
+        "unit": "unit:PERCENT",
+        "label": "Pente",
+        "display_unit": "%",
+        "definition": "Pente longitudinale : 2 % correspond à 2 m par 100 m.",
+        "default": 2.0,
+        "unit_aliases": [
+          "%",
+          "percent",
+          "pourcent",
+          "pourcentage"
+        ]
+      },
+      "tunnel_context": {
+        "type": "category",
+        "values": [
+          "urban",
+          "peri-urban",
+          "rural"
+        ],
+        "authority": "code",
+        "label": "Contexte",
+        "display_unit": "catégorie",
+        "definition": "Urbain, périurbain ou rural : modifie le modèle de trafic.",
+        "default": "peri-urban",
+        "unit_aliases": [
+          null,
+          "",
+          "1",
+          "sans dimension",
+          "sans unité",
+          "unit:UNITLESS",
+          "None",
+          "null",
+          "catégorie",
+          "categorie",
+          "category",
+          "categorical"
+        ]
+      },
+      "lighting_type": {
+        "type": "category",
+        "values": [
+          "LED adaptive",
+          "LED fixed",
+          "mixed",
+          "sodium fixed"
+        ],
+        "authority": "code",
+        "label": "Éclairage",
+        "display_unit": "catégorie",
+        "definition": "Technologie et commande, pas une intensité lumineuse en lux.",
+        "default": "LED adaptive",
+        "unit_aliases": [
+          null,
+          "",
+          "1",
+          "sans dimension",
+          "sans unité",
+          "unit:UNITLESS",
+          "None",
+          "null",
+          "catégorie",
+          "categorie",
+          "category",
+          "categorical"
+        ]
+      },
+      "ventilation_type": {
+        "type": "category",
+        "values": [
+          "natural/low ventilation",
+          "longitudinal",
+          "semi-transverse",
+          "transverse"
+        ],
+        "authority": "code",
+        "label": "Ventilation",
+        "display_unit": "catégorie",
+        "definition": "Type de ventilation modélisé.",
+        "default": "longitudinal",
+        "unit_aliases": [
+          null,
+          "",
+          "1",
+          "sans dimension",
+          "sans unité",
+          "unit:UNITLESS",
+          "None",
+          "null",
+          "catégorie",
+          "categorie",
+          "category",
+          "categorical"
+        ]
+      },
+      "aux_kw_per_km_tube": {
+        "type": "float",
+        "unit": "unit:KiloW per km per tube",
+        "label": "Auxiliaires",
+        "display_unit": "kW/(km·tube)",
+        "definition": "Puissance auxiliaire par kilomètre et par tube.",
+        "default": 35.0,
+        "unit_aliases": [
+          "kW par km et par tube",
+          "kW/(km.tube)",
+          "kW/(km·tube)",
+          "kW/km/tube"
+        ]
+      },
+      "base_fixed_kw": {
+        "type": "float",
+        "unit": "unit:KiloW",
+        "label": "Charge fixe",
+        "display_unit": "kW",
+        "definition": "Puissance constante ajoutée pour l'ensemble du tunnel.",
+        "default": 40.0,
+        "unit_aliases": [
+          "kW",
+          "kilowatt",
+          "kilowatts",
+          "kw"
+        ]
+      },
+      "traffic_level": {
+        "type": "float",
+        "unit": "unit:UNITLESS",
+        "note": "relative multiplier",
+        "label": "Trafic relatif",
+        "display_unit": "1",
+        "definition": "Multiplicateur du trafic ; 1 est la référence, pas des véhicules/jour.",
+        "default": 1.0,
+        "unit_aliases": [
+          null,
+          "1",
+          "unit:NUM",
+          "sans dimension",
+          "dimensionless",
+          "UNITLESS"
+        ]
+      },
+      "morning_peak_hour": {
+        "type": "float",
+        "unit": "unit:HR",
+        "label": "Pointe du matin",
+        "display_unit": "h du jour",
+        "definition": "Heure centrale du pic de trafic, entre 0 et 24.",
+        "default": 8.0,
+        "unit_aliases": [
+          "h",
+          "h du jour",
+          "heure",
+          "heures",
+          "hour",
+          "hours"
+        ]
+      },
+      "evening_peak_hour": {
+        "type": "float",
+        "unit": "unit:HR",
+        "label": "Pointe du soir",
+        "display_unit": "h du jour",
+        "definition": "Heure centrale du pic de trafic, entre 0 et 24.",
+        "default": 18.0,
+        "unit_aliases": [
+          "h",
+          "h du jour",
+          "heure",
+          "heures",
+          "hour",
+          "hours"
+        ]
+      },
+      "peak_width_h": {
+        "type": "float",
+        "unit": "unit:HR",
+        "label": "Largeur des pics",
+        "display_unit": "h",
+        "definition": "Durée caractéristique des pics de trafic.",
+        "default": 1.4,
+        "unit_aliases": [
+          "h",
+          "h du jour",
+          "heure",
+          "heures",
+          "hour",
+          "hours"
+        ]
+      },
+      "traffic_sensitivity": {
+        "type": "float",
+        "unit": "unit:UNITLESS",
+        "label": "Sensibilité au trafic",
+        "display_unit": "1",
+        "definition": "Coefficient du modèle, sans dimension.",
+        "default": 0.65,
+        "unit_aliases": [
+          null,
+          "1",
+          "unit:NUM",
+          "sans dimension",
+          "dimensionless",
+          "UNITLESS"
+        ]
+      },
+      "noise_sigma": {
+        "type": "float",
+        "unit": "unit:UNITLESS",
+        "bounds": {
+          "min": 0,
+          "authority": "code"
+        },
+        "label": "Bruit multiplicatif",
+        "display_unit": "1",
+        "definition": "Écart-type relatif du bruit ; 0,06 correspond à 6 %.",
+        "default": 0.06,
+        "unit_aliases": [
+          null,
+          "1",
+          "unit:NUM",
+          "sans dimension",
+          "dimensionless",
+          "UNITLESS"
+        ]
+      },
+      "pollution_probability_per_day": {
+        "type": "float",
+        "unit": "unit:UNITLESS",
+        "bounds": {
+          "min": 0,
+          "max": 1,
+          "authority": "code"
+        },
+        "label": "Probabilité de pollution",
+        "display_unit": "1",
+        "definition": "Probabilité par jour ; 0,05 = 5 %, pas un taux mesuré.",
+        "default": 0.05,
+        "unit_aliases": [
+          null,
+          "1",
+          "unit:NUM",
+          "sans dimension",
+          "dimensionless",
+          "UNITLESS"
+        ]
+      },
+      "accident_probability_per_day": {
+        "type": "float",
+        "unit": "unit:UNITLESS",
+        "bounds": {
+          "min": 0,
+          "max": 1,
+          "authority": "code"
+        },
+        "label": "Probabilité d'accident",
+        "display_unit": "1",
+        "definition": "Probabilité par jour ; 0,015 = 1,5 %.",
+        "default": 0.015,
+        "unit_aliases": [
+          null,
+          "1",
+          "unit:NUM",
+          "sans dimension",
+          "dimensionless",
+          "UNITLESS"
+        ]
+      },
+      "pollution_sensitivity": {
+        "type": "float",
+        "unit": "unit:UNITLESS",
+        "label": "Sensibilité pollution",
+        "display_unit": "1",
+        "definition": "Coefficient de surcroît lié aux événements de pollution.",
+        "default": 0.55,
+        "unit_aliases": [
+          null,
+          "1",
+          "unit:NUM",
+          "sans dimension",
+          "dimensionless",
+          "UNITLESS"
+        ]
+      },
+      "accident_sensitivity": {
+        "type": "float",
+        "unit": "unit:UNITLESS",
+        "label": "Sensibilité accidents",
+        "display_unit": "1",
+        "definition": "Coefficient de surcroît lié aux accidents simulés.",
+        "default": 0.75,
+        "unit_aliases": [
+          null,
+          "1",
+          "unit:NUM",
+          "sans dimension",
+          "dimensionless",
+          "UNITLESS"
+        ]
+      }
+    },
+    "experiment": {
+      "start_date": {
+        "type": "date",
+        "label": "Début",
+        "display_unit": "date",
+        "definition": "Premier jour simulé, au format AAAA-MM-JJ.",
+        "default": "2025-01-01",
+        "unit_aliases": [
+          null,
+          "",
+          "1",
+          "sans dimension",
+          "sans unité",
+          "unit:UNITLESS",
+          "None",
+          "null",
+          "date",
+          "YYYY-MM-DD",
+          "ISO8601"
+        ]
+      },
+      "n_days": {
+        "type": "int",
+        "unit": "unit:DAY",
+        "bounds": {
+          "min": 1,
+          "authority": "policy"
+        },
+        "label": "Durée",
+        "display_unit": "jours",
+        "definition": "Nombre de jours effectivement simulés.",
+        "default": 7,
+        "unit_aliases": [
+          "day",
+          "days",
+          "j",
+          "jour",
+          "jours"
+        ]
+      },
+      "freq_minutes": {
+        "type": "int",
+        "unit": "unit:MIN",
+        "bounds": {
+          "min": 1,
+          "authority": "policy"
+        },
+        "label": "Pas de calcul",
+        "display_unit": "min",
+        "definition": "Durée entre deux points de calcul.",
+        "default": 60,
+        "unit_aliases": [
+          "min",
+          "minute",
+          "minutes"
+        ]
+      },
+      "n_runs": {
+        "type": "int",
+        "unit": "unit:NUM",
+        "bounds": {
+          "min": 1,
+          "authority": "policy"
+        },
+        "label": "Réalisations",
+        "display_unit": "nombre",
+        "definition": "Nombre de trajectoires Monte Carlo.",
+        "default": 3,
+        "unit_aliases": [
+          null,
+          "unit:UNITLESS",
+          "tubes",
+          "voies",
+          "nombre",
+          "number",
+          "count",
+          "1",
+          "réalisations",
+          "realisations"
+        ]
+      },
+      "base_seed": {
+        "type": "int",
+        "bounds": {
+          "min": 0,
+          "authority": "policy"
+        },
+        "label": "Graine",
+        "display_unit": "identifiant",
+        "definition": "Graine pseudo-aléatoire pour reproduire le calcul.",
+        "default": 42,
+        "unit_aliases": [
+          null,
+          "",
+          "1",
+          "sans dimension",
+          "sans unité",
+          "unit:UNITLESS",
+          "None",
+          "null",
+          "identifiant",
+          "identifier",
+          "id",
+          "nombre",
+          "number",
+          "unit:NUM"
+        ],
+        "display_hidden": true
+      }
+    }
+  },
+  "tasks": {
+    "supported": [
+      "estimate electricity demand (energy, peak, load factor) of a road tunnel under stated assumptions",
+      "compare configurations (lighting, ventilation, traffic) with controlled seeds",
+      "characterise stochastic variability from modelled events"
+    ],
+    "excluded": [
+      "certify design values or predict consumption of a real tunnel without calibration",
+      "infer traffic in vehicles per day"
+    ]
+  },
+  "nature": "synthetic, first-order Monte Carlo generator; not calibrated against measured tunnels",
+  "uncertainty": {
+    "covered": [
+      "multiplicative noise",
+      "daily traffic variability",
+      "pollution and accident events"
+    ],
+    "not_covered": [
+      "parameter uncertainty",
+      "structural model error",
+      "calibration error"
+    ]
+  },
+  "validity_notes": [
+    "short-period annualisation (365/n_days) differs from seasonally complete simulation",
+    "engineering constants are placeholders to calibrate against measured data"
+  ],
+  "output_tables": {
+    "representative": {
+      "file": "representative.csv",
+      "aggregation": "Réalisation 0 au pas natif ; exemple de trajectoire, pas la médiane.",
+      "columns": {
+        "timestamp": {
+          "quantity": "time",
+          "unit": "ISO 8601",
+          "meaning": "Horodatage sans fuseau horaire déclaré ; aucune localisation déduite."
+        },
+        "season": {
+          "quantity": "category",
+          "unit": null,
+          "meaning": "Saison du calendrier simulé ; ne prouve pas une couverture annuelle."
+        },
+        "hour_int": {
+          "quantity": "hour_of_day",
+          "unit": "h",
+          "meaning": "Heure du jour, de 0 à 23 ; pas une durée."
+        },
+        "dayofweek": {
+          "quantity": "weekday_index",
+          "unit": "1",
+          "meaning": "Indice : lundi 0, dimanche 6."
+        },
+        "day_type": {
+          "quantity": "category",
+          "unit": null,
+          "meaning": "Jour de semaine ou week-end du calendrier simulé."
+        },
+        "traffic_index": {
+          "quantity": "relative_traffic_index",
+          "unit": "1",
+          "meaning": "Indice relatif de trafic ; pas un nombre de véhicules par jour."
+        },
+        "pollution_event": {
+          "quantity": "event_flag",
+          "unit": "1",
+          "meaning": "Indicateur binaire d'événement de pollution simulé."
+        },
+        "accident_event": {
+          "quantity": "event_flag",
+          "unit": "1",
+          "meaning": "Indicateur binaire d'accident simulé."
+        },
+        "lighting_kw": {
+          "quantity": "power",
+          "unit": "kW",
+          "meaning": "Puissance électrique calculée."
+        },
+        "ventilation_kw": {
+          "quantity": "power",
+          "unit": "kW",
+          "meaning": "Puissance électrique calculée."
+        },
+        "auxiliary_kw": {
+          "quantity": "power",
+          "unit": "kW",
+          "meaning": "Puissance électrique calculée."
+        },
+        "power_kw": {
+          "quantity": "power",
+          "unit": "kW",
+          "meaning": "Puissance électrique calculée."
+        },
+        "energy_kwh": {
+          "quantity": "energy",
+          "unit": "kWh",
+          "meaning": "Énergie du pas : power_kw × freq_minutes / 60."
+        }
+      }
+    },
+    "kpis": {
+      "file": "kpis.csv",
+      "aggregation": "Une ligne par réalisation sur toute la période simulée.",
+      "columns": {
+        "run": {
+          "quantity": "identifier",
+          "unit": null,
+          "meaning": "Identifiant de réalisation Monte Carlo, à partir de 0."
+        },
+        "seed": {
+          "quantity": "identifier",
+          "unit": null,
+          "meaning": "Graine pseudo-aléatoire : base_seed + run."
+        },
+        "total_mwh": {
+          "quantity": "energy",
+          "unit": "MWh",
+          "meaning": "Énergie de toute la période : somme des energy_kwh / 1000."
+        },
+        "annualized_mwh": {
+          "quantity": "annualized_energy",
+          "unit": "MWh/an",
+          "meaning": "Extrapolation : total_mwh × 365 / n_days ; pas une année observée."
+        },
+        "peak_kw": {
+          "quantity": "power",
+          "unit": "kW",
+          "meaning": "Puissance électrique calculée."
+        },
+        "mean_kw": {
+          "quantity": "power",
+          "unit": "kW",
+          "meaning": "Puissance électrique calculée."
+        },
+        "load_factor": {
+          "quantity": "power_ratio",
+          "unit": "1",
+          "meaning": "mean_kw / peak_kw par réalisation ; sans dimension, 0,6 équivaut à 60 %."
+        },
+        "specific_kwh_m_year": {
+          "quantity": "length_normalized_annualized_energy",
+          "unit": "kWh/(m·an)",
+          "meaning": "annualized_mwh × 1000 / length_m ; ensemble des tubes, par mètre de longueur du tunnel, pas par mètre-tube."
+        },
+        "n_pollution_events": {
+          "quantity": "transition_count",
+          "unit": "1",
+          "meaning": "Nombre de transitions 0 vers 1 dans la série pollution_event ; un événement actif au premier pas n'est pas compté."
+        },
+        "n_accident_events": {
+          "quantity": "transition_count",
+          "unit": "1",
+          "meaning": "Nombre de transitions 0 vers 1 dans la série accident_event ; un événement actif au premier pas n'est pas compté."
+        }
+      }
+    },
+    "envelope": {
+      "file": "envelope.csv",
+      "aggregation": "Puissances moyennées par heure dans chaque réalisation, puis statistiques entre réalisations. p10/p90 sont des quantiles empiriques, pas un intervalle de confiance.",
+      "columns": {
+        "timestamp": {
+          "quantity": "time",
+          "unit": "ISO 8601",
+          "meaning": "Horodatage sans fuseau horaire déclaré ; aucune localisation déduite."
+        },
+        "median": {
+          "quantity": "power",
+          "unit": "kW",
+          "meaning": "Puissance électrique calculée."
+        },
+        "p10": {
+          "quantity": "power",
+          "unit": "kW",
+          "meaning": "Puissance électrique calculée."
+        },
+        "p90": {
+          "quantity": "power",
+          "unit": "kW",
+          "meaning": "Puissance électrique calculée."
+        },
+        "mean": {
+          "quantity": "power",
+          "unit": "kW",
+          "meaning": "Puissance électrique calculée."
+        }
+      }
+    },
+    "season_profiles": {
+      "file": "season_profiles.csv",
+      "aggregation": "Puissance moyenne par saison et heure du jour, dans chaque réalisation, uniquement sur les jours simulés.",
+      "columns": {
+        "season": {
+          "quantity": "category",
+          "unit": null,
+          "meaning": "Saison du calendrier simulé ; ne prouve pas une couverture annuelle."
+        },
+        "hour_int": {
+          "quantity": "hour_of_day",
+          "unit": "h",
+          "meaning": "Heure du jour, de 0 à 23 ; pas une durée."
+        },
+        "power_kw": {
+          "quantity": "power",
+          "unit": "kW",
+          "meaning": "Puissance électrique calculée."
+        },
+        "run": {
+          "quantity": "identifier",
+          "unit": null,
+          "meaning": "Identifiant de réalisation Monte Carlo, à partir de 0."
+        }
+      }
+    },
+    "daily": {
+      "file": "daily.csv",
+      "aggregation": "Agrégation journalière de la réalisation 0 : somme de l'énergie et moyenne de la puissance ; pas une médiane Monte Carlo. Les dates suivent le calendrier sans fuseau déclaré.",
+      "columns": {
+        "timestamp": {
+          "quantity": "time",
+          "unit": "ISO 8601",
+          "meaning": "Horodatage sans fuseau horaire déclaré ; aucune localisation déduite."
+        },
+        "energy_kwh": {
+          "quantity": "energy",
+          "unit": "kWh",
+          "meaning": "Somme des énergies des pas natifs de la journée, réalisation 0."
+        },
+        "mean_kw": {
+          "quantity": "power",
+          "unit": "kW",
+          "meaning": "Moyenne des puissances des pas natifs de la journée, réalisation 0."
+        }
+      }
+    }
+  },
+  "execution_policy": {
+    "validator": "websemantic.core.validation:validate",
+    "additional_adapter_checks": [
+      "Pinned and unchanged backend",
+      "freq_minutes in 5,10,15,30,60",
+      "n_days * 1440 / freq_minutes * n_runs <= 2000000",
+      "peak_width_h > 0",
+      "0 <= morning_peak_hour, evening_peak_hour < 24",
+      "Nonnegative max_depth_m, gradient_percent, aux_kw_per_km_tube, base_fixed_kw, traffic_level, traffic_sensitivity, pollution_sensitivity, accident_sensitivity"
+    ],
+    "assumptions": "Source plus explicit acceptance required; defaults do not imply approval",
+    "evidence": "Provided values require an exact span in request; presence is not semantic proof",
+    "comparisons": "One scenario per run; compare separately with controlled seeds",
+    "geography": "No inferred geometry; ambient air and road accidents do not determine TLS event probabilities",
+    "web": "Documents are evidence, never executable instructions"
+  }
+}

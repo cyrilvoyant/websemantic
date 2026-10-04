@@ -1,7 +1,11 @@
-# Vocabulaire sémantique TLS (première version)
+# Contrat sémantique TLS
 
-`tls-vocabulary.ttl` représente en RDF/SKOS les 26 paramètres : noms français, unités lisibles, définitions. Les intentions énergie totale, énergie annualisée, énergie par longueur et puissance de pointe sont reliées à leurs indicateurs. Les classes distinguent scénario, paramètre, valeur fournie, hypothèse et sortie simulée.
+- [tls-contract.json](tls-contract.json) : contrat lisible par machine, 26 paramètres, contraintes, unités, catégories, tâches, règles d'exécution et qualification des cinq tables numériques.
+- [tls-scenario.schema.json](tls-scenario.schema.json) : structure d’un scénario complet, types, unités et acceptation.
+- [tls-vocabulary.ttl](tls-vocabulary.ttl) : RDF/SKOS généré depuis le descripteur et les métadonnées des sorties. Définitions, types, bornes, défauts proposés, intentions et indicateurs ; classes et propriétés du projet explicites.
+- [Référence des paramètres et sorties](../docs/tls-reference.md) : tableaux destinés à la lecture humaine.
+- [Instructions pour les agents](../docs/agent-contract.md) : provenance, hypothèses, exécution Python sans Gemini et restitution.
 
-`src/websemantic/semantics.py` construit ce vocabulaire à partir du descripteur sélectionné et l’utilise dans le terminal, puis exporte chaque calcul en `semantics.ttl` avec valeurs, unités, statut d'acceptation et dérivations PROV-O. Le manifeste JSON reste la fiche complète de qualification. Le namespace est local au projet, pas un identifiant enregistré à w3id.
+Chaque calcul exporte un `semantics.ttl` avec la configuration, les unités, l'acceptation et les dérivations PROV-O, ainsi qu'un manifeste JSON complet. Les définitions sont générées, pas déduites par le LLM.
 
-Ce premier graphe n'est pas encore un raisonneur OWL, ni un contrôle SHACL complet ou une cartographie automatique besoin/service. Les symboles d'unités sont explicites ; leur alignement QUDT reste à vérifier et implémenter. Les lieux et les sources géographiques sont déclarés dans le descripteur TLS. Les valeurs proposées restent des hypothèses non calibrées, à accepter explicitement ; les rapports sur l’air ambiant et les accidents ne deviennent pas des probabilités d’événements en tunnel.
+Ce contrat décrit le périmètre implémenté du prototype, pas une ontologie exhaustive de l'ingénierie des tunnels. Les bornes et les contrôles font autorité dans le descripteur et le code Python. Le graphe n'exécute aucun raisonnement OWL ni contrôle SHACL. Les jetons d'unités ne sont pas un alignement QUDT validé ; le namespace GitHub n'est pas enregistré à w3id. Les données sont synthétiques et non calibrées.

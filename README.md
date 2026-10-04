@@ -4,6 +4,10 @@
 
 > Status: early terminal proof of concept (October 2026). Gemini interpretation, deterministic validation, explicit demonstration-profile acceptance and pinned local TLS execution are implemented. CSV outputs and an initial JSON manifest are saved. An initial RDF/SKOS vocabulary and PROV-O export are implemented. No comparative benchmark, transfer study, JSON-LD or SHACL execution gate yet.
 
+## For repository-reading agents
+
+Start with [the agent execution contract](docs/agent-contract.md), [all parameter and output definitions](docs/tls-reference.md), the [machine-readable JSON contract](ontology/tls-contract.json) and [RDF/SKOS vocabulary](ontology/tls-vocabulary.ttl). A complete accepted fictitious scenario is available in [examples/tls-complete.json](examples/tls-complete.json). Execute it without Gemini with `python -m websemantic.replay examples/tls-complete.json --model tls` after installing `.[tls]` and cloning the pinned submodules. Missing or unaccepted values are blocked; no implicit defaults are added.
+
 ## Try the terminal PoC
 
 **Windows :** décompressez entièrement le package privé, puis double-cliquez sur `Installer.cmd`. Pour les usages suivants, ouvrez `WebSemantic_TLS.cmd` : ce lanceur ne réalise aucune installation. Le menu propose TLS (disponible), LQL et pvlib (Work in progress). Les composants compatibles déjà présents sont conservés. Le `.env` du package privé est lu automatiquement ; le clone GitHub ne contient aucune clé. Ne lancez pas directement depuis le ZIP et ne publiez pas l’archive privée.
@@ -27,7 +31,7 @@ Scientific software exposes numerical parameters, while users ask questions. Thi
 1. turns a natural-language request into a **traceable semantic state**: every value is user-provided, deterministically transformed, an accepted assumption or unknown, and none is silently invented;
 2. **selects** a suitable model and validates a configuration before any run, by checking structure, units, bounds, completeness, conflicts and task suitability;
 3. runs the **unmodified** simulator;
-4. **qualifies the simulated data**: each output is published as a self-describing JSON-LD record stating which software, version and configuration produced it, which assumptions were accepted, which uncertainties are and are not covered, and what uses are admitted or excluded.
+4. **qualifies the simulated data**: each output is saved as CSV with JSON qualification and an RDF provenance graph stating which software, version and configuration produced it, which assumptions were accepted, which uncertainties are and are not covered, and what uses are admitted or excluded.
 
 The architectural goal is a shared core with software-specific **descriptors** and **adapters**. Transfer without core changes is a hypothesis to test after a core freeze, not an established guarantee for arbitrary software.
 
@@ -43,9 +47,9 @@ The local development environment is `.venv/`; `requirements-tested.txt` records
 
 - **Non-intrusive**: target software is never modified, locally or on GitHub. TLS and LQL-Equiv are linked as git submodules pinned to exact commits (read-only references); pvlib is a pinned PyPI dependency. Only their public APIs are called.
 - **Non-invention**: an unsupported value that is not an accepted assumption cannot reach the simulator.
-- **LLM as interpreter, not as calculator**: the language model only sees deterministic tools generated from descriptors (`describe_model`, `propose_config`, `validate`, `run`, `annotate`). It never executes code and never computes results. Any explanation reads annotated outputs only.
+- **LLM as interpreter, not as calculator**: Gemini receives the descriptor and returns a structured interpretation. Local Python performs validation, approved adapter dispatch and annotation. In the dedicated Gemini workflow it never executes code and never computes results. An external tool-enabled agent may invoke the reviewed replay command. Any explanation must read qualified computed outputs.
 - **Model comparisons planned**: Gemini is implemented; Claude/GPT repository-reading baselines and within-model comparisons remain prospective. Ranking models alone is not the research objective.
-- **Standards**: QUDT for units, PROV-O for provenance, SHACL for the execution gate, DCAT and schema.org for output datasets, CodeMeta and CITATION.cff as input to model selection.
+- **Standards**: RDF/SKOS vocabulary and PROV-O derivations are implemented, along with a JSON Schema scenario contract. QUDT alignment, SHACL execution validation, JSON-LD dataset records and broader ontology reasoning remain planned. CodeMeta and CITATION.cff describe the software.
 
 ## Case studies
 

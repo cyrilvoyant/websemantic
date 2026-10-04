@@ -1,0 +1,2490 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Complete canonical TLS scenario; Python validation and adapter checks remain mandatory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "request",
+    "task",
+    "inputs",
+    "experiment"
+  ],
+  "properties": {
+    "request": {
+      "type": "string"
+    },
+    "task": {
+      "enum": [
+        "estimate electricity demand (energy, peak, load factor) of a road tunnel under stated assumptions",
+        "compare configurations (lighting, ventilation, traffic) with controlled seeds",
+        "characterise stochastic variability from modelled events"
+      ]
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "length_m",
+        "n_tubes",
+        "n_lanes_per_tube",
+        "altitude_m",
+        "max_depth_m",
+        "gradient_percent",
+        "tunnel_context",
+        "lighting_type",
+        "ventilation_type",
+        "aux_kw_per_km_tube",
+        "base_fixed_kw",
+        "traffic_level",
+        "morning_peak_hour",
+        "evening_peak_hour",
+        "peak_width_h",
+        "traffic_sensitivity",
+        "noise_sigma",
+        "pollution_probability_per_day",
+        "accident_probability_per_day",
+        "pollution_sensitivity",
+        "accident_sensitivity"
+      ],
+      "properties": {
+        "length_m": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "unit": {
+              "const": "unit:M"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "n_tubes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 8
+            },
+            "unit": {
+              "const": "unit:NUM"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "n_lanes_per_tube": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 6
+            },
+            "unit": {
+              "const": "unit:NUM"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "altitude_m": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "const": "unit:M"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "max_depth_m": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "const": "unit:M"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "gradient_percent": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "const": "unit:PERCENT"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "tunnel_context": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "urban",
+                "peri-urban",
+                "rural"
+              ]
+            },
+            "unit": {
+              "const": null
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "lighting_type": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "LED adaptive",
+                "LED fixed",
+                "mixed",
+                "sodium fixed"
+              ]
+            },
+            "unit": {
+              "const": null
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "ventilation_type": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "natural/low ventilation",
+                "longitudinal",
+                "semi-transverse",
+                "transverse"
+              ]
+            },
+            "unit": {
+              "const": null
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "aux_kw_per_km_tube": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "const": "unit:KiloW per km per tube"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "base_fixed_kw": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "const": "unit:KiloW"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "traffic_level": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "const": "unit:UNITLESS"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "morning_peak_hour": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "const": "unit:HR"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "evening_peak_hour": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "const": "unit:HR"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "peak_width_h": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "const": "unit:HR"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "traffic_sensitivity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "const": "unit:UNITLESS"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "noise_sigma": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "number",
+              "minimum": 0
+            },
+            "unit": {
+              "const": "unit:UNITLESS"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "pollution_probability_per_day": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "unit": {
+              "const": "unit:UNITLESS"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "accident_probability_per_day": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "unit": {
+              "const": "unit:UNITLESS"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "pollution_sensitivity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "const": "unit:UNITLESS"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "accident_sensitivity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "const": "unit:UNITLESS"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "experiment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start_date",
+        "n_days",
+        "freq_minutes",
+        "n_runs",
+        "base_seed"
+      ],
+      "properties": {
+        "start_date": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "string",
+              "format": "date"
+            },
+            "unit": {
+              "const": null
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "n_days": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "unit": {
+              "const": "unit:DAY"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "freq_minutes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "unit": {
+              "const": "unit:MIN"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "n_runs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "unit": {
+              "const": "unit:NUM"
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "base_seed": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "unit",
+            "origin"
+          ],
+          "properties": {
+            "value": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unit": {
+              "const": null
+            },
+            "origin": {
+              "enum": [
+                "provided",
+                "default",
+                "assumption"
+              ]
+            },
+            "evidence": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accepted": {
+              "type": "boolean"
+            },
+            "conflicts": {
+              "type": "array",
+              "maxItems": 0
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "const": "provided"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "evidence"
+                ],
+                "properties": {
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "origin": {
+                    "enum": [
+                      "default",
+                      "assumption"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "source",
+                  "accepted"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "accepted": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,242 @@
+{
+  "request": "Fully specified and explicitly accepted fictitious example 1 in Guide.txt",
+  "task": "estimate electricity demand (energy, peak, load factor) of a road tunnel under stated assumptions",
+  "inputs": {
+    "length_m": {
+      "value": 2000,
+      "unit": "unit:M",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "n_tubes": {
+      "value": 2,
+      "unit": "unit:NUM",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "n_lanes_per_tube": {
+      "value": 2,
+      "unit": "unit:NUM",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "altitude_m": {
+      "value": 300,
+      "unit": "unit:M",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "max_depth_m": {
+      "value": 80,
+      "unit": "unit:M",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "gradient_percent": {
+      "value": 2.0,
+      "unit": "unit:PERCENT",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "tunnel_context": {
+      "value": "peri-urban",
+      "unit": null,
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "lighting_type": {
+      "value": "LED fixed",
+      "unit": null,
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "ventilation_type": {
+      "value": "longitudinal",
+      "unit": null,
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "aux_kw_per_km_tube": {
+      "value": 35.0,
+      "unit": "unit:KiloW per km per tube",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "base_fixed_kw": {
+      "value": 40.0,
+      "unit": "unit:KiloW",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "traffic_level": {
+      "value": 1.0,
+      "unit": "unit:UNITLESS",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "morning_peak_hour": {
+      "value": 8.0,
+      "unit": "unit:HR",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "evening_peak_hour": {
+      "value": 18.0,
+      "unit": "unit:HR",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "peak_width_h": {
+      "value": 1.4,
+      "unit": "unit:HR",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "traffic_sensitivity": {
+      "value": 0.65,
+      "unit": "unit:UNITLESS",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "noise_sigma": {
+      "value": 0.06,
+      "unit": "unit:UNITLESS",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "pollution_probability_per_day": {
+      "value": 0.05,
+      "unit": "unit:UNITLESS",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "accident_probability_per_day": {
+      "value": 0.015,
+      "unit": "unit:UNITLESS",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "pollution_sensitivity": {
+      "value": 0.55,
+      "unit": "unit:UNITLESS",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "accident_sensitivity": {
+      "value": 0.75,
+      "unit": "unit:UNITLESS",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    }
+  },
+  "experiment": {
+    "start_date": {
+      "value": "2025-01-01",
+      "unit": null,
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "n_days": {
+      "value": 30,
+      "unit": "unit:DAY",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "freq_minutes": {
+      "value": 15,
+      "unit": "unit:MIN",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "n_runs": {
+      "value": 10,
+      "unit": "unit:NUM",
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    },
+    "base_seed": {
+      "value": 42,
+      "unit": null,
+      "origin": "assumption",
+      "evidence": null,
+      "source": "Explicit fictitious scenario in Guide.txt, example 1; not measured data",
+      "accepted": true,
+      "conflicts": []
+    }
+  }
+}
