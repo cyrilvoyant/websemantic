@@ -1,0 +1,3183 @@
+{
+  "kind": "deterministic_development_check",
+  "llm_calls": 0,
+  "backend_execution": false,
+  "scope": "Declared TLS aliases and acceptance only; not held-out agent performance",
+  "traces": [
+    {
+      "field": "inputs.length_m",
+      "phrase": "tunnel court",
+      "level": "faible",
+      "proposal": {
+        "value": 375.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "tunnel court",
+        "source": "Convention qualitative : faible = 375.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 375.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "tunnel court",
+        "source": "Convention qualitative : faible = 375.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.length_m",
+      "phrase": "faible longueur",
+      "level": "faible",
+      "proposal": {
+        "value": 375.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "faible longueur",
+        "source": "Convention qualitative : faible = 375.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 375.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "faible longueur",
+        "source": "Convention qualitative : faible = 375.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.length_m",
+      "phrase": "longueur courante",
+      "level": "courant",
+      "proposal": {
+        "value": 1500,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "longueur courante",
+        "source": "Convention qualitative : courant = 1500. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1500,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "longueur courante",
+        "source": "Convention qualitative : courant = 1500. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.length_m",
+      "phrase": "tunnel long",
+      "level": "élevé",
+      "proposal": {
+        "value": 9000.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "tunnel long",
+        "source": "Convention qualitative : élevé = 0.75 × 12000.0 = 9000.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 9000.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "tunnel long",
+        "source": "Convention qualitative : élevé = 0.75 × 12000.0 = 9000.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.length_m",
+      "phrase": "grande longueur",
+      "level": "élevé",
+      "proposal": {
+        "value": 9000.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "grande longueur",
+        "source": "Convention qualitative : élevé = 0.75 × 12000.0 = 9000.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 9000.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "grande longueur",
+        "source": "Convention qualitative : élevé = 0.75 × 12000.0 = 9000.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.length_m",
+      "phrase": "tunnel très long",
+      "level": "très élevé",
+      "proposal": {
+        "value": 12000.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "tunnel très long",
+        "source": "Convention qualitative : très élevé = 1.0 × 12000.0 = 12000.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 12000.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "tunnel très long",
+        "source": "Convention qualitative : très élevé = 1.0 × 12000.0 = 12000.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.length_m",
+      "phrase": "très grande longueur",
+      "level": "très élevé",
+      "proposal": {
+        "value": 12000.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "très grande longueur",
+        "source": "Convention qualitative : très élevé = 1.0 × 12000.0 = 12000.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 12000.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "très grande longueur",
+        "source": "Convention qualitative : très élevé = 1.0 × 12000.0 = 12000.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.n_tubes",
+      "phrase": "peu de tubes",
+      "level": "peu",
+      "proposal": {
+        "value": 1,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "peu de tubes",
+        "source": "Convention qualitative : peu = 1. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptages entiers de scénario, à valider ; références discrètes de l’interface TLS, pas maxima du moteur.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "peu de tubes",
+        "source": "Convention qualitative : peu = 1. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptages entiers de scénario, à valider ; références discrètes de l’interface TLS, pas maxima du moteur.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.n_tubes",
+      "phrase": "nombre courant de tubes",
+      "level": "courant",
+      "proposal": {
+        "value": 2,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "nombre courant de tubes",
+        "source": "Convention qualitative : courant = 2. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptages entiers de scénario, à valider ; références discrètes de l’interface TLS, pas maxima du moteur.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 2,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "nombre courant de tubes",
+        "source": "Convention qualitative : courant = 2. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptages entiers de scénario, à valider ; références discrètes de l’interface TLS, pas maxima du moteur.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.n_tubes",
+      "phrase": "beaucoup de tubes",
+      "level": "beaucoup",
+      "proposal": {
+        "value": 3,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "beaucoup de tubes",
+        "source": "Convention qualitative : beaucoup = 3. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptages entiers de scénario, à valider ; références discrètes de l’interface TLS, pas maxima du moteur.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 3,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "beaucoup de tubes",
+        "source": "Convention qualitative : beaucoup = 3. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptages entiers de scénario, à valider ; références discrètes de l’interface TLS, pas maxima du moteur.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.n_tubes",
+      "phrase": "énormément de tubes",
+      "level": "maximum de référence",
+      "proposal": {
+        "value": 4,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "énormément de tubes",
+        "source": "Convention qualitative : maximum de référence = 4. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptages entiers de scénario, à valider ; références discrètes de l’interface TLS, pas maxima du moteur.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 4,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "énormément de tubes",
+        "source": "Convention qualitative : maximum de référence = 4. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptages entiers de scénario, à valider ; références discrètes de l’interface TLS, pas maxima du moteur.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.n_lanes_per_tube",
+      "phrase": "peu de voies par tube",
+      "level": "peu",
+      "proposal": {
+        "value": 1,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "peu de voies par tube",
+        "source": "Convention qualitative : peu = 1. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptage par tube, à valider ; ne pas le confondre avec le total de voies.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "peu de voies par tube",
+        "source": "Convention qualitative : peu = 1. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptage par tube, à valider ; ne pas le confondre avec le total de voies.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.n_lanes_per_tube",
+      "phrase": "nombre courant de voies par tube",
+      "level": "courant",
+      "proposal": {
+        "value": 2,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "nombre courant de voies par tube",
+        "source": "Convention qualitative : courant = 2. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptage par tube, à valider ; ne pas le confondre avec le total de voies.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 2,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "nombre courant de voies par tube",
+        "source": "Convention qualitative : courant = 2. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptage par tube, à valider ; ne pas le confondre avec le total de voies.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.n_lanes_per_tube",
+      "phrase": "beaucoup de voies par tube",
+      "level": "beaucoup",
+      "proposal": {
+        "value": 3,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "beaucoup de voies par tube",
+        "source": "Convention qualitative : beaucoup = 3. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptage par tube, à valider ; ne pas le confondre avec le total de voies.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 3,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "beaucoup de voies par tube",
+        "source": "Convention qualitative : beaucoup = 3. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptage par tube, à valider ; ne pas le confondre avec le total de voies.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.n_lanes_per_tube",
+      "phrase": "énormément de voies par tube",
+      "level": "maximum de référence",
+      "proposal": {
+        "value": 4,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "énormément de voies par tube",
+        "source": "Convention qualitative : maximum de référence = 4. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptage par tube, à valider ; ne pas le confondre avec le total de voies.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 4,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "énormément de voies par tube",
+        "source": "Convention qualitative : maximum de référence = 4. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptage par tube, à valider ; ne pas le confondre avec le total de voies.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.altitude_m",
+      "phrase": "faible altitude",
+      "level": "faible",
+      "proposal": {
+        "value": 75.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "faible altitude",
+        "source": "Convention qualitative : faible = 75.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 75.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "faible altitude",
+        "source": "Convention qualitative : faible = 75.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.altitude_m",
+      "phrase": "basse altitude",
+      "level": "faible",
+      "proposal": {
+        "value": 75.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "basse altitude",
+        "source": "Convention qualitative : faible = 75.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 75.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "basse altitude",
+        "source": "Convention qualitative : faible = 75.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.altitude_m",
+      "phrase": "altitude courante",
+      "level": "courant",
+      "proposal": {
+        "value": 300,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "altitude courante",
+        "source": "Convention qualitative : courant = 300. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 300,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "altitude courante",
+        "source": "Convention qualitative : courant = 300. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.altitude_m",
+      "phrase": "haute altitude",
+      "level": "élevé",
+      "proposal": {
+        "value": 2250.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "haute altitude",
+        "source": "Convention qualitative : élevé = 0.75 × 3000.0 = 2250.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 2250.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "haute altitude",
+        "source": "Convention qualitative : élevé = 0.75 × 3000.0 = 2250.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.altitude_m",
+      "phrase": "altitude élevée",
+      "level": "élevé",
+      "proposal": {
+        "value": 2250.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "altitude élevée",
+        "source": "Convention qualitative : élevé = 0.75 × 3000.0 = 2250.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 2250.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "altitude élevée",
+        "source": "Convention qualitative : élevé = 0.75 × 3000.0 = 2250.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.altitude_m",
+      "phrase": "très haute altitude",
+      "level": "très élevé",
+      "proposal": {
+        "value": 3000.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "très haute altitude",
+        "source": "Convention qualitative : très élevé = 1.0 × 3000.0 = 3000.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 3000.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "très haute altitude",
+        "source": "Convention qualitative : très élevé = 1.0 × 3000.0 = 3000.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.altitude_m",
+      "phrase": "altitude très élevée",
+      "level": "très élevé",
+      "proposal": {
+        "value": 3000.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "altitude très élevée",
+        "source": "Convention qualitative : très élevé = 1.0 × 3000.0 = 3000.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 3000.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "altitude très élevée",
+        "source": "Convention qualitative : très élevé = 1.0 × 3000.0 = 3000.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.max_depth_m",
+      "phrase": "faible profondeur",
+      "level": "faible",
+      "proposal": {
+        "value": 20.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "faible profondeur",
+        "source": "Convention qualitative : faible = 20.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 20.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "faible profondeur",
+        "source": "Convention qualitative : faible = 20.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.max_depth_m",
+      "phrase": "tunnel peu profond",
+      "level": "faible",
+      "proposal": {
+        "value": 20.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "tunnel peu profond",
+        "source": "Convention qualitative : faible = 20.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 20.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "tunnel peu profond",
+        "source": "Convention qualitative : faible = 20.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.max_depth_m",
+      "phrase": "profondeur courante",
+      "level": "courant",
+      "proposal": {
+        "value": 80,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "profondeur courante",
+        "source": "Convention qualitative : courant = 80. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 80,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "profondeur courante",
+        "source": "Convention qualitative : courant = 80. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.max_depth_m",
+      "phrase": "grande profondeur",
+      "level": "élevé",
+      "proposal": {
+        "value": 750.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "grande profondeur",
+        "source": "Convention qualitative : élevé = 0.75 × 1000.0 = 750.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 750.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "grande profondeur",
+        "source": "Convention qualitative : élevé = 0.75 × 1000.0 = 750.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.max_depth_m",
+      "phrase": "tunnel profond",
+      "level": "élevé",
+      "proposal": {
+        "value": 750.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "tunnel profond",
+        "source": "Convention qualitative : élevé = 0.75 × 1000.0 = 750.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 750.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "tunnel profond",
+        "source": "Convention qualitative : élevé = 0.75 × 1000.0 = 750.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.max_depth_m",
+      "phrase": "très grande profondeur",
+      "level": "très élevé",
+      "proposal": {
+        "value": 1000.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "très grande profondeur",
+        "source": "Convention qualitative : très élevé = 1.0 × 1000.0 = 1000.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1000.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "très grande profondeur",
+        "source": "Convention qualitative : très élevé = 1.0 × 1000.0 = 1000.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.max_depth_m",
+      "phrase": "tunnel très profond",
+      "level": "très élevé",
+      "proposal": {
+        "value": 1000.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "tunnel très profond",
+        "source": "Convention qualitative : très élevé = 1.0 × 1000.0 = 1000.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1000.0,
+        "unit": "unit:M",
+        "origin": "assumption",
+        "evidence": "tunnel très profond",
+        "source": "Convention qualitative : très élevé = 1.0 × 1000.0 = 1000.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.gradient_percent",
+      "phrase": "faible pente",
+      "level": "faible",
+      "proposal": {
+        "value": 0.5,
+        "unit": "unit:PERCENT",
+        "origin": "assumption",
+        "evidence": "faible pente",
+        "source": "Convention qualitative : faible = 0.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.5,
+        "unit": "unit:PERCENT",
+        "origin": "assumption",
+        "evidence": "faible pente",
+        "source": "Convention qualitative : faible = 0.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.gradient_percent",
+      "phrase": "pente faible",
+      "level": "faible",
+      "proposal": {
+        "value": 0.5,
+        "unit": "unit:PERCENT",
+        "origin": "assumption",
+        "evidence": "pente faible",
+        "source": "Convention qualitative : faible = 0.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.5,
+        "unit": "unit:PERCENT",
+        "origin": "assumption",
+        "evidence": "pente faible",
+        "source": "Convention qualitative : faible = 0.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.gradient_percent",
+      "phrase": "pente courante",
+      "level": "courant",
+      "proposal": {
+        "value": 2.0,
+        "unit": "unit:PERCENT",
+        "origin": "assumption",
+        "evidence": "pente courante",
+        "source": "Convention qualitative : courant = 2.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 2.0,
+        "unit": "unit:PERCENT",
+        "origin": "assumption",
+        "evidence": "pente courante",
+        "source": "Convention qualitative : courant = 2.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.gradient_percent",
+      "phrase": "forte pente",
+      "level": "élevé",
+      "proposal": {
+        "value": 9.0,
+        "unit": "unit:PERCENT",
+        "origin": "assumption",
+        "evidence": "forte pente",
+        "source": "Convention qualitative : élevé = 0.75 × 12.0 = 9.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 9.0,
+        "unit": "unit:PERCENT",
+        "origin": "assumption",
+        "evidence": "forte pente",
+        "source": "Convention qualitative : élevé = 0.75 × 12.0 = 9.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.gradient_percent",
+      "phrase": "pente forte",
+      "level": "élevé",
+      "proposal": {
+        "value": 9.0,
+        "unit": "unit:PERCENT",
+        "origin": "assumption",
+        "evidence": "pente forte",
+        "source": "Convention qualitative : élevé = 0.75 × 12.0 = 9.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 9.0,
+        "unit": "unit:PERCENT",
+        "origin": "assumption",
+        "evidence": "pente forte",
+        "source": "Convention qualitative : élevé = 0.75 × 12.0 = 9.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.gradient_percent",
+      "phrase": "très forte pente",
+      "level": "très élevé",
+      "proposal": {
+        "value": 12.0,
+        "unit": "unit:PERCENT",
+        "origin": "assumption",
+        "evidence": "très forte pente",
+        "source": "Convention qualitative : très élevé = 1.0 × 12.0 = 12.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 12.0,
+        "unit": "unit:PERCENT",
+        "origin": "assumption",
+        "evidence": "très forte pente",
+        "source": "Convention qualitative : très élevé = 1.0 × 12.0 = 12.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.gradient_percent",
+      "phrase": "pente très forte",
+      "level": "très élevé",
+      "proposal": {
+        "value": 12.0,
+        "unit": "unit:PERCENT",
+        "origin": "assumption",
+        "evidence": "pente très forte",
+        "source": "Convention qualitative : très élevé = 1.0 × 12.0 = 12.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 12.0,
+        "unit": "unit:PERCENT",
+        "origin": "assumption",
+        "evidence": "pente très forte",
+        "source": "Convention qualitative : très élevé = 1.0 × 12.0 = 12.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.aux_kw_per_km_tube",
+      "phrase": "faible charge auxiliaire",
+      "level": "faible",
+      "proposal": {
+        "value": 8.75,
+        "unit": "unit:KiloW per km per tube",
+        "origin": "assumption",
+        "evidence": "faible charge auxiliaire",
+        "source": "Convention qualitative : faible = 8.75. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 8.75,
+        "unit": "unit:KiloW per km per tube",
+        "origin": "assumption",
+        "evidence": "faible charge auxiliaire",
+        "source": "Convention qualitative : faible = 8.75. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.aux_kw_per_km_tube",
+      "phrase": "auxiliaires peu puissants",
+      "level": "faible",
+      "proposal": {
+        "value": 8.75,
+        "unit": "unit:KiloW per km per tube",
+        "origin": "assumption",
+        "evidence": "auxiliaires peu puissants",
+        "source": "Convention qualitative : faible = 8.75. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 8.75,
+        "unit": "unit:KiloW per km per tube",
+        "origin": "assumption",
+        "evidence": "auxiliaires peu puissants",
+        "source": "Convention qualitative : faible = 8.75. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.aux_kw_per_km_tube",
+      "phrase": "charge auxiliaire courante",
+      "level": "courant",
+      "proposal": {
+        "value": 35.0,
+        "unit": "unit:KiloW per km per tube",
+        "origin": "assumption",
+        "evidence": "charge auxiliaire courante",
+        "source": "Convention qualitative : courant = 35.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 35.0,
+        "unit": "unit:KiloW per km per tube",
+        "origin": "assumption",
+        "evidence": "charge auxiliaire courante",
+        "source": "Convention qualitative : courant = 35.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.aux_kw_per_km_tube",
+      "phrase": "forte charge auxiliaire",
+      "level": "élevé",
+      "proposal": {
+        "value": 90.0,
+        "unit": "unit:KiloW per km per tube",
+        "origin": "assumption",
+        "evidence": "forte charge auxiliaire",
+        "source": "Convention qualitative : élevé = 0.75 × 120.0 = 90.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 90.0,
+        "unit": "unit:KiloW per km per tube",
+        "origin": "assumption",
+        "evidence": "forte charge auxiliaire",
+        "source": "Convention qualitative : élevé = 0.75 × 120.0 = 90.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.aux_kw_per_km_tube",
+      "phrase": "auxiliaires puissants",
+      "level": "élevé",
+      "proposal": {
+        "value": 90.0,
+        "unit": "unit:KiloW per km per tube",
+        "origin": "assumption",
+        "evidence": "auxiliaires puissants",
+        "source": "Convention qualitative : élevé = 0.75 × 120.0 = 90.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 90.0,
+        "unit": "unit:KiloW per km per tube",
+        "origin": "assumption",
+        "evidence": "auxiliaires puissants",
+        "source": "Convention qualitative : élevé = 0.75 × 120.0 = 90.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.aux_kw_per_km_tube",
+      "phrase": "très forte charge auxiliaire",
+      "level": "très élevé",
+      "proposal": {
+        "value": 120.0,
+        "unit": "unit:KiloW per km per tube",
+        "origin": "assumption",
+        "evidence": "très forte charge auxiliaire",
+        "source": "Convention qualitative : très élevé = 1.0 × 120.0 = 120.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 120.0,
+        "unit": "unit:KiloW per km per tube",
+        "origin": "assumption",
+        "evidence": "très forte charge auxiliaire",
+        "source": "Convention qualitative : très élevé = 1.0 × 120.0 = 120.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.aux_kw_per_km_tube",
+      "phrase": "auxiliaires très puissants",
+      "level": "très élevé",
+      "proposal": {
+        "value": 120.0,
+        "unit": "unit:KiloW per km per tube",
+        "origin": "assumption",
+        "evidence": "auxiliaires très puissants",
+        "source": "Convention qualitative : très élevé = 1.0 × 120.0 = 120.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 120.0,
+        "unit": "unit:KiloW per km per tube",
+        "origin": "assumption",
+        "evidence": "auxiliaires très puissants",
+        "source": "Convention qualitative : très élevé = 1.0 × 120.0 = 120.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.base_fixed_kw",
+      "phrase": "faible charge fixe",
+      "level": "faible",
+      "proposal": {
+        "value": 10.0,
+        "unit": "unit:KiloW",
+        "origin": "assumption",
+        "evidence": "faible charge fixe",
+        "source": "Convention qualitative : faible = 10.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 10.0,
+        "unit": "unit:KiloW",
+        "origin": "assumption",
+        "evidence": "faible charge fixe",
+        "source": "Convention qualitative : faible = 10.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.base_fixed_kw",
+      "phrase": "charge fixe faible",
+      "level": "faible",
+      "proposal": {
+        "value": 10.0,
+        "unit": "unit:KiloW",
+        "origin": "assumption",
+        "evidence": "charge fixe faible",
+        "source": "Convention qualitative : faible = 10.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 10.0,
+        "unit": "unit:KiloW",
+        "origin": "assumption",
+        "evidence": "charge fixe faible",
+        "source": "Convention qualitative : faible = 10.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.base_fixed_kw",
+      "phrase": "charge fixe courante",
+      "level": "courant",
+      "proposal": {
+        "value": 40.0,
+        "unit": "unit:KiloW",
+        "origin": "assumption",
+        "evidence": "charge fixe courante",
+        "source": "Convention qualitative : courant = 40.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 40.0,
+        "unit": "unit:KiloW",
+        "origin": "assumption",
+        "evidence": "charge fixe courante",
+        "source": "Convention qualitative : courant = 40.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.base_fixed_kw",
+      "phrase": "forte charge fixe",
+      "level": "élevé",
+      "proposal": {
+        "value": 375.0,
+        "unit": "unit:KiloW",
+        "origin": "assumption",
+        "evidence": "forte charge fixe",
+        "source": "Convention qualitative : élevé = 0.75 × 500.0 = 375.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 375.0,
+        "unit": "unit:KiloW",
+        "origin": "assumption",
+        "evidence": "forte charge fixe",
+        "source": "Convention qualitative : élevé = 0.75 × 500.0 = 375.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.base_fixed_kw",
+      "phrase": "charge fixe élevée",
+      "level": "élevé",
+      "proposal": {
+        "value": 375.0,
+        "unit": "unit:KiloW",
+        "origin": "assumption",
+        "evidence": "charge fixe élevée",
+        "source": "Convention qualitative : élevé = 0.75 × 500.0 = 375.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 375.0,
+        "unit": "unit:KiloW",
+        "origin": "assumption",
+        "evidence": "charge fixe élevée",
+        "source": "Convention qualitative : élevé = 0.75 × 500.0 = 375.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.base_fixed_kw",
+      "phrase": "très forte charge fixe",
+      "level": "très élevé",
+      "proposal": {
+        "value": 500.0,
+        "unit": "unit:KiloW",
+        "origin": "assumption",
+        "evidence": "très forte charge fixe",
+        "source": "Convention qualitative : très élevé = 1.0 × 500.0 = 500.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 500.0,
+        "unit": "unit:KiloW",
+        "origin": "assumption",
+        "evidence": "très forte charge fixe",
+        "source": "Convention qualitative : très élevé = 1.0 × 500.0 = 500.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.base_fixed_kw",
+      "phrase": "charge fixe très élevée",
+      "level": "très élevé",
+      "proposal": {
+        "value": 500.0,
+        "unit": "unit:KiloW",
+        "origin": "assumption",
+        "evidence": "charge fixe très élevée",
+        "source": "Convention qualitative : très élevé = 1.0 × 500.0 = 500.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 500.0,
+        "unit": "unit:KiloW",
+        "origin": "assumption",
+        "evidence": "charge fixe très élevée",
+        "source": "Convention qualitative : très élevé = 1.0 × 500.0 = 500.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_level",
+      "phrase": "beaucoup de trafic",
+      "level": "beaucoup",
+      "proposal": {
+        "value": 1.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "beaucoup de trafic",
+        "source": "Convention qualitative : beaucoup = 0.75 × 2.0 = 1.5. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "beaucoup de trafic",
+        "source": "Convention qualitative : beaucoup = 0.75 × 2.0 = 1.5. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_level",
+      "phrase": "beaucoup de traffic",
+      "level": "beaucoup",
+      "proposal": {
+        "value": 1.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "beaucoup de traffic",
+        "source": "Convention qualitative : beaucoup = 0.75 × 2.0 = 1.5. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "beaucoup de traffic",
+        "source": "Convention qualitative : beaucoup = 0.75 × 2.0 = 1.5. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_level",
+      "phrase": "trafic important",
+      "level": "beaucoup",
+      "proposal": {
+        "value": 1.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "trafic important",
+        "source": "Convention qualitative : beaucoup = 0.75 × 2.0 = 1.5. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "trafic important",
+        "source": "Convention qualitative : beaucoup = 0.75 × 2.0 = 1.5. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_level",
+      "phrase": "trafic élevé",
+      "level": "beaucoup",
+      "proposal": {
+        "value": 1.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "trafic élevé",
+        "source": "Convention qualitative : beaucoup = 0.75 × 2.0 = 1.5. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "trafic élevé",
+        "source": "Convention qualitative : beaucoup = 0.75 × 2.0 = 1.5. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_level",
+      "phrase": "fort trafic",
+      "level": "beaucoup",
+      "proposal": {
+        "value": 1.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "fort trafic",
+        "source": "Convention qualitative : beaucoup = 0.75 × 2.0 = 1.5. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "fort trafic",
+        "source": "Convention qualitative : beaucoup = 0.75 × 2.0 = 1.5. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_level",
+      "phrase": "énormément de trafic",
+      "level": "énormément",
+      "proposal": {
+        "value": 2.0,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "énormément de trafic",
+        "source": "Convention qualitative : énormément = 1.0 × 2.0 = 2.0. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 2.0,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "énormément de trafic",
+        "source": "Convention qualitative : énormément = 1.0 × 2.0 = 2.0. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_level",
+      "phrase": "énormément de traffic",
+      "level": "énormément",
+      "proposal": {
+        "value": 2.0,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "énormément de traffic",
+        "source": "Convention qualitative : énormément = 1.0 × 2.0 = 2.0. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 2.0,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "énormément de traffic",
+        "source": "Convention qualitative : énormément = 1.0 × 2.0 = 2.0. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_level",
+      "phrase": "trafic très élevé",
+      "level": "énormément",
+      "proposal": {
+        "value": 2.0,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "trafic très élevé",
+        "source": "Convention qualitative : énormément = 1.0 × 2.0 = 2.0. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 2.0,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "trafic très élevé",
+        "source": "Convention qualitative : énormément = 1.0 × 2.0 = 2.0. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_level",
+      "phrase": "trafic énorme",
+      "level": "énormément",
+      "proposal": {
+        "value": 2.0,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "trafic énorme",
+        "source": "Convention qualitative : énormément = 1.0 × 2.0 = 2.0. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 2.0,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "trafic énorme",
+        "source": "Convention qualitative : énormément = 1.0 × 2.0 = 2.0. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_level",
+      "phrase": "peu de trafic",
+      "level": "faible",
+      "proposal": {
+        "value": 0.3,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "peu de trafic",
+        "source": "Convention qualitative : faible = 0.3. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.3,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "peu de trafic",
+        "source": "Convention qualitative : faible = 0.3. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_level",
+      "phrase": "faible trafic",
+      "level": "faible",
+      "proposal": {
+        "value": 0.3,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "faible trafic",
+        "source": "Convention qualitative : faible = 0.3. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.3,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "faible trafic",
+        "source": "Convention qualitative : faible = 0.3. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_level",
+      "phrase": "trafic faible",
+      "level": "faible",
+      "proposal": {
+        "value": 0.3,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "trafic faible",
+        "source": "Convention qualitative : faible = 0.3. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.3,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "trafic faible",
+        "source": "Convention qualitative : faible = 0.3. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_level",
+      "phrase": "trafic courant",
+      "level": "courant",
+      "proposal": {
+        "value": 1.0,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "trafic courant",
+        "source": "Convention qualitative : courant = 1.0. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1.0,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "trafic courant",
+        "source": "Convention qualitative : courant = 1.0. TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum. Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.morning_peak_hour",
+      "phrase": "pointe du matin tôt",
+      "level": "tôt",
+      "proposal": {
+        "value": 5,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointe du matin tôt",
+        "source": "Convention qualitative : tôt = 5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 5,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointe du matin tôt",
+        "source": "Convention qualitative : tôt = 5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.morning_peak_hour",
+      "phrase": "pic du matin précoce",
+      "level": "tôt",
+      "proposal": {
+        "value": 5,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pic du matin précoce",
+        "source": "Convention qualitative : tôt = 5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 5,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pic du matin précoce",
+        "source": "Convention qualitative : tôt = 5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.morning_peak_hour",
+      "phrase": "pointe du matin courante",
+      "level": "courant",
+      "proposal": {
+        "value": 8,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointe du matin courante",
+        "source": "Convention qualitative : courant = 8. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 8,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointe du matin courante",
+        "source": "Convention qualitative : courant = 8. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.morning_peak_hour",
+      "phrase": "pointe du matin tardive",
+      "level": "tard",
+      "proposal": {
+        "value": 11,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointe du matin tardive",
+        "source": "Convention qualitative : tard = 11. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 11,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointe du matin tardive",
+        "source": "Convention qualitative : tard = 11. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.morning_peak_hour",
+      "phrase": "pic du matin tardif",
+      "level": "tard",
+      "proposal": {
+        "value": 11,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pic du matin tardif",
+        "source": "Convention qualitative : tard = 11. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 11,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pic du matin tardif",
+        "source": "Convention qualitative : tard = 11. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.evening_peak_hour",
+      "phrase": "pointe du soir tôt",
+      "level": "tôt",
+      "proposal": {
+        "value": 15,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointe du soir tôt",
+        "source": "Convention qualitative : tôt = 15. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 15,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointe du soir tôt",
+        "source": "Convention qualitative : tôt = 15. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.evening_peak_hour",
+      "phrase": "pic du soir précoce",
+      "level": "tôt",
+      "proposal": {
+        "value": 15,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pic du soir précoce",
+        "source": "Convention qualitative : tôt = 15. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 15,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pic du soir précoce",
+        "source": "Convention qualitative : tôt = 15. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.evening_peak_hour",
+      "phrase": "pointe du soir courante",
+      "level": "courant",
+      "proposal": {
+        "value": 18,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointe du soir courante",
+        "source": "Convention qualitative : courant = 18. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 18,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointe du soir courante",
+        "source": "Convention qualitative : courant = 18. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.evening_peak_hour",
+      "phrase": "pointe du soir tardive",
+      "level": "tard",
+      "proposal": {
+        "value": 22,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointe du soir tardive",
+        "source": "Convention qualitative : tard = 22. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 22,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointe du soir tardive",
+        "source": "Convention qualitative : tard = 22. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.evening_peak_hour",
+      "phrase": "pic du soir tardif",
+      "level": "tard",
+      "proposal": {
+        "value": 22,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pic du soir tardif",
+        "source": "Convention qualitative : tard = 22. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 22,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pic du soir tardif",
+        "source": "Convention qualitative : tard = 22. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.peak_width_h",
+      "phrase": "pics de trafic étroits",
+      "level": "faible",
+      "proposal": {
+        "value": 0.35,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pics de trafic étroits",
+        "source": "Convention qualitative : faible = 0.35. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.35,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pics de trafic étroits",
+        "source": "Convention qualitative : faible = 0.35. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.peak_width_h",
+      "phrase": "pointes étroites",
+      "level": "faible",
+      "proposal": {
+        "value": 0.35,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointes étroites",
+        "source": "Convention qualitative : faible = 0.35. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.35,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointes étroites",
+        "source": "Convention qualitative : faible = 0.35. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.peak_width_h",
+      "phrase": "largeur de pointe courante",
+      "level": "courant",
+      "proposal": {
+        "value": 1.4,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "largeur de pointe courante",
+        "source": "Convention qualitative : courant = 1.4. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1.4,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "largeur de pointe courante",
+        "source": "Convention qualitative : courant = 1.4. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.peak_width_h",
+      "phrase": "pics de trafic larges",
+      "level": "élevé",
+      "proposal": {
+        "value": 3.0,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pics de trafic larges",
+        "source": "Convention qualitative : élevé = 0.75 × 4.0 = 3.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 3.0,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pics de trafic larges",
+        "source": "Convention qualitative : élevé = 0.75 × 4.0 = 3.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.peak_width_h",
+      "phrase": "pointes larges",
+      "level": "élevé",
+      "proposal": {
+        "value": 3.0,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointes larges",
+        "source": "Convention qualitative : élevé = 0.75 × 4.0 = 3.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 3.0,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointes larges",
+        "source": "Convention qualitative : élevé = 0.75 × 4.0 = 3.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.peak_width_h",
+      "phrase": "pics de trafic très larges",
+      "level": "très élevé",
+      "proposal": {
+        "value": 4.0,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pics de trafic très larges",
+        "source": "Convention qualitative : très élevé = 1.0 × 4.0 = 4.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 4.0,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pics de trafic très larges",
+        "source": "Convention qualitative : très élevé = 1.0 × 4.0 = 4.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.peak_width_h",
+      "phrase": "pointes très larges",
+      "level": "très élevé",
+      "proposal": {
+        "value": 4.0,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointes très larges",
+        "source": "Convention qualitative : très élevé = 1.0 × 4.0 = 4.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 4.0,
+        "unit": "unit:HR",
+        "origin": "assumption",
+        "evidence": "pointes très larges",
+        "source": "Convention qualitative : très élevé = 1.0 × 4.0 = 4.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_sensitivity",
+      "phrase": "faible sensibilité au trafic",
+      "level": "faible",
+      "proposal": {
+        "value": 0.1625,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "faible sensibilité au trafic",
+        "source": "Convention qualitative : faible = 0.1625. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.1625,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "faible sensibilité au trafic",
+        "source": "Convention qualitative : faible = 0.1625. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_sensitivity",
+      "phrase": "sensibilité au trafic courante",
+      "level": "courant",
+      "proposal": {
+        "value": 0.65,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "sensibilité au trafic courante",
+        "source": "Convention qualitative : courant = 0.65. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.65,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "sensibilité au trafic courante",
+        "source": "Convention qualitative : courant = 0.65. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_sensitivity",
+      "phrase": "forte sensibilité au trafic",
+      "level": "élevé",
+      "proposal": {
+        "value": 1.125,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "forte sensibilité au trafic",
+        "source": "Convention qualitative : élevé = 0.75 × 1.5 = 1.125. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1.125,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "forte sensibilité au trafic",
+        "source": "Convention qualitative : élevé = 0.75 × 1.5 = 1.125. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.traffic_sensitivity",
+      "phrase": "très forte sensibilité au trafic",
+      "level": "très élevé",
+      "proposal": {
+        "value": 1.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "très forte sensibilité au trafic",
+        "source": "Convention qualitative : très élevé = 1.0 × 1.5 = 1.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "très forte sensibilité au trafic",
+        "source": "Convention qualitative : très élevé = 1.0 × 1.5 = 1.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.noise_sigma",
+      "phrase": "faible bruit relatif",
+      "level": "faible",
+      "proposal": {
+        "value": 0.015,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "faible bruit relatif",
+        "source": "Convention qualitative : faible = 0.015. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.015,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "faible bruit relatif",
+        "source": "Convention qualitative : faible = 0.015. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.noise_sigma",
+      "phrase": "faible bruit gaussien",
+      "level": "faible",
+      "proposal": {
+        "value": 0.015,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "faible bruit gaussien",
+        "source": "Convention qualitative : faible = 0.015. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.015,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "faible bruit gaussien",
+        "source": "Convention qualitative : faible = 0.015. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.noise_sigma",
+      "phrase": "bruit relatif courant",
+      "level": "courant",
+      "proposal": {
+        "value": 0.06,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "bruit relatif courant",
+        "source": "Convention qualitative : courant = 0.06. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.06,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "bruit relatif courant",
+        "source": "Convention qualitative : courant = 0.06. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.noise_sigma",
+      "phrase": "fort bruit relatif",
+      "level": "élevé",
+      "proposal": {
+        "value": 0.375,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "fort bruit relatif",
+        "source": "Convention qualitative : élevé = 0.75 × 0.5 = 0.375. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.375,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "fort bruit relatif",
+        "source": "Convention qualitative : élevé = 0.75 × 0.5 = 0.375. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.noise_sigma",
+      "phrase": "bruit gaussien élevé",
+      "level": "élevé",
+      "proposal": {
+        "value": 0.375,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "bruit gaussien élevé",
+        "source": "Convention qualitative : élevé = 0.75 × 0.5 = 0.375. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.375,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "bruit gaussien élevé",
+        "source": "Convention qualitative : élevé = 0.75 × 0.5 = 0.375. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.noise_sigma",
+      "phrase": "très fort bruit relatif",
+      "level": "très élevé",
+      "proposal": {
+        "value": 0.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "très fort bruit relatif",
+        "source": "Convention qualitative : très élevé = 1.0 × 0.5 = 0.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "très fort bruit relatif",
+        "source": "Convention qualitative : très élevé = 1.0 × 0.5 = 0.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.noise_sigma",
+      "phrase": "bruit gaussien très élevé",
+      "level": "très élevé",
+      "proposal": {
+        "value": 0.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "bruit gaussien très élevé",
+        "source": "Convention qualitative : très élevé = 1.0 × 0.5 = 0.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "bruit gaussien très élevé",
+        "source": "Convention qualitative : très élevé = 1.0 × 0.5 = 0.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.pollution_probability_per_day",
+      "phrase": "faible probabilité de pollution",
+      "level": "faible",
+      "proposal": {
+        "value": 0.0125,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "faible probabilité de pollution",
+        "source": "Convention qualitative : faible = 0.0125. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.0125,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "faible probabilité de pollution",
+        "source": "Convention qualitative : faible = 0.0125. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.pollution_probability_per_day",
+      "phrase": "événements de pollution rares",
+      "level": "faible",
+      "proposal": {
+        "value": 0.0125,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "événements de pollution rares",
+        "source": "Convention qualitative : faible = 0.0125. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.0125,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "événements de pollution rares",
+        "source": "Convention qualitative : faible = 0.0125. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.pollution_probability_per_day",
+      "phrase": "probabilité de pollution courante",
+      "level": "courant",
+      "proposal": {
+        "value": 0.05,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "probabilité de pollution courante",
+        "source": "Convention qualitative : courant = 0.05. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.05,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "probabilité de pollution courante",
+        "source": "Convention qualitative : courant = 0.05. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.pollution_probability_per_day",
+      "phrase": "forte probabilité de pollution",
+      "level": "élevé",
+      "proposal": {
+        "value": 0.375,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "forte probabilité de pollution",
+        "source": "Convention qualitative : élevé = 0.75 × 0.5 = 0.375. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.375,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "forte probabilité de pollution",
+        "source": "Convention qualitative : élevé = 0.75 × 0.5 = 0.375. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.pollution_probability_per_day",
+      "phrase": "événements de pollution fréquents",
+      "level": "élevé",
+      "proposal": {
+        "value": 0.375,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "événements de pollution fréquents",
+        "source": "Convention qualitative : élevé = 0.75 × 0.5 = 0.375. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.375,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "événements de pollution fréquents",
+        "source": "Convention qualitative : élevé = 0.75 × 0.5 = 0.375. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.pollution_probability_per_day",
+      "phrase": "très forte probabilité de pollution",
+      "level": "très élevé",
+      "proposal": {
+        "value": 0.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "très forte probabilité de pollution",
+        "source": "Convention qualitative : très élevé = 1.0 × 0.5 = 0.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "très forte probabilité de pollution",
+        "source": "Convention qualitative : très élevé = 1.0 × 0.5 = 0.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.pollution_probability_per_day",
+      "phrase": "événements de pollution très fréquents",
+      "level": "très élevé",
+      "proposal": {
+        "value": 0.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "événements de pollution très fréquents",
+        "source": "Convention qualitative : très élevé = 1.0 × 0.5 = 0.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "événements de pollution très fréquents",
+        "source": "Convention qualitative : très élevé = 1.0 × 0.5 = 0.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.accident_probability_per_day",
+      "phrase": "faible probabilité d’accident",
+      "level": "faible",
+      "proposal": {
+        "value": 0.00375,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "faible probabilité d’accident",
+        "source": "Convention qualitative : faible = 0.00375. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.00375,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "faible probabilité d’accident",
+        "source": "Convention qualitative : faible = 0.00375. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.accident_probability_per_day",
+      "phrase": "accidents rares",
+      "level": "faible",
+      "proposal": {
+        "value": 0.00375,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "accidents rares",
+        "source": "Convention qualitative : faible = 0.00375. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.00375,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "accidents rares",
+        "source": "Convention qualitative : faible = 0.00375. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.accident_probability_per_day",
+      "phrase": "probabilité d’accident courante",
+      "level": "courant",
+      "proposal": {
+        "value": 0.015,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "probabilité d’accident courante",
+        "source": "Convention qualitative : courant = 0.015. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.015,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "probabilité d’accident courante",
+        "source": "Convention qualitative : courant = 0.015. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.accident_probability_per_day",
+      "phrase": "forte probabilité d’accident",
+      "level": "élevé",
+      "proposal": {
+        "value": 0.15000000000000002,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "forte probabilité d’accident",
+        "source": "Convention qualitative : élevé = 0.75 × 0.2 = 0.15000000000000002. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.15000000000000002,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "forte probabilité d’accident",
+        "source": "Convention qualitative : élevé = 0.75 × 0.2 = 0.15000000000000002. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.accident_probability_per_day",
+      "phrase": "accidents fréquents",
+      "level": "élevé",
+      "proposal": {
+        "value": 0.15000000000000002,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "accidents fréquents",
+        "source": "Convention qualitative : élevé = 0.75 × 0.2 = 0.15000000000000002. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.15000000000000002,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "accidents fréquents",
+        "source": "Convention qualitative : élevé = 0.75 × 0.2 = 0.15000000000000002. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.accident_probability_per_day",
+      "phrase": "très forte probabilité d’accident",
+      "level": "très élevé",
+      "proposal": {
+        "value": 0.2,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "très forte probabilité d’accident",
+        "source": "Convention qualitative : très élevé = 1.0 × 0.2 = 0.2. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.2,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "très forte probabilité d’accident",
+        "source": "Convention qualitative : très élevé = 1.0 × 0.2 = 0.2. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.accident_probability_per_day",
+      "phrase": "accidents très fréquents",
+      "level": "très élevé",
+      "proposal": {
+        "value": 0.2,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "accidents très fréquents",
+        "source": "Convention qualitative : très élevé = 1.0 × 0.2 = 0.2. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.2,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "accidents très fréquents",
+        "source": "Convention qualitative : très élevé = 1.0 × 0.2 = 0.2. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.pollution_sensitivity",
+      "phrase": "faible sensibilité à la pollution",
+      "level": "faible",
+      "proposal": {
+        "value": 0.1375,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "faible sensibilité à la pollution",
+        "source": "Convention qualitative : faible = 0.1375. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.1375,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "faible sensibilité à la pollution",
+        "source": "Convention qualitative : faible = 0.1375. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.pollution_sensitivity",
+      "phrase": "sensibilité à la pollution courante",
+      "level": "courant",
+      "proposal": {
+        "value": 0.55,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "sensibilité à la pollution courante",
+        "source": "Convention qualitative : courant = 0.55. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.55,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "sensibilité à la pollution courante",
+        "source": "Convention qualitative : courant = 0.55. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.pollution_sensitivity",
+      "phrase": "forte sensibilité à la pollution",
+      "level": "élevé",
+      "proposal": {
+        "value": 1.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "forte sensibilité à la pollution",
+        "source": "Convention qualitative : élevé = 0.75 × 2.0 = 1.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "forte sensibilité à la pollution",
+        "source": "Convention qualitative : élevé = 0.75 × 2.0 = 1.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.pollution_sensitivity",
+      "phrase": "très forte sensibilité à la pollution",
+      "level": "très élevé",
+      "proposal": {
+        "value": 2.0,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "très forte sensibilité à la pollution",
+        "source": "Convention qualitative : très élevé = 1.0 × 2.0 = 2.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 2.0,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "très forte sensibilité à la pollution",
+        "source": "Convention qualitative : très élevé = 1.0 × 2.0 = 2.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.accident_sensitivity",
+      "phrase": "faible sensibilité aux accidents",
+      "level": "faible",
+      "proposal": {
+        "value": 0.1875,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "faible sensibilité aux accidents",
+        "source": "Convention qualitative : faible = 0.1875. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.1875,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "faible sensibilité aux accidents",
+        "source": "Convention qualitative : faible = 0.1875. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.accident_sensitivity",
+      "phrase": "sensibilité aux accidents courante",
+      "level": "courant",
+      "proposal": {
+        "value": 0.75,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "sensibilité aux accidents courante",
+        "source": "Convention qualitative : courant = 0.75. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 0.75,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "sensibilité aux accidents courante",
+        "source": "Convention qualitative : courant = 0.75. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.accident_sensitivity",
+      "phrase": "forte sensibilité aux accidents",
+      "level": "élevé",
+      "proposal": {
+        "value": 1.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "forte sensibilité aux accidents",
+        "source": "Convention qualitative : élevé = 0.75 × 2.0 = 1.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1.5,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "forte sensibilité aux accidents",
+        "source": "Convention qualitative : élevé = 0.75 × 2.0 = 1.5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "inputs.accident_sensitivity",
+      "phrase": "très forte sensibilité aux accidents",
+      "level": "très élevé",
+      "proposal": {
+        "value": 2.0,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "très forte sensibilité aux accidents",
+        "source": "Convention qualitative : très élevé = 1.0 × 2.0 = 2.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 2.0,
+        "unit": "unit:UNITLESS",
+        "origin": "assumption",
+        "evidence": "très forte sensibilité aux accidents",
+        "source": "Convention qualitative : très élevé = 1.0 × 2.0 = 2.0. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.n_days",
+      "phrase": "courte période de simulation",
+      "level": "court",
+      "proposal": {
+        "value": 1,
+        "unit": "unit:DAY",
+        "origin": "assumption",
+        "evidence": "courte période de simulation",
+        "source": "Convention qualitative : court = 1. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1,
+        "unit": "unit:DAY",
+        "origin": "assumption",
+        "evidence": "courte période de simulation",
+        "source": "Convention qualitative : court = 1. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.n_days",
+      "phrase": "simulation courte",
+      "level": "court",
+      "proposal": {
+        "value": 1,
+        "unit": "unit:DAY",
+        "origin": "assumption",
+        "evidence": "simulation courte",
+        "source": "Convention qualitative : court = 1. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1,
+        "unit": "unit:DAY",
+        "origin": "assumption",
+        "evidence": "simulation courte",
+        "source": "Convention qualitative : court = 1. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.n_days",
+      "phrase": "durée de simulation courante",
+      "level": "courant",
+      "proposal": {
+        "value": 7,
+        "unit": "unit:DAY",
+        "origin": "assumption",
+        "evidence": "durée de simulation courante",
+        "source": "Convention qualitative : courant = 7. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 7,
+        "unit": "unit:DAY",
+        "origin": "assumption",
+        "evidence": "durée de simulation courante",
+        "source": "Convention qualitative : courant = 7. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.n_days",
+      "phrase": "longue période de simulation",
+      "level": "long",
+      "proposal": {
+        "value": 365,
+        "unit": "unit:DAY",
+        "origin": "assumption",
+        "evidence": "longue période de simulation",
+        "source": "Convention qualitative : long = 365. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 365,
+        "unit": "unit:DAY",
+        "origin": "assumption",
+        "evidence": "longue période de simulation",
+        "source": "Convention qualitative : long = 365. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.n_days",
+      "phrase": "simulation longue",
+      "level": "long",
+      "proposal": {
+        "value": 365,
+        "unit": "unit:DAY",
+        "origin": "assumption",
+        "evidence": "simulation longue",
+        "source": "Convention qualitative : long = 365. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 365,
+        "unit": "unit:DAY",
+        "origin": "assumption",
+        "evidence": "simulation longue",
+        "source": "Convention qualitative : long = 365. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.n_days",
+      "phrase": "très longue période de simulation",
+      "level": "très long",
+      "proposal": {
+        "value": 1095,
+        "unit": "unit:DAY",
+        "origin": "assumption",
+        "evidence": "très longue période de simulation",
+        "source": "Convention qualitative : très long = 1095. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1095,
+        "unit": "unit:DAY",
+        "origin": "assumption",
+        "evidence": "très longue période de simulation",
+        "source": "Convention qualitative : très long = 1095. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.n_days",
+      "phrase": "simulation très longue",
+      "level": "très long",
+      "proposal": {
+        "value": 1095,
+        "unit": "unit:DAY",
+        "origin": "assumption",
+        "evidence": "simulation très longue",
+        "source": "Convention qualitative : très long = 1095. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1095,
+        "unit": "unit:DAY",
+        "origin": "assumption",
+        "evidence": "simulation très longue",
+        "source": "Convention qualitative : très long = 1095. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.freq_minutes",
+      "phrase": "pas très fin",
+      "level": "très fin",
+      "proposal": {
+        "value": 5,
+        "unit": "unit:MIN",
+        "origin": "assumption",
+        "evidence": "pas très fin",
+        "source": "Convention qualitative : très fin = 5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 5,
+        "unit": "unit:MIN",
+        "origin": "assumption",
+        "evidence": "pas très fin",
+        "source": "Convention qualitative : très fin = 5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.freq_minutes",
+      "phrase": "résolution temporelle très fine",
+      "level": "très fin",
+      "proposal": {
+        "value": 5,
+        "unit": "unit:MIN",
+        "origin": "assumption",
+        "evidence": "résolution temporelle très fine",
+        "source": "Convention qualitative : très fin = 5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 5,
+        "unit": "unit:MIN",
+        "origin": "assumption",
+        "evidence": "résolution temporelle très fine",
+        "source": "Convention qualitative : très fin = 5. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.freq_minutes",
+      "phrase": "pas fin",
+      "level": "fin",
+      "proposal": {
+        "value": 10,
+        "unit": "unit:MIN",
+        "origin": "assumption",
+        "evidence": "pas fin",
+        "source": "Convention qualitative : fin = 10. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 10,
+        "unit": "unit:MIN",
+        "origin": "assumption",
+        "evidence": "pas fin",
+        "source": "Convention qualitative : fin = 10. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.freq_minutes",
+      "phrase": "résolution temporelle fine",
+      "level": "fin",
+      "proposal": {
+        "value": 10,
+        "unit": "unit:MIN",
+        "origin": "assumption",
+        "evidence": "résolution temporelle fine",
+        "source": "Convention qualitative : fin = 10. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 10,
+        "unit": "unit:MIN",
+        "origin": "assumption",
+        "evidence": "résolution temporelle fine",
+        "source": "Convention qualitative : fin = 10. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.freq_minutes",
+      "phrase": "pas intermédiaire",
+      "level": "intermédiaire",
+      "proposal": {
+        "value": 15,
+        "unit": "unit:MIN",
+        "origin": "assumption",
+        "evidence": "pas intermédiaire",
+        "source": "Convention qualitative : intermédiaire = 15. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 15,
+        "unit": "unit:MIN",
+        "origin": "assumption",
+        "evidence": "pas intermédiaire",
+        "source": "Convention qualitative : intermédiaire = 15. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.freq_minutes",
+      "phrase": "pas large",
+      "level": "large",
+      "proposal": {
+        "value": 30,
+        "unit": "unit:MIN",
+        "origin": "assumption",
+        "evidence": "pas large",
+        "source": "Convention qualitative : large = 30. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 30,
+        "unit": "unit:MIN",
+        "origin": "assumption",
+        "evidence": "pas large",
+        "source": "Convention qualitative : large = 30. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.freq_minutes",
+      "phrase": "pas grossier",
+      "level": "grossier",
+      "proposal": {
+        "value": 60,
+        "unit": "unit:MIN",
+        "origin": "assumption",
+        "evidence": "pas grossier",
+        "source": "Convention qualitative : grossier = 60. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 60,
+        "unit": "unit:MIN",
+        "origin": "assumption",
+        "evidence": "pas grossier",
+        "source": "Convention qualitative : grossier = 60. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.freq_minutes",
+      "phrase": "résolution temporelle grossière",
+      "level": "grossier",
+      "proposal": {
+        "value": 60,
+        "unit": "unit:MIN",
+        "origin": "assumption",
+        "evidence": "résolution temporelle grossière",
+        "source": "Convention qualitative : grossier = 60. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 60,
+        "unit": "unit:MIN",
+        "origin": "assumption",
+        "evidence": "résolution temporelle grossière",
+        "source": "Convention qualitative : grossier = 60. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.n_runs",
+      "phrase": "peu de réalisations",
+      "level": "peu",
+      "proposal": {
+        "value": 1,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "peu de réalisations",
+        "source": "Convention qualitative : peu = 1. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptages Monte Carlo conventionnels, à valider ; beaucoup = 30 et énormément = 50 selon une échelle entière. Plus de réalisations augmente le coût ; cela ne valide pas le modèle.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 1,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "peu de réalisations",
+        "source": "Convention qualitative : peu = 1. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptages Monte Carlo conventionnels, à valider ; beaucoup = 30 et énormément = 50 selon une échelle entière. Plus de réalisations augmente le coût ; cela ne valide pas le modèle.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.n_runs",
+      "phrase": "nombre courant de réalisations",
+      "level": "courant",
+      "proposal": {
+        "value": 3,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "nombre courant de réalisations",
+        "source": "Convention qualitative : courant = 3. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptages Monte Carlo conventionnels, à valider ; beaucoup = 30 et énormément = 50 selon une échelle entière. Plus de réalisations augmente le coût ; cela ne valide pas le modèle.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 3,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "nombre courant de réalisations",
+        "source": "Convention qualitative : courant = 3. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptages Monte Carlo conventionnels, à valider ; beaucoup = 30 et énormément = 50 selon une échelle entière. Plus de réalisations augmente le coût ; cela ne valide pas le modèle.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.n_runs",
+      "phrase": "beaucoup de réalisations",
+      "level": "beaucoup",
+      "proposal": {
+        "value": 30,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "beaucoup de réalisations",
+        "source": "Convention qualitative : beaucoup = 30. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptages Monte Carlo conventionnels, à valider ; beaucoup = 30 et énormément = 50 selon une échelle entière. Plus de réalisations augmente le coût ; cela ne valide pas le modèle.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 30,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "beaucoup de réalisations",
+        "source": "Convention qualitative : beaucoup = 30. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptages Monte Carlo conventionnels, à valider ; beaucoup = 30 et énormément = 50 selon une échelle entière. Plus de réalisations augmente le coût ; cela ne valide pas le modèle.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    },
+    {
+      "field": "experiment.n_runs",
+      "phrase": "énormément de réalisations",
+      "level": "maximum de référence",
+      "proposal": {
+        "value": 50,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "énormément de réalisations",
+        "source": "Convention qualitative : maximum de référence = 50. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptages Monte Carlo conventionnels, à valider ; beaucoup = 30 et énormément = 50 selon une échelle entière. Plus de réalisations augmente le coût ; cela ne valide pas le modèle.",
+        "accepted": false,
+        "conflicts": []
+      },
+      "after_acceptance": {
+        "value": 50,
+        "unit": "unit:NUM",
+        "origin": "assumption",
+        "evidence": "énormément de réalisations",
+        "source": "Convention qualitative : maximum de référence = 50. Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain. Comptages Monte Carlo conventionnels, à valider ; beaucoup = 30 et énormément = 50 selon une échelle entière. Plus de réalisations augmente le coût ; cela ne valide pas le modèle.",
+        "accepted": true,
+        "conflicts": []
+      },
+      "passed": true
+    }
+  ],
+  "source_revision_before_report": "778a4bcab7e0fec17b3ec3a57b480bab75afb6c6",
+  "source_sha256_lf": {
+    "descriptors/tls/descriptor.yaml": "5880882ae67c4723e8a59e893e48e3ea1f63493bd74926d9b7655dde8fc35b2a",
+    "src/websemantic/qualitative.py": "13a788571fe3a9ff9cd0f49a61416d224ef61ce964af9f0ae26756d788ae5f5b",
+    "src/websemantic/session.py": "3de0b85fa12851a4103816038ebd7133b6dd1f2a92ff02b55d2c9646648e9265",
+    "tools/check_qualifiers.py": "f951d5fff4973384438bb6b500ea6ec1816c8a3a13cb0c4467b03d9667945356"
+  }
+}

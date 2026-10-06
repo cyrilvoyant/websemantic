@@ -14,3 +14,5 @@ Définitions, unités, types, catégories, bornes et provenance des paramètres 
 Les identifiants utilisent `ns#tls/`. Le graphe relie configurations, sources, versions, activités et fichiers selon SKOS et PROV-O. Les contrôles Python valident les configurations avant le calcul.
 
 Le descripteur maintient les définitions. `python tools/export_tls_contract.py` régénère les documents. Les bornes logicielles et les conventions qualitatives gardent leur provenance et leur portée.
+
+Les [qualificatifs](../docs/qualificatifs.md) définissent des hypothèses propres aux paramètres, avec source et accord. Le [plan de validation](../docs/plan-etude.md) sépare contrat plat et relations ontologiques.
