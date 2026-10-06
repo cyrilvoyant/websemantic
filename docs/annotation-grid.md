@@ -51,7 +51,7 @@ Every human measure keeps its denominator; non-applicable items are recorded as 
 
 ## 4. Annotation procedure
 
-1. Two annotators score a stratified 20 % sample and every disagreement flagged by the script.
+1. One blinded annotator scores every applicable explanation. A second independently scores a stratified 20 % sample and every disagreement or material anomaly flagged by the script or first reader. This specifies the first-pass coverage rather than assuming that unreviewed language claims are correct.
 2. Disagreements are adjudicated and kept with their resolution.
 3. Agreement is reported as raw percentage and Cohen's kappa on decisions and severity.
 4. Annotators see neither the system name nor the condition.
