@@ -18,17 +18,19 @@ pyrcel 2.0.0, BSD-3-Clause, revision `977e9094644ec4a17d658d657094651928591c89`,
 | `V` | `ParcelModel(V=…)` | Constant updraft speed | m/s | > 0 (profile policy) | none: must be stated |
 | `T0` | `ParcelModel(T0=…)` | Initial temperature | K (°C converted exactly) | > 0 (physics) | none |
 | `P0` | `ParcelModel(P0=…)` | Initial pressure | Pa (hPa converted exactly) | > 0 (physics) | none |
-| `S0` | `ParcelModel(S0=…)` | Initial supersaturation; 0 = 100 % RH, −0.02 = 98 % RH | 1 | ≤ 0 (profile policy: start sub-saturated) | none; « humidité relative 98 % » converted exactly to −0.02 |
+| `S0` | `ParcelModel(S0=…)` | Initial supersaturation; 0 = 100 % RH, −0.02 = 98 % RH | 1 | −1 < S0 ≤ 0 (profile policy: sub-saturated start, RH > 0) | none; RH in % → S0 = RH/100 − 1 (98 % → −0.02); RH as a fraction → S0 = RH − 1 |
 | `aerosols[k].species` | `AerosolSpecies(species)` | Label of mode k | text | — | none |
 | `aerosols[k].N` | `Lognorm(N=…)` | Total number concentration of mode k | cm⁻³ | > 0 (profile) | none |
 | `aerosols[k].mu` | `Lognorm(mu=…)` | Median (geometric mean) dry radius | μm | > 0 (profile) | none |
 | `aerosols[k].sigma` | `Lognorm(sigma=…)` | Geometric standard deviation | 1 | > 1 (profile) | none |
 | `aerosols[k].kappa` | `AerosolSpecies(kappa=…)` | Hygroscopicity parameter κ | 1 | ≥ 0 (profile) | none |
-| `aerosols[k].bins` | `AerosolSpecies(bins=…)` | Number of size bins | count | ≥ 1 (code) | numerical setting fixed by study policy (operational setting, declared) |
+| `aerosols[k].bins` | `AerosolSpecies(bins=…)` | Number of size bins | count | ≥ 1 (code) | protocol default, frozen before the campaign and logged; affects results, never changed silently |
 | `accom` | `ParcelModel(accom=…)` | Condensation coefficient | 1 | (0, 1] | 1.0 (code constant `ac`, stated in answers) |
-| `t_end` | `run(t_end=…)` | Maximum integration time | s | > 0 | study policy |
-| `output_dt` | `run(output_dt=…)` | Output cadence | s | > 0 | study policy |
-| `terminate`, `terminate_depth` | `run(...)` | Stop `terminate_depth` m above S_max | boolean, m | — | study policy, declared; changes the trajectory length |
+| `t_end` | `run(t_end=…)` | Maximum integration time | s | > 0 | protocol default, frozen and logged |
+| `output_dt` | `run(output_dt=…)` | Output cadence | s | > 0 | protocol default, frozen and logged |
+| `terminate`, `terminate_depth` | `run(...)` | Stop `terminate_depth` m above S_max | boolean, m | — | protocol default, frozen and logged; changes the trajectory length |
+
+Numerical settings (`bins`, `t_end`, `output_dt`, termination) change results: their protocol values are fixed before the campaign, recorded in every manifest, and identical across compared runs.
 
 Units are a contract point: pyrcel interprets `mu` in μm and `N` in cm⁻³ for parcel runs, while the activated droplet number `Nd` is returned in m⁻³. Any answer must state the unit used.
 
@@ -45,7 +47,7 @@ Relational rules (condition B3):
 | Pressure `P`, temperature `T` | parcel table | Pa, K | output grid | |
 | Water vapour, liquid, ice `wv`, `wc`, `wi` | parcel table | kg/kg | output grid | Mixing ratios |
 | Supersaturation `S` | parcel table | 1 | output grid | Report as % only if stated (`S × 100`) |
-| `S_max` | `summary["S_max"]` | 1 | whole run | Maximum supersaturation |
+| `S_max` | `summary["S_max"]` | 1 | whole run | Maximum supersaturation from pyrcel's peak locator; may differ from the maximum of the sampled `S` column. Kept as a native KPI; the CSV maximum is not presented as S_max |
 | `Nd` | `ModelOutput.Nd` | m⁻³ | at end of run | Activated droplets; convert to cm⁻³ only explicitly |
 | Activated fraction | `ModelOutput.nd_frac` | 1 | at end of run | |
 
@@ -59,7 +61,8 @@ Numerical comparisons: RMSD on one quantity at a time, on the same output grid (
 | « air pur », « marin », « pollué », « continental » | aerosol `N` (and mode) | **Clarification**: no aerosol population is proposed without a cited source |
 | « sulfate d'ammonium », « sel marin » | `kappa` | Proposal only with a cited κ value, to accept |
 | « air presque saturé », « humidité 98 % » | `S0` | Numerical RH: exact conversion; « presque saturé » alone: clarification |
-| « plus de particules », « deux fois plus d'aérosols » | `N` | Relative change on an existing value: deterministic (× 2), stated and accepted |
+| « plus de particules » | `N` | **Clarification**: no factor or new value is given |
+| « deux fois plus d'aérosols » | `N` | Explicit factor on an existing value: N × 2, the interpretation stated and accepted before the run |
 
 ## 5. Refusal policy
 
