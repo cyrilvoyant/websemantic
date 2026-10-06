@@ -40,7 +40,7 @@ def test_cq1_supported_and_excluded_tasks_per_software():
           ?sw a ws:Software ; ws:hasContract ?c .
           ?c ws:supportsTask ?s ; ws:excludesTask ?e .
         } GROUP BY ?sw""")
-    assert {row.sw for row in rows} == {WS.TLS, WS.LQLEquiv, WS.PVLib}
+    assert {row.sw for row in rows} == {WS.TLS, WS.LQLEquiv, WS.Pyrcel}
     assert all(int(row.ns) >= 1 and int(row.ne) >= 1 for row in rows)
     patient = ask("ASK { ws:LQLContract ws:excludesTask ws:TaskPatientDecision }")
     assert bool(patient[0])

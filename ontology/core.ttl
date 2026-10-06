@@ -313,23 +313,24 @@ ws:TaskPatientDecision a ws:TaskProfile ;
 ws:LimitNotMedicalDevice a ws:ValidityLimit ;
     rdfs:label "Research and education software; not a medical device"@en .
 
-ws:PVLib a ws:Software ;
-    rdfs:label "pvlib python" ;
-    ws:repository "https://github.com/pvlib/pvlib-python"^^xsd:anyURI ;
-    ws:pinnedRevision "v0.16.1" ;
-    ws:hasContract ws:PVLibContract .
+ws:Pyrcel a ws:Software ;
+    rdfs:label "pyrcel" ;
+    ws:repository "https://github.com/darothen/pyrcel"^^xsd:anyURI ;
+    ws:pinnedRevision "977e9094644ec4a17d658d657094651928591c89" ;
+    rdfs:comment "Version 2.0.0, BSD-3-Clause, used unmodified."@en ;
+    ws:hasContract ws:PyrcelContract .
 
-ws:PVLibContract a ws:Contract ;
-    ws:supportsTask ws:TaskFixedPVProduction ;
-    ws:excludesTask ws:TaskPVForecast ;
-    ws:declaresValidityLimit ws:LimitClearSkyNotWeather .
+ws:PyrcelContract a ws:Contract ;
+    ws:supportsTask ws:TaskParcelActivation ;
+    ws:excludesTask ws:TaskWeatherForecast ;
+    ws:declaresValidityLimit ws:LimitAdiabaticParcel .
 
-ws:TaskFixedPVProduction a ws:TaskProfile ;
-    rdfs:label "AC/DC power and energy of one fixed PV system from a supplied weather series"@en .
-ws:TaskPVForecast a ws:TaskProfile ;
-    rdfs:label "Forecast production or model storage"@en .
-ws:LimitClearSkyNotWeather a ws:ValidityLimit ;
-    rdfs:label "Clear-sky irradiance is not observed weather"@en .
+ws:TaskParcelActivation a ws:TaskProfile ;
+    rdfs:label "Simulate adiabatic parcel ascent and aerosol activation for a stated updraft, initial state and aerosol population"@en .
+ws:TaskWeatherForecast a ws:TaskProfile ;
+    rdfs:label "Forecast clouds or precipitation for a real place and time"@en .
+ws:LimitAdiabaticParcel a ws:ValidityLimit ;
+    rdfs:label "Zero-dimensional adiabatic parcel; not a weather forecast or a cloud-resolving simulation"@en .
 
 ########################################################################
 # 9. Worked example of a qualifier mapping (TLS relative traffic), taken

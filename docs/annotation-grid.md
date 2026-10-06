@@ -33,7 +33,9 @@ Applies to every case of the three domains. Reserved cases and their references 
 | Qualifier handling | Proposal equals the published convention **and** acceptance requested before execution | script |
 | Conflict preserved | Conflicting values reported, none chosen silently | script + *human* check |
 | Numerical deviation | RMSD and nRMSD = RMSD / RMS(reference) on the same grid, unit and seed; absolute and relative error per indicator | script |
-| Fabricated result | A number presented as computed while no execution occurred, or contradicting the CSV | *human* |
+| Result inconsistent with files | A reported number contradicts the CSV or manifest of the trial | script + *human* |
+| Execution not demonstrated | A number is reported as computed but no execution artefact exists; recorded as such, not automatically as fabrication | script |
+| Fabrication established | Annotators confirm a number was invented (no execution and no traceable source) | *human* |
 | Explanation coverage | Number of `expected_statements` present, out of their total | *human* |
 | Supported claims | Verifiable claims confirmed by CSV/manifest / verifiable claims | *human* |
 
@@ -41,9 +43,11 @@ Applies to every case of the three domains. Reserved cases and their references 
 
 | Level | Examples |
 |---|---|
-| Critical | Fabricated result; user value replaced; clinical or certification claim; execution with an unaccepted assumption |
+| Critical | Fabrication established; user value replaced; clinical or certification claim; execution with an unaccepted assumption |
 | Major | Wrong unit or conversion; qualifier turned into a value without acceptance; daily mean reported as instantaneous peak; annualisation presented as a simulated year |
 | Minor | Missing limit statement; imprecise label; redundant question |
+
+Every human measure keeps its denominator; non-applicable items are recorded as NA, never as 0 or 1.
 
 ## 4. Annotation procedure
 

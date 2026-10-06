@@ -14,13 +14,13 @@ Scope: definitions, units, bounds, qualifiers and refusal policy. The adapter, d
 
 | Field | API | Meaning | Unit | Bounds (authority) | Default (origin) |
 |---|---|---|---|---|---|
-| `organ` | `compute(organ=…)` | Organ at risk from the shipped library (34 entries) | category | library names (code) | none: must be stated |
-| `tumour_site` | `compute(tumour=…)` | Tumour site from the shipped library (20 entries) | category | library names (code) | none: must be stated |
+| `organ` | `compute(organ, …)` (1st positional) | Organ at risk from the shipped library (34 entries) | category | library names (code) | none: must be stated |
+| `tumour_site` | `compute(…, tumour, …)` (2nd positional; API name `tumour`) | Tumour site from the shipped library (20 entries) | category | library names (code) | none: must be stated |
 | `courses[k].dose_per_fraction` | `Course.dose_per_fraction` | Physical dose per fraction of course k | Gy (`unit:GRAY`) | ≥ 0 (code) | none |
-| `courses[k].n_fractions` | `Course.n_fractions` | Number of fractions of course k | count | ≥ 0 (code) | none |
+| `courses[k].n_fractions` | `Course.n_fractions` (float in the API) | Number of fractions of course k | count | ≥ 0 (code); integer ≥ 1 (profile policy for physical schedules) | none |
 | `courses[k].gap_days` | `Course.gap_days` | Interruption before course k | d (`unit:DAY`) | ≥ 0 (code) | 0 (code default) |
-| number of courses | `len(Prescription.courses)` | Successive courses | count | 1–10 (code: `MAX_COURSES`) | 1 |
-| `reference_dose` | `Prescription.reference_dose` | Dose per fraction of the reference fractionation defining EQD | Gy | ≥ 0 (code) | 2.0 (code default, to state in every answer) |
+| number of courses | `len(Prescription.courses)` | Successive courses | count | ≤ 10 (code: `MAX_COURSES`); ≥ 1 (profile policy, the code accepts an empty tuple) | 1 |
+| `reference_dose` | `Prescription.reference_dose` | Dose per fraction of the reference fractionation defining EQD | Gy | ≥ 0 (code); > 0 (profile policy: 0 is constructible but does not guarantee a computable EQD) | 2.0 (code default, proposed and stated in every answer; not a clinical default) |
 | `bifractionated` | `Prescription.bifractionated` | Two fractions a day | boolean | — | false (code default) |
 | `time_model`, `tcp_model`, `reproduce_2014` | `Options` | Calculation switches | category / boolean | enumerations (code) | `Options()` defaults (code) |
 
@@ -47,13 +47,14 @@ Comparisons use absolute and relative errors on one quantity at a time. BED, EQD
 | Expression | Field | Treatment |
 |---|---|---|
 | « fractionnement conventionnel », « classique » | `dose_per_fraction` | Proposal 2.0 Gy, to accept |
-| « hypofractionnement modéré » | `dose_per_fraction` | **Clarification**: no single value; indicative range 2.4–3.4 Gy to show, user chooses |
-| « hypofractionnement extrême », « stéréotaxique » | `dose_per_fraction` | **Clarification**: typically ≥ 5 Gy; user chooses |
-| « hyperfractionnement », « deux séances par jour » | `bifractionated` (+ dose) | `bifractionated = true` proposed; dose per fraction must be stated |
+| « hypofractionnement modéré » | `dose_per_fraction` | **Clarification**: the user states the dose per fraction; no numerical range is proposed before sourced scientific review |
+| « hypofractionnement extrême », « stéréotaxique » | `dose_per_fraction` | **Clarification**: the user states the dose per fraction; no numerical range before review |
+| « hyperfractionnement » | dose / frequency | **Clarification**: the word alone does not fix two sessions a day |
+| « deux séances par jour » | `bifractionated` | Explicit setting `bifractionated = true`; dose per fraction must still be stated |
 | « longue interruption », « pause d'une semaine » | `gap_days` | « une semaine » → 7 d (exact conversion); « longue » → clarification |
 | « dose élevée », « peu de séances » | dose / fractions | Clarification: no study convention |
 
-Ranges are indicative conventions to be validated by the domain reviewers; they are never accepted automatically.
+Only « conventionnel » carries a proposed value (2 Gy, to accept). Any numerical convention for other expressions requires sourced review by Cyril and D. Julian before it enters the contract.
 
 ## 5. Refusal policy (task exclusion)
 
@@ -71,5 +72,5 @@ A fictitious or textbook schedule (« un schéma 20 × 3 Gy comparé à 2 Gy »)
 | CQ11 | Which reference defines EQD? | `reference_dose`, 2 Gy unless stated | graph |
 | CQ13 | Are dose per fraction, number of fractions and total dose independent? | No: total = d × n; disagreement = conflict | graph rule (B3) |
 | CQ14 | May a saturated EQD be reported? | No | Python flag + graph |
-| CQ15 | Does « hypofractionnement modéré » fix a dose? | No: clarification with indicative range | graph |
+| CQ15 | Does « hypofractionnement modéré » fix a dose? | No: clarification | graph |
 | CQ16 | Is a patient-specific request in scope? | No: refuse | rules |
