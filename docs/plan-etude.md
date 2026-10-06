@@ -1,6 +1,6 @@
 # WebSemantic — plan de travail et d’évaluation
 
-Version du 6 octobre 2026. Proposition à relire avec Claude avant de figer le protocole. Aucun résultat comparatif n’est encore acquis.
+Version du 6 octobre 2026. Répartition et orientations validées par Codex et Claude via le tri-log. Contrat scientifique, sémantique et ontologie constituent le cœur du papier ; l’évaluation mesure leur apport. Aucun résultat comparatif n’est encore acquis. Taille finale et budget fixés après le pilote.
 
 ## 1. Question scientifique et périmètre
 
@@ -8,14 +8,14 @@ Question principale : à logiciel, données et moyens d’exécution constants, 
 
 Trois applications : TLS, LQL-Equiv et un profil pvlib limité. Garder un cadre de data intelligence en introduction et en discussion ; le corps du papier reste une étude expérimentale de logiciel scientifique. Pas de grand modèle théorique ajouté pour donner de l’ampleur. Trois équations utiles suffisent : erreur numérique, normalisation, effet apparié. La reproductibilité du calcul n’est pas une validation physique ou clinique.
 
-Les 100 scénarios sont proposés **par logiciel**, soit 300 cas indépendants. Une requête, un scénario et une conversation ne sont pas synonymes : une étude peut nécessiter plusieurs messages. Les paraphrases et variantes dérivées restent dans le même groupe statistique. Cette taille est un objectif de campagne, pas une garantie de puissance statistique ; le pilote déterminera la précision accessible.
+Les 100 scénarios sont proposés **par logiciel**, soit 300 cas indépendants, sous réserve de l’effort de validation mesuré au pilote ; repli proposé à 60 par logiciel. Ce choix conditionnel remplace la proposition intermédiaire de 100 au total consignée dans les échanges. Une requête, un scénario et une conversation ne sont pas synonymes : une étude peut nécessiter plusieurs messages. Les paraphrases et variantes dérivées restent dans le même groupe statistique. Cette taille est un objectif de campagne, pas une garantie de puissance statistique ; le pilote déterminera la précision accessible.
 
 ## 2. État de départ à préserver
 
 - Le dépôt et le pack existants constituent la base. Archiver leurs empreintes, le guide et les versions avant toute modification. Les corrections d’installation non achevées restent identifiées comme telles.
 - TLS est connecté ; les descripteurs LQL et pvlib ne déclarent encore que l’identité et le périmètre. Ne pas les présenter comme intégrés.
 - Les sources originales sous external/ et les applications publiques existantes restent intactes. Les adaptateurs, contrats et exemples sont développés dans WebSemantic.
-- LQL local est épinglé à une révision ancienne : comparer ses API et conventions avec la version publique actuelle avant de choisir la référence. Ne pas confondre une correction du backend et un effet du contrat.
+- LQL local est épinglé à dfc9a338205b8864b8e3470c4ae245b019e88844 : la branche main publique correspond à cette révision, vérifiée le 6 octobre 2026 par git ls-remote. Vérifier les conventions à cette révision avant intégration. Ne pas confondre une correction du backend et un effet du contrat.
 - Le RDF/SKOS et la provenance existent pour TLS. Une véritable démonstration de l’effet des relations doit encore être construite : un graphe plus volumineux ne prouve pas une meilleure interprétation.
 
 ## 3. Répartition proposée entre Codex et Claude
@@ -30,7 +30,7 @@ Les 100 scénarios sont proposés **par logiciel**, soit 300 cas indépendants. 
 | Statistiques et ablations | Codex | Claude | Analyse appariée, échecs inclus, intervalles par scénario |
 | Manuscrit et guide | Codex première réduction ; Claude critique | Cyril décide | Texte court, résultats documentés, pas de revendications gratuites |
 
-Cette répartition exprime des responsabilités, pas une supériorité démontrée d’un modèle. Claude intervient via le tri-log externe ; aucune réponse de Claude n’est supposée ni fabriquée. Chaque entrée comporte demande, fichiers/version lus, modifications proposées, preuves, points en désaccord et prochaine action. Le second lecteur vérifie le livrable avant clôture. Les références privées ne sont pas publiées dans les dépôts consultés par les candidats.
+Cette répartition est validée par les deux collaborateurs. Elle exprime des responsabilités, pas une supériorité démontrée d’un modèle. Claude intervient via le tri-log externe ; aucune réponse de Claude n’est supposée ni fabriquée. Chaque entrée comporte demande, fichiers/version lus, modifications proposées, preuves, points en désaccord et prochaine action. Le second lecteur vérifie le livrable avant clôture. Les références privées ne sont pas publiées dans les dépôts consultés par les candidats.
 
 ## 4. Ordre d’exécution et portes de validation
 
@@ -76,7 +76,7 @@ Inclure beaucoup, peu, faible, très fort, moyen quand déclaré, négations, co
 
 ## 6. Conditions et campagne
 
-**Pilote pratique.** Gemini, GPT, Claude, Grok et Perplexity, si accessibles : 60 cas × 5 services = 300 conversations pour une condition complète. Documenter service, identifiant/version du modèle lorsqu’exposé, date, abonnement, mode, Python, web, upload et budget. Tous ne possèdent pas les mêmes outils : vérifier leur disponibilité avant de comparer. Un chat sans Python peut être évalué pour configuration/explication ; son absence de calcul reste un résultat de disponibilité, pas une erreur RMSD. Ne pas appeler cela « tous les LLM du marché ».
+**Pilote pratique.** Préférer les API lorsque disponibles ; température/version/options réellement exposées sont consignées. Chats web séparés avec mode/abonnement/outils enregistrés. Température zéro ne garantit pas le déterminisme.  Gemini, GPT, Claude, Grok et Perplexity, si accessibles : 60 cas × 5 services = 300 conversations pour une condition complète. Documenter service, identifiant/version du modèle lorsqu’exposé, date, abonnement, mode, Python, web, upload et budget. Tous ne possèdent pas les mêmes outils : vérifier leur disponibilité avant de comparer. Un chat sans Python peut être évalué pour configuration/explication ; son absence de calcul reste un résultat de disponibilité, pas une erreur RMSD. Ne pas appeler cela « tous les LLM du marché ».
 
 **Campagne principale contrôlée.** Deux agents avec Python/web, GPT et Claude si ces moyens sont disponibles. 300 scénarios × 2 agents × 2 conditions (sources natives versus WebSemantic complet) × 3 répétitions = 3 600 essais. Même backend, mêmes données et budget pour les deux conditions ; seul le dossier/documentation offert change. Répertoires expérimentaux figés et séparation réseau contrôlée évitent que le bras natif consulte le contrat enrichi. Accès aux sites officiels et recherche web sont évalués séparément, avec requêtes/outils consignés ; leur évolution ne doit pas contaminer l’ablation contrôlée.
 
