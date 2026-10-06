@@ -20,6 +20,10 @@ RMSD = sqrt(mean((P − P_ref)²)) ; nRMSD = RMSD/sqrt(mean(P_ref²)). Une réf�
 
 Évaluer les explications par leurs affirmations soutenues et leur couverture : unités, période, hypothèses, origine et portée. Rapporter les effets et intervalles par scénario, y compris les résultats nuls ou défavorables.
 
+La qualification lisible par machine est un résultat à contrôler : définition et unité de chaque sortie, support temporel, agrégation/transformation, origine, limites et lien à l’expérience/version. Vérifier schéma, résolution des champs et concordance avec les fichiers calculés. La sémantique définit les significations ; l’ontologie explicite les relations ; le contrat relie ces éléments aux contrôles et à l’exécution. Cette continuité constitue l’hypothèse distinctive à tester.
+
+FAIR pour les données et FAIR4RS pour les logiciels fournissent le cadre de réutilisation : métadonnées découvrables, ressources accessibles et versionnées, vocabulaires/interfaces déclarés, provenance, dépendances et licences. Documenter les lacunes ; ce relevé de preuves n’est pas une certification FAIR et ne démontre pas la validité scientifique des sorties.
+
 Pour deux configurations, vérifier affectation des valeurs, accords, champs contrôlés, CSV individuels/réunis et écarts entre médianes. Une erreur partielle ne produit pas une comparaison achevée. Un écart entre configurations concerne l’ensemble des paramètres modifiés.
 
 Les références numériques sont les calculs des trois logiciels sous configuration contrôlée, pas des observations de terrain. Une demande ambiguë peut admettre plusieurs réponses : définir les configurations admissibles avant de noter. Présenter séparément disponibilité des outils, réussite des tâches et erreurs numériques conditionnelles.
