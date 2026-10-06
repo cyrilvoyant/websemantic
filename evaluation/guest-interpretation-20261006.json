@@ -1,0 +1,53 @@
+{
+  "scope": "Single exploratory ChatGPT guest interpretation recovered with two unscripted follow-ups; execution by common local Python, not by ChatGPT",
+  "case": "TLS-P01",
+  "source_revision": "37ae3f6",
+  "model": "ChatGPT guest; underlying model unavailable",
+  "provider_execution": false,
+  "common_executor_execution": true,
+  "initial_decision": "clarify",
+  "recovered_decision": "execute",
+  "followups": 2,
+  "metrics": [
+    {
+      "table": "representative",
+      "column": "power_kw",
+      "n": 1344,
+      "rmsd": 2.0317099417114232e-05,
+      "nrmsd": 2.07183299061637e-08
+    },
+    {
+      "table": "representative",
+      "column": "energy_kwh",
+      "n": 1344,
+      "rmsd": 4.016566712046534e-06,
+      "nrmsd": 1.638355013613751e-08
+    },
+    {
+      "table": "kpis",
+      "column": "total_mwh",
+      "n": 5,
+      "rmsd": 0.0,
+      "nrmsd": 0.0
+    },
+    {
+      "table": "kpis",
+      "column": "annualized_mwh",
+      "n": 5,
+      "rmsd": 0.0,
+      "nrmsd": 0.0
+    },
+    {
+      "table": "kpis",
+      "column": "peak_kw",
+      "n": 5,
+      "rmsd": 1.016845989170083e-13,
+      "nrmsd": 5.514153627828562e-17
+    }
+  ],
+  "fields_matched": 26,
+  "units_matched": 26,
+  "evidence_spans_present": 26,
+  "total_fields": 26,
+  "evaluation": "No population success rate or confidence interval from this single exploratory recovery"
+}
