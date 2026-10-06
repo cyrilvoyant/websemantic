@@ -44,22 +44,22 @@ ws:PYR_RH a ws:ParameterDefinition ;
 ws:PYR_N a ws:ParameterDefinition ;
     skos:prefLabel "Concentration en nombre du mode"@fr ; ws:apiVariable "Lognorm(N=)" ; ws:fieldPath "aerosols[k].N" ;
     ws:quantityKind qk:NumberDensity ; ws:canonicalUnit unit:PER-CentiM3 ;
-    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" .
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; ws:requiresInstance true .
 
 ws:PYR_mu a ws:ParameterDefinition ;
     skos:prefLabel "Rayon sec médian"@fr ; ws:apiVariable "Lognorm(mu=)" ; ws:fieldPath "aerosols[k].mu" ;
     ws:quantityKind qk:Length ; ws:canonicalUnit unit:MicroM ;
-    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" .
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; ws:requiresInstance true .
 
 ws:PYR_sigma a ws:ParameterDefinition ;
     skos:prefLabel "Écart-type géométrique"@fr ; ws:apiVariable "Lognorm(sigma=)" ; ws:fieldPath "aerosols[k].sigma" ;
     ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:UNITLESS ;
-    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" .
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; ws:requiresInstance true .
 
 ws:PYR_kappa a ws:ParameterDefinition ;
     skos:prefLabel "Hygroscopicité κ"@fr ; ws:apiVariable "AerosolSpecies(kappa=)" ; ws:fieldPath "aerosols[k].kappa" ;
     ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:UNITLESS ;
-    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" .
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; ws:requiresInstance true .
 
 ws:PYR_T a ws:OutputVariable ;
     skos:prefLabel "Température de la parcelle"@fr ; ws:apiVariable "to_pandas() T" ;

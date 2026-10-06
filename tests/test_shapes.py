@@ -113,3 +113,24 @@ def test_inconsistent_second_course_is_detected():
 def test_non_numeric_value_is_rejected():
     conforms, texts = messages({**LQL_OK, "LQL_n_fractions": "trois"})
     assert not conforms and any("Numeric value expected" in m for m in texts)
+
+
+def test_missing_group_instance_is_rejected_for_repeated_parameters():
+    g = scenario(course("c1", 3.0, 20, 66.0))
+    for record in list(g.subjects(WS.concept, WS.LQL_total_dose)):
+        g.remove((record, WS.groupInstance, None))
+    shapes = Graph().parse(ROOT / "ontology" / "shapes.ttl", format="turtle")
+    conforms, report, _ = pyshacl.validate(g + ontology(), shacl_graph=shapes, advanced=True, inference="none")
+    texts = [str(o) for o in report.objects(None, Namespace("http://www.w3.org/ns/shacl#").resultMessage)]
+    assert not conforms and any("lacks ws:groupInstance" in m for m in texts)
+
+
+def test_unknown_concept_and_duplicate_value_are_rejected():
+    g = scenario({"LQL_reference_dose": 2.0})
+    record = next(g.subjects(WS.concept, WS.LQL_reference_dose))
+    g.add((record, WS.value, Literal(3.0)))
+    g.add((record, WS.concept, WS.NotDeclared))
+    shapes = Graph().parse(ROOT / "ontology" / "shapes.ttl", format="turtle")
+    conforms, report, _ = pyshacl.validate(g + ontology(), shacl_graph=shapes, advanced=True, inference="none")
+    texts = [str(o) for o in report.objects(None, Namespace("http://www.w3.org/ns/shacl#").resultMessage)]
+    assert not conforms and any("at most one value" in m for m in texts) and any("known parameter" in m for m in texts)

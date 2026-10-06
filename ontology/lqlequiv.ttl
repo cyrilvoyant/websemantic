@@ -27,19 +27,19 @@ ws:LQL_tumour_site a ws:ParameterDefinition ;
     skos:prefLabel "Site tumoral"@fr ; ws:apiVariable "compute(..., tumour, ...) positional 2" ; ws:fieldPath "tumour_site" ;
     skos:definition "Tumour site from the shipped library (20 entries)."@en .
 
-ws:LQL_dose_per_fraction a ws:ParameterDefinition ;
+ws:LQL_dose_per_fraction a ws:ParameterDefinition ; ws:requiresInstance true ;
     skos:prefLabel "Dose par fraction"@fr ; ws:apiVariable "Course.dose_per_fraction" ; ws:fieldPath "courses[k].dose_per_fraction" ;
     ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ;
     ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] .
 
-ws:LQL_n_fractions a ws:ParameterDefinition ;
+ws:LQL_n_fractions a ws:ParameterDefinition ; ws:requiresInstance true ;
     skos:prefLabel "Nombre de fractions"@fr ; ws:apiVariable "Course.n_fractions" ; ws:fieldPath "courses[k].n_fractions" ;
     ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:NUM ;
     ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] ,
                 [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 1 ; ws:authority ws:AuthorityPolicy ;
                   rdfs:comment "Integer >= 1 for physical schedules (profile policy); the API accepts floats."@en ] .
 
-ws:LQL_gap_days a ws:ParameterDefinition ;
+ws:LQL_gap_days a ws:ParameterDefinition ; ws:requiresInstance true ;
     skos:prefLabel "Interruption"@fr ; ws:apiVariable "Course.gap_days" ; ws:fieldPath "courses[k].gap_days" ;
     ws:quantityKind qk:Time ; ws:canonicalUnit unit:DAY ;
     ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] .
@@ -56,7 +56,7 @@ ws:LQL_bifractionated a ws:ParameterDefinition ;
     skos:prefLabel "Deux fractions par jour"@fr ; ws:apiVariable "Prescription.bifractionated" ; ws:fieldPath "bifractionated" ;
     ws:codeDefault false .
 
-ws:LQL_total_dose a ws:ParameterDefinition ;
+ws:LQL_total_dose a ws:ParameterDefinition ; ws:requiresInstance true ;
     skos:prefLabel "Dose totale"@fr ; ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ;
     ws:derivedFrom ws:LQL_dose_per_fraction, ws:LQL_n_fractions ;
     ws:derivationRule "total_dose = dose_per_fraction * n_fractions; a stated total that disagrees is a conflict" .

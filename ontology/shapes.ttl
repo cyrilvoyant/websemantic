@@ -17,8 +17,19 @@ ws:PrefixDecl a owl:Ontology ;
 
 ws:ParameterRecordShape a sh:NodeShape ;
     sh:targetClass ws:Parameter ;
-    sh:property [ sh:path ws:concept ; sh:minCount 1 ; sh:maxCount 1 ;
-                  sh:message "Each record refers to exactly one parameter definition." ] ;
+    sh:property [ sh:path ws:concept ; sh:minCount 1 ; sh:maxCount 1 ; sh:class ws:ParameterDefinition ;
+                  sh:message "Each record refers to exactly one known parameter definition." ] ;
+    sh:property [ sh:path ws:value ; sh:maxCount 1 ;
+                  sh:message "A record carries at most one value; competing values are conflicts, not duplicates." ] ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "Record of a repeated parameter lacks ws:groupInstance (course or mode identifier)." ;
+        sh:prefixes ws:PrefixDecl ;
+        sh:select """
+            SELECT $this WHERE {
+              $this ws:concept ?c . ?c ws:requiresInstance true .
+              FILTER NOT EXISTS { $this ws:groupInstance ?k }
+            }""" ] ;
     sh:sparql [
         a sh:SPARQLConstraint ;
         sh:message "Numeric value expected for a parameter with a canonical unit." ;

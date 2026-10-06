@@ -253,6 +253,8 @@ ws:codeDefault a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ;
 ws:validityFlag a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:string .
 ws:groupInstance a owl:DatatypeProperty ; rdfs:domain ws:Parameter ; rdfs:range xsd:string ;
     rdfs:comment "Identifier of the course, aerosol mode or other repeated group a record belongs to; checks never mix instances."@en .
+ws:requiresInstance a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range xsd:boolean ;
+    rdfs:comment "Records of this parameter must carry ws:groupInstance (repeated course, aerosol mode...)."@en .
 ws:partOfGroup a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range xsd:string ;
     rdfs:comment "Parameters that must be supplied together."@en .
 
