@@ -15,3 +15,7 @@ Répartition et orientations validées par les deux collaborateurs. Le contrat s
 ## Troisième domaine et distribution
 
 Demande de remplacement éventuel de pvlib par un logiciel atmosphérique. Audit préalable documenté dans [troisieme-logiciel.md](troisieme-logiciel.md) : ecape-parcel-py cloné à révision fixe, licence MIT conservée, aucune exécution encore validée. Les logiciels originaux restent inchangés. Le package final doit inclure chaque nouveau backend, contrat, notice et exemple après vérification. Aucun nouveau package diffusé à ce stade.
+
+## Connaissance préalable
+
+Contrôle accepté : sessions neuves sans accès aux sources, assertions évaluées contre une version fixe. Le [protocole](connaissance-prealable.md) distingue familiarité et preuve de contamination. Banque de six questions rédigée hors du dépôt public, à relire avant collecte. Aucun modèle testé ni réponse fabriquée.
