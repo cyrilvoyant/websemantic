@@ -1,0 +1,309 @@
+{
+  "scope": "Development pilot; no held-out evidence, no ontology ablation, no multi-provider comparison",
+  "numerical": [
+    {
+      "model": "tls",
+      "case": 1,
+      "metrics": {
+        "power_kw": {
+          "n": 168,
+          "rmsd": 8.60520660449427e-06,
+          "nrmsd": 1.8187658187020342e-08
+        },
+        "energy_kwh": {
+          "n": 168,
+          "rmsd": 8.60520660449427e-06,
+          "nrmsd": 1.8187658187020342e-08
+        }
+      },
+      "run": "work\\first-pilot-20261006\\tls\\20261006T103900Z-3ffcf9e9"
+    },
+    {
+      "model": "tls",
+      "case": 2,
+      "metrics": {
+        "power_kw": {
+          "n": 168,
+          "rmsd": 1.00163055507086e-05,
+          "nrmsd": 1.802348124576627e-08
+        },
+        "energy_kwh": {
+          "n": 168,
+          "rmsd": 1.00163055507086e-05,
+          "nrmsd": 1.802348124576627e-08
+        }
+      },
+      "run": "work\\first-pilot-20261006\\tls\\20261006T103901Z-a269cc5f"
+    },
+    {
+      "model": "tls",
+      "case": 3,
+      "metrics": {
+        "power_kw": {
+          "n": 168,
+          "rmsd": 1.2786339514278532e-05,
+          "nrmsd": 1.994215312343927e-08
+        },
+        "energy_kwh": {
+          "n": 168,
+          "rmsd": 1.2786339514278532e-05,
+          "nrmsd": 1.994215312343927e-08
+        }
+      },
+      "run": "work\\first-pilot-20261006\\tls\\20261006T103902Z-5e397919"
+    },
+    {
+      "model": "lql",
+      "case": 1,
+      "metrics": {
+        "eqd_oar_total": {
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        "eqd_tumour_total": {
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        }
+      },
+      "run": "work\\first-pilot-20261006\\lql\\20261006T103902Z-08f89f07"
+    },
+    {
+      "model": "lql",
+      "case": 2,
+      "metrics": {
+        "eqd_oar_total": {
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        "eqd_tumour_total": {
+          "n": 1,
+          "rmsd": 2.842170943040401e-14,
+          "nrmsd": 2.013005554421906e-16
+        }
+      },
+      "run": "work\\first-pilot-20261006\\lql\\20261006T103903Z-ab8660da"
+    },
+    {
+      "model": "lql",
+      "case": 3,
+      "metrics": {
+        "eqd_oar_total": {
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        "eqd_tumour_total": {
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        }
+      },
+      "run": "work\\first-pilot-20261006\\lql\\20261006T103903Z-b5f8b501"
+    },
+    {
+      "model": "pyrcel",
+      "case": 1,
+      "metrics": {
+        "T": {
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        "S": {
+          "n": 7,
+          "rmsd": 5.795118929344973e-17,
+          "nrmsd": 3.4859321374288008e-15
+        }
+      },
+      "run": "work\\first-pilot-20261006\\pyrcel\\20261006T103911Z-ef2a177a"
+    },
+    {
+      "model": "pyrcel",
+      "case": 2,
+      "metrics": {
+        "T": {
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        "S": {
+          "n": 7,
+          "rmsd": 5.285825932019826e-17,
+          "nrmsd": 3.84334876494602e-15
+        }
+      },
+      "run": "work\\first-pilot-20261006\\pyrcel\\20261006T103913Z-a11fd63c"
+    },
+    {
+      "model": "pyrcel",
+      "case": 3,
+      "metrics": {
+        "T": {
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        "S": {
+          "n": 7,
+          "rmsd": 4.985309331593299e-17,
+          "nrmsd": 4.665453381250565e-15
+        }
+      },
+      "run": "work\\first-pilot-20261006\\pyrcel\\20261006T103915Z-285477fa"
+    }
+  ],
+  "semantic": [
+    {
+      "model": "tls",
+      "request": "Un tunnel de moins de deux kilomètres avec beaucoup de trafic : calcule.",
+      "decision": "clarify",
+      "expected": "clarify",
+      "decision_correct": true,
+      "reason": "Une borne ou une approximation ne fixe pas une longueur précise. Indiquez une longueur de calcul (avec m ou km), ou demandez un profil de démonstration.",
+      "layer": "local conversation guard",
+      "needs_web": false
+    },
+    {
+      "model": "tls",
+      "request": "Estime la consommation du tunnel du Vieux-Port de Marseille, il est assez gros et avec un peu de trafic.",
+      "decision": "clarify",
+      "expected": "clarify",
+      "decision_correct": true,
+      "needs_web": false,
+      "records": {
+        "experiment.base_seed": {
+          "value": 42,
+          "origin": "default",
+          "accepted": true,
+          "source": "Politique de reproductibilité des essais : graine initiale fixe à 42, modifiable sur demande explicite."
+        }
+      },
+      "questions": [
+        {
+          "question": "Quelle est la longueur exacte du tunnel en mètres ou en kilomètres ?",
+          "fields": [
+            "inputs.length_m"
+          ],
+          "blocking": true,
+          "scenario": "common"
+        },
+        {
+          "question": "Quel est le nombre de tubes du tunnel ?",
+          "fields": [
+            "inputs.n_tubes"
+          ],
+          "blocking": true,
+          "scenario": "common"
+        }
+      ],
+      "issues": [
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing"
+      ]
+    },
+    {
+      "model": "lql",
+      "request": "Compare un hypofractionnement modéré au schéma conventionnel pour la prostate et le rectum.",
+      "decision": "clarify",
+      "expected": "clarify",
+      "decision_correct": true,
+      "reason": "La comparaison de plusieurs cursus dépasse le profil supporté par cet outil.",
+      "layer": "local conversation guard",
+      "needs_web": false
+    },
+    {
+      "model": "pyrcel",
+      "request": "Simule une parcelle avec une forte ascendance dans un air très pollué.",
+      "decision": "clarify",
+      "expected": "clarify",
+      "decision_correct": true,
+      "needs_web": false,
+      "records": {},
+      "questions": [
+        {
+          "question": "Quelle est la valeur de la vitesse verticale (ascendance) ?",
+          "fields": [
+            "inputs.V"
+          ],
+          "blocking": true,
+          "scenario": "common"
+        },
+        {
+          "question": "Quelle est la concentration initiale d'aérosols pour cet air pollué ?",
+          "fields": [
+            "inputs.N"
+          ],
+          "blocking": true,
+          "scenario": "common"
+        }
+      ],
+      "issues": [
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing"
+      ]
+    }
+  ],
+  "provenance": {
+    "repository_revision": "65e37f82e7b2a7fd16598f13aff9ca1755fb4f6b",
+    "harness_sha256": "71a90f6be31a223c828179b87c37362f5d78567a12b0bd54a0e6f70adacb4189",
+    "gemini_model": "gemini-3.5-flash-lite",
+    "api_calls": 4,
+    "fresh_history_per_probe": true,
+    "date": "2026-10-06",
+    "reference_calls": "Nine adapter executions paired with nine direct native executions; no LLM in numerical control",
+    "interrupted_attempts": "Two incomplete harness attempts excluded; direct pyrcel call had reversed positional P0/S0. Corrected to named arguments before completed controls.",
+    "collection": "Development cases; overlaps pilot families; not reserved/confirmatory"
+  },
+  "limitations": [
+    "Single Gemini sample per vague request",
+    "No ontology or guidance ablation",
+    "No GPT/Claude/Perplexity comparison",
+    "Marseille probe did not request web research",
+    "30 s pyrcel profiles remain short, not long-horizon activation validation",
+    "Numerical reference calls use the same pinned algorithms and environment; test transport/adapter fidelity, not physical accuracy",
+    "Clarification decisions include local guards, not only Gemini reasoning"
+  ],
+  "additional_checks": [
+    "TLS persisted reference timestamp alignment checked for all three cases",
+    "RMSD/nRMSD known-offset and zero-reference checks passed",
+    "18 core ontology tests passed; not an ablation"
+  ]
+}
