@@ -5,9 +5,12 @@
 @prefix owl:  <http://www.w3.org/2002/07/owl#> .
 
 # SHACL shapes executed over a scenario graph merged with the ontology.
-# They read bounds and relations from the graph (ws:hasBound, ws:derivedFrom,
-# ws:convertibleTo, ws:partOfGroup) instead of hard-coding them, so the same
-# shapes serve every domain extension.
+# Generic shapes (any domain): numeric type, declared bounds, complete groups;
+# they read ws:hasBound and ws:partOfGroup from the graph.
+# Domain-specific shapes: LQL total dose (d x n) and pyrcel RH/S0 conversion;
+# they name their concepts and encode the rule, they do not execute
+# ws:derivationRule strings. Repeated groups (courses, aerosol modes) are
+# checked per ws:groupInstance, never across instances.
 
 ws:PrefixDecl a owl:Ontology ;
     sh:declare [ sh:prefix "ws" ; sh:namespace "https://github.com/cyrilvoyant/websemantic/ns#"^^xsd:anyURI ] .
@@ -16,6 +19,15 @@ ws:ParameterRecordShape a sh:NodeShape ;
     sh:targetClass ws:Parameter ;
     sh:property [ sh:path ws:concept ; sh:minCount 1 ; sh:maxCount 1 ;
                   sh:message "Each record refers to exactly one parameter definition." ] ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "Numeric value expected for a parameter with a canonical unit." ;
+        sh:prefixes ws:PrefixDecl ;
+        sh:select """
+            SELECT $this ?value WHERE {
+              $this ws:value ?value ; ws:concept ?c . ?c ws:canonicalUnit ?u .
+              FILTER ( !isNumeric(?value) )
+            }""" ] ;
     sh:sparql [
         a sh:SPARQLConstraint ;
         sh:message "Value violates a declared bound ({?kind} {?bound})." ;
@@ -32,14 +44,14 @@ ws:DerivedQuantityShape a sh:NodeShape ;
     sh:targetClass ws:Scenario ;
     sh:sparql [
         a sh:SPARQLConstraint ;
-        sh:message "Stated total dose disagrees with dose per fraction x number of fractions (conflict to resolve)." ;
+        sh:message "Stated total dose of a course disagrees with its dose per fraction x number of fractions (conflict to resolve)." ;
         sh:prefixes ws:PrefixDecl ;
         sh:select """
             SELECT $this WHERE {
               $this ws:hasParameter ?t, ?d, ?n .
-              ?t ws:concept ws:LQL_total_dose ; ws:value ?tv .
-              ?d ws:concept ws:LQL_dose_per_fraction ; ws:value ?dv .
-              ?n ws:concept ws:LQL_n_fractions ; ws:value ?nv .
+              ?t ws:concept ws:LQL_total_dose ; ws:value ?tv ; ws:groupInstance ?k .
+              ?d ws:concept ws:LQL_dose_per_fraction ; ws:value ?dv ; ws:groupInstance ?k .
+              ?n ws:concept ws:LQL_n_fractions ; ws:value ?nv ; ws:groupInstance ?k .
               FILTER ( ABS(?tv - ?dv * ?nv) > 1e-9 )
             }""" ] .
 
@@ -62,11 +74,11 @@ ws:CompleteGroupShape a sh:NodeShape ;
     sh:targetClass ws:Scenario ;
     sh:sparql [
         a sh:SPARQLConstraint ;
-        sh:message "Incomplete parameter group ({?group}): all members must be supplied together." ;
+        sh:message "Incomplete parameter group ({?group}, instance {?k}): all members must be supplied together." ;
         sh:prefixes ws:PrefixDecl ;
         sh:select """
-            SELECT DISTINCT $this ?group WHERE {
-              $this ws:hasParameter ?r . ?r ws:concept ?c . ?c ws:partOfGroup ?group .
+            SELECT DISTINCT $this ?group ?k WHERE {
+              $this ws:hasParameter ?r . ?r ws:concept ?c ; ws:groupInstance ?k . ?c ws:partOfGroup ?group .
               ?m ws:partOfGroup ?group .
-              FILTER NOT EXISTS { $this ws:hasParameter ?r2 . ?r2 ws:concept ?m }
+              FILTER NOT EXISTS { $this ws:hasParameter ?r2 . ?r2 ws:concept ?m ; ws:groupInstance ?k }
             }""" ] .

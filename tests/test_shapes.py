@@ -20,14 +20,17 @@ def ontology():
 
 
 def scenario(values):
+    """values: dict concept -> value (single instance "1") or list of (concept, value, instance)."""
+    items = values if isinstance(values, list) else [(c, v, "1") for c, v in values.items()]
     g = Graph()
     s = WS.TestScenario
     g.add((s, RDF.type, WS.Scenario))
-    for concept, value in values.items():
+    for concept, value, instance in items:
         r = BNode()
         g.add((r, RDF.type, WS.Parameter))
         g.add((r, WS.concept, WS[concept]))
         g.add((r, WS.value, Literal(value)))
+        g.add((r, WS.groupInstance, Literal(instance)))
         g.add((s, WS.hasParameter, r))
     return g
 
@@ -55,7 +58,7 @@ def test_reference_scenarios_conform():
 
 def test_bound_from_graph_rejects_negative_dose_and_zero_reference():
     conforms, texts = messages({**LQL_OK, "LQL_dose_per_fraction": -1.0, "LQL_reference_dose": 0.0})
-    assert not conforms and len([t for t in texts if "bound" in t]) == 2
+    assert not conforms and len([m for m in texts if "bound" in m]) == 2
 
 
 def test_derived_total_dose_conflict_is_detected():  # LQL-P09: 20 x 3 Gy announced as 66 Gy
@@ -77,3 +80,36 @@ def test_incomplete_aerosol_mode_is_detected():
 def test_s0_bounds_from_profile_policy():
     conforms, _ = messages({**PYR_OK, "PYR_S0": 0.01})
     assert not conforms
+
+
+MODE = ("PYR_N", "PYR_mu", "PYR_sigma", "PYR_kappa")
+BASE = [("PYR_V", 1.0, "1"), ("PYR_T0", 283.0, "1"), ("PYR_P0", 85000.0, "1"), ("PYR_S0", -0.02, "1")]
+
+
+def test_two_complete_aerosol_modes_conform():
+    modes = [(c, v, k) for k in ("m1", "m2") for c, v in zip(MODE, (1000.0, 0.05, 2.0, 0.54))]
+    assert messages(BASE + modes)[0]
+
+
+def test_incomplete_second_mode_is_not_masked_by_first():
+    modes = [(c, v, "m1") for c, v in zip(MODE, (1000.0, 0.05, 2.0, 0.54))] + [("PYR_N", 50.0, "m2"), ("PYR_mu", 0.5, "m2")]
+    conforms, texts = messages(BASE + modes)
+    assert not conforms and any("instance m2" in m for m in texts) and not any("instance m1" in m for m in texts)
+
+
+def course(k, d, n, total):
+    return [("LQL_dose_per_fraction", d, k), ("LQL_n_fractions", n, k), ("LQL_total_dose", total, k)]
+
+
+def test_consistent_courses_are_not_cross_mixed():
+    assert messages(course("c1", 2.0, 25, 50.0) + course("c2", 3.0, 5, 15.0))[0]
+
+
+def test_inconsistent_second_course_is_detected():
+    conforms, texts = messages(course("c1", 2.0, 25, 50.0) + course("c2", 3.0, 5, 20.0))
+    assert not conforms and sum("total dose" in m for m in texts) == 1
+
+
+def test_non_numeric_value_is_rejected():
+    conforms, texts = messages({**LQL_OK, "LQL_n_fractions": "trois"})
+    assert not conforms and any("Numeric value expected" in m for m in texts)

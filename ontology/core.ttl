@@ -251,6 +251,8 @@ ws:derivationRule a owl:DatatypeProperty ; rdfs:range xsd:string .
 ws:codeDefault a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ;
     rdfs:comment "Default set by the backend code; stated, never treated as user data."@en .
 ws:validityFlag a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:string .
+ws:groupInstance a owl:DatatypeProperty ; rdfs:domain ws:Parameter ; rdfs:range xsd:string ;
+    rdfs:comment "Identifier of the course, aerosol mode or other repeated group a record belongs to; checks never mix instances."@en .
 ws:partOfGroup a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range xsd:string ;
     rdfs:comment "Parameters that must be supplied together."@en .
 
