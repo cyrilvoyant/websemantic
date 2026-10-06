@@ -12,3 +12,5 @@ Le choix est scientifique et pratique, pas une conclusion sur les données d’a
 Rapports et CSV sont des sorties de smoke tests, pas des références cliniques, une validation physique, un benchmark LLM ni un test d’installation sur Windows vierge. Un seul cas par logiciel ne prouve pas la robustesse. Essais de limites, unités, profils longs, distribution et Linux restent requis.
 
 Pour reproduire le script, matérialiser `ecape-parcel-py` et `pyrcel` dans son dossier, aux SHA des rapports, puis l’exécuter avec un environnement correspondant et l’argument ecape ou pyrcel. pyrcel est exécuté avec JAX_ENABLE_X64=true et JAX_PLATFORMS=cpu. Le script importe les sources clonées ; les packages installés fournissent les dépendances. Les installations isolées, tentatives avant installation achevée et essais finaux sont distincts : seules les sorties finales réussies figurent ici.
+
+Correction du 6 octobre : index temps pyrcel conservé en time_s (s), scénarios explicites et unités par colonne ajoutés aux rapports. Calculs répétées à nouveau ; aucun écart entre répétitions. Les coordonnées verticales ecape et le temps pyrcel restent distincts.

@@ -6,6 +6,7 @@
   "source_revision": "977e9094644ec4a17d658d657094651928591c89",
   "rows": 7,
   "columns": [
+    "time_s",
     "z",
     "P",
     "T",
@@ -18,7 +19,39 @@
     7,
     17
   ],
-  "elapsed_seconds": 9.789092099992558,
+  "scenario": {
+    "V": 1.0,
+    "T0": 283.0,
+    "S0": -0.02,
+    "P0": 85000.0,
+    "aerosols": [
+      {
+        "species": "sulfate",
+        "mu": 0.05,
+        "sigma": 2.0,
+        "N": 1000.0,
+        "kappa": 0.54,
+        "bins": 10
+      }
+    ],
+    "t_end": 30.0,
+    "output_dt": 5.0,
+    "terminate": false,
+    "source": "Fictitious development smoke fixture; explicit in this script"
+  },
+  "column_units": {
+    "time_s": "s",
+    "z": "m",
+    "P": "Pa",
+    "T": "K",
+    "wv": "kg/kg",
+    "wc": "kg/kg",
+    "wi": "kg/kg",
+    "S": "1"
+  },
+  "JAX_ENABLE_X64": "true",
+  "JAX_PLATFORMS": "cpu",
+  "elapsed_seconds": 17.756406000000425,
   "max_repeat_difference": 0.0,
   "finite": true,
   "versions": {
