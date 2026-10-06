@@ -1,0 +1,72 @@
+@prefix ws:   <https://github.com/cyrilvoyant/websemantic/ns#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+
+# SHACL shapes executed over a scenario graph merged with the ontology.
+# They read bounds and relations from the graph (ws:hasBound, ws:derivedFrom,
+# ws:sameQuantityAs, ws:partOfGroup) instead of hard-coding them, so the same
+# shapes serve every domain extension.
+
+ws:PrefixDecl a owl:Ontology ;
+    sh:declare [ sh:prefix "ws" ; sh:namespace "https://github.com/cyrilvoyant/websemantic/ns#"^^xsd:anyURI ] .
+
+ws:ParameterRecordShape a sh:NodeShape ;
+    sh:targetClass ws:Parameter ;
+    sh:property [ sh:path ws:concept ; sh:minCount 1 ; sh:maxCount 1 ;
+                  sh:message "Each record refers to exactly one parameter definition." ] ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "Value violates a declared bound ({?kind} {?bound})." ;
+        sh:prefixes ws:PrefixDecl ;
+        sh:select """
+            SELECT $this ?value ?kind ?bound WHERE {
+              $this ws:value ?value ; ws:concept ?c .
+              ?c ws:hasBound ?b . ?b ws:boundKind ?kind ; ws:boundValue ?bound .
+              FILTER ( (?kind = "min" && ?value < ?bound) || (?kind = "max" && ?value > ?bound) ||
+                       (?kind = "min_exclusive" && ?value <= ?bound) || (?kind = "max_exclusive" && ?value >= ?bound) )
+            }""" ] .
+
+ws:DerivedQuantityShape a sh:NodeShape ;
+    sh:targetClass ws:Scenario ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "Stated total dose disagrees with dose per fraction x number of fractions (conflict to resolve)." ;
+        sh:prefixes ws:PrefixDecl ;
+        sh:select """
+            SELECT $this WHERE {
+              $this ws:hasParameter ?t, ?d, ?n .
+              ?t ws:concept ws:LQL_total_dose ; ws:value ?tv .
+              ?d ws:concept ws:LQL_dose_per_fraction ; ws:value ?dv .
+              ?n ws:concept ws:LQL_n_fractions ; ws:value ?nv .
+              FILTER ( ABS(?tv - ?dv * ?nv) > 1e-9 )
+            }""" ] .
+
+ws:SameQuantityShape a sh:NodeShape ;
+    sh:targetClass ws:Scenario ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "Relative humidity and initial supersaturation are one quantity and disagree (S0 must equal RH - 1)." ;
+        sh:prefixes ws:PrefixDecl ;
+        sh:select """
+            SELECT $this WHERE {
+              $this ws:hasParameter ?h, ?s .
+              ?h ws:concept ws:PYR_RH ; ws:value ?rh .
+              ?s ws:concept ws:PYR_S0 ; ws:value ?s0 .
+              ws:PYR_RH ws:sameQuantityAs ws:PYR_S0 .
+              FILTER ( ABS(?s0 - (?rh - 1.0)) > 1e-9 )
+            }""" ] .
+
+ws:CompleteGroupShape a sh:NodeShape ;
+    sh:targetClass ws:Scenario ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "Incomplete parameter group ({?group}): all members must be supplied together." ;
+        sh:prefixes ws:PrefixDecl ;
+        sh:select """
+            SELECT DISTINCT $this ?group WHERE {
+              $this ws:hasParameter ?r . ?r ws:concept ?c . ?c ws:partOfGroup ?group .
+              ?m ws:partOfGroup ?group .
+              FILTER NOT EXISTS { $this ws:hasParameter ?r2 . ?r2 ws:concept ?m }
+            }""" ] .
