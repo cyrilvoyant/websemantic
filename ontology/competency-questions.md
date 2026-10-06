@@ -14,7 +14,18 @@ Each question states the expected answer and the mechanism that answers it: **gr
 | CQ8 | Does « 2 km » map to `length_m` in m? | 2000 m, deterministic normalisation, not inference. | Python | covered by existing tests |
 | CQ9 | Does a bound come from code, interface or physics? | From `ws:authority` of each bound. | graph | to export from descriptors |
 | CQ10 | Does a city name justify a traffic value? | No: geography yields proposals only, never accepted values. | Python + rules | covered by existing tests |
-| CQ11 | Which reference fractionation defines EQD in LQL? | Declared reference dose per fraction (2 Gy unless stated). | graph | pending LQL contract |
-| CQ12 | Which inputs define a pyrcel run, and in which units? | Updraft V (m/s), initial T0 (K), P0 (Pa), S0 (supersaturation, 1), aerosol modes (N, μ, σ, κ); no default aerosol population. | graph | pending pyrcel contract |
+| CQ11 | Which reference fractionation defines EQD in LQL? | Declared reference dose per fraction (2 Gy unless stated). | graph | tested (`lqlequiv.ttl`) |
+| CQ12 | Which inputs define a pyrcel run, and in which units? | Updraft V (m/s), initial T0 (K), P0 (Pa), S0 (supersaturation, 1), aerosol modes (N, μ, σ, κ); no default aerosol population. | graph | tested (`pyrcel.ttl`) |
+
+| CQ13 | Are dose per fraction, number of fractions and total dose independent? | No: total is derived; disagreement = conflict | graph | tested |
+| CQ14 | May a saturated EQD be reported? | No | graph + Python flag | tested (graph) |
+| CQ15 | Does « hypofractionnement modéré » fix a dose? | No: clarification | graph | tested |
+| CQ16 | Is a patient-specific request in scope? | No: refuse | rules | pending adapter |
+| CQ17 | Are relative humidity and S0 independent? | No: one quantity, S0 = RH − 1 | graph | tested |
+| CQ18 | In which unit is `Nd` returned? | m⁻³, while input N is in cm⁻³ | graph | tested |
+| CQ19 | Does « air pollué » fix an aerosol population? | No: clarification | graph | tested |
+| CQ20 | Is a rain forecast for a city in scope? | No: refuse | rules | pending adapter |
+
+Domain extensions (`lqlequiv.ttl`, `pyrcel.ttl`) add instances only; a test checks that they declare no new class.
 
 Ablation link: CQ2–CQ7 and CQ9 are the relational behaviours measured by condition B3 against B2 (flat contract with the same definitions, without relations).

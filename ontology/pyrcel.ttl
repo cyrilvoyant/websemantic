@@ -1,0 +1,92 @@
+@prefix ws:   <https://github.com/cyrilvoyant/websemantic/ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix qk:   <http://qudt.org/vocab/quantitykind/> .
+
+# pyrcel extension: instances of the common core only (no new classes).
+# Source: docs/pyrcel-contract-definitions.md (draft, scientific review pending).
+
+ws:TaskParcelActivation
+    ws:requiresParameter ws:PYR_V, ws:PYR_T0, ws:PYR_P0, ws:PYR_S0,
+                         ws:PYR_N, ws:PYR_mu, ws:PYR_sigma, ws:PYR_kappa ;
+    ws:producesOutput ws:PYR_S, ws:PYR_Smax, ws:PYR_Nd .
+
+ws:PyrcelContract ws:declaresParameter ws:PYR_V, ws:PYR_T0, ws:PYR_P0, ws:PYR_S0, ws:PYR_RH,
+        ws:PYR_N, ws:PYR_mu, ws:PYR_sigma, ws:PYR_kappa ;
+    ws:declaresOutput ws:PYR_S, ws:PYR_Smax, ws:PYR_Nd, ws:PYR_T .
+
+ws:PYR_V a ws:ParameterDefinition ;
+    skos:prefLabel "Vitesse ascendante"@fr ; ws:apiVariable "ParcelModel(V=)" ; ws:fieldPath "V" ;
+    ws:quantityKind qk:Velocity ; ws:canonicalUnit unit:M-PER-SEC ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min_exclusive" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityPolicy ] .
+
+ws:PYR_T0 a ws:ParameterDefinition ;
+    skos:prefLabel "Température initiale"@fr ; ws:apiVariable "ParcelModel(T0=)" ; ws:fieldPath "T0" ;
+    ws:quantityKind qk:ThermodynamicTemperature ; ws:canonicalUnit unit:K .
+
+ws:PYR_P0 a ws:ParameterDefinition ;
+    skos:prefLabel "Pression initiale"@fr ; ws:apiVariable "ParcelModel(P0=)" ; ws:fieldPath "P0" ;
+    ws:quantityKind qk:Pressure ; ws:canonicalUnit unit:PA .
+
+ws:PYR_S0 a ws:ParameterDefinition ;
+    skos:prefLabel "Sursaturation initiale"@fr ; ws:apiVariable "ParcelModel(S0=)" ; ws:fieldPath "S0" ;
+    ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:UNITLESS ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min_exclusive" ; ws:boundValue -1.0 ; ws:authority ws:AuthorityPolicy ] ,
+                [ a ws:Bound ; ws:boundKind "max" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityPolicy ] .
+
+ws:PYR_RH a ws:ParameterDefinition ;
+    skos:prefLabel "Humidité relative initiale"@fr ; ws:fieldPath "RH (user expression)" ;
+    ws:quantityKind qk:Dimensionless ;
+    ws:sameQuantityAs ws:PYR_S0 ;
+    ws:derivationRule "S0 = RH_percent/100 - 1 = RH_fraction - 1; RH and S0 both given and inconsistent is a conflict" .
+
+ws:PYR_N a ws:ParameterDefinition ;
+    skos:prefLabel "Concentration en nombre du mode"@fr ; ws:apiVariable "Lognorm(N=)" ; ws:fieldPath "aerosols[k].N" ;
+    ws:quantityKind qk:NumberDensity ; ws:canonicalUnit unit:NUM-PER-CentiM3 ;
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" .
+
+ws:PYR_mu a ws:ParameterDefinition ;
+    skos:prefLabel "Rayon sec médian"@fr ; ws:apiVariable "Lognorm(mu=)" ; ws:fieldPath "aerosols[k].mu" ;
+    ws:quantityKind qk:Length ; ws:canonicalUnit unit:MicroM ;
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" .
+
+ws:PYR_sigma a ws:ParameterDefinition ;
+    skos:prefLabel "Écart-type géométrique"@fr ; ws:apiVariable "Lognorm(sigma=)" ; ws:fieldPath "aerosols[k].sigma" ;
+    ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:UNITLESS ;
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" .
+
+ws:PYR_kappa a ws:ParameterDefinition ;
+    skos:prefLabel "Hygroscopicité κ"@fr ; ws:apiVariable "AerosolSpecies(kappa=)" ; ws:fieldPath "aerosols[k].kappa" ;
+    ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:UNITLESS ;
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" .
+
+ws:PYR_T a ws:OutputVariable ;
+    skos:prefLabel "Température de la parcelle"@fr ; ws:apiVariable "to_pandas() T" ;
+    ws:canonicalUnit unit:K ; ws:aggregation ws:AggNativeStep ; ws:additive false ;
+    ws:temporalSupport "nominal output_dt; terminal sample may be irregular" ; ws:dataOrigin ws:SyntheticSimulation .
+
+ws:PYR_S a ws:OutputVariable ;
+    skos:prefLabel "Sursaturation"@fr ; ws:apiVariable "to_pandas() S" ;
+    ws:canonicalUnit unit:UNITLESS ; ws:aggregation ws:AggNativeStep ; ws:additive false ;
+    ws:temporalSupport "nominal output_dt; terminal sample may be irregular" ; ws:dataOrigin ws:SyntheticSimulation .
+
+ws:PYR_Smax a ws:OutputVariable ;
+    skos:prefLabel "Sursaturation maximale"@fr ; ws:apiVariable "summary['S_max']" ;
+    ws:canonicalUnit unit:UNITLESS ; ws:aggregation ws:AggMax ; ws:additive false ;
+    skos:note "From the peak locator; may differ from the maximum of the sampled S column."@en ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:PYR_Nd a ws:OutputVariable ;
+    skos:prefLabel "Gouttelettes activées"@fr ; ws:apiVariable "ModelOutput.Nd" ;
+    ws:quantityKind qk:NumberDensity ; ws:canonicalUnit unit:PER-M3 ;
+    skos:note "Returned in m^-3, while input N is in cm^-3."@en ;
+    ws:temporalSupport "end of run" ; ws:dataOrigin ws:SyntheticSimulation .
+
+# Qualitative expressions: clarification until sourced conventions exist.
+ws:PYR_updraft_words a ws:ClarificationPolicy ;
+    skos:altLabel "faible ascendance"@fr, "ascendance modérée"@fr, "forte ascendance"@fr ; ws:appliesTo ws:PYR_V .
+ws:PYR_air_mass_words a ws:ClarificationPolicy ;
+    skos:altLabel "air pur"@fr, "air marin"@fr, "air pollué"@fr, "air continental"@fr ; ws:appliesTo ws:PYR_N .
+ws:PYR_near_saturation a ws:ClarificationPolicy ;
+    skos:altLabel "air presque saturé"@fr ; ws:appliesTo ws:PYR_S0 .

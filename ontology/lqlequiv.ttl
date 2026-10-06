@@ -1,0 +1,103 @@
+@prefix ws:   <https://github.com/cyrilvoyant/websemantic/ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix qk:   <http://qudt.org/vocab/quantitykind/> .
+
+# LQL-Equiv extension: instances of the common core only (no new classes).
+# Source: docs/lql-contract-definitions.md (draft, scientific review pending).
+
+ws:TaskFractionationEquivalence
+    ws:requiresParameter ws:LQL_organ, ws:LQL_tumour_site, ws:LQL_dose_per_fraction,
+                         ws:LQL_n_fractions, ws:LQL_reference_dose ;
+    ws:producesOutput ws:LQL_bed_oar, ws:LQL_eqd_oar, ws:LQL_eqd_oar_total, ws:LQL_ntcp ;
+    skos:note "BED, EQD and probabilities are compared one quantity at a time; never concatenated."@en .
+
+ws:LQLContract ws:declaresParameter ws:LQL_organ, ws:LQL_tumour_site, ws:LQL_dose_per_fraction,
+        ws:LQL_n_fractions, ws:LQL_gap_days, ws:LQL_reference_dose, ws:LQL_bifractionated, ws:LQL_total_dose ;
+    ws:declaresOutput ws:LQL_bed_oar, ws:LQL_eqd_oar, ws:LQL_eqd_oar_total, ws:LQL_ntcp, ws:LQL_saturated .
+
+ws:LQL_organ a ws:ParameterDefinition ;
+    skos:prefLabel "Organe à risque"@fr ; ws:apiVariable "compute(organ, ...) positional 1" ; ws:fieldPath "organ" ;
+    skos:definition "Organ at risk from the shipped library (34 entries); never chosen silently."@en .
+
+ws:LQL_tumour_site a ws:ParameterDefinition ;
+    skos:prefLabel "Site tumoral"@fr ; ws:apiVariable "compute(..., tumour, ...) positional 2" ; ws:fieldPath "tumour_site" ;
+    skos:definition "Tumour site from the shipped library (20 entries)."@en .
+
+ws:LQL_dose_per_fraction a ws:ParameterDefinition ;
+    skos:prefLabel "Dose par fraction"@fr ; ws:apiVariable "Course.dose_per_fraction" ; ws:fieldPath "courses[k].dose_per_fraction" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] .
+
+ws:LQL_n_fractions a ws:ParameterDefinition ;
+    skos:prefLabel "Nombre de fractions"@fr ; ws:apiVariable "Course.n_fractions" ; ws:fieldPath "courses[k].n_fractions" ;
+    ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:NUM ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] ,
+                [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 1 ; ws:authority ws:AuthorityPolicy ;
+                  rdfs:comment "Integer >= 1 for physical schedules (profile policy); the API accepts floats."@en ] .
+
+ws:LQL_gap_days a ws:ParameterDefinition ;
+    skos:prefLabel "Interruption"@fr ; ws:apiVariable "Course.gap_days" ; ws:fieldPath "courses[k].gap_days" ;
+    ws:quantityKind qk:Time ; ws:canonicalUnit unit:DAY ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] .
+
+ws:LQL_reference_dose a ws:ParameterDefinition ;
+    skos:prefLabel "Dose de référence par fraction"@fr ; ws:apiVariable "Prescription.reference_dose" ; ws:fieldPath "reference_dose" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:codeDefault 2.0 ;
+    skos:definition "Defines the EQD reference fractionation; always stated in answers."@en ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] ,
+                [ a ws:Bound ; ws:boundKind "min_exclusive" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityPolicy ;
+                  rdfs:comment "0 is constructible but does not guarantee a computable EQD."@en ] .
+
+ws:LQL_bifractionated a ws:ParameterDefinition ;
+    skos:prefLabel "Deux fractions par jour"@fr ; ws:apiVariable "Prescription.bifractionated" ; ws:fieldPath "bifractionated" ;
+    ws:codeDefault false .
+
+ws:LQL_total_dose a ws:ParameterDefinition ;
+    skos:prefLabel "Dose totale"@fr ; ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ;
+    ws:derivedFrom ws:LQL_dose_per_fraction, ws:LQL_n_fractions ;
+    ws:derivationRule "total_dose = dose_per_fraction * n_fractions; a stated total that disagrees is a conflict" .
+
+ws:LQL_bed_oar a ws:OutputVariable ;
+    skos:prefLabel "BED organe"@fr ; ws:apiVariable "CourseResult.bed_oar" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
+    ws:additive true ; ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_eqd_oar a ws:OutputVariable ;
+    skos:prefLabel "EQD organe"@fr ; ws:apiVariable "CourseResult.eqd_oar" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
+    ws:dependsOnReference ws:LQL_reference_dose ; ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_eqd_oar_total a ws:OutputVariable ;
+    skos:prefLabel "EQD organe cumulée"@fr ; ws:apiVariable "Result.eqd_oar_total" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggSum ;
+    ws:dependsOnReference ws:LQL_reference_dose ; ws:validityFlag "Result.oar_total_valid" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_ntcp a ws:OutputVariable ;
+    skos:prefLabel "NTCP"@fr ; ws:apiVariable "Result.ntcp_percent" ; ws:canonicalUnit unit:PERCENT ;
+    skos:definition "Model estimate for research and education, not a patient-specific probability."@en ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_saturated a ws:OutputVariable ;
+    skos:prefLabel "Saturation de la recherche"@fr ; ws:apiVariable "Result.saturated" ;
+    ws:mustNotReportWhenTrue ws:LQL_eqd_oar, ws:LQL_eqd_oar_total .
+
+# Qualitative expressions
+ws:LQL_conventional a ws:QualifierMapping ;
+    ws:term ws:LevelTypical ; skos:altLabel "fractionnement conventionnel"@fr, "classique"@fr ;
+    ws:appliesTo ws:LQL_dose_per_fraction ; ws:proposedValue 2.0 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Conventional fractionation, 2 Gy per fraction; proposal to accept." .
+
+ws:LQL_hypo_moderate a ws:ClarificationPolicy ;
+    skos:altLabel "hypofractionnement modéré"@fr ; ws:appliesTo ws:LQL_dose_per_fraction ;
+    rdfs:comment "No numerical convention before sourced review: the user states the dose per fraction."@en .
+
+ws:LQL_hypo_extreme a ws:ClarificationPolicy ;
+    skos:altLabel "hypofractionnement extrême"@fr, "stéréotaxique"@fr ; ws:appliesTo ws:LQL_dose_per_fraction .
+
+ws:LQL_hyperfractionation a ws:ClarificationPolicy ;
+    skos:altLabel "hyperfractionnement"@fr ; ws:appliesTo ws:LQL_bifractionated ;
+    rdfs:comment "The word alone does not fix two sessions a day."@en .
