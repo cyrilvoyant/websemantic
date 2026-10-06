@@ -28,9 +28,9 @@ pyrcel 2.0.0, BSD-3-Clause, revision `977e9094644ec4a17d658d657094651928591c89`,
 | `accom` | `ParcelModel(accom=…)` | Condensation coefficient | 1 | (0, 1] | 1.0 (code constant `ac`, stated in answers) |
 | `t_end` | `run(t_end=…)` | Maximum integration time | s | > 0 | protocol default, frozen and logged |
 | `output_dt` | `run(output_dt=…)` | Output cadence | s | > 0 | protocol default, frozen and logged |
-| `terminate`, `terminate_depth` | `run(...)` | Stop `terminate_depth` m above S_max | boolean, m | — | protocol default, frozen and logged; changes the trajectory length |
+| `terminate`, `terminate_depth` | `run(...)` | Stop `terminate_depth` m above S_max | boolean, m | — | protocol default, frozen and logged (terminate = True, terminate_depth = 10 m, API default made explicit); changes the trajectory length |
 
-Numerical settings (`bins`, `t_end`, `output_dt`, termination) change results: their protocol values are fixed before the campaign, recorded in every manifest, and identical across compared runs.
+Numerical settings (`bins`, `t_end`, `output_dt`, termination, solver and JAX versions with x64 mode) change results: their protocol values are fixed before the campaign, recorded in every manifest, and identical across compared runs.
 
 Units are a contract point: pyrcel interprets `mu` in μm and `N` in cm⁻³ for parcel runs, while the activated droplet number `Nd` is returned in m⁻³. Any answer must state the unit used.
 
@@ -51,7 +51,9 @@ Relational rules (condition B3):
 | `Nd` | `ModelOutput.Nd` | m⁻³ | at end of run | Activated droplets; convert to cm⁻³ only explicitly |
 | Activated fraction | `ModelOutput.nd_frac` | 1 | at end of run | |
 
-Numerical comparisons: RMSD on one quantity at a time, on the same output grid (same `output_dt`, same termination rule); absolute and relative error on `S_max`, `Nd` and activated fraction.
+Time support: `output_dt` is the nominal cadence; the terminal sample can be irregular when `terminate` stops the run (e.g. 390.174 s). Exact timestamps are kept in the CSV and the manifest; `t_end` is a maximum, not the simulated duration.
+
+Numerical comparisons: RMSD on one quantity at a time, on the same controlled output grid (same `output_dt`, termination rule and `terminate_depth`), without silent interpolation. Runs that stop at different times are compared on a declared scope (native KPIs or the common time span), never by inventing a series tail. Absolute and relative error on `S_max`, `Nd` and activated fraction.
 
 ## 4. Qualifiers
 
