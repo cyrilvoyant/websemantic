@@ -9,6 +9,11 @@
   "backend_commit": "748e053e129669cf3e896d381e3c0ac01c763edd",
   "files": [
     {
+      "path": "agent/run.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/agent/run.py",
+      "sha256_lf": "b09b7b36d17efb397f8cd8e133444c1e8f2b9c8d6b5c3ea1996b5857a547e629"
+    },
+    {
       "path": "agent/run_tls.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/agent/run_tls.py",
       "sha256_lf": "ec1fad7caf73b3d422256afb29edfa95cbde276fbaec1cb34175b0f5f961b6c2"
@@ -26,7 +31,7 @@
     {
       "path": "src/websemantic/core/validation.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/core/validation.py",
-      "sha256_lf": "c1ed6ea568d78b75e93a19ff15690e17040c06a4a209b6f089fc7fcc8d3daaff"
+      "sha256_lf": "b05ee637a0c6be04fe68d3de1fadedbe8ef13ba90edd9d53bfe5467933623166"
     },
     {
       "path": "src/websemantic/adapters/__init__.py",
@@ -67,6 +72,61 @@
       "path": "ontology/tls-contract.json",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/tls-contract.json",
       "sha256_lf": "aa5ce2fd401e0b6f233d93abc4740470baf49f1ebe88564afa3b66d996cfc672"
+    },
+    {
+      "path": "ontology/core.ttl",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/core.ttl",
+      "sha256_lf": "1237445237b0de7b0fc2768e2d1f0093e087d2d0a0851f24bc8ac26bdcc5be8a"
+    },
+    {
+      "path": "ontology/tls-vocabulary.ttl",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/tls-vocabulary.ttl",
+      "sha256_lf": "0ad801abe02c3beabecd4319505329caa80041d1020953b4cea430f4cb0521df"
+    },
+    {
+      "path": "ontology/shapes.ttl",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/shapes.ttl",
+      "sha256_lf": "96fd37fb090e5692dff0e3355c7f8e92cde804475349055745f86457246cc410"
+    },
+    {
+      "path": "ontology/competency-questions.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/competency-questions.md",
+      "sha256_lf": "cfd502d94624d77873072945b0f63fad57502d27a1c214c240a21e8819c85d7b"
+    },
+    {
+      "path": "ontology/README.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/README.md",
+      "sha256_lf": "b296b600aac4afce5549e88b32670c1cb920616ee461fb79e39e770a160df25b"
+    },
+    {
+      "path": "ontology/tls-scenario.schema.json",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/tls-scenario.schema.json",
+      "sha256_lf": "f1dceb895869de0eeb1ba80fbaaee508c17401d8a3b32f2a1ddf8ee35cdc4830"
+    },
+    {
+      "path": "ontology/tls-comparison.schema.json",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/tls-comparison.schema.json",
+      "sha256_lf": "f3daf0b7810fa605e1e6290147a0570293298da885383a218a6f99e752fc5a4e"
+    },
+    {
+      "path": "llm.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/llm.md",
+      "sha256_lf": "b55b74b293f59e79bdff6162ff4ac02208ea334527ebe08d56cd01cc2c90bda4"
+    },
+    {
+      "path": "agent/README.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/agent/README.md",
+      "sha256_lf": "639909c289e60e93fd22838b40c8def52a68dbf5f6fe90c12a9cf346765c3c4a"
+    },
+    {
+      "path": "docs/agent-contract.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/docs/agent-contract.md",
+      "sha256_lf": "793d5ab07fc701b1da1704cc811fb4d0639970bbda2df5452407c40e66e0da76"
+    },
+    {
+      "path": "docs/tls-reference.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/docs/tls-reference.md",
+      "sha256_lf": "6e752f1e759e4a08eb906ff07e9c901474e4f3ab7ccc758dbb4bfe1e1537388e"
     },
     {
       "path": "examples/tls-complete.json",

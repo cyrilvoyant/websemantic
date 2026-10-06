@@ -1,8 +1,28 @@
 {
   "model": "pyrcel",
   "backend_commit": "977e9094644ec4a17d658d657094651928591c89",
+  "dependencies": [
+    "PyYAML",
+    "rdflib",
+    "numpy",
+    "scipy",
+    "pandas",
+    "polars",
+    "xarray",
+    "netcdf4",
+    "setuptools",
+    "jax",
+    "diffrax",
+    "equinox",
+    "optimistix"
+  ],
   "scope": "Reviewed bounded adapter; explicit accepted scenario; no Git required.",
   "files": [
+    {
+      "path": "agent/run.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/agent/run.py",
+      "sha256_lf": "b09b7b36d17efb397f8cd8e133444c1e8f2b9c8d6b5c3ea1996b5857a547e629"
+    },
     {
       "path": "src/websemantic/__init__.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/__init__.py",
@@ -16,7 +36,7 @@
     {
       "path": "src/websemantic/core/validation.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/core/validation.py",
-      "sha256_lf": "c1ed6ea568d78b75e93a19ff15690e17040c06a4a209b6f089fc7fcc8d3daaff"
+      "sha256_lf": "b05ee637a0c6be04fe68d3de1fadedbe8ef13ba90edd9d53bfe5467933623166"
     },
     {
       "path": "src/websemantic/adapters/__init__.py",
@@ -77,6 +97,31 @@
       "path": "ontology/pyrcel.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/pyrcel.ttl",
       "sha256_lf": "7efc5848ad70d3dc04b567144cb9a7bc56637444b86b13e251154e54d7e4cef5"
+    },
+    {
+      "path": "ontology/shapes.ttl",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/shapes.ttl",
+      "sha256_lf": "96fd37fb090e5692dff0e3355c7f8e92cde804475349055745f86457246cc410"
+    },
+    {
+      "path": "ontology/competency-questions.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/competency-questions.md",
+      "sha256_lf": "cfd502d94624d77873072945b0f63fad57502d27a1c214c240a21e8819c85d7b"
+    },
+    {
+      "path": "ontology/README.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/README.md",
+      "sha256_lf": "b296b600aac4afce5549e88b32670c1cb920616ee461fb79e39e770a160df25b"
+    },
+    {
+      "path": "llm.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/llm.md",
+      "sha256_lf": "b55b74b293f59e79bdff6162ff4ac02208ea334527ebe08d56cd01cc2c90bda4"
+    },
+    {
+      "path": "agent/README.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/agent/README.md",
+      "sha256_lf": "639909c289e60e93fd22838b40c8def52a68dbf5f6fe90c12a9cf346765c3c4a"
     },
     {
       "path": "LICENSE",
@@ -192,6 +237,11 @@
       "path": "external/pyrcel/pyrcel/activation/__init__.py",
       "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/activation/__init__.py",
       "sha256_lf": "9dd0d8a8e2246f6cc8e7aba01bc493c2cad47c9144752908f9a1e251a207cfd2"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/data/std_atm.csv",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/data/std_atm.csv",
+      "sha256_lf": "261daa78114e534fb142594c5e173e868bdc235e5e2a5b1b2d332e8b83d681cf"
     },
     {
       "path": "external/pyrcel/pyrcel/legacy/activation.py",

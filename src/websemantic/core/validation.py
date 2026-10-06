@@ -71,6 +71,9 @@ def validate(scenario: Scenario, descriptor: dict) -> ValidationResult:
             path = f"{group}.{name}"
             record = supplied.get(name, Parameter())
             value = record.value
+            if type(record.accepted) is not bool:
+                issues.append(Issue(path, "acceptance_type", "Acceptance must be a JSON boolean."))
+                continue
             if record.conflicts:
                 issues.append(Issue(path, "conflict", "Resolve conflicting values."))
             if value is None:

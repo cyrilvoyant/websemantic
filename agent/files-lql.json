@@ -1,8 +1,17 @@
 {
   "model": "lql",
   "backend_commit": "dfc9a338205b8864b8e3470c4ae245b019e88844",
+  "dependencies": [
+    "PyYAML",
+    "rdflib"
+  ],
   "scope": "Reviewed bounded adapter; explicit accepted scenario; no Git required.",
   "files": [
+    {
+      "path": "agent/run.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/agent/run.py",
+      "sha256_lf": "b09b7b36d17efb397f8cd8e133444c1e8f2b9c8d6b5c3ea1996b5857a547e629"
+    },
     {
       "path": "src/websemantic/__init__.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/__init__.py",
@@ -16,7 +25,7 @@
     {
       "path": "src/websemantic/core/validation.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/core/validation.py",
-      "sha256_lf": "c1ed6ea568d78b75e93a19ff15690e17040c06a4a209b6f089fc7fcc8d3daaff"
+      "sha256_lf": "b05ee637a0c6be04fe68d3de1fadedbe8ef13ba90edd9d53bfe5467933623166"
     },
     {
       "path": "src/websemantic/adapters/__init__.py",
@@ -77,6 +86,31 @@
       "path": "ontology/lqlequiv.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/lqlequiv.ttl",
       "sha256_lf": "1dd461596dee677407102041e6b9f661df21910263340e83ca6b9bbf0a13bc23"
+    },
+    {
+      "path": "ontology/shapes.ttl",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/shapes.ttl",
+      "sha256_lf": "96fd37fb090e5692dff0e3355c7f8e92cde804475349055745f86457246cc410"
+    },
+    {
+      "path": "ontology/competency-questions.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/competency-questions.md",
+      "sha256_lf": "cfd502d94624d77873072945b0f63fad57502d27a1c214c240a21e8819c85d7b"
+    },
+    {
+      "path": "ontology/README.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/README.md",
+      "sha256_lf": "b296b600aac4afce5549e88b32670c1cb920616ee461fb79e39e770a160df25b"
+    },
+    {
+      "path": "llm.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/llm.md",
+      "sha256_lf": "b55b74b293f59e79bdff6162ff4ac02208ea334527ebe08d56cd01cc2c90bda4"
+    },
+    {
+      "path": "agent/README.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/agent/README.md",
+      "sha256_lf": "639909c289e60e93fd22838b40c8def52a68dbf5f6fe90c12a9cf346765c3c4a"
     },
     {
       "path": "LICENSE",

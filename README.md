@@ -4,7 +4,7 @@ Préparer une simulation en phrases, examiner les hypothèses et obtenir des ré
 
 ## Avec un agent Python
 
-Lisez [le point d’entrée agent](agent/README.md). Il indique les fichiers à lire, leurs empreintes et la commande de calcul. Ce parcours utilise les fichiers sources, sans Git ni clé Gemini.
+Lisez [les règles de réutilisation](llm.md), puis [le point d’entrée Python](agent/README.md). Il indique les fichiers, leurs empreintes et la commande commune aux trois modèles : `python agent/run.py tls|lql|pyrcel scenario.json` (choisir un modèle). Ce parcours utilise les fichiers sources, sans Git ni clé Gemini.
 
 ## Utiliser
 

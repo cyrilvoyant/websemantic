@@ -36,3 +36,9 @@ Limites observées : acceptations explicites rejetées par le contrôle de citat
 ## Contrôle des règles relationnelles
 
 24 exemples construits, distincts du corpus préparé : dose totale, humidité/sursaturation et complétude d'un mode d'aérosols. Données et ontologie identiques, cibles SHACL relationnelles désactivées puis activées, sans inférence OWL. Détection : 0/12 incohérences avec les seuls contrôles individuels, 12/12 avec les règles relationnelles ; aucun des 12 contrôles cohérents rejeté. Preuves : run_relational_controls.py et relational-controls-20261006.json. Contrôle de mécanisme, sans preuve de bénéfice pour un LLM ni généralisation hors de ces exemples. 31 tests ontologie/SHACL passent.
+
+## Parcours publié pour les trois logiciels
+
+Six calculs réels, deux processus neufs par logiciel, depuis les fichiers indexés copiés sans métadonnées Git et sans installation du projet. Dépendances déjà présentes sur le même poste Windows : pas une reproduction indépendante. Conservation du scénario et des champs déclarés ; métadonnées couvrant 36 colonnes TLS, 14 LQL et 23 pyrcel, y compris identifiants et drapeaux. RMSD de répétition nul pour les colonnes numériques ; nRMSD non définie si référence nulle.
+
+18 perturbations bloquées sans dossier de sorties : unité incorrecte, hypothèse non acceptée, accord sous forme de texte, champ manquant, définition modifiée et backend modifié, pour chaque logiciel. L'essai révèle le CSV d'atmosphère omis dans l'index pyrcel et le besoin de typer strictement les accords ; corrections précédant le lot retenu. Lot : work/portable-controls-20261006-release ; synthèse publique : portable-controls-20261006.json ; harnais : run_portable_controls.py. Les tentatives de montage précédentes restent archivées et ne sont pas comptées. Aucun appel LLM, aucune conclusion comparative fournisseur ou intervalle statistique tiré de ces cas construits.

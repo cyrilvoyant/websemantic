@@ -1,0 +1,670 @@
+{
+  "date": "2026-10-06T16:29:40.242431+00:00",
+  "scope": "Constructed development controls, not an agent benchmark or independent environment replication",
+  "source_mode": "Indexed files copied into standalone directories, no Git metadata or project installation; dependencies already installed on same Windows host",
+  "language_model_calls": 0,
+  "models": [
+    {
+      "model": "tls",
+      "index_sha256": "0696a75aaf7ec6f4b8193a37b132391b87a236f788113962eb62552ade777bf0",
+      "completed_runs": 2,
+      "qualified_tables": 5,
+      "qualified_columns": 36,
+      "negative_controls": [
+        {
+          "case": "wrong-unit",
+          "decision": "clarify",
+          "returncode": 2,
+          "output_created": false
+        },
+        {
+          "case": "unaccepted",
+          "decision": "clarify",
+          "returncode": 2,
+          "output_created": false
+        },
+        {
+          "case": "acceptance-as-text",
+          "decision": "clarify",
+          "returncode": 2,
+          "output_created": false
+        },
+        {
+          "case": "missing-field",
+          "decision": "clarify",
+          "returncode": 2,
+          "output_created": false
+        },
+        {
+          "case": "changed-definition",
+          "decision": "refuse",
+          "returncode": 2,
+          "output_created": false
+        },
+        {
+          "case": "changed-backend",
+          "decision": "refuse",
+          "returncode": 2,
+          "output_created": false
+        }
+      ],
+      "repeat_metrics": [
+        {
+          "table": "daily.csv",
+          "column": "energy_kwh",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "daily.csv",
+          "column": "mean_kw",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "envelope.csv",
+          "column": "median",
+          "n": 168,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "envelope.csv",
+          "column": "p10",
+          "n": 168,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "envelope.csv",
+          "column": "p90",
+          "n": 168,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "envelope.csv",
+          "column": "mean",
+          "n": 168,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "kpis.csv",
+          "column": "run",
+          "n": 3,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "kpis.csv",
+          "column": "seed",
+          "n": 3,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "kpis.csv",
+          "column": "total_mwh",
+          "n": 3,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "kpis.csv",
+          "column": "annualized_mwh",
+          "n": 3,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "kpis.csv",
+          "column": "peak_kw",
+          "n": 3,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "kpis.csv",
+          "column": "mean_kw",
+          "n": 3,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "kpis.csv",
+          "column": "load_factor",
+          "n": 3,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "kpis.csv",
+          "column": "specific_kwh_m_year",
+          "n": 3,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "kpis.csv",
+          "column": "n_pollution_events",
+          "n": 3,
+          "rmsd": 0.0,
+          "nrmsd": null
+        },
+        {
+          "table": "kpis.csv",
+          "column": "n_accident_events",
+          "n": 3,
+          "rmsd": 0.0,
+          "nrmsd": null
+        },
+        {
+          "table": "kpis.csv",
+          "column": "base_seed",
+          "n": 3,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "representative.csv",
+          "column": "hour_int",
+          "n": 168,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "representative.csv",
+          "column": "dayofweek",
+          "n": 168,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "representative.csv",
+          "column": "traffic_index",
+          "n": 168,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "representative.csv",
+          "column": "pollution_event",
+          "n": 168,
+          "rmsd": 0.0,
+          "nrmsd": null
+        },
+        {
+          "table": "representative.csv",
+          "column": "accident_event",
+          "n": 168,
+          "rmsd": 0.0,
+          "nrmsd": null
+        },
+        {
+          "table": "representative.csv",
+          "column": "lighting_kw",
+          "n": 168,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "representative.csv",
+          "column": "ventilation_kw",
+          "n": 168,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "representative.csv",
+          "column": "auxiliary_kw",
+          "n": 168,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "representative.csv",
+          "column": "power_kw",
+          "n": 168,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "representative.csv",
+          "column": "energy_kwh",
+          "n": 168,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "season_profiles.csv",
+          "column": "hour_int",
+          "n": 72,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "season_profiles.csv",
+          "column": "power_kw",
+          "n": 72,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "season_profiles.csv",
+          "column": "run",
+          "n": 72,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        }
+      ],
+      "run_artifact_hashes": [
+        {
+          "daily.csv": "d1d71436c8cbb3b0029375764ab6f92d6a77dcad578eb039227d48380ec8b576",
+          "envelope.csv": "ccb73d20252208a7c3adb92c7e51baf5bab002e3eed50b64ccdfee743e3d8820",
+          "kpis.csv": "f0bebe9cc7e6a1da6e03285675ee12ff1301617321cdecabb81ef5ce14383ff6",
+          "manifest.json": "d5e96b5e79731b795c8490b2b7a259c8f278771705d3b2605ae025a0d2d11476",
+          "representative.csv": "aab89f7da2a80ff1035120f74777d7d13b8c08e5d6b797b8d8c4ba9acffa72c6",
+          "season_profiles.csv": "ca8912739787bb81ac4e72a8271c3de64d822130e32f7515f8f2b65ee6b31505",
+          "semantics.ttl": "20c7b5aeef4e898e073dc8f7b1bacdc743938d1ef6be6e99ece2a654f86f0b00"
+        },
+        {
+          "daily.csv": "d1d71436c8cbb3b0029375764ab6f92d6a77dcad578eb039227d48380ec8b576",
+          "envelope.csv": "ccb73d20252208a7c3adb92c7e51baf5bab002e3eed50b64ccdfee743e3d8820",
+          "kpis.csv": "f0bebe9cc7e6a1da6e03285675ee12ff1301617321cdecabb81ef5ce14383ff6",
+          "manifest.json": "d5e96b5e79731b795c8490b2b7a259c8f278771705d3b2605ae025a0d2d11476",
+          "representative.csv": "aab89f7da2a80ff1035120f74777d7d13b8c08e5d6b797b8d8c4ba9acffa72c6",
+          "season_profiles.csv": "ca8912739787bb81ac4e72a8271c3de64d822130e32f7515f8f2b65ee6b31505",
+          "semantics.ttl": "b66e8277f23990be83300874f50db1c48b50119f7528dfc3a00df17bd690236e"
+        }
+      ]
+    },
+    {
+      "model": "lql",
+      "index_sha256": "75241b1c01c83ff694d2d573daddccd551309d5a5f1170909f87ded7e2bd1725",
+      "completed_runs": 2,
+      "qualified_tables": 1,
+      "qualified_columns": 14,
+      "negative_controls": [
+        {
+          "case": "wrong-unit",
+          "decision": "clarify",
+          "returncode": 2,
+          "output_created": false
+        },
+        {
+          "case": "unaccepted",
+          "decision": "clarify",
+          "returncode": 2,
+          "output_created": false
+        },
+        {
+          "case": "acceptance-as-text",
+          "decision": "refuse",
+          "returncode": 2,
+          "output_created": false
+        },
+        {
+          "case": "missing-field",
+          "decision": "clarify",
+          "returncode": 2,
+          "output_created": false
+        },
+        {
+          "case": "changed-definition",
+          "decision": "refuse",
+          "returncode": 2,
+          "output_created": false
+        },
+        {
+          "case": "changed-backend",
+          "decision": "refuse",
+          "returncode": 2,
+          "output_created": false
+        }
+      ],
+      "repeat_metrics": [
+        {
+          "table": "indicators.csv",
+          "column": "physical_dose_gy",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "indicators.csv",
+          "column": "bed_oar",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "indicators.csv",
+          "column": "bed_tumour",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "indicators.csv",
+          "column": "eqd_oar_total",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "indicators.csv",
+          "column": "eqd_tumour_total",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "indicators.csv",
+          "column": "ntcp_percent",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "indicators.csv",
+          "column": "tcp_percent",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "indicators.csv",
+          "column": "cancer_risk",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "indicators.csv",
+          "column": "overall_days_oar",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "indicators.csv",
+          "column": "overall_days_tumour",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "indicators.csv",
+          "column": "oar_total_valid",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "indicators.csv",
+          "column": "tumour_total_valid",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "indicators.csv",
+          "column": "oar_saturated",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": null
+        },
+        {
+          "table": "indicators.csv",
+          "column": "tumour_saturated",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": null
+        }
+      ],
+      "run_artifact_hashes": [
+        {
+          "indicators.csv": "2470fe1b9da4827c72393e3028c0bd8054b7f7c20ee33a334470e7476dde2565",
+          "manifest.json": "0a4710cc5f7c8f3d0c41262543465ee80b14244d5cb39cff488fd766d4ad5347",
+          "scenario.json": "c2b9485abc82e5420fb96bad1ef5de146fae02b90f00d7aeb1cbd0cb23db323a",
+          "semantics.ttl": "c239130ee437e9002140792b8e60a4212a4e1535e56e7088973153639961bf5d"
+        },
+        {
+          "indicators.csv": "2470fe1b9da4827c72393e3028c0bd8054b7f7c20ee33a334470e7476dde2565",
+          "manifest.json": "0a4710cc5f7c8f3d0c41262543465ee80b14244d5cb39cff488fd766d4ad5347",
+          "scenario.json": "c2b9485abc82e5420fb96bad1ef5de146fae02b90f00d7aeb1cbd0cb23db323a",
+          "semantics.ttl": "94af95c6be38f4c2bbe4ff47ae72df4131f328f4845530847355c0d2e6433156"
+        }
+      ]
+    },
+    {
+      "model": "pyrcel",
+      "index_sha256": "822a2e7209d06d7773c4813e2e6b2e9b4baa8478f9aaf734ad83bbe261f10d34",
+      "completed_runs": 2,
+      "qualified_tables": 3,
+      "qualified_columns": 23,
+      "negative_controls": [
+        {
+          "case": "wrong-unit",
+          "decision": "clarify",
+          "returncode": 2,
+          "output_created": false
+        },
+        {
+          "case": "unaccepted",
+          "decision": "clarify",
+          "returncode": 2,
+          "output_created": false
+        },
+        {
+          "case": "acceptance-as-text",
+          "decision": "refuse",
+          "returncode": 2,
+          "output_created": false
+        },
+        {
+          "case": "missing-field",
+          "decision": "clarify",
+          "returncode": 2,
+          "output_created": false
+        },
+        {
+          "case": "changed-definition",
+          "decision": "refuse",
+          "returncode": 2,
+          "output_created": false
+        },
+        {
+          "case": "changed-backend",
+          "decision": "refuse",
+          "returncode": 2,
+          "output_created": false
+        }
+      ],
+      "repeat_metrics": [
+        {
+          "table": "kpis.csv",
+          "column": "maximum_supersaturation_percent",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "kpis.csv",
+          "column": "activated_number_cm3",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": null
+        },
+        {
+          "table": "kpis.csv",
+          "column": "activated_fraction",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": null
+        },
+        {
+          "table": "kpis.csv",
+          "column": "actual_end_time_s",
+          "n": 1,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "trajectory.csv",
+          "column": "time_s",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "trajectory.csv",
+          "column": "z",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "trajectory.csv",
+          "column": "P",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "trajectory.csv",
+          "column": "T",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "trajectory.csv",
+          "column": "wv",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "trajectory.csv",
+          "column": "wc",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "trajectory.csv",
+          "column": "wi",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": null
+        },
+        {
+          "table": "trajectory.csv",
+          "column": "S",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "wet_radii.csv",
+          "column": "time_s",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "wet_radii.csv",
+          "column": "r000",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "wet_radii.csv",
+          "column": "r001",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "wet_radii.csv",
+          "column": "r002",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "wet_radii.csv",
+          "column": "r003",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "wet_radii.csv",
+          "column": "r004",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "wet_radii.csv",
+          "column": "r005",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "wet_radii.csv",
+          "column": "r006",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "wet_radii.csv",
+          "column": "r007",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "wet_radii.csv",
+          "column": "r008",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        },
+        {
+          "table": "wet_radii.csv",
+          "column": "r009",
+          "n": 7,
+          "rmsd": 0.0,
+          "nrmsd": 0.0
+        }
+      ],
+      "run_artifact_hashes": [
+        {
+          "kpis.csv": "fb6aa54d2dff5519498e026ec84c107349ec512e529756d320f8813ec9653f56",
+          "manifest.json": "078583fe2503518b0c057f0a459c7b9039995bc19488a2a2417ec8db77c19820",
+          "scenario.json": "9895bac57250b56d92f7388cb866d86afab3376d16992eb7c1586567bb4cda15",
+          "semantics.ttl": "d8acba772b918ff65d7dd98912acc727806c0ebf6a38b9745a499aa6b3893b5d",
+          "trajectory.csv": "de6c2c7d0a2b60a9ed7d32a1862f12f942a0adf37c7241a0aef573727b6f55cf",
+          "wet_radii.csv": "d555b2ea8086e061c95dfd1eeb0efeea8b498635bf6f619943fda06c37ebd196"
+        },
+        {
+          "kpis.csv": "fb6aa54d2dff5519498e026ec84c107349ec512e529756d320f8813ec9653f56",
+          "manifest.json": "078583fe2503518b0c057f0a459c7b9039995bc19488a2a2417ec8db77c19820",
+          "scenario.json": "9895bac57250b56d92f7388cb866d86afab3376d16992eb7c1586567bb4cda15",
+          "semantics.ttl": "a005e832c7a487e5d48b37d9cbaccbbffb7aef070acadf0bfb046241df563b9f",
+          "trajectory.csv": "de6c2c7d0a2b60a9ed7d32a1862f12f942a0adf37c7241a0aef573727b6f55cf",
+          "wet_radii.csv": "d555b2ea8086e061c95dfd1eeb0efeea8b498635bf6f619943fda06c37ebd196"
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,16 @@
-# Parcours agent TLS
+# Parcours agent Python
 
-Lisez [files.json](files.json) : fichiers nécessaires, liens directs et empreintes. Écrivez leur contenu intégral aux chemins indiqués dans votre espace Python et conservez cet index. Dépendances : numpy, pandas, rdflib. Le script vérifie les sources et appelle TLS sans Git ni installation du projet.
+Choisissez l'index : [TLS](files.json), [LQL](files-lql.json) ou [pyrcel](files-pyrcel.json). Écrivez les fichiers intégraux aux chemins indiqués dans votre espace Python et conservez l'index choisi. Il déclare liens, empreintes et dépendances ; les contraintes numériques pyrcel figurent dans `pyproject.toml`. Le script vérifie les sources et appelle le logiciel sans Git ni installation du projet. Les dépendances doivent être présentes.
+
+```sh
+python agent/run.py tls scenario.json
+python agent/run.py lql scenario.json
+python agent/run.py pyrcel scenario.json
+```
+
+N'exécutez que la commande du modèle choisi. Chaque commande utilise son propre descripteur, ses unités et ses contrôles ; les profils ne sont pas interchangeables. Une validation refusée ou une dépendance manquante n'autorise aucun résultat inventé. Les empreintes vérifient la cohérence des fichiers avec l'index, pas la vérité scientifique du modèle.
+
+Les index comprennent le vocabulaire, les relations, les formes SHACL et les questions de compétence. Consultez-les pour relier l'intention aux variables et qualifier les sorties ; tracez les relations effectivement utilisées. `pyshacl` est nécessaire seulement pour lancer les contrôles de graphe séparés. Ils ne remplacent pas la validation Python et ne sont pas exécutés automatiquement par la commande de calcul.
 
 ## Conduire l’étude
 
@@ -39,6 +49,6 @@ Les paramètres, hypothèses, sources, versions et graines restent dans les fich
 
 [Sources LQL](files-lql.json) · [Sources pyrcel](files-pyrcel.json). Récupérez les fichiers indiqués aux chemins publiés, puis lisez le descripteur et les définitions. LQL couvre un seul cursus fictif ; pyrcel une ascendance constante et un mode lognormal. Ces profils ne donnent ni recommandation clinique ni prévision météorologique.
 
-Construisez un scénario explicite accepté selon l’exemple, chargez-le avec `load_scenario` (`websemantic.replay`, si disponible), ou construisez les enregistrements `Parameter` et `Scenario` du noyau. Chargez le descripteur YAML, puis appelez `websemantic.adapters.lql.run` ou `websemantic.adapters.pyrcel.run` avec le scénario, le descripteur et le dossier des sources. Les dépendances communes sont PyYAML et RDFLib ; pyrcel exige les dépendances numériques de l’extra `atmosphere` du pyproject. Aucun Git ni clé Gemini ne sont requis.
+Construisez un scénario explicite accepté selon `examples/lql-complete.json` ou `examples/pyrcel-complete.json`, puis utilisez la commande commune ci-dessus. Les dépendances communes sont PyYAML et RDFLib ; pyrcel exige les dépendances numériques de l'extra `atmosphere` du pyproject. Aucun Git ni clé Gemini ne sont requis. La commande conserve l'index des sources et les versions des dépendances dans le manifeste.
 
 Lisez les CSV et le manifeste avant de répondre. Donnez les unités, le caractère simulé, les hypothèses et les limites ; une EQD invalidée reste absente. Conservez les horodatages natifs pyrcel, y compris la terminaison irrégulière. Les formes SHACL publiées sont testées séparément ; la porte Python reste le contrôle d’exécution.
