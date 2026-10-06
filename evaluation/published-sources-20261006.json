@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-06T16:42:14.045360+00:00",
+  "checked_at": "2026-10-06T16:54:09.295913+00:00",
   "scope": "Published URLs and content hashes; no scientific or agent-performance claim",
   "files": [
     {
@@ -165,9 +165,9 @@
     {
       "path": "llm.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/llm.md",
-      "expected": "b55b74b293f59e79bdff6162ff4ac02208ea334527ebe08d56cd01cc2c90bda4",
+      "expected": "9f838630dab4653e0780745d62dafbb26b102f138ea2fceeabd69dbc4bc0410f",
       "http_status": 200,
-      "actual": "b55b74b293f59e79bdff6162ff4ac02208ea334527ebe08d56cd01cc2c90bda4",
+      "actual": "9f838630dab4653e0780745d62dafbb26b102f138ea2fceeabd69dbc4bc0410f",
       "match": true
     },
     {
