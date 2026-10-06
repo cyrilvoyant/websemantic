@@ -124,3 +124,39 @@ ws:LQL_hypo_extreme a ws:ClarificationPolicy ;
 ws:LQL_hyperfractionation a ws:ClarificationPolicy ;
     skos:altLabel "hyperfractionnement"@fr ; ws:appliesTo ws:LQL_bifractionated ;
     rdfs:comment "The word alone does not fix two sessions a day."@en .
+
+# Outputs and flags exposed by the single-course profile of the LQL descriptor (aligned on its ontology_concept names).
+ws:LQLContract ws:declaresOutput ws:LQL_bed_tumour, ws:LQL_tcp_percent, ws:LQL_cancer_risk,
+        ws:LQL_overall_days_oar, ws:LQL_overall_days_tumour, ws:LQL_oar_total_valid, ws:LQL_tumour_total_valid .
+
+ws:LQL_bed_tumour a ws:OutputVariable ;
+    skos:prefLabel "BED tumeur"@fr ; ws:apiVariable "CourseResult.bed_tumour" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_tcp_percent a ws:OutputVariable ;
+    skos:prefLabel "TCP"@fr ; ws:apiVariable "Result.tcp_percent" ; ws:canonicalUnit unit:PERCENT ;
+    skos:definition "Model estimate for research and education; sigmoid stated by Options.tcp_model."@en ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_cancer_risk a ws:OutputVariable ;
+    skos:prefLabel "Indice de risque de cancer radio-induit"@fr ; ws:apiVariable "Result.cancer_risk" ;
+    skos:definition "Native model index from tabulated coefficients; not a clinical percentage; None when the tissue has no coefficients."@en ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_overall_days_oar a ws:OutputVariable ;
+    skos:prefLabel "Durée calendaire (organe)"@fr ; ws:apiVariable "CourseResult.overall_days_oar" ;
+    ws:quantityKind qk:Time ; ws:canonicalUnit unit:DAY ; ws:aggregation ws:AggPerCourse .
+
+ws:LQL_overall_days_tumour a ws:OutputVariable ;
+    skos:prefLabel "Durée calendaire (tumeur)"@fr ; ws:apiVariable "CourseResult.overall_days_tumour" ;
+    ws:quantityKind qk:Time ; ws:canonicalUnit unit:DAY ; ws:aggregation ws:AggPerCourse .
+
+# Validity flags: true means valid (inverse polarity of the saturation flags).
+ws:LQL_oar_total_valid a ws:OutputVariable ;
+    skos:prefLabel "Validité du total organe"@fr ; ws:apiVariable "Result.oar_total_valid" ;
+    rdfs:comment "True when the cumulative organ EQD is defined; when false, LQL_eqd_oar_total must not be reported."@en .
+
+ws:LQL_tumour_total_valid a ws:OutputVariable ;
+    skos:prefLabel "Validité du total tumeur"@fr ; ws:apiVariable "Result.tumour_total_valid" ;
+    rdfs:comment "True when the cumulative tumour EQD is defined; when false, LQL_eqd_tumour_total must not be reported."@en .
