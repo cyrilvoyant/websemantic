@@ -1,0 +1,40 @@
+{
+  "scope": "Browser collection access check; one prepared case, not the full pilot",
+  "date": "2026-10-06",
+  "case": "TLS-P01",
+  "condition": "WebSemantic repository supplied; ablation conditions not collected",
+  "observations": [
+    {
+      "provider": "ChatGPT",
+      "account": "guest",
+      "model": "not disclosed by the interface",
+      "response_received": true,
+      "execution": "unavailable",
+      "evidence": "Response explicitly reports no Python interpreter or terminal. Configuration restated with units; no simulated numerical result or file produced.",
+      "numeric_metrics": null
+    },
+    {
+      "provider": "Grok",
+      "account": "guest",
+      "model": "not observed",
+      "response_received": false,
+      "execution": "not reached",
+      "evidence": "Prompt visible; interface requests registration to continue.",
+      "numeric_metrics": null
+    },
+    {
+      "provider": "Claude",
+      "account": "connected, incognito conversation",
+      "model": "Opus 5.5 Moyen (interface label)",
+      "response_received": false,
+      "execution": "not reached",
+      "evidence": "After sending, interface reports monthly spending limit reached and reset on 7 October at 06:00. Subsequently returns to composer with the prompt retained.",
+      "numeric_metrics": null
+    }
+  ],
+  "limitations": [
+    "One access check cannot estimate a success rate or ontology benefit.",
+    "No RMSD or nRMSD can be calculated without executed results.",
+    "Provider quota, account gating and missing tools are distinct from simulator failures."
+  ]
+}

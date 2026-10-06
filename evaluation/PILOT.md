@@ -19,4 +19,8 @@ Résultats : first-pilot-20261006.json et first-pilot-metrics.csv. Script : run_
 
 Neuf configurations numériques appariées et quatre demandes vagues avec Gemini, un échantillon chacune. Il ne s’agit ni de la campagne comparative ni d’une preuve d’apport ontologique. Les variables balayées sont trafic TLS, dose par fraction LQL et ascendance pyrcel. Le contrôle numérique appelle directement les API natives ; il ne simule pas un agent généraliste.
 
-Le Vieux-Port a conduit à des questions mais pas à une demande de recherche web. Cette lacune est conservée comme observation. GPT, Claude, Grok et Perplexity restent non évalués ; leurs clés API ne sont pas configurées dans cet environnement. Les graphes ont passé leurs contrôles locaux, ce qui ne mesure pas leur utilité pour un LLM.
+Le Vieux-Port a conduit à des questions mais pas à une demande de recherche web. Cette lacune est conservée comme observation. Les graphes ont passé leurs contrôles locaux, ce qui ne mesure pas leur utilité pour un LLM.
+
+## Accès navigateur
+
+Premier cas préparé TLS-P01 soumis le 6 octobre : ChatGPT sans compte répond avec une configuration et signale l'absence de Python ; Grok sans compte demande une inscription ; Claude connecté en conversation incognito atteint une limite de dépenses. Aucun de ces essais ne produit de calcul. Détails : browser-access-20261006.json. La collecte navigateur ne nécessite pas de clé API ; ces limitations ne constituent ni une comparaison numérique ni une mesure de l'apport ontologique.
