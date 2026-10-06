@@ -11,3 +11,7 @@ Le tri-log de collaboration reste local. Ce journal publie les décisions et pre
 ## Accord de démarrage
 
 Répartition et orientations validées par les deux collaborateurs. Le contrat sémantique et l’ontologie forment le cœur de la contribution. Pilote 20 par logiciel ; objectif final 100 réservés par logiciel, conditionné à la validation des références et au budget. Contrôle indépendant : LQL-Equiv-web public et sous-module partagent la révision dfc9a338205b8864b8e3470c4ae245b019e88844. Début des intégrations et de la modélisation dans des fichiers distincts, avec relecture croisée.
+
+## Troisième domaine et distribution
+
+Demande de remplacement éventuel de pvlib par un logiciel atmosphérique. Audit préalable documenté dans [troisieme-logiciel.md](troisieme-logiciel.md) : ecape-parcel-py cloné à révision fixe, licence MIT conservée, aucune exécution encore validée. Les logiciels originaux restent inchangés. Le package final doit inclure chaque nouveau backend, contrat, notice et exemple après vérification. Aucun nouveau package diffusé à ce stade.

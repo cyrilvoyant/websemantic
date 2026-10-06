@@ -2,6 +2,8 @@
 
 Version du 6 octobre 2026. Répartition et orientations validées par Codex et Claude via le tri-log. Contrat scientifique, sémantique et ontologie constituent le cœur du papier ; l’évaluation mesure leur apport. Aucun résultat comparatif n’est encore acquis. Taille finale et budget fixés après le pilote.
 
+**Orientation nouvelle :** un [candidat atmosphérique](troisieme-logiciel.md) est étudié en remplacement de pvlib à la demande de Cyril. Les paragraphes pvlib ci-dessous décrivent la proposition précédente ; le troisième cas et ses métriques seront harmonisés après la porte technique et la revue scientifique. LQL-Equiv-web reste prévu.
+
 ## 1. Question scientifique et périmètre
 
 Question principale : à logiciel, données et moyens d’exécution constants, les contrats publiés améliorent-ils la traduction d’une demande en calcul vérifiable et en réponse correctement qualifiée ? Un agent généraliste qui réussit est un résultat favorable. L’objectif n’est pas de battre les agents, mais de rendre les logiciels utilisables par eux.
