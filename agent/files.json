@@ -46,7 +46,7 @@
     {
       "path": "src/websemantic/semantics.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/semantics.py",
-      "sha256_lf": "bd086206e23c54269d494487948d72ab71dd9b9370bdfda05f985fce186e867e"
+      "sha256_lf": "305a9ebfa48fccebca4fc547982e7cd5c36edfb14b6b02f91a89cbca545165de"
     },
     {
       "path": "src/websemantic/comparison.py",

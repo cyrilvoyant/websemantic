@@ -51,17 +51,17 @@
     {
       "path": "src/websemantic/semantics.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/semantics.py",
-      "sha256_lf": "bd086206e23c54269d494487948d72ab71dd9b9370bdfda05f985fce186e867e"
+      "sha256_lf": "305a9ebfa48fccebca4fc547982e7cd5c36edfb14b6b02f91a89cbca545165de"
     },
     {
       "path": "descriptors/pyrcel/descriptor.yaml",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/descriptors/pyrcel/descriptor.yaml",
-      "sha256_lf": "c4b22044ce44ef803e1fc8ffd5250e24105535b336eeb1d1fe421f77c141c270"
+      "sha256_lf": "144d6da0dba47121c1d15556eff922fec4ea503aa61939ef98405abdfe576931"
     },
     {
       "path": "examples/pyrcel-complete.json",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/examples/pyrcel-complete.json",
-      "sha256_lf": "df01d5484195a6feb678d06431a13206f8d97556eea424c22a904f012e7ef735"
+      "sha256_lf": "6df915114db12eb61b192ca7d895a0cfee3013775db25abc27313ed467521f53"
     },
     {
       "path": "docs/pyrcel-contract-definitions.md",

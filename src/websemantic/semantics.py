@@ -13,7 +13,7 @@ def concept(descriptor, name):
     """Keep model concepts distinct when graphs from several simulators are merged."""
     for group in ('inputs', 'experiment', 'outputs'):
         spec = descriptor.get(group, {}).get(name, {})
-        if spec.get('ontology_concept'):
+        if isinstance(spec, dict) and spec.get('ontology_concept'):
             return WS[spec['ontology_concept']]
     software = descriptor.get('software', {})
     identity = software.get('repository') or software.get('name', 'unnamed')
@@ -159,6 +159,17 @@ def vocabulary(descriptor, qualification=None):
         graph.add((concept(descriptor, intent), RDF.type, WS.Intent))
         graph.add((concept(descriptor, intent), SKOS.related, concept(descriptor, indicator)))
         graph.add((concept(descriptor, intent), WS.requiresIndicator, concept(descriptor, indicator)))
+    for name, spec in descriptor.get("outputs", {}).items():
+        if not isinstance(spec, dict):
+            continue
+        term = concept(descriptor, name)
+        if spec.get("native_concept"):
+            graph.add((term, PROV.wasDerivedFrom, WS[spec["native_concept"]]))
+            graph.add((term, WS.conversionFactor, Literal(spec["conversion_factor"])))
+        if spec.get("unit"):
+            graph.add((term, WS.canonicalUnitToken, Literal(spec["unit"])))
+            if spec["unit"].startswith("unit:"):
+                graph.add((term, WS.canonicalUnit, URIRef("http://qudt.org/vocab/unit/" + spec["unit"][5:])))
     if qualification:
         for table, info in qualification["tables"].items():
             term = concept(descriptor, f"outputs/{table}")

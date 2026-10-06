@@ -51,6 +51,12 @@ inputs:
     - Standard acute-responding tissue
     - Standard late-responding tissue
     ontology_concept: LQL_organ
+    unit_aliases:
+    - sans unité
+    - sans unite
+    - unit:UNITLESS
+    - '1'
+    - none
   tumour_site:
     type: category
     unit: null
@@ -79,6 +85,12 @@ inputs:
     - Standard tumour
     - Standard tumour, no proliferation
     ontology_concept: LQL_tumour_site
+    unit_aliases:
+    - sans unité
+    - sans unite
+    - unit:UNITLESS
+    - '1'
+    - none
   dose_per_fraction:
     type: float
     unit: unit:GRAY
@@ -168,6 +180,12 @@ inputs:
     - 'yes'
     - 'no'
     ontology_concept: LQL_bifractionated
+    unit_aliases:
+    - sans unité
+    - sans unite
+    - unit:UNITLESS
+    - '1'
+    - none
 experiment:
   scenario_scope:
     type: category
@@ -177,6 +195,13 @@ experiment:
     definition: Scénario fictif de recherche, sans décision clinique.
     values:
     - fictitious
+    unit_aliases:
+    - sans unité
+    - sans unite
+    - unit:UNITLESS
+    - '1'
+    - none
+    default: fictitious
 outputs:
   physical_dose_gy:
     display_unit: Gy
@@ -305,7 +330,9 @@ interpretation:
     Fractionnement conventionnel propose 2 Gy par fraction à accepter ; modéré, fort
     ou hypofractionné ne déterminent pas une dose ni un nombre de fractions. Plusieurs
     cursus sont hors du profil. Organes et sites correspondent aux noms de la bibliothèque
-    ; ne jamais choisir un tissu manquant.
+    ; ne jamais choisir un tissu manquant. Pour une demande explicitement fictive,
+    renseigner scenario_scope=fictitious avec la preuve textuelle exacte. Les catégories
+    sans unité utilisent unit=null.
 model_equations:
 - id: physical_dose
   label: Dose physique

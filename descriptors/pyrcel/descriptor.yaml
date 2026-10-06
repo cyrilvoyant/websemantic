@@ -99,7 +99,7 @@ inputs:
           offset: -1
   N:
     type: float
-    unit: unit:NUM-PER-CentiM3
+    unit: unit:PER-CentiM3
     bounds:
       min_exclusive: 0
       authority: WebSemantic task profile; see pyrcel model and distributions
@@ -285,3 +285,24 @@ model_equations:
     cm^-3. Activation au dernier instant réellement calculé.
   unit: cm^-3
   reference: pyrcel.model_output.ModelOutput.Nd
+outputs:
+  T:
+    unit: unit:K
+    ontology_concept: PYR_T
+    definition: Native parcel temperature.
+  S:
+    unit: unit:UNITLESS
+    ontology_concept: PYR_S
+    definition: Native supersaturation fraction.
+  maximum_supersaturation_percent:
+    unit: unit:PERCENT
+    ontology_concept: PYR_Smax_percent
+    definition: Native peak supersaturation multiplied by 100.
+    native_concept: PYR_Smax
+    conversion_factor: 100
+  activated_number_cm3:
+    unit: unit:PER-CentiM3
+    ontology_concept: PYR_Nd_cm3
+    definition: Native activated concentration divided by 10^6.
+    native_concept: PYR_Nd
+    conversion_factor: 1.0e-06

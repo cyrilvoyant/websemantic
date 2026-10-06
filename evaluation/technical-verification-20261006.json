@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-06",
+  "tests_passed": 420,
+  "tests_skipped": 0,
+  "installation": {
+    "scope": "Fresh venv and isolated LOCALAPPDATA on existing Windows; not virgin OS.",
+    "first_install_exit": 0,
+    "launcher_before_install_blocked": true,
+    "api_calls": 0
+  },
+  "relaunch": {
+    "second_install_exit": 0,
+    "second_install_no_pip_install": true,
+    "menu_1": {
+      "exit": 0,
+      "chat": true
+    },
+    "menu_2": {
+      "exit": 0,
+      "chat": true
+    },
+    "menu_3": {
+      "exit": 0,
+      "chat": true
+    }
+  },
+  "live_gemini": {
+    "calls": 8,
+    "model": "gemini-3.5-flash-lite",
+    "checks": [
+      {
+        "model": "tls",
+        "executed": true,
+        "checked_explicit_parameters": [
+          "length_m",
+          "n_tubes",
+          "n_lanes_per_tube"
+        ]
+      },
+      {
+        "model": "lql",
+        "executed": true,
+        "checked_explicit_parameters": [
+          "organ",
+          "tumour_site",
+          "n_fractions",
+          "dose_per_fraction"
+        ]
+      },
+      {
+        "model": "pyrcel",
+        "executed": true,
+        "checked_explicit_parameters": [
+          "V",
+          "T0",
+          "P0",
+          "S0",
+          "N",
+          "mu"
+        ]
+      }
+    ],
+    "initial_lql": "blocked; successful retry after descriptor correction"
+  },
+  "limits": [
+    "Existing Windows host, not virgin OS",
+    "Reserved multi-provider campaign not executed",
+    "No Claude review",
+    "No observational validation"
+  ]
+}

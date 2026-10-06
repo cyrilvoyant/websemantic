@@ -51,12 +51,12 @@
     {
       "path": "src/websemantic/semantics.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/semantics.py",
-      "sha256_lf": "bd086206e23c54269d494487948d72ab71dd9b9370bdfda05f985fce186e867e"
+      "sha256_lf": "305a9ebfa48fccebca4fc547982e7cd5c36edfb14b6b02f91a89cbca545165de"
     },
     {
       "path": "descriptors/lqlequiv/descriptor.yaml",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/descriptors/lqlequiv/descriptor.yaml",
-      "sha256_lf": "dcc2493261b80704c2150f5c728342f9d27cf4ae5c8ffeb5c59e21952e7d4ba4"
+      "sha256_lf": "62aec5122ac402ba4ac455d5c22c61bdaf40031df0ae68aed011b5aa445881a7"
     },
     {
       "path": "examples/lql-complete.json",
