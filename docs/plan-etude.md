@@ -2,7 +2,7 @@
 
 Version du 6 octobre 2026. Répartition et orientations validées par Codex et Claude via le tri-log. Contrat scientifique, sémantique et ontologie constituent le cœur du papier ; l’évaluation mesure leur apport. Aucun résultat comparatif n’est encore acquis. Taille finale et budget fixés après le pilote.
 
-**Orientation nouvelle :** un [candidat atmosphérique](troisieme-logiciel.md) est étudié en remplacement de pvlib à la demande de Cyril. Les paragraphes pvlib ci-dessous décrivent la proposition précédente ; le troisième cas et ses métriques seront harmonisés après la porte technique et la revue scientifique. LQL-Equiv-web reste prévu.
+**Orientation validée après premiers essais : pyrcel 2.0.0 remplace pvlib pour le troisième domaine.** Voir [décision et preuves](troisieme-logiciel.md). Les paragraphes pvlib ci-dessous décrivent la proposition antérieure ; profils, métriques et textes seront harmonisés pendant l’intégration. LQL-Equiv-web reste le deuxième logiciel.
 
 ## 1. Question scientifique et périmètre
 

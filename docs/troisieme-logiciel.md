@@ -1,5 +1,9 @@
 # Troisième logiciel : piste atmosphérique
 
+## Choix après essais
+
+**pyrcel 2.0.0 retenu pour intégration**, en accord avec la recommandation de Claude et après les premiers essais réels Codex. Les deux candidats ont exécuté un cas synthétique reproductible sous Windows ; preuves et limites dans [evaluation/candidates](../evaluation/candidates/README.md). Cela ne valide pas encore la distribution. ecape-parcel-py reste une alternative. Les audits ci-dessous décrivent la phase précédente.
+
 ## Demande du 6 octobre 2026
 
 Étudier un remplacement de pvlib par un logiciel atmosphérique plus spécialisé. La connaissance préalable d’un code par les modèles est un facteur à contrôler ; le faible nombre d’utilisateurs ne démontre pas son absence des données d’apprentissage. Employer scénarios inédits, versions fixes et comparaisons appariées ; séparer documentation native et enrichissement.
