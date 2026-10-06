@@ -1,0 +1,287 @@
+software:
+  name: pyrcel
+  version: 2.0.0
+  repository: https://github.com/darothen/pyrcel
+  commit: 977e9094644ec4a17d658d657094651928591c89
+  licence: BSD-3-Clause
+  entry_point: pyrcel:ParcelModel
+nature: Idealised adiabatic parcel simulation; not a weather forecast or measured
+  cloud
+uncertainty: Numerical discretisation and idealised prescribed conditions; no statistical
+  confidence interval
+validity_notes:
+- Constant positive updraft; single lognormal aerosol mode; initially subsaturated
+  parcel.
+- All inputs must be explicit or accepted hypotheses; qualifiers without a calibrated
+  mapping require clarification.
+- Terminal activation is evaluated at actual end time, not necessarily t_end.
+tasks:
+  supported:
+  - simulate aerosol activation in a constant-updraft parcel with one lognormal mode
+inputs:
+  V:
+    type: float
+    unit: unit:M-PER-SEC
+    bounds:
+      min_exclusive: 0
+      authority: WebSemantic task profile; see pyrcel model and distributions
+    default: 1
+    label: Ascendance constante
+    display_unit: m/s
+    definition: Vitesse verticale imposée; pas une prévision météorologique.
+    ontology_concept: PYR_V
+    unit_aliases:
+    - m/s
+  T0:
+    type: float
+    unit: unit:K
+    bounds:
+      min_exclusive: 0
+      authority: WebSemantic task profile; see pyrcel model and distributions
+    default: 283
+    label: Température initiale
+    display_unit: K
+    definition: Température absolue initiale de la parcelle.
+    ontology_concept: PYR_T0
+    evidence_conversion:
+      units:
+        k: 1
+        °c:
+          factor: 1
+          offset: 273.15
+    unit_aliases:
+    - K
+    - kelvin
+  P0:
+    type: float
+    unit: unit:PA
+    bounds:
+      min_exclusive: 0
+      authority: WebSemantic task profile; see pyrcel model and distributions
+    default: 85000
+    label: Pression initiale
+    display_unit: Pa
+    definition: Pression absolue initiale.
+    ontology_concept: PYR_P0
+    evidence_conversion:
+      units:
+        pa: 1
+        hpa: 100
+    unit_aliases:
+    - Pa
+    - pascal
+  S0:
+    type: float
+    unit: unit:UNITLESS
+    bounds:
+      min_exclusive: -1
+      max: 0
+      authority: WebSemantic task profile; see pyrcel model and distributions
+    default: -0.02
+    label: Sursaturation initiale
+    display_unit: '1'
+    definition: S0 = humidité relative en fraction - 1; -0,02 correspond à 98 %.
+    ontology_concept: PYR_S0
+    unit_aliases:
+    - '1'
+    - fraction
+    evidence_conversion:
+      trigger_regex: humidite|relative humidity|\brh\b
+      units:
+        '%':
+          factor: 0.01
+          offset: -1
+        pour cent:
+          factor: 0.01
+          offset: -1
+        fraction:
+          factor: 1
+          offset: -1
+  N:
+    type: float
+    unit: unit:NUM-PER-CentiM3
+    bounds:
+      min_exclusive: 0
+      authority: WebSemantic task profile; see pyrcel model and distributions
+    default: 1000
+    label: Concentration aérosol
+    display_unit: cm⁻³
+    definition: Nombre initial de particules de la distribution lognormale par cm³.
+    ontology_concept: PYR_N
+    group_instance: mode-1
+    unit_aliases:
+    - cm^-3
+    - cm⁻³
+  mu:
+    type: float
+    unit: unit:MicroM
+    bounds:
+      min_exclusive: 0
+      authority: WebSemantic task profile; see pyrcel model and distributions
+    default: 0.05
+    label: Rayon sec médian
+    display_unit: µm
+    definition: Rayon sec médian géométrique; pas le diamètre.
+    ontology_concept: PYR_mu
+    group_instance: mode-1
+    unit_aliases:
+    - µm
+    - um
+    - micrometre
+  sigma:
+    type: float
+    unit: unit:UNITLESS
+    bounds:
+      min_exclusive: 1
+      authority: WebSemantic task profile; see pyrcel model and distributions
+    default: 2
+    label: Dispersion géométrique
+    display_unit: '1'
+    definition: Écart type géométrique de la distribution lognormale.
+    ontology_concept: PYR_sigma
+    group_instance: mode-1
+    unit_aliases:
+    - '1'
+  kappa:
+    type: float
+    unit: unit:UNITLESS
+    bounds:
+      min: 0
+      authority: WebSemantic task profile; see pyrcel model and distributions
+    default: 0.54
+    label: Hygroscopicité
+    display_unit: '1'
+    definition: Paramètre κ de Köhler.
+    ontology_concept: PYR_kappa
+    group_instance: mode-1
+    unit_aliases:
+    - '1'
+  bins:
+    type: int
+    unit: unit:NUM
+    bounds:
+      min: 2
+      max: 200
+      authority: WebSemantic task profile; see pyrcel model and distributions
+    default: 50
+    label: Classes de taille
+    display_unit: nombre
+    definition: Discrétisation de la distribution; borne haute du profil local.
+    group_instance: mode-1
+    unit_aliases:
+    - nombre
+  accom:
+    type: float
+    unit: unit:UNITLESS
+    bounds:
+      min_exclusive: 0
+      max: 1
+      authority: WebSemantic task profile; see pyrcel model and distributions
+    default: 1
+    label: Accommodation
+    display_unit: '1'
+    definition: Coefficient d’accommodation de vapeur.
+    unit_aliases:
+    - '1'
+experiment:
+  t_end:
+    type: float
+    unit: unit:SEC
+    bounds:
+      min_exclusive: 0
+      max: 3000
+      authority: WebSemantic task profile; see pyrcel model and distributions
+    default: 3000
+    label: Durée maximale
+    display_unit: s
+    definition: Limite de temps; la terminaison peut survenir avant.
+    unit_aliases:
+    - s
+  output_dt:
+    type: float
+    unit: unit:SEC
+    bounds:
+      min_exclusive: 0
+      authority: WebSemantic task profile; see pyrcel model and distributions
+    default: 1
+    label: Pas de sortie nominal
+    display_unit: s
+    definition: Le dernier instant peut être irrégulier.
+    unit_aliases:
+    - s
+  terminate:
+    type: category
+    unit: unit:UNITLESS
+    bounds:
+      authority: WebSemantic task profile; see pyrcel model and distributions
+    default: 'yes'
+    label: Arrêt après maximum
+    display_unit: oui/non
+    definition: 'yes: arrêt après maximum; no: intégration jusqu’à t_end.'
+    values:
+    - 'yes'
+    - 'no'
+    unit_aliases:
+    - oui/non
+  terminate_depth:
+    type: float
+    unit: unit:M
+    bounds:
+      min_exclusive: 0
+      authority: WebSemantic task profile; see pyrcel model and distributions
+    default: 10
+    label: Profondeur après maximum
+    display_unit: m
+    definition: Distance ascendante après le maximum de sursaturation.
+    unit_aliases:
+    - m
+presentation:
+  results:
+    table: kpis.csv
+    indicators:
+    - - maximum_supersaturation_percent
+      - Sursaturation maximale
+      - '%'
+    - - activated_number_cm3
+      - Particules activées
+      - cm⁻³
+    - - activated_fraction
+      - Fraction activée
+      - '1'
+    - - actual_end_time_s
+      - Durée effective
+      - s
+    notes:
+    - Parcelle idéale simulée ; les conditions initiales sont des hypothèses, pas
+      une prévision météorologique.
+    deterministic: true
+  namespace: websemantic.pyrcel
+  short_name: pyrcel
+interpretation:
+  guidance: Profil à un seul mode lognormal et ascendance constante. Forte ascendance
+    ou air pollué demandent une valeur ou des hypothèses sourcées à accepter, sans
+    nombre implicite. S0 = humidité relative exprimée en fraction moins 1 ; conserve
+    la preuve textuelle de conversion. Ne formule aucune prévision locale. Plusieurs
+    modes demandent une clarification hors de ce profil.
+runtime:
+  adapter: websemantic.adapters.pyrcel:run
+  backend_path: external/pyrcel
+  backend_marker: pyrcel/__init__.py
+profile:
+  source: WebSemantic pyrcel fictitious pilot protocol; proposed conditions requiring
+    user acceptance
+model_equations:
+- id: relative_humidity
+  label: Humidité et sursaturation
+  expression: S0 = RH_fraction - 1 = RH_percent/100 - 1
+  meaning: Conversion déterministe de l’humidité relative initiale. Les qualificatifs
+    restent des hypothèses à préciser.
+  unit: '1'
+  reference: pyrcel.ParcelModel S0 ; docs/pyrcel-contract-definitions.md
+- id: number_density
+  label: Concentration activée
+  expression: Nd_cm3 = Nd_m3 / 10^6
+  meaning: La sortie native Nd est en m^-3 ; la table de synthèse la convertit en
+    cm^-3. Activation au dernier instant réellement calculé.
+  unit: cm^-3
+  reference: pyrcel.model_output.ModelOutput.Nd

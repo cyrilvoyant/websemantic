@@ -211,7 +211,13 @@ def results_table(session, target, medians):
                 recap.append(f'{label.lower()} {value}' + ('' if unit in ('nombre', 'catégorie', 'identifiant') else ' ' + unit))
     if recap:
         print('Hypothèses retenues : ' + '; '.join(recap) + '.')
-    if config.get('table'):
+    if config.get('indicators') and (not config.get('table') or config.get('deterministic')):
+        print(f"{'Indicateur':30} | {'Valeur':14} | Unité")
+        for name, label, unit in config['indicators']:
+            value = medians.get(name)
+            shown = f'{value:.3f}' if type(value) in (int, float) else 'non valide'
+            print(f'{label:30} | {shown:14} | {unit}')
+    if config.get('table') and not config.get('deterministic'):
         import pandas as pd
 
         means = pd.read_csv(target / config['table']).mean(numeric_only=True)
@@ -219,7 +225,11 @@ def results_table(session, target, medians):
         selected = config.get('display_indicators')
         for name, label, unit in config.get('indicators', []):
             if selected is None or name in selected:
-                print(f'{label:30} | {medians[name]:12.3f} | {means[name]:12.3f} | {unit}')
+                value = medians.get(name)
+                average = means.get(name)
+                shown = f'{value:.3f}' if type(value) in (int, float) else 'non valide'
+                mean_shown = f'{average:.3f}' if average is not None and pd.notna(average) else 'non valide'
+                print(f'{label:30} | {shown:12} | {mean_shown:12} | {unit}')
     for note in config.get('notes', []):
         print(note)
     print('Dossier des résultats :', target)

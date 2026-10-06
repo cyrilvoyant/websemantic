@@ -11,6 +11,10 @@ WS = Namespace("https://github.com/cyrilvoyant/websemantic/ns#")
 PROV = Namespace("http://www.w3.org/ns/prov#")
 def concept(descriptor, name):
     """Keep model concepts distinct when graphs from several simulators are merged."""
+    for group in ('inputs', 'experiment', 'outputs'):
+        spec = descriptor.get(group, {}).get(name, {})
+        if spec.get('ontology_concept'):
+            return WS[spec['ontology_concept']]
     software = descriptor.get('software', {})
     identity = software.get('repository') or software.get('name', 'unnamed')
     scope = descriptor.get('semantics', {}).get('namespace') or 'software-' + sha256(identity.encode()).hexdigest()[:16]
@@ -214,7 +218,12 @@ def export_semantics(scenario, qualification, target, descriptor):
                 graph.add((parameter, RDF.type, WS.UserValue))
             elif not descriptor[group][name].get('operational_default'):
                 graph.add((parameter, RDF.type, WS.Hypothesis))
-            graph.add((parameter, WS.concept, concept(descriptor, name)))
+            definition = concept(descriptor, name)
+            graph.add((parameter, WS.concept, definition))
+            graph.add((definition, RDF.type, WS.ParameterDefinition))
+            spec = descriptor[group][name]
+            if spec.get('group_instance'):
+                graph.add((parameter, WS.groupInstance, Literal(spec['group_instance'])))
             graph.add((parameter, WS.value, Literal(record.value)))
             graph.add((parameter, WS.unitSymbol, Literal(describe(name, descriptor)[1])))
             graph.add((parameter, WS.accepted, Literal(record.accepted)))

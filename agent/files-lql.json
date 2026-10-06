@@ -1,0 +1,122 @@
+{
+  "model": "lql",
+  "backend_commit": "dfc9a338205b8864b8e3470c4ae245b019e88844",
+  "scope": "Reviewed bounded adapter; explicit accepted scenario; no Git required.",
+  "files": [
+    {
+      "path": "src/websemantic/__init__.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/__init__.py",
+      "sha256_lf": "220a73c915e7d09981abc75e80ee1fb122abd6e7bf09021a5e802b9d0243522b"
+    },
+    {
+      "path": "src/websemantic/core/__init__.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/core/__init__.py",
+      "sha256_lf": "5f71e16fc85ce99befa26d975eab06287be71ce5f2b1964a5aa639789d7bbadf"
+    },
+    {
+      "path": "src/websemantic/core/validation.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/core/validation.py",
+      "sha256_lf": "c1ed6ea568d78b75e93a19ff15690e17040c06a4a209b6f089fc7fcc8d3daaff"
+    },
+    {
+      "path": "src/websemantic/adapters/__init__.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/adapters/__init__.py",
+      "sha256_lf": "f7fcc68a7c07d2e431732b4c2d4f2169dc88147e302a66538207020f18eca2d9"
+    },
+    {
+      "path": "src/websemantic/replay.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/replay.py",
+      "sha256_lf": "65086af3ada570dadfa3f1a2c7a89531a0d535f3d81f166fd2f24c189d93bed5"
+    },
+    {
+      "path": "src/websemantic/registry.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/registry.py",
+      "sha256_lf": "ec92768ee8f8b64e0ee4480ed716e26e6777e26f557597823898f1a6eece88e5"
+    },
+    {
+      "path": "src/websemantic/environments.json",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/environments.json",
+      "sha256_lf": "50d4e824a54df620b8866ae56486f52719f83e737ed3a0861c628e4b78831cc7"
+    },
+    {
+      "path": "pyproject.toml",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/pyproject.toml",
+      "sha256_lf": "7a911f7008fa786c50f4950d1369c9f01c652d80b6c2a0794965691841b80c48"
+    },
+    {
+      "path": "src/websemantic/adapters/lql.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/adapters/lql.py",
+      "sha256_lf": "a4c2ebb54cf5eddc5669325dc8a5770237e6e4cd2db6b22263d1c8f85f946fab"
+    },
+    {
+      "path": "src/websemantic/semantics.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/semantics.py",
+      "sha256_lf": "bd086206e23c54269d494487948d72ab71dd9b9370bdfda05f985fce186e867e"
+    },
+    {
+      "path": "descriptors/lqlequiv/descriptor.yaml",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/descriptors/lqlequiv/descriptor.yaml",
+      "sha256_lf": "dcc2493261b80704c2150f5c728342f9d27cf4ae5c8ffeb5c59e21952e7d4ba4"
+    },
+    {
+      "path": "examples/lql-complete.json",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/examples/lql-complete.json",
+      "sha256_lf": "e4def1684b7504722e65d333db10cf11d8b71239a946f75056f6345a9e9f948a"
+    },
+    {
+      "path": "docs/lql-contract-definitions.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/docs/lql-contract-definitions.md",
+      "sha256_lf": "5521c3be840879d3cb84fd580ebfede7810211ce3d02ebe182d7f0c82f605184"
+    },
+    {
+      "path": "ontology/core.ttl",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/core.ttl",
+      "sha256_lf": "1237445237b0de7b0fc2768e2d1f0093e087d2d0a0851f24bc8ac26bdcc5be8a"
+    },
+    {
+      "path": "ontology/lqlequiv.ttl",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/lqlequiv.ttl",
+      "sha256_lf": "1dd461596dee677407102041e6b9f661df21910263340e83ca6b9bbf0a13bc23"
+    },
+    {
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/LICENSE",
+      "sha256_lf": "45ee8c16c0bcb29337d6549cd074f07ea18577e9840140333318e4a593d7317b"
+    },
+    {
+      "path": "external/LQL-Equiv-web/LICENSE",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/LQL-Equiv-web/dfc9a338205b8864b8e3470c4ae245b019e88844/LICENSE",
+      "sha256_lf": "737e1e4a98810302c856a118ca717186aca2ade17f1bf8bdf90f097befa0921e"
+    },
+    {
+      "path": "external/LQL-Equiv-web/src/lqlequiv/model.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/LQL-Equiv-web/dfc9a338205b8864b8e3470c4ae245b019e88844/src/lqlequiv/model.py",
+      "sha256_lf": "3e0638c077e2fd9a04fedf7520a8e0c008f88d61b6e28974abd9533d681e0800"
+    },
+    {
+      "path": "external/LQL-Equiv-web/src/lqlequiv/schedule.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/LQL-Equiv-web/dfc9a338205b8864b8e3470c4ae245b019e88844/src/lqlequiv/schedule.py",
+      "sha256_lf": "7cffecd6e82acf536521aab1c1f58ae997a6754d43185ae6d317752c057f7dfa"
+    },
+    {
+      "path": "external/LQL-Equiv-web/src/lqlequiv/tissues.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/LQL-Equiv-web/dfc9a338205b8864b8e3470c4ae245b019e88844/src/lqlequiv/tissues.py",
+      "sha256_lf": "9ef2ff4d9a93b040697e5199d6902ce0ca9888474591de56126accf826a05c15"
+    },
+    {
+      "path": "external/LQL-Equiv-web/src/lqlequiv/__init__.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/LQL-Equiv-web/dfc9a338205b8864b8e3470c4ae245b019e88844/src/lqlequiv/__init__.py",
+      "sha256_lf": "2685b5a34b0da98c8329928f1de533ec6619178c2e2e89e92d48e231ad7a9d82"
+    },
+    {
+      "path": "external/LQL-Equiv-web/src/lqlequiv/data/tissues.json",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/LQL-Equiv-web/dfc9a338205b8864b8e3470c4ae245b019e88844/src/lqlequiv/data/tissues.json",
+      "sha256_lf": "63283344abdc8147da7e112e0a5d728d1dc0bc565ad9950e9e5adccd08027f61"
+    },
+    {
+      "path": "external/LQL-Equiv-web/src/lqlequiv/data/__init__.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/LQL-Equiv-web/dfc9a338205b8864b8e3470c4ae245b019e88844/src/lqlequiv/data/__init__.py",
+      "sha256_lf": "c849ce7dc4c2cd921e57faf5ffa453f8772eeed07367af69f1f9d7288f1741dd"
+    }
+  ]
+}

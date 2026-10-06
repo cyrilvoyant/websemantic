@@ -11,13 +11,13 @@
     "namespace": "websemantic.lql",
     "definition": "LQL-Equiv : équivalences radiobiologiques",
     "descriptor": "lqlequiv",
-    "available": false
+    "available": true
   },
   {
-    "id": "pvlib",
-    "namespace": "websemantic.pvlib",
-    "definition": "pvlib : modélisation des systèmes photovoltaïques",
-    "descriptor": "pvlib",
-    "available": false
+    "id": "pyrcel",
+    "namespace": "websemantic.pyrcel",
+    "definition": "pyrcel : activation des aérosols dans une parcelle ascendante",
+    "descriptor": "pyrcel",
+    "available": true
   }
 ]

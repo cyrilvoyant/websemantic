@@ -4,3 +4,6 @@
 [submodule "external/LQL-Equiv-web"]
 	path = external/LQL-Equiv-web
 	url = https://github.com/cyrilvoyant/LQL-Equiv-web.git
+[submodule "external/pyrcel"]
+	path = external/pyrcel
+	url = https://github.com/darothen/pyrcel.git

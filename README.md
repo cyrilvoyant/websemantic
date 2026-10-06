@@ -1,6 +1,6 @@
 # WebSemantic
 
-Préparer une simulation TLS en phrases, examiner les hypothèses et obtenir des résultats avec leurs unités et leur provenance.
+Préparer une simulation en phrases, examiner les hypothèses et obtenir des résultats avec leurs unités et leur provenance. Trois profils : TLS, LQL-Equiv (un cursus fictif) et pyrcel (un mode d’aérosol, ascendance constante).
 
 ## Avec un agent Python
 
@@ -8,7 +8,7 @@ Lisez [le point d’entrée agent](agent/README.md). Il indique les fichiers à 
 
 ## Utiliser
 
-Dans le package Windows, ouvrez `Installer.cmd` une fois, puis `WebSemantic.cmd` et choisissez TLS.
+Dans le package Windows, ouvrez `Installer.cmd` une fois, puis `WebSemantic.cmd` et choisissez 1 (TLS), 2 (LQL) ou 3 (pyrcel).
 
 > Étudie un tunnel fictif de 2 km, deux tubes et deux voies par tube, avec éclairage LED fixe et ventilation longitudinale. Propose les paramètres manquants.
 
@@ -18,17 +18,25 @@ Le [guide](packaging/windows/Guide.txt) propose quatre essais, dont une comparai
 
 ## Installer depuis GitHub
 
-Python 3.10+ et Git sont nécessaires. Configurez `GEMINI_API_KEY` pour le dialogue.
+Python 3.12+ et Git sont nécessaires pour installer les trois profils depuis GitHub. Configurez `GEMINI_API_KEY` pour le dialogue.
 
 ```powershell
 git clone --recurse-submodules https://github.com/cyrilvoyant/websemantic.git
 cd websemantic
 python -m venv .venv
-& .\.venv\Scripts\python.exe -m pip install -e ".[tls]"
+& .\.venv\Scripts\python.exe -m pip install -e ".[tls,atmosphere]"
 & .\.venv\Scripts\python.exe -m websemantic.cli chat
 ```
 
 [Installation](docs/installation-windows.md) · [Dialogue et raccourcis](docs/terminal.md)
+
+## Autres profils
+
+LQL : « Étudie un schéma fictif rectum/prostate : 20 fractions de 3 Gy, référence 2 Gy. Propose les hypothèses manquantes. »
+
+pyrcel : « Simule une parcelle à 1 m/s, 283 K, 850 hPa et S0 = -0,02 ; un mode lognormal de 1000 particules/cm³, rayon sec médian 0,05 µm, sigma 2, kappa 0,54. Propose les réglages manquants. »
+
+Examinez les paramètres et leurs unités, puis acceptez les hypothèses. LQL sert à la recherche sur des schémas fictifs ; pyrcel simule une parcelle idéale.
 
 ## Résultats
 

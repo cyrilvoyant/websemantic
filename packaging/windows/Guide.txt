@@ -6,7 +6,7 @@ Quatre essais à copier. Pour un retour, indiquez la demande, la réponse et le 
 
 Décompressez le package, puis double-cliquez sur Installer.cmd, une seule fois.
 L’installation conserve les composants déjà compatibles et vérifie un court calcul TLS. Les nouveaux packages réutilisent la même installation.
-Pour chaque utilisation, ouvrez WebSemantic.cmd et choisissez 1 (TLS).
+Pour chaque utilisation, ouvrez WebSemantic.cmd et choisissez 1 (TLS), 2 (LQL) ou 3 (pyrcel).
 Si un composant manque, le lanceur vous invite à relancer Installer.cmd.
 
 Internet est nécessaire. La clé Gemini est fournie pour cet essai : gardez le package privé.
@@ -68,3 +68,21 @@ Ouvrez votre service habituel avec navigation et exécution Python, puis collez 
 
 Utilise TLS depuis https://github.com/cyrilvoyant/websemantic avec tes outils Python. Calcule la consommation d’un tunnel fictif de 2 km, 2 tubes, 2 voies par tube, périurbain, LED fixe et ventilation longitudinale, sur 30 jours dès le 01/01/2025, au pas de 15 min, avec 10 réalisations. J’accepte les autres défauts. Réponds brièvement en français : énergie (MWh), énergie annualisée (MWh/an, extrapolation), pic (kW) et lien vers les fichiers. Trace les paramètres, hypothèses, sources et détails d’exécution dans les fichiers, sans les détailler à l’écran.
 
+
+AUTRES ENVIRONNEMENTS
+
+LQL — choisissez 2. Un seul cursus fictif, pour recherche et enseignement.
+
+Étudie un schéma fictif : rectum et prostate, 20 fractions de 3 Gy, référence 2 Gy. Propose les informations manquantes sans les accepter.
+
+Montre les paramètres, leurs unités et les coefficients utilisés.
+
+J’accepte les hypothèses proposées ; calcule et explique les EQD en Gy.
+
+pyrcel — choisissez 3. Une parcelle idéale avec un seul mode d’aérosol.
+
+Simule une parcelle à 1 m/s, 283 K, 850 hPa, S0 = -0,02. Un mode lognormal : 1000 particules/cm³, rayon sec médian 0,05 µm, sigma 2 et kappa 0,54. Propose les réglages numériques.
+
+Montre les paramètres avec leurs unités ; explique le rayon médian et la durée maximale.
+
+J’accepte les hypothèses proposées. Calcule et donne la sursaturation maximale et les particules activées, avec leurs unités.

@@ -23,14 +23,14 @@ function Install-Tool($packageId) {
         throw 'Installation automatique indisponible : installez App Installer (winget) depuis le Microsoft Store, puis relancez.'
     }
     Write-Host "Installation de $packageId..."
-    & winget install --id $packageId --exact --source winget --silent --accept-package-agreements --accept-source-agreements
+    & winget install --id $packageId --architecture x64 --exact --source winget --silent --accept-package-agreements --accept-source-agreements
     if ($LASTEXITCODE -ne 0) { throw "Installation de $packageId échouée. Vérifiez les droits et la connexion Internet." }
     Refresh-Tools
 }
 function Find-Python {
     $candidates = @()
     if (Get-Command py -ErrorAction SilentlyContinue) {
-        $found = & py -3 -c 'import sys; print(sys.executable) if sys.version_info >= (3,10) else None' 2>$null
+        $found = & py -3 -c 'import sys; print(sys.executable) if sys.version_info >= (3,12) else None' 2>$null
         if ($LASTEXITCODE -eq 0 -and $found) { $candidates += [string]$found }
     }
     if (Get-Command python -ErrorAction SilentlyContinue) { $candidates += (Get-Command python).Source }
@@ -43,7 +43,7 @@ function Find-Python {
     }
     foreach ($candidate in $candidates) {
         if (-not (Test-Path -LiteralPath $candidate)) { continue }
-        & $candidate -c 'import sys,venv; sys.exit(0 if sys.version_info >= (3,10) else 1)' 2>$null
+        & $candidate -c 'import sys,venv,struct; sys.exit(0 if sys.version_info >= (3,12) and struct.calcsize(chr(80)) == 8 else 1)' 2>$null
         if ($LASTEXITCODE -eq 0) { return $candidate }
     }
     return $null
@@ -53,15 +53,10 @@ function Find-Python {
 $ErrorActionPreference = 'Continue'
 try {
     Refresh-Tools
-    if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
-        Install-Tool 'Git.Git'
-    }
-    & git --version
-    if ($LASTEXITCODE -ne 0) { throw 'Git ne fonctionne pas après installation.' }
     $pythonExecutable = Join-Path $PSScriptRoot '.venv\Scripts\python.exe'
     $environmentReady = $false
     if (Test-Path -LiteralPath $pythonExecutable) {
-        & $pythonExecutable -c 'import sys; sys.exit(0 if sys.version_info >= (3,10) else 1)' 2>$null
+        & $pythonExecutable -c 'import sys,struct; sys.exit(0 if sys.version_info >= (3,12) and struct.calcsize(chr(80)) == 8 else 1)' 2>$null
         $environmentReady = $LASTEXITCODE -eq 0
     }
     if (-not $environmentReady) {
@@ -81,8 +76,8 @@ try {
         & $basePython -m venv .venv 2>&1 | ForEach-Object { $_.ToString() } | Tee-Object -FilePath $creationLog
         if ($LASTEXITCODE -ne 0) { throw "Création Python impossible. Détail complet dans $creationLog" }
     }
-    & $pythonExecutable -c 'import sys; sys.exit(0 if sys.version_info >= (3, 10) else 1)'
-    if ($LASTEXITCODE -ne 0) { throw 'Python 3.10 ou supérieur est requis.' }
+    & $pythonExecutable -c 'import sys; sys.exit(0 if sys.version_info >= (3, 12) else 1)'
+    if ($LASTEXITCODE -ne 0) { throw 'Python 3.12 ou supérieur est requis.' }
     & $pythonExecutable (Join-Path $PSScriptRoot 'verifier-installation.py') --dependencies-only
     $dependenciesReady = $LASTEXITCODE -eq 0
     if (-not $dependenciesReady) {
@@ -92,8 +87,12 @@ try {
             & $pythonExecutable -m ensurepip
             if ($LASTEXITCODE -ne 0) { throw 'pip est absent et sa réparation a échoué.' }
         }
-        & $pythonExecutable -m pip install -e '.[tls]'
-        if ($LASTEXITCODE -ne 0) { throw 'Installation échouée. Vérifiez la connexion puis relancez.' }
+        $dependencyLog = Join-Path $PSScriptRoot 'installation-diagnostic.txt'
+        & $pythonExecutable -c 'import sys,platform,struct; print(sys.version); print(struct.calcsize(chr(80))*8); print(platform.machine())' 2>&1 | ForEach-Object { $_.ToString() } | Tee-Object -FilePath $dependencyLog -Append
+        & $pythonExecutable -m pip install --upgrade pip 2>&1 | ForEach-Object { $_.ToString() } | Tee-Object -FilePath $dependencyLog -Append
+        if ($LASTEXITCODE -ne 0) { throw "Préparation de pip impossible. Détail dans $dependencyLog" }
+        & $pythonExecutable -m pip install --only-binary=:all: -e '.[tls,atmosphere]' 2>&1 | ForEach-Object { $_.ToString() } | Tee-Object -FilePath $dependencyLog -Append
+        if ($LASTEXITCODE -ne 0) { throw "Installation des dépendances échouée (compatibilité Python, accès aux paquets ou réseau). Détail complet dans $dependencyLog" }
         & $pythonExecutable (Join-Path $PSScriptRoot 'verifier-installation.py') --dependencies-only
         if ($LASTEXITCODE -ne 0) { throw 'Les composants restent incomplets après installation.' }
     } else {
@@ -104,23 +103,8 @@ try {
         & $pythonExecutable -m pip check
         if ($LASTEXITCODE -ne 0) { throw 'Dépendances incohérentes. Vérifiez les versions indiquées par pip check.' }
     }
-    $backendPath = Join-Path $PSScriptRoot 'external\tunnel-load-simulator'
-    if (-not (Test-Path -LiteralPath (Join-Path $backendPath 'src\tunnel_load_simulator\simulator.py'))) {
-        & git submodule update --init --recursive
-        if ($LASTEXITCODE -ne 0) { throw 'Les sources TLS sont absentes. Décompressez entièrement le package.' }
-    }
-    @"
-import subprocess, yaml
-from pathlib import Path
-d = yaml.safe_load(Path('descriptors/tls/descriptor.yaml').read_text(encoding='utf-8'))
-p = 'external/tunnel-load-simulator'
-c = subprocess.check_output(['git', '-C', p, 'rev-parse', 'HEAD'], text=True).strip()
-s = subprocess.check_output(['git', '-C', p, 'status', '--porcelain', '--untracked-files=no'], text=True)
-assert c == d['software']['commit'] and not s, 'Version TLS incorrecte ou sources modifiees'
-"@ | & $pythonExecutable -
-    if ($LASTEXITCODE -ne 0) { throw 'Le contrôle du simulateur TLS a échoué.' }
     & $pythonExecutable (Join-Path $PSScriptRoot 'verifier-installation.py') --smoke
-    if ($LASTEXITCODE -ne 0) { throw 'Le test de calcul TLS a échoué. L installation reste à vérifier.' }
+    if ($LASTEXITCODE -ne 0) { throw 'Un test de calcul a échoué. L installation reste à vérifier.' }
     Write-Host 'Vérification terminée. Ouvrez WebSemantic.cmd pour utiliser le programme.'
     exit 0
 } catch {

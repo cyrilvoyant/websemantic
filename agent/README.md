@@ -34,3 +34,11 @@ Pour comparer deux scénarios, le JSON contient `scenario_1` et `scenario_2`, ch
 Lire les CSV et le manifeste. Donner brièvement trois médianes, unités, période et lien vers les fichiers : énergie, énergie annualisée et pic. Mentionner « simulation ; annualisation extrapolée ». Pour une série, préciser la réalisation ou l’agrégation choisie ; conserver l’ensemble des réalisations demandé.
 
 Les paramètres, hypothèses, sources, versions et graines restent dans les fichiers. Donner les détails sur demande. Le contexte est conservé avec le calcul ; le nom de ville seul ne change pas TLS. Signaler en une phrase tout écart du parcours réellement exécuté.
+
+## LQL et pyrcel
+
+[Sources LQL](files-lql.json) · [Sources pyrcel](files-pyrcel.json). Récupérez les fichiers indiqués aux chemins publiés, puis lisez le descripteur et les définitions. LQL couvre un seul cursus fictif ; pyrcel une ascendance constante et un mode lognormal. Ces profils ne donnent ni recommandation clinique ni prévision météorologique.
+
+Construisez un scénario explicite accepté selon l’exemple, chargez-le avec `load_scenario` (`websemantic.replay`, si disponible), ou construisez les enregistrements `Parameter` et `Scenario` du noyau. Chargez le descripteur YAML, puis appelez `websemantic.adapters.lql.run` ou `websemantic.adapters.pyrcel.run` avec le scénario, le descripteur et le dossier des sources. Les dépendances communes sont PyYAML et RDFLib ; pyrcel exige les dépendances numériques de l’extra `atmosphere` du pyproject. Aucun Git ni clé Gemini ne sont requis.
+
+Lisez les CSV et le manifeste avant de répondre. Donnez les unités, le caractère simulé, les hypothèses et les limites ; une EQD invalidée reste absente. Conservez les horodatages natifs pyrcel, y compris la terminaison irrégulière. Les formes SHACL publiées sont testées séparément ; la porte Python reste le contrôle d’exécution.

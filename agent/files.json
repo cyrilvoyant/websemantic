@@ -46,7 +46,7 @@
     {
       "path": "src/websemantic/semantics.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/semantics.py",
-      "sha256_lf": "c9351ee88859cc424e327c72e3a3e229e108a04e8142958ccbde294e67d4e8a4"
+      "sha256_lf": "bd086206e23c54269d494487948d72ab71dd9b9370bdfda05f985fce186e867e"
     },
     {
       "path": "src/websemantic/comparison.py",
@@ -61,7 +61,7 @@
     {
       "path": "src/websemantic/units.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/units.py",
-      "sha256_lf": "9a782b26ad6a1afd2325b5046e2b1fff0ec514a9329f9fa202ecc748ff9a72f0"
+      "sha256_lf": "dfa9f1cb21aabcd3dcb5efd7c21b65f19b61daace8f76cdfa97240672b4a8680"
     },
     {
       "path": "ontology/tls-contract.json",

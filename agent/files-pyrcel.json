@@ -1,0 +1,252 @@
+{
+  "model": "pyrcel",
+  "backend_commit": "977e9094644ec4a17d658d657094651928591c89",
+  "scope": "Reviewed bounded adapter; explicit accepted scenario; no Git required.",
+  "files": [
+    {
+      "path": "src/websemantic/__init__.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/__init__.py",
+      "sha256_lf": "220a73c915e7d09981abc75e80ee1fb122abd6e7bf09021a5e802b9d0243522b"
+    },
+    {
+      "path": "src/websemantic/core/__init__.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/core/__init__.py",
+      "sha256_lf": "5f71e16fc85ce99befa26d975eab06287be71ce5f2b1964a5aa639789d7bbadf"
+    },
+    {
+      "path": "src/websemantic/core/validation.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/core/validation.py",
+      "sha256_lf": "c1ed6ea568d78b75e93a19ff15690e17040c06a4a209b6f089fc7fcc8d3daaff"
+    },
+    {
+      "path": "src/websemantic/adapters/__init__.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/adapters/__init__.py",
+      "sha256_lf": "f7fcc68a7c07d2e431732b4c2d4f2169dc88147e302a66538207020f18eca2d9"
+    },
+    {
+      "path": "src/websemantic/replay.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/replay.py",
+      "sha256_lf": "65086af3ada570dadfa3f1a2c7a89531a0d535f3d81f166fd2f24c189d93bed5"
+    },
+    {
+      "path": "src/websemantic/registry.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/registry.py",
+      "sha256_lf": "ec92768ee8f8b64e0ee4480ed716e26e6777e26f557597823898f1a6eece88e5"
+    },
+    {
+      "path": "src/websemantic/environments.json",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/environments.json",
+      "sha256_lf": "50d4e824a54df620b8866ae56486f52719f83e737ed3a0861c628e4b78831cc7"
+    },
+    {
+      "path": "pyproject.toml",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/pyproject.toml",
+      "sha256_lf": "7a911f7008fa786c50f4950d1369c9f01c652d80b6c2a0794965691841b80c48"
+    },
+    {
+      "path": "src/websemantic/adapters/pyrcel.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/adapters/pyrcel.py",
+      "sha256_lf": "d054a8df75a4368b87ada10600ce803bcb4b2a5086608c8aa70dd5bea4c0d11a"
+    },
+    {
+      "path": "src/websemantic/semantics.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/semantics.py",
+      "sha256_lf": "bd086206e23c54269d494487948d72ab71dd9b9370bdfda05f985fce186e867e"
+    },
+    {
+      "path": "descriptors/pyrcel/descriptor.yaml",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/descriptors/pyrcel/descriptor.yaml",
+      "sha256_lf": "c4b22044ce44ef803e1fc8ffd5250e24105535b336eeb1d1fe421f77c141c270"
+    },
+    {
+      "path": "examples/pyrcel-complete.json",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/examples/pyrcel-complete.json",
+      "sha256_lf": "df01d5484195a6feb678d06431a13206f8d97556eea424c22a904f012e7ef735"
+    },
+    {
+      "path": "docs/pyrcel-contract-definitions.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/docs/pyrcel-contract-definitions.md",
+      "sha256_lf": "0e665fb9a93e59cf9b7ec43217e266f9d35e052fa873fb1fd79b5ede4a9df409"
+    },
+    {
+      "path": "ontology/core.ttl",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/core.ttl",
+      "sha256_lf": "1237445237b0de7b0fc2768e2d1f0093e087d2d0a0851f24bc8ac26bdcc5be8a"
+    },
+    {
+      "path": "ontology/pyrcel.ttl",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/pyrcel.ttl",
+      "sha256_lf": "7efc5848ad70d3dc04b567144cb9a7bc56637444b86b13e251154e54d7e4cef5"
+    },
+    {
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/LICENSE",
+      "sha256_lf": "45ee8c16c0bcb29337d6549cd074f07ea18577e9840140333318e4a593d7317b"
+    },
+    {
+      "path": "external/pyrcel/LICENSE.md",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/LICENSE.md",
+      "sha256_lf": "ba6fb460fbf5a0adc4a2e06cee0f389628a60e473d58bf10b101a3818940c236"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/aerosol.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/aerosol.py",
+      "sha256_lf": "d7fc5c1d055a5d6868aae53430a7d1c0797ff4c8f73caff387aef5900fcfc9c4"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/console_report.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/console_report.py",
+      "sha256_lf": "2f64b98e0bda566582e46a6938c142d1aed361f9f3503f17864b5f153a98bf6e"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/constants.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/constants.py",
+      "sha256_lf": "7d75523d46874bb1faeaff3191f7effe27dc8e6e7866976dd72dc7b6d5df52d8"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/distributions.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/distributions.py",
+      "sha256_lf": "712f41b5e72f54c3cb243d6e7708f8cb014c9f897f97a322ffac1ba832f1eb2e"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/ensemble.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/ensemble.py",
+      "sha256_lf": "856d97c73873061dfeae77c69db5da23d3b15019864808a9180ec6dd66e2641c"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/equilibrate.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/equilibrate.py",
+      "sha256_lf": "c85e21765e25589279d438f405b92bffabeac9115b290bfb76a3f3037cc0ffe7"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/integrator.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/integrator.py",
+      "sha256_lf": "d08876ea45151dd0fc2119aec2d4964dc0028087a904da4d7d006723b3e85992"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/model.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/model.py",
+      "sha256_lf": "6c4cf795c682e4acb4b6531b4cd1fc3bf6b0689df9d046625862f0b8ef1ad5f0"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/model_output.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/model_output.py",
+      "sha256_lf": "7214480542a6248ee914cd0e5709fd5223faf65f022bee3d6eea147ec0f64a3d"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/output.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/output.py",
+      "sha256_lf": "d7e543ed4d73fd853421f7106b0503dd3991c93a90082adfb180d2935514c472"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/parcel_aux.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/parcel_aux.py",
+      "sha256_lf": "07d56e3854d16acf309666d1444136fb1c52d5652d29442482a2047eadc91735"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/thermo.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/thermo.py",
+      "sha256_lf": "779d453484e25b708afda3517f9d8f1303dd40c5ee1ead77c9ac01119cdccd80"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/updraft.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/updraft.py",
+      "sha256_lf": "f299171a7da17bbf206fe82b8a15a137e84265c2268b5489d32570e0f5a499ba"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/util.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/util.py",
+      "sha256_lf": "7a1e64350e830870a5582822d2c93518cf18638e723fdc3333299855760db352"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/_types.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/_types.py",
+      "sha256_lf": "8e72187aa2c824f7adc4c784dcad676fc082b0487a422809a4619236eeb4561a"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/__init__.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/__init__.py",
+      "sha256_lf": "e4a30cbc78b63ef61c5a32f852a27362096c60a97f82c075b290a85acf050639"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/activation/_arg2000.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/activation/_arg2000.py",
+      "sha256_lf": "e107a9c8ac418b09a9e6717bf14d108280ed02c2fc0ac159403cfb45d15f2ead"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/activation/_common.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/activation/_common.py",
+      "sha256_lf": "383585cd6c00f2a9a7b940e3b7fa539132aba0981ac67db5f8ad061ec374514c"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/activation/_mbn2014.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/activation/_mbn2014.py",
+      "sha256_lf": "dd96adaa9c0282324b072dcf9f51dcac72507c75c0bb85d3cb7ee3f7a9f1a79d"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/activation/_scheme.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/activation/_scheme.py",
+      "sha256_lf": "f3976646eba72b0b81c4538be92c92fed60c39e4ec7a05bab6e204b9174254c7"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/activation/__init__.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/activation/__init__.py",
+      "sha256_lf": "9dd0d8a8e2246f6cc8e7aba01bc493c2cad47c9144752908f9a1e251a207cfd2"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/legacy/activation.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/legacy/activation.py",
+      "sha256_lf": "f1e283f36d95ae373f705245f46d9beffebaed071a2e4e5ea8af1b81c8b4145d"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/legacy/postprocess.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/legacy/postprocess.py",
+      "sha256_lf": "4b763e13f904cd5c0662fbd43dc52e77acbedee61a6aaf9e7d19962216653dbc"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/legacy/thermo.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/legacy/thermo.py",
+      "sha256_lf": "94e21fd06e573ebbadcf7e0ff5b2831f4e06b08f8e02ae185aeaae89e2c61a32"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/legacy/vis.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/legacy/vis.py",
+      "sha256_lf": "932c8ded03dcf9daeea05a6f9a5c8021841204d92afa32e1dcf85042e9b58a0d"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/legacy/__init__.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/legacy/__init__.py",
+      "sha256_lf": "21ec0430ebb1bfdeef5e73bdf1f4227c23d83bc4d460b94a4f658f23bd45d34a"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/scripts/run_parcel.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/scripts/run_parcel.py",
+      "sha256_lf": "d8a45a5f535f469cd8ec6d9bfbc645bd3d28bc1dfc0cdc1f4496a1ccd5d40f4d"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/scripts/__init__.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/scripts/__init__.py",
+      "sha256_lf": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/test/generate_data.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/test/generate_data.py",
+      "sha256_lf": "5fcb1e9f4840c56e4834bbdfa8b3bf25dcd1fe09990f5e24998f3fa3a86165a7"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/test/pm_test.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/test/pm_test.py",
+      "sha256_lf": "f0733f17aadccb1620e7c453c46647f9588c39bd7d2f5e79c165ad6671934ad8"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/test/test_thermo.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/test/test_thermo.py",
+      "sha256_lf": "3f6f0bcb7ccec593246c5578fde57c3bcacc63729b3b1bc859da453c2f3b54d3"
+    },
+    {
+      "path": "external/pyrcel/pyrcel/test/__init__.py",
+      "url": "https://raw.githubusercontent.com/darothen/pyrcel/977e9094644ec4a17d658d657094651928591c89/pyrcel/test/__init__.py",
+      "sha256_lf": "aedf1b7eccb3cfb02226205f82309a1290079ce31ed5204325781ee2bf368fc7"
+    }
+  ]
+}

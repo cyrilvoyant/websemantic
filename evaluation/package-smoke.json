@@ -1,0 +1,25 @@
+{
+  "scope": "Extracted private source package, existing dependency environment; no fresh Windows installation or Gemini call.",
+  "python": "3.12.14",
+  "system": "Windows",
+  "models": [
+    {
+      "model": "tls",
+      "source_commit": "748e053e129669cf3e896d381e3c0ac01c763edd",
+      "csv_count": 5,
+      "finite_or_qualified_null": true
+    },
+    {
+      "model": "lql",
+      "source_commit": "dfc9a338205b8864b8e3470c4ae245b019e88844",
+      "csv_count": 1,
+      "finite_or_qualified_null": true
+    },
+    {
+      "model": "pyrcel",
+      "source_commit": "977e9094644ec4a17d658d657094651928591c89",
+      "csv_count": 3,
+      "finite_or_qualified_null": true
+    }
+  ]
+}

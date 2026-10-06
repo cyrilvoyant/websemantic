@@ -56,11 +56,13 @@ def parse_number(value, kind):
 def normalize(value, unit, evidence, spec):
     canonical = spec.get('unit')
     conversion = spec.get('evidence_conversion')
+    if conversion and conversion.get('trigger_regex') and not re.search(conversion['trigger_regex'], fold(evidence)):
+        conversion = None
     if conversion:
         units = conversion['units']
         text = fold(evidence)
         alternatives = '|'.join(re.escape(name) for name in sorted(units, key=len, reverse=True))
-        matches = re.findall(r'(?<![\w.,])([+-]?\d(?:[\d \u00a0\u202f]*\d)?(?:[.,]\d+)?)\s*(' + alternatives + r')\b', text)
+        matches = re.findall(r'(?<![\w.,])([+-]?\d(?:[\d \u00a0\u202f]*\d)?(?:[.,]\d+)?)\s*(' + alternatives + r')(?!\w)', text)
         if not matches:
             words = conversion.get('word_numbers', {})
             if words:
@@ -70,17 +72,21 @@ def normalize(value, unit, evidence, spec):
             raise ValueError('Fournir une preuve avec une seule valeur et une unité explicitement déclarée.')
         number, symbol = matches[0]
         original = numeric_literal(number)
-        factor = units[symbol]
-        source = f'Exact normalisation: {original} {symbol} x {factor} -> {canonical}'
+        rule = units[symbol]
+        factor = rule['factor'] if isinstance(rule, dict) else rule
+        offset = rule.get('offset', 0) if isinstance(rule, dict) else 0
+        converted = original * factor + offset
+        source = f'Exact normalisation: {original} {symbol} x {factor} + {offset} -> {canonical}'
         if unit == canonical or unit in spec.get('unit_aliases', []):
             interpreted = value
         elif unit in units:
-            interpreted = value * units[unit]
+            unit_rule = units[unit]
+            interpreted = value * (unit_rule['factor'] if isinstance(unit_rule, dict) else unit_rule) + (unit_rule.get('offset', 0) if isinstance(unit_rule, dict) else 0)
         else:
             interpreted = None
-        if interpreted is not None and interpreted != original * factor:
-            source += f'; Extraction divergence: LLM value {value!r} {unit!r} -> {interpreted!r} {canonical}; evidence {evidence!r} -> {original * factor!r} {canonical}; exact evidence takes precedence.'
-        return original * factor, canonical, source
+        if interpreted is not None and interpreted != converted:
+            source += f'; Extraction divergence: LLM value {value!r} {unit!r} -> {interpreted!r} {canonical}; evidence {evidence!r} -> {converted!r} {canonical}; exact evidence takes precedence.'
+        return converted, canonical, source
     if unit != canonical and unit in spec.get('unit_aliases', []):
         return value, canonical, f'Unit label normalisation: {unit!r} -> {canonical!r}; numeric value unchanged.'
     return value, unit, None

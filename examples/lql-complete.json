@@ -1,0 +1,64 @@
+{
+  "request": "Cas fictif de recherche : Rectum, Prostate, 39 fractions de 2 Gy.",
+  "task": "simulate fictitious radiobiological fractionation",
+  "inputs": {
+    "organ": {
+      "value": "Rectum",
+      "unit": null,
+      "origin": "assumption",
+      "source": "Explicit fictitious complete LQL example",
+      "accepted": true
+    },
+    "tumour_site": {
+      "value": "Prostate",
+      "unit": null,
+      "origin": "assumption",
+      "source": "Explicit fictitious complete LQL example",
+      "accepted": true
+    },
+    "dose_per_fraction": {
+      "value": 2.0,
+      "unit": "unit:GRAY",
+      "origin": "assumption",
+      "source": "Explicit fictitious complete LQL example",
+      "accepted": true
+    },
+    "n_fractions": {
+      "value": 39,
+      "unit": "unit:NUM",
+      "origin": "assumption",
+      "source": "Explicit fictitious complete LQL example",
+      "accepted": true
+    },
+    "gap_days": {
+      "value": 0.0,
+      "unit": "unit:DAY",
+      "origin": "assumption",
+      "source": "Explicit fictitious complete LQL example",
+      "accepted": true
+    },
+    "reference_dose": {
+      "value": 2.0,
+      "unit": "unit:GRAY",
+      "origin": "assumption",
+      "source": "Explicit fictitious complete LQL example",
+      "accepted": true
+    },
+    "bifractionated": {
+      "value": "no",
+      "unit": null,
+      "origin": "assumption",
+      "source": "Explicit fictitious complete LQL example",
+      "accepted": true
+    }
+  },
+  "experiment": {
+    "scenario_scope": {
+      "value": "fictitious",
+      "unit": null,
+      "origin": "assumption",
+      "source": "Explicit fictitious complete LQL example",
+      "accepted": true
+    }
+  }
+}

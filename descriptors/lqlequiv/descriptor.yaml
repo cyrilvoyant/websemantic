@@ -1,16 +1,316 @@
-# Descriptor stub for LQL-Equiv (held-out case 1).
-# Not to be completed before the core is frozen (tag core-frozen). Only identity is recorded now.
-
 software:
   name: LQL-Equiv
   version: 3.0.0+dfc9a33
   repository: https://github.com/cyrilvoyant/LQL-Equiv-web
   commit: dfc9a338205b8864b8e3470c4ae245b019e88844
-  doi: 10.5281/zenodo.21948623
   licence: MIT
   entry_point: lqlequiv:compute
-  status: research and education only; not a medical device
-
+nature: Deterministic radiobiological model for fictitious research examples; not
+  observed clinical outcomes
+inputs:
+  organ:
+    type: category
+    unit: null
+    label: Organe à risque
+    display_unit: sans unité
+    definition: Nom exact dans la bibliothèque radiobiologique ; ne définit pas un
+      patient.
+    values:
+    - Temporomandibular joint
+    - Rib cage
+    - Oral cavity / oropharynx
+    - Brain
+    - Optic chiasm
+    - Heart
+    - Colon
+    - Stomach
+    - Liver
+    - Small bowel
+    - Larynx / supraglottis
+    - Spinal cord
+    - Oral mucosa
+    - Muscle / vasculature / cartilage
+    - Optic nerve
+    - Eye
+    - Oesophagus
+    - Middle / external ear
+    - Parotid
+    - Skin (acute)
+    - Skin (late)
+    - Brachial plexus
+    - Lung
+    - Cauda equina
+    - Rectum
+    - Kidney
+    - Retina
+    - Testis
+    - Femoral head
+    - Thyroid
+    - Brainstem
+    - Bladder
+    - Standard acute-responding tissue
+    - Standard late-responding tissue
+    ontology_concept: LQL_organ
+  tumour_site:
+    type: category
+    unit: null
+    label: Site tumoral
+    display_unit: sans unité
+    definition: Nom exact dans la bibliothèque ; cas fictif uniquement.
+    values:
+    - Tonsil
+    - Carcinoma
+    - Cervix (LQ-L)
+    - Vocal cord
+    - Glioblastoma (LQ-L)
+    - Larynx
+    - Liposarcoma
+    - Medulloblastoma (LQ-L)
+    - Oral mucosa
+    - Nasopharynx
+    - Oesophagus
+    - Oropharynx
+    - Skin carcinoma
+    - Skin melanoma (LQ-L)
+    - Lung
+    - Prostate
+    - Rectum
+    - Breast carcinoma
+    - Standard tumour
+    - Standard tumour, no proliferation
+    ontology_concept: LQL_tumour_site
+  dose_per_fraction:
+    type: float
+    unit: unit:GRAY
+    label: Dose par fraction
+    display_unit: Gy
+    definition: Dose physique pour chaque fraction du seul cursus.
+    bounds:
+      min_exclusive: 0
+      authority: WebSemantic task profile; stricter than backend permissive constructor
+    unit_aliases:
+    - Gy
+    - gray
+    - grays
+    - gy
+    ontology_concept: LQL_dose_per_fraction
+    group_instance: course-1
+    qualitative_scale:
+      authority: LQL reference fractionation convention; proposed not accepted
+      levels:
+        conventional:
+          value: 2
+          aliases:
+          - fractionnement conventionnel
+          - dose conventionnelle
+      interpretation: Convention de fractionnement proposée ; hypothèse à accepter,
+        pas prescription.
+  n_fractions:
+    type: int
+    unit: unit:NUM
+    label: Fractions
+    display_unit: nombre
+    definition: Nombre entier de fractions du seul cursus.
+    bounds:
+      min: 1
+      authority: WebSemantic task profile; stricter than backend permissive constructor
+    unit_aliases:
+    - nombre
+    - fractions
+    - '1'
+    - null
+    ontology_concept: LQL_n_fractions
+    group_instance: course-1
+  gap_days:
+    type: float
+    unit: unit:DAY
+    label: Interruption
+    display_unit: j
+    definition: Intervalle avant le cursus en jours, dans la convention calendaire
+      native.
+    default: 0
+    bounds:
+      min: 0
+      authority: WebSemantic task profile; stricter than backend permissive constructor
+    unit_aliases:
+    - j
+    - jour
+    - jours
+    - day
+    - days
+    ontology_concept: LQL_gap_days
+    group_instance: course-1
+  reference_dose:
+    type: float
+    unit: unit:GRAY
+    label: Dose de référence
+    display_unit: Gy
+    definition: Dose physique par fraction du régime auquel EQD se rapporte ; EQD2
+      seulement si 2 Gy.
+    default: 2
+    bounds:
+      min_exclusive: 0
+      authority: WebSemantic task profile; stricter than backend permissive constructor
+    unit_aliases:
+    - Gy
+    - gy
+    - gray
+    ontology_concept: LQL_reference_dose
+  bifractionated:
+    type: category
+    unit: null
+    label: Deux fractions par jour
+    display_unit: sans unité
+    definition: yes active deux fractions par jour et un intervalle natif fixe de
+      6 h ; no sinon.
+    default: 'no'
+    values:
+    - 'yes'
+    - 'no'
+    ontology_concept: LQL_bifractionated
+experiment:
+  scenario_scope:
+    type: category
+    unit: null
+    label: Cadre
+    display_unit: sans unité
+    definition: Scénario fictif de recherche, sans décision clinique.
+    values:
+    - fictitious
+outputs:
+  physical_dose_gy:
+    display_unit: Gy
+    definition: Dose physique totale = dose par fraction × fractions ; distincte de
+      BED.
+    unit: unit:GRAY
+    ontology_concept: LQL_total_dose
+  bed_oar:
+    display_unit: Gy
+    definition: BED organe native ; null si non calculable.
+    unit: unit:GRAY
+    ontology_concept: LQL_bed_oar
+  bed_tumour:
+    display_unit: Gy
+    definition: BED tumeur native ; null si non calculable.
+    unit: unit:GRAY
+    ontology_concept: LQL_bed_tumour
+  eqd_oar_total:
+    display_unit: Gy
+    definition: Dose équivalente organe au fractionnement de référence ; null si invalide
+      ou saturée.
+    unit: unit:GRAY
+    ontology_concept: LQL_eqd_oar_total
+  eqd_tumour_total:
+    display_unit: Gy
+    definition: Dose équivalente tumeur au fractionnement de référence ; null si invalide
+      ou saturée.
+    unit: unit:GRAY
+    ontology_concept: LQL_eqd_tumour_total
+  ntcp_percent:
+    display_unit: '%'
+    definition: Probabilité modélisée de complication ; null si EQD invalide ou coefficient
+      absent.
+    unit: unit:PERCENT
+    ontology_concept: LQL_ntcp
+  tcp_percent:
+    display_unit: '%'
+    definition: Probabilité modélisée de contrôle tumoral ; null si EQD invalide ou
+      coefficient absent.
+    unit: unit:PERCENT
+    ontology_concept: LQL_tcp_percent
+  cancer_risk:
+    display_unit: null
+    definition: Indice natif du modèle de risque secondaire ; dépend des coefficients
+      tabulés, ne pas interpréter comme pourcentage clinique.
+    unit: null
+    ontology_concept: LQL_cancer_risk
+  overall_days_oar:
+    display_unit: j
+    definition: Durée calendaire native du cursus, organe.
+    unit: unit:DAY
+    ontology_concept: LQL_overall_days_oar
+  overall_days_tumour:
+    display_unit: j
+    definition: Durée calendaire native du cursus, tumeur.
+    unit: unit:DAY
+    ontology_concept: LQL_overall_days_tumour
+  oar_total_valid:
+    display_unit: null
+    definition: Validité native du total organe.
+    unit: null
+    ontology_concept: LQL_oar_total_valid
+  tumour_total_valid:
+    display_unit: null
+    definition: Validité native du total tumeur.
+    unit: null
+    ontology_concept: LQL_tumour_total_valid
+  oar_saturated:
+    display_unit: null
+    definition: true si EQD organe à une borne de recherche.
+    unit: null
+    ontology_concept: LQL_oar_saturated
+  tumour_saturated:
+    display_unit: null
+    definition: true si EQD tumeur à une borne de recherche.
+    unit: null
+    ontology_concept: LQL_tumour_saturated
 tasks:
+  supported:
+  - simulate fictitious radiobiological fractionation
   excluded:
-    - any treatment decision, prescription or validation for an individual patient
+  - patient treatment decision
+  - clinical dose prescription
+  - multi-course fractionation
+profile:
+  source: Pinned LQL-Equiv 3.0.0 library and explicitly accepted fictitious research
+    profile
+uncertainty: No fitted confidence interval; tissue parameters are native library coefficients.
+validity_notes:
+- Un seul cursus ; plusieurs cursus demandent un autre profil explicite.
+- Scénarios fictifs de recherche et enseignement ; aucune recommandation clinique.
+- EQD non calculable ou à une borne supprimée ; paramètres et drapeaux restent tracés.
+- Calendrier staircase natif et résolution exacte ; aucune option legacy implicite.
+presentation:
+  results:
+    table: indicators.csv
+    indicators:
+    - - physical_dose_gy
+      - Dose physique
+      - Gy
+    - - eqd_oar_total
+      - EQD organe
+      - Gy
+    - - eqd_tumour_total
+      - EQD tumeur
+      - Gy
+    notes:
+    - Calcul radiobiologique fictif ; EQD se réfère au fractionnement déclaré.
+    recap_fields:
+    - organ
+    - tumour_site
+    - dose_per_fraction
+    - n_fractions
+    - reference_dose
+    deterministic: true
+  namespace: websemantic.lql
+  short_name: LQL
+semantics:
+  namespace: lqlequiv
+runtime:
+  adapter: websemantic.adapters.lql:run
+  backend_path: external/LQL-Equiv-web
+  backend_marker: src/lqlequiv/__init__.py
+interpretation:
+  guidance: Recherche sur un seul cursus fictif. Aucune recommandation pour un patient.
+    Fractionnement conventionnel propose 2 Gy par fraction à accepter ; modéré, fort
+    ou hypofractionné ne déterminent pas une dose ni un nombre de fractions. Plusieurs
+    cursus sont hors du profil. Organes et sites correspondent aux noms de la bibliothèque
+    ; ne jamais choisir un tissu manquant.
+model_equations:
+- id: physical_dose
+  label: Dose physique
+  expression: D = d × n
+  meaning: Dose par fraction fois nombre de fractions ; distincte de la BED native.
+    Les coefficients des tissus et options sont enregistrés dans le manifeste.
+  unit: Gy
+  reference: lqlequiv.model.compute ; dose_per_fraction et n_fractions

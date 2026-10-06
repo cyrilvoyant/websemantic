@@ -1,0 +1,106 @@
+{
+  "request": "Fictitious parcel with explicitly accepted illustrative conditions.",
+  "task": "simulate aerosol activation in a constant-updraft parcel with one lognormal mode",
+  "inputs": {
+    "V": {
+      "value": 1,
+      "unit": "unit:M-PER-SEC",
+      "origin": "assumption",
+      "source": "Explicit fictitious demonstration; not observed atmospheric data",
+      "accepted": true
+    },
+    "T0": {
+      "value": 283,
+      "unit": "unit:K",
+      "origin": "assumption",
+      "source": "Explicit fictitious demonstration; not observed atmospheric data",
+      "accepted": true
+    },
+    "P0": {
+      "value": 85000,
+      "unit": "unit:PA",
+      "origin": "assumption",
+      "source": "Explicit fictitious demonstration; not observed atmospheric data",
+      "accepted": true
+    },
+    "S0": {
+      "value": -0.02,
+      "unit": "unit:UNITLESS",
+      "origin": "assumption",
+      "source": "Explicit fictitious demonstration; not observed atmospheric data",
+      "accepted": true
+    },
+    "N": {
+      "value": 1000,
+      "unit": "unit:NUM-PER-CentiM3",
+      "origin": "assumption",
+      "source": "Explicit fictitious demonstration; not observed atmospheric data",
+      "accepted": true
+    },
+    "mu": {
+      "value": 0.05,
+      "unit": "unit:MicroM",
+      "origin": "assumption",
+      "source": "Explicit fictitious demonstration; not observed atmospheric data",
+      "accepted": true
+    },
+    "sigma": {
+      "value": 2,
+      "unit": "unit:UNITLESS",
+      "origin": "assumption",
+      "source": "Explicit fictitious demonstration; not observed atmospheric data",
+      "accepted": true
+    },
+    "kappa": {
+      "value": 0.54,
+      "unit": "unit:UNITLESS",
+      "origin": "assumption",
+      "source": "Explicit fictitious demonstration; not observed atmospheric data",
+      "accepted": true
+    },
+    "bins": {
+      "value": 50,
+      "unit": "unit:NUM",
+      "origin": "assumption",
+      "source": "Explicit fictitious demonstration; not observed atmospheric data",
+      "accepted": true
+    },
+    "accom": {
+      "value": 1,
+      "unit": "unit:UNITLESS",
+      "origin": "assumption",
+      "source": "Explicit fictitious demonstration; not observed atmospheric data",
+      "accepted": true
+    }
+  },
+  "experiment": {
+    "t_end": {
+      "value": 3000,
+      "unit": "unit:SEC",
+      "origin": "assumption",
+      "source": "Explicit fictitious demonstration; not observed atmospheric data",
+      "accepted": true
+    },
+    "output_dt": {
+      "value": 1,
+      "unit": "unit:SEC",
+      "origin": "assumption",
+      "source": "Explicit fictitious demonstration; not observed atmospheric data",
+      "accepted": true
+    },
+    "terminate": {
+      "value": "yes",
+      "unit": "unit:UNITLESS",
+      "origin": "assumption",
+      "source": "Explicit fictitious demonstration; not observed atmospheric data",
+      "accepted": true
+    },
+    "terminate_depth": {
+      "value": 10,
+      "unit": "unit:M",
+      "origin": "assumption",
+      "source": "Explicit fictitious demonstration; not observed atmospheric data",
+      "accepted": true
+    }
+  }
+}

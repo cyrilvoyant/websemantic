@@ -5,7 +5,6 @@ import importlib
 import importlib.metadata
 import json
 import math
-import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -19,17 +18,29 @@ REQUIRED = {
     'numpy': ('1.24', 'numpy'),
     'pandas': ('2.0', 'pandas'),
 }
+ATMOSPHERE = {
+    'jax': ('0.11.2', 'jax'),
+    'diffrax': ('0.7.2', 'diffrax'),
+    'equinox': ('0.13.8', 'equinox'),
+    'optimistix': ('0.1.0', 'optimistix'),
+    'scipy': ('1.0', 'scipy'),
+    'polars': ('1.0', 'polars'),
+    'xarray': ('2024.1', 'xarray'),
+    'netcdf4': ('1.0', 'netCDF4'),
+}
 
 
-def dependencies():
+def dependencies(include_atmosphere=False):
     problems = []
+    if include_atmosphere and sys.version_info < (3, 12):
+        return ['Python 3.12 ou supérieur est nécessaire pour les trois profils. Relancez Installer.cmd.']
     if sys.version_info < (3, 10):  # noqa: UP036 -- bootstrap may run before supported Python is installed
         return ['Python 3.10 ou supérieur est nécessaire.']
     try:
         from packaging.version import Version
     except ImportError:
         return ['Le composant de vérification des versions (packaging) est absent.']
-    for name, (minimum, module) in REQUIRED.items():
+    for name, (minimum, module) in (REQUIRED | ATMOSPHERE if include_atmosphere else REQUIRED).items():
         try:
             installed = importlib.metadata.version(name)
             if Version(installed) < Version(minimum):
@@ -49,34 +60,27 @@ def dependencies():
 
 
 def runtime(root):
-    problems = dependencies()
+    problems = dependencies(include_atmosphere=True)
     if problems:
         return problems
-    git = shutil.which('git')
-    if not git:
-        return ['Git est introuvable : il est nécessaire pour vérifier la version du simulateur.']
     try:
-        from websemantic.registry import environments, load_descriptor
+        import hashlib
 
-        active = next(item for item in environments() if item['available'])
-        descriptor = load_descriptor(root, active['id'])
-        metadata = descriptor.get('runtime', {})
-        if 'backend_path' not in metadata:
-            return []
-        backend = root / metadata['backend_path']
-        marker = backend / metadata['backend_marker']
-        if not marker.is_file():
-            return ['Les fichiers du simulateur ou son descripteur sont absents.']
-        expected = descriptor['software']['commit']
-        commit = subprocess.check_output([git, '-C', str(backend), 'rev-parse', 'HEAD'], text=True, stderr=subprocess.DEVNULL, timeout=10).strip()
-        dirty = subprocess.check_output([git, '-C', str(backend), 'status', '--porcelain', '--untracked-files=no'], text=True, stderr=subprocess.DEVNULL, timeout=10)
-        if commit != expected or dirty:
-            return ['Le simulateur ne correspond pas à la version de recherche prévue, ou ses sources ont été modifiées.']
-    except FileNotFoundError:
-        return ["Les fichiers du simulateur ou son descripteur sont absents."]
-    except (OSError, subprocess.SubprocessError, KeyError, ValueError, TypeError, StopIteration):
-        return ['La vérification du simulateur est impossible.']
+        from websemantic.adapters.lql import EXPECTED_FILES
+        from websemantic.adapters.pyrcel import verify_source
+        tls = root / 'external/tunnel-load-simulator/src/tunnel_load_simulator/simulator.py'
+        digest = hashlib.sha256(tls.read_bytes().replace(b'\r\n', b'\n')).hexdigest()
+        if digest != '8377b8a26e18d060a7a217721100512625f53fbd4d8aa9d7a3b085bd14663464':
+            return ['Les sources TLS ne correspondent pas à la version attendue.']
+        for name, expected in EXPECTED_FILES.items():
+            path = root / 'external/LQL-Equiv-web/src/lqlequiv' / name
+            if hashlib.sha256(path.read_bytes().replace(b'\r\n', b'\n')).hexdigest() != expected:
+                return ['Les sources LQL ne correspondent pas à la version attendue.']
+        verify_source(root / 'external/pyrcel')
+    except (OSError, ValueError):
+        return ['Sources absentes ou modifiées. Relancez Installer.cmd avec le package complet.']
     return []
+
 
 
 
@@ -109,16 +113,43 @@ def smoke(root):
         return ["Le test de calcul TLS a échoué : " + type(error).__name__ + "."]
     return []
 
+def smoke_transfers(root):
+    """Execute the two bounded transfer examples without loading an LLM key."""
+    try:
+        from dataclasses import replace
+
+        from websemantic.registry import execute, load_descriptor
+        from websemantic.replay import load_scenario
+        with TemporaryDirectory(prefix='websemantic-transfer-check-') as temporary:
+            for model, name in [('lql','lql-complete.json'), ('pyrcel','pyrcel-complete.json')]:
+                descriptor = load_descriptor(root, model)
+                scenario = load_scenario(json.loads((root / 'examples' / name).read_text(encoding='utf-8')))
+                if model == 'pyrcel':
+                    experiment = dict(scenario.experiment)
+                    for field, value in [('t_end',30),('output_dt',5),('terminate','no')]:
+                        experiment[field] = replace(experiment[field],value=value)
+                    scenario = replace(scenario,experiment=experiment)
+                target, indicators = execute(scenario, descriptor, root, temporary)
+                assert (target / 'manifest.json').is_file() and (target / 'semantics.ttl').is_file()
+                assert all(value is None or math.isfinite(value) for value in indicators.values())
+    except (ImportError, OSError, ValueError, KeyError, TypeError, AssertionError, RuntimeError) as error:
+        return ['Test de calcul de transfert échoué : ' + type(error).__name__ + '.']
+    return []
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dependencies-only', action='store_true')
     parser.add_argument('--smoke', action='store_true')
     args = parser.parse_args()
-    problems = dependencies() if args.dependencies_only else runtime(Path(__file__).resolve().parent)
+    problems = dependencies(include_atmosphere=True) if args.dependencies_only else runtime(Path(__file__).resolve().parent)
     if not problems and args.smoke:
-        problems = smoke(Path(__file__).resolve().parent)
+        root = Path(__file__).resolve().parent
+        problems = smoke(root)
         if not problems:
-            print('Test de calcul TLS réussi : 24 pas horaires, une réalisation, fichiers vérifiés.')
+            problems = smoke_transfers(root)
+        if not problems:
+            print('Tests TLS, LQL et pyrcel réussis ; fichiers et unités vérifiés.')
     if problems:
         for problem in problems:
             print(problem)

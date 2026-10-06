@@ -35,13 +35,14 @@ def test_missing_or_old_dependency_has_actionable_diagnostic(monkeypatch, versio
     assert len(problems) == 1 and 'numpy' in problems[0]
 
 
-def test_missing_backend_does_not_launch_or_install(tmp_path):
-    assert 'absents' in check.runtime(tmp_path)[0]
+def test_missing_backend_does_not_launch_or_install(tmp_path, monkeypatch):
+    monkeypatch.setattr(check, "dependencies", lambda **kwargs: [])
+    assert 'absent' in check.runtime(tmp_path)[0]
 
 
-def test_missing_git_is_identified(monkeypatch):
-    monkeypatch.setattr(check.shutil, 'which', lambda _: None)
-    assert 'Git' in check.runtime(ROOT)[0]
+def test_runtime_source_verification_does_not_require_git(monkeypatch):
+    monkeypatch.setattr(check, 'dependencies', lambda **kwargs: [])
+    assert check.runtime(ROOT) == []
 
 
 def test_installer_runs_real_tls_smoke_without_llm(monkeypatch):
