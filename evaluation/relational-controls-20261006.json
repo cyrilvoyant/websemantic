@@ -1,0 +1,1191 @@
+{
+  "scope": "Hand-built paired SHACL mechanism controls; no LLM effect or general success estimate",
+  "inference": "none",
+  "summary": {
+    "scalar": {
+      "invalid_detected": 0,
+      "invalid_total": 12,
+      "valid_rejected": 0,
+      "valid_total": 12
+    },
+    "relational": {
+      "invalid_detected": 12,
+      "invalid_total": 12,
+      "valid_rejected": 0,
+      "valid_total": 12
+    }
+  },
+  "cases": [
+    {
+      "id": "dose-0-False",
+      "family": "dose identity",
+      "invalid": false,
+      "values": [
+        [
+          "LQL_dose_per_fraction",
+          2.0,
+          "course1"
+        ],
+        [
+          "LQL_n_fractions",
+          25,
+          "course1"
+        ],
+        [
+          "LQL_total_dose",
+          50.0,
+          "course1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": true,
+        "messages": []
+      }
+    },
+    {
+      "id": "dose-0-True",
+      "family": "dose identity",
+      "invalid": true,
+      "values": [
+        [
+          "LQL_dose_per_fraction",
+          2.0,
+          "course1"
+        ],
+        [
+          "LQL_n_fractions",
+          25,
+          "course1"
+        ],
+        [
+          "LQL_total_dose",
+          56.0,
+          "course1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": false,
+        "messages": [
+          "Stated total dose of a course disagrees with its dose per fraction x number of fractions (conflict to resolve)."
+        ]
+      }
+    },
+    {
+      "id": "dose-1-False",
+      "family": "dose identity",
+      "invalid": false,
+      "values": [
+        [
+          "LQL_dose_per_fraction",
+          3.0,
+          "course1"
+        ],
+        [
+          "LQL_n_fractions",
+          20,
+          "course1"
+        ],
+        [
+          "LQL_total_dose",
+          60.0,
+          "course1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": true,
+        "messages": []
+      }
+    },
+    {
+      "id": "dose-1-True",
+      "family": "dose identity",
+      "invalid": true,
+      "values": [
+        [
+          "LQL_dose_per_fraction",
+          3.0,
+          "course1"
+        ],
+        [
+          "LQL_n_fractions",
+          20,
+          "course1"
+        ],
+        [
+          "LQL_total_dose",
+          66.0,
+          "course1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": false,
+        "messages": [
+          "Stated total dose of a course disagrees with its dose per fraction x number of fractions (conflict to resolve)."
+        ]
+      }
+    },
+    {
+      "id": "dose-2-False",
+      "family": "dose identity",
+      "invalid": false,
+      "values": [
+        [
+          "LQL_dose_per_fraction",
+          2.5,
+          "course1"
+        ],
+        [
+          "LQL_n_fractions",
+          16,
+          "course1"
+        ],
+        [
+          "LQL_total_dose",
+          40.0,
+          "course1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": true,
+        "messages": []
+      }
+    },
+    {
+      "id": "dose-2-True",
+      "family": "dose identity",
+      "invalid": true,
+      "values": [
+        [
+          "LQL_dose_per_fraction",
+          2.5,
+          "course1"
+        ],
+        [
+          "LQL_n_fractions",
+          16,
+          "course1"
+        ],
+        [
+          "LQL_total_dose",
+          46.0,
+          "course1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": false,
+        "messages": [
+          "Stated total dose of a course disagrees with its dose per fraction x number of fractions (conflict to resolve)."
+        ]
+      }
+    },
+    {
+      "id": "dose-3-False",
+      "family": "dose identity",
+      "invalid": false,
+      "values": [
+        [
+          "LQL_dose_per_fraction",
+          4.0,
+          "course1"
+        ],
+        [
+          "LQL_n_fractions",
+          10,
+          "course1"
+        ],
+        [
+          "LQL_total_dose",
+          40.0,
+          "course1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": true,
+        "messages": []
+      }
+    },
+    {
+      "id": "dose-3-True",
+      "family": "dose identity",
+      "invalid": true,
+      "values": [
+        [
+          "LQL_dose_per_fraction",
+          4.0,
+          "course1"
+        ],
+        [
+          "LQL_n_fractions",
+          10,
+          "course1"
+        ],
+        [
+          "LQL_total_dose",
+          46.0,
+          "course1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": false,
+        "messages": [
+          "Stated total dose of a course disagrees with its dose per fraction x number of fractions (conflict to resolve)."
+        ]
+      }
+    },
+    {
+      "id": "humidity-0-False",
+      "family": "same state",
+      "invalid": false,
+      "values": [
+        [
+          "PYR_V",
+          1.0,
+          "1"
+        ],
+        [
+          "PYR_T0",
+          283.0,
+          "1"
+        ],
+        [
+          "PYR_P0",
+          85000.0,
+          "1"
+        ],
+        [
+          "PYR_N",
+          1000.0,
+          "mode1"
+        ],
+        [
+          "PYR_mu",
+          0.05,
+          "mode1"
+        ],
+        [
+          "PYR_sigma",
+          2.0,
+          "mode1"
+        ],
+        [
+          "PYR_kappa",
+          0.54,
+          "mode1"
+        ],
+        [
+          "PYR_RH",
+          0.98,
+          "1"
+        ],
+        [
+          "PYR_S0",
+          -0.020000000000000018,
+          "1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": true,
+        "messages": []
+      }
+    },
+    {
+      "id": "humidity-0-True",
+      "family": "same state",
+      "invalid": true,
+      "values": [
+        [
+          "PYR_V",
+          1.0,
+          "1"
+        ],
+        [
+          "PYR_T0",
+          283.0,
+          "1"
+        ],
+        [
+          "PYR_P0",
+          85000.0,
+          "1"
+        ],
+        [
+          "PYR_N",
+          1000.0,
+          "mode1"
+        ],
+        [
+          "PYR_mu",
+          0.05,
+          "mode1"
+        ],
+        [
+          "PYR_sigma",
+          2.0,
+          "mode1"
+        ],
+        [
+          "PYR_kappa",
+          0.54,
+          "mode1"
+        ],
+        [
+          "PYR_RH",
+          0.98,
+          "1"
+        ],
+        [
+          "PYR_S0",
+          -1.734723475976807e-17,
+          "1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": false,
+        "messages": [
+          "Relative humidity and initial supersaturation describe one state and disagree (S0 must equal RH_fraction - 1)."
+        ]
+      }
+    },
+    {
+      "id": "humidity-1-False",
+      "family": "same state",
+      "invalid": false,
+      "values": [
+        [
+          "PYR_V",
+          1.0,
+          "1"
+        ],
+        [
+          "PYR_T0",
+          283.0,
+          "1"
+        ],
+        [
+          "PYR_P0",
+          85000.0,
+          "1"
+        ],
+        [
+          "PYR_N",
+          1000.0,
+          "mode1"
+        ],
+        [
+          "PYR_mu",
+          0.05,
+          "mode1"
+        ],
+        [
+          "PYR_sigma",
+          2.0,
+          "mode1"
+        ],
+        [
+          "PYR_kappa",
+          0.54,
+          "mode1"
+        ],
+        [
+          "PYR_RH",
+          0.95,
+          "1"
+        ],
+        [
+          "PYR_S0",
+          -0.050000000000000044,
+          "1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": true,
+        "messages": []
+      }
+    },
+    {
+      "id": "humidity-1-True",
+      "family": "same state",
+      "invalid": true,
+      "values": [
+        [
+          "PYR_V",
+          1.0,
+          "1"
+        ],
+        [
+          "PYR_T0",
+          283.0,
+          "1"
+        ],
+        [
+          "PYR_P0",
+          85000.0,
+          "1"
+        ],
+        [
+          "PYR_N",
+          1000.0,
+          "mode1"
+        ],
+        [
+          "PYR_mu",
+          0.05,
+          "mode1"
+        ],
+        [
+          "PYR_sigma",
+          2.0,
+          "mode1"
+        ],
+        [
+          "PYR_kappa",
+          0.54,
+          "mode1"
+        ],
+        [
+          "PYR_RH",
+          0.95,
+          "1"
+        ],
+        [
+          "PYR_S0",
+          -0.030000000000000044,
+          "1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": false,
+        "messages": [
+          "Relative humidity and initial supersaturation describe one state and disagree (S0 must equal RH_fraction - 1)."
+        ]
+      }
+    },
+    {
+      "id": "humidity-2-False",
+      "family": "same state",
+      "invalid": false,
+      "values": [
+        [
+          "PYR_V",
+          1.0,
+          "1"
+        ],
+        [
+          "PYR_T0",
+          283.0,
+          "1"
+        ],
+        [
+          "PYR_P0",
+          85000.0,
+          "1"
+        ],
+        [
+          "PYR_N",
+          1000.0,
+          "mode1"
+        ],
+        [
+          "PYR_mu",
+          0.05,
+          "mode1"
+        ],
+        [
+          "PYR_sigma",
+          2.0,
+          "mode1"
+        ],
+        [
+          "PYR_kappa",
+          0.54,
+          "mode1"
+        ],
+        [
+          "PYR_RH",
+          0.9,
+          "1"
+        ],
+        [
+          "PYR_S0",
+          -0.09999999999999998,
+          "1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": true,
+        "messages": []
+      }
+    },
+    {
+      "id": "humidity-2-True",
+      "family": "same state",
+      "invalid": true,
+      "values": [
+        [
+          "PYR_V",
+          1.0,
+          "1"
+        ],
+        [
+          "PYR_T0",
+          283.0,
+          "1"
+        ],
+        [
+          "PYR_P0",
+          85000.0,
+          "1"
+        ],
+        [
+          "PYR_N",
+          1000.0,
+          "mode1"
+        ],
+        [
+          "PYR_mu",
+          0.05,
+          "mode1"
+        ],
+        [
+          "PYR_sigma",
+          2.0,
+          "mode1"
+        ],
+        [
+          "PYR_kappa",
+          0.54,
+          "mode1"
+        ],
+        [
+          "PYR_RH",
+          0.9,
+          "1"
+        ],
+        [
+          "PYR_S0",
+          -0.07999999999999997,
+          "1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": false,
+        "messages": [
+          "Relative humidity and initial supersaturation describe one state and disagree (S0 must equal RH_fraction - 1)."
+        ]
+      }
+    },
+    {
+      "id": "humidity-3-False",
+      "family": "same state",
+      "invalid": false,
+      "values": [
+        [
+          "PYR_V",
+          1.0,
+          "1"
+        ],
+        [
+          "PYR_T0",
+          283.0,
+          "1"
+        ],
+        [
+          "PYR_P0",
+          85000.0,
+          "1"
+        ],
+        [
+          "PYR_N",
+          1000.0,
+          "mode1"
+        ],
+        [
+          "PYR_mu",
+          0.05,
+          "mode1"
+        ],
+        [
+          "PYR_sigma",
+          2.0,
+          "mode1"
+        ],
+        [
+          "PYR_kappa",
+          0.54,
+          "mode1"
+        ],
+        [
+          "PYR_RH",
+          0.85,
+          "1"
+        ],
+        [
+          "PYR_S0",
+          -0.15000000000000002,
+          "1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": true,
+        "messages": []
+      }
+    },
+    {
+      "id": "humidity-3-True",
+      "family": "same state",
+      "invalid": true,
+      "values": [
+        [
+          "PYR_V",
+          1.0,
+          "1"
+        ],
+        [
+          "PYR_T0",
+          283.0,
+          "1"
+        ],
+        [
+          "PYR_P0",
+          85000.0,
+          "1"
+        ],
+        [
+          "PYR_N",
+          1000.0,
+          "mode1"
+        ],
+        [
+          "PYR_mu",
+          0.05,
+          "mode1"
+        ],
+        [
+          "PYR_sigma",
+          2.0,
+          "mode1"
+        ],
+        [
+          "PYR_kappa",
+          0.54,
+          "mode1"
+        ],
+        [
+          "PYR_RH",
+          0.85,
+          "1"
+        ],
+        [
+          "PYR_S0",
+          -0.13000000000000003,
+          "1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": false,
+        "messages": [
+          "Relative humidity and initial supersaturation describe one state and disagree (S0 must equal RH_fraction - 1)."
+        ]
+      }
+    },
+    {
+      "id": "group-0-False",
+      "family": "complete aerosol mode",
+      "invalid": false,
+      "values": [
+        [
+          "PYR_V",
+          1.0,
+          "1"
+        ],
+        [
+          "PYR_T0",
+          283.0,
+          "1"
+        ],
+        [
+          "PYR_P0",
+          85000.0,
+          "1"
+        ],
+        [
+          "PYR_S0",
+          -0.02,
+          "1"
+        ],
+        [
+          "PYR_N",
+          1000.0,
+          "mode1"
+        ],
+        [
+          "PYR_mu",
+          0.05,
+          "mode1"
+        ],
+        [
+          "PYR_sigma",
+          2.0,
+          "mode1"
+        ],
+        [
+          "PYR_kappa",
+          0.54,
+          "mode1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": true,
+        "messages": []
+      }
+    },
+    {
+      "id": "group-0-True",
+      "family": "complete aerosol mode",
+      "invalid": true,
+      "values": [
+        [
+          "PYR_V",
+          1.0,
+          "1"
+        ],
+        [
+          "PYR_T0",
+          283.0,
+          "1"
+        ],
+        [
+          "PYR_P0",
+          85000.0,
+          "1"
+        ],
+        [
+          "PYR_S0",
+          -0.02,
+          "1"
+        ],
+        [
+          "PYR_mu",
+          0.05,
+          "mode1"
+        ],
+        [
+          "PYR_sigma",
+          2.0,
+          "mode1"
+        ],
+        [
+          "PYR_kappa",
+          0.54,
+          "mode1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": false,
+        "messages": [
+          "Incomplete parameter group (aerosol mode (N, mu, sigma, kappa all required), instance mode1): all members must be supplied together."
+        ]
+      }
+    },
+    {
+      "id": "group-1-False",
+      "family": "complete aerosol mode",
+      "invalid": false,
+      "values": [
+        [
+          "PYR_V",
+          1.0,
+          "1"
+        ],
+        [
+          "PYR_T0",
+          283.0,
+          "1"
+        ],
+        [
+          "PYR_P0",
+          85000.0,
+          "1"
+        ],
+        [
+          "PYR_S0",
+          -0.02,
+          "1"
+        ],
+        [
+          "PYR_N",
+          1000.0,
+          "mode1"
+        ],
+        [
+          "PYR_mu",
+          0.05,
+          "mode1"
+        ],
+        [
+          "PYR_sigma",
+          2.0,
+          "mode1"
+        ],
+        [
+          "PYR_kappa",
+          0.54,
+          "mode1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": true,
+        "messages": []
+      }
+    },
+    {
+      "id": "group-1-True",
+      "family": "complete aerosol mode",
+      "invalid": true,
+      "values": [
+        [
+          "PYR_V",
+          1.0,
+          "1"
+        ],
+        [
+          "PYR_T0",
+          283.0,
+          "1"
+        ],
+        [
+          "PYR_P0",
+          85000.0,
+          "1"
+        ],
+        [
+          "PYR_S0",
+          -0.02,
+          "1"
+        ],
+        [
+          "PYR_N",
+          1000.0,
+          "mode1"
+        ],
+        [
+          "PYR_sigma",
+          2.0,
+          "mode1"
+        ],
+        [
+          "PYR_kappa",
+          0.54,
+          "mode1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": false,
+        "messages": [
+          "Incomplete parameter group (aerosol mode (N, mu, sigma, kappa all required), instance mode1): all members must be supplied together."
+        ]
+      }
+    },
+    {
+      "id": "group-2-False",
+      "family": "complete aerosol mode",
+      "invalid": false,
+      "values": [
+        [
+          "PYR_V",
+          1.0,
+          "1"
+        ],
+        [
+          "PYR_T0",
+          283.0,
+          "1"
+        ],
+        [
+          "PYR_P0",
+          85000.0,
+          "1"
+        ],
+        [
+          "PYR_S0",
+          -0.02,
+          "1"
+        ],
+        [
+          "PYR_N",
+          1000.0,
+          "mode1"
+        ],
+        [
+          "PYR_mu",
+          0.05,
+          "mode1"
+        ],
+        [
+          "PYR_sigma",
+          2.0,
+          "mode1"
+        ],
+        [
+          "PYR_kappa",
+          0.54,
+          "mode1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": true,
+        "messages": []
+      }
+    },
+    {
+      "id": "group-2-True",
+      "family": "complete aerosol mode",
+      "invalid": true,
+      "values": [
+        [
+          "PYR_V",
+          1.0,
+          "1"
+        ],
+        [
+          "PYR_T0",
+          283.0,
+          "1"
+        ],
+        [
+          "PYR_P0",
+          85000.0,
+          "1"
+        ],
+        [
+          "PYR_S0",
+          -0.02,
+          "1"
+        ],
+        [
+          "PYR_N",
+          1000.0,
+          "mode1"
+        ],
+        [
+          "PYR_mu",
+          0.05,
+          "mode1"
+        ],
+        [
+          "PYR_kappa",
+          0.54,
+          "mode1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": false,
+        "messages": [
+          "Incomplete parameter group (aerosol mode (N, mu, sigma, kappa all required), instance mode1): all members must be supplied together."
+        ]
+      }
+    },
+    {
+      "id": "group-3-False",
+      "family": "complete aerosol mode",
+      "invalid": false,
+      "values": [
+        [
+          "PYR_V",
+          1.0,
+          "1"
+        ],
+        [
+          "PYR_T0",
+          283.0,
+          "1"
+        ],
+        [
+          "PYR_P0",
+          85000.0,
+          "1"
+        ],
+        [
+          "PYR_S0",
+          -0.02,
+          "1"
+        ],
+        [
+          "PYR_N",
+          1000.0,
+          "mode1"
+        ],
+        [
+          "PYR_mu",
+          0.05,
+          "mode1"
+        ],
+        [
+          "PYR_sigma",
+          2.0,
+          "mode1"
+        ],
+        [
+          "PYR_kappa",
+          0.54,
+          "mode1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": true,
+        "messages": []
+      }
+    },
+    {
+      "id": "group-3-True",
+      "family": "complete aerosol mode",
+      "invalid": true,
+      "values": [
+        [
+          "PYR_V",
+          1.0,
+          "1"
+        ],
+        [
+          "PYR_T0",
+          283.0,
+          "1"
+        ],
+        [
+          "PYR_P0",
+          85000.0,
+          "1"
+        ],
+        [
+          "PYR_S0",
+          -0.02,
+          "1"
+        ],
+        [
+          "PYR_N",
+          1000.0,
+          "mode1"
+        ],
+        [
+          "PYR_mu",
+          0.05,
+          "mode1"
+        ],
+        [
+          "PYR_sigma",
+          2.0,
+          "mode1"
+        ]
+      ],
+      "scalar": {
+        "conforms": true,
+        "messages": []
+      },
+      "relational": {
+        "conforms": false,
+        "messages": [
+          "Incomplete parameter group (aerosol mode (N, mu, sigma, kappa all required), instance mode1): all members must be supplied together."
+        ]
+      }
+    }
+  ],
+  "files_sha256": {
+    "ontology\\core.ttl": "1237445237b0de7b0fc2768e2d1f0093e087d2d0a0851f24bc8ac26bdcc5be8a",
+    "ontology\\lqlequiv.ttl": "1dd461596dee677407102041e6b9f661df21910263340e83ca6b9bbf0a13bc23",
+    "ontology\\pyrcel.ttl": "7efc5848ad70d3dc04b567144cb9a7bc56637444b86b13e251154e54d7e4cef5",
+    "ontology\\shapes.ttl": "96fd37fb090e5692dff0e3355c7f8e92cde804475349055745f86457246cc410",
+    "ontology\\tls-vocabulary.ttl": "0ad801abe02c3beabecd4319505329caa80041d1020953b4cea430f4cb0521df"
+  }
+}

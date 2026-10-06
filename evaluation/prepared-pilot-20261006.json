@@ -1,0 +1,57 @@
+{
+  "scope": "One development repetition through dedicated CLI; not multi-provider or document ablation",
+  "model_requested": "gemini-3.5-flash-lite",
+  "domains": {
+    "tls": {
+      "cases": 20,
+      "extraction_calls": 27,
+      "cases_with_runs": 2,
+      "runs": 2,
+      "extract_access_errors": 0,
+      "consent_block_messages": 13,
+      "comparison_unavailable_messages": 0,
+      "explicit_fields_correct": 122,
+      "explicit_fields_checked": 123,
+      "unit_fields_correct": 123
+    },
+    "lqlequiv": {
+      "cases": 20,
+      "extraction_calls": 26,
+      "cases_with_runs": 0,
+      "runs": 0,
+      "extract_access_errors": 0,
+      "consent_block_messages": 0,
+      "comparison_unavailable_messages": 2,
+      "explicit_fields_correct": 0,
+      "explicit_fields_checked": 0,
+      "unit_fields_correct": 0
+    },
+    "pyrcel": {
+      "cases": 20,
+      "extraction_calls": 28,
+      "cases_with_runs": 0,
+      "runs": 0,
+      "extract_access_errors": 0,
+      "consent_block_messages": 7,
+      "comparison_unavailable_messages": 2,
+      "explicit_fields_correct": 0,
+      "explicit_fields_checked": 0,
+      "unit_fields_correct": 0
+    }
+  },
+  "completed_cases": 60,
+  "stopped_on_access_error": false,
+  "extraction_calls_only": true,
+  "limits": [
+    "Web/geographic research calls are not included in extraction-call counts.",
+    "Cases with outputs are not automatically task successes.",
+    "Field accuracy covers only corpus explicit expected_fields, not all outputs or all domains.",
+    "Some reference tasks exceed the implemented single-course/single-mode profiles.",
+    "No confirmatory success rate, ontology LLM effect or provider comparison is estimated."
+  ],
+  "numerical": {
+    "reference_matched_cases": 2,
+    "vectors": 4,
+    "maximum_nrmsd": 2.2269991350471844e-08
+  }
+}
