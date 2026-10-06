@@ -18,14 +18,14 @@ Each question states the expected answer and the mechanism that answers it: **gr
 | CQ12 | Which inputs define a pyrcel run, and in which units? | Updraft V (m/s), initial T0 (K), P0 (Pa), S0 (supersaturation, 1), aerosol modes (N, μ, σ, κ); no default aerosol population. | graph | tested (`pyrcel.ttl`) |
 
 | CQ13 | Are dose per fraction, number of fractions and total dose independent? | No: total is derived; disagreement = conflict | graph | tested |
-| CQ14 | May a saturated EQD be reported? | No | graph + Python flag | tested (graph) |
+| CQ14 | May a saturated EQD be reported? | No: each per-course flag invalidates the matching EQD; the global flag only signals | graph + Python flag | tested (graph, direction checked) |
 | CQ15 | Does « hypofractionnement modéré » fix a dose? | No: clarification | graph | tested |
 | CQ16 | Is a patient-specific request in scope? | No: refuse | rules | pending adapter |
-| CQ17 | Are relative humidity and S0 independent? | No: one quantity, S0 = RH − 1 | graph | tested |
+| CQ17 | Are relative humidity and S0 independent? | No: one state, S0 = RH_fraction − 1 (conversion, not equality) | graph + SHACL | tested |
 | CQ18 | In which unit is `Nd` returned? | m⁻³, while input N is in cm⁻³ | graph | tested |
 | CQ19 | Does « air pollué » fix an aerosol population? | No: clarification | graph | tested |
 | CQ20 | Is a rain forecast for a city in scope? | No: refuse | rules | pending adapter |
 
-Domain extensions (`lqlequiv.ttl`, `pyrcel.ttl`) add instances only; a test checks that they declare no new class.
+Domain extensions (`lqlequiv.ttl`, `pyrcel.ttl`) add instances only; a test checks that they declare no new class. This shows reuse of the core for these two cases, not a general proof of domain independence. `derivationRule` strings are documentary; the executed checks are the SHACL shapes (`shapes.ttl`). Unit and quantity-kind IRIs were checked to resolve on qudt.org on 6 October 2026.
 
 Ablation link: CQ2–CQ7 and CQ9 are the relational behaviours measured by condition B3 against B2 (flat contract with the same definitions, without relations).

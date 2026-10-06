@@ -65,7 +65,7 @@ def test_derived_total_dose_conflict_is_detected():  # LQL-P09: 20 x 3 Gy announ
 
 def test_relative_humidity_and_s0_conflict_is_detected():  # PYR-P09: RH 95 % with S0 = -0.02
     conforms, texts = messages({**PYR_OK, "PYR_RH": 0.95})
-    assert not conforms and any("one quantity" in t for t in texts)
+    assert not conforms and any("one state" in t for t in texts)
 
 
 def test_incomplete_aerosol_mode_is_detected():

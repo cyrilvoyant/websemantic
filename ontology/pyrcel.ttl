@@ -38,12 +38,12 @@ ws:PYR_S0 a ws:ParameterDefinition ;
 ws:PYR_RH a ws:ParameterDefinition ;
     skos:prefLabel "Humidité relative initiale"@fr ; ws:fieldPath "RH (user expression)" ;
     ws:quantityKind qk:Dimensionless ;
-    ws:sameQuantityAs ws:PYR_S0 ;
+    ws:convertibleTo ws:PYR_S0 ;
     ws:derivationRule "S0 = RH_percent/100 - 1 = RH_fraction - 1; RH and S0 both given and inconsistent is a conflict" .
 
 ws:PYR_N a ws:ParameterDefinition ;
     skos:prefLabel "Concentration en nombre du mode"@fr ; ws:apiVariable "Lognorm(N=)" ; ws:fieldPath "aerosols[k].N" ;
-    ws:quantityKind qk:NumberDensity ; ws:canonicalUnit unit:NUM-PER-CentiM3 ;
+    ws:quantityKind qk:NumberDensity ; ws:canonicalUnit unit:PER-CentiM3 ;
     ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" .
 
 ws:PYR_mu a ws:ParameterDefinition ;

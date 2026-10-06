@@ -16,7 +16,8 @@ ws:TaskFractionationEquivalence
 
 ws:LQLContract ws:declaresParameter ws:LQL_organ, ws:LQL_tumour_site, ws:LQL_dose_per_fraction,
         ws:LQL_n_fractions, ws:LQL_gap_days, ws:LQL_reference_dose, ws:LQL_bifractionated, ws:LQL_total_dose ;
-    ws:declaresOutput ws:LQL_bed_oar, ws:LQL_eqd_oar, ws:LQL_eqd_oar_total, ws:LQL_ntcp, ws:LQL_saturated .
+    ws:declaresOutput ws:LQL_bed_oar, ws:LQL_eqd_oar, ws:LQL_eqd_oar_total, ws:LQL_eqd_tumour, ws:LQL_eqd_tumour_total,
+        ws:LQL_ntcp, ws:LQL_oar_saturated, ws:LQL_tumour_saturated, ws:LQL_saturated .
 
 ws:LQL_organ a ws:ParameterDefinition ;
     skos:prefLabel "Organe à risque"@fr ; ws:apiVariable "compute(organ, ...) positional 1" ; ws:fieldPath "organ" ;
@@ -81,9 +82,31 @@ ws:LQL_ntcp a ws:OutputVariable ;
     skos:definition "Model estimate for research and education, not a patient-specific probability."@en ;
     ws:dataOrigin ws:SyntheticSimulation .
 
+ws:LQL_eqd_tumour a ws:OutputVariable ;
+    skos:prefLabel "EQD tumeur"@fr ; ws:apiVariable "CourseResult.eqd_tumour" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
+    ws:dependsOnReference ws:LQL_reference_dose ; ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_eqd_tumour_total a ws:OutputVariable ;
+    skos:prefLabel "EQD tumeur cumulée"@fr ; ws:apiVariable "Result.eqd_tumour_total" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggSum ;
+    ws:dependsOnReference ws:LQL_reference_dose ; ws:validityFlag "Result.tumour_total_valid" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+# Per-course backend flags invalidate the matching per-course output only.
+ws:LQL_oar_saturated a ws:OutputVariable ;
+    skos:prefLabel "Saturation EQD organe (cours)"@fr ; ws:apiVariable "CourseResult.oar_saturated" ;
+    ws:invalidates ws:LQL_eqd_oar .
+
+ws:LQL_tumour_saturated a ws:OutputVariable ;
+    skos:prefLabel "Saturation EQD tumeur (cours)"@fr ; ws:apiVariable "CourseResult.tumour_saturated" ;
+    ws:invalidates ws:LQL_eqd_tumour .
+
+# Global summary flag: true if any course flag is true. It signals a problem but
+# does not by itself identify which output is invalid, so it invalidates nothing directly.
 ws:LQL_saturated a ws:OutputVariable ;
-    skos:prefLabel "Saturation de la recherche"@fr ; ws:apiVariable "Result.saturated" ;
-    ws:mustNotReportWhenTrue ws:LQL_eqd_oar, ws:LQL_eqd_oar_total .
+    skos:prefLabel "Saturation (résumé global)"@fr ; ws:apiVariable "Result.saturated" ;
+    rdfs:comment "Any-course summary of CourseResult.oar_saturated / tumour_saturated; read the per-course flags."@en .
 
 # Qualitative expressions
 ws:LQL_conventional a ws:QualifierMapping ;

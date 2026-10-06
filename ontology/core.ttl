@@ -241,12 +241,12 @@ ws:additive a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range 
 # Relational properties used by the domain extensions (condition B3).
 ws:derivedFrom a owl:ObjectProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:ParameterDefinition ;
     rdfs:comment "The quantity is computed from others; an inconsistent stated value is a conflict."@en .
-ws:sameQuantityAs a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:ParameterDefinition ;
-    rdfs:comment "Two user expressions of one physical quantity (e.g. relative humidity and initial supersaturation)."@en .
+ws:convertibleTo a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "Two expressions of one physical state related by the stated ws:derivationRule (e.g. S0 = RH_fraction - 1). Not a numerical equality and not a unit change alone."@en .
 ws:dependsOnReference a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:ParameterDefinition ;
     rdfs:comment "Output meaningful only with the stated reference parameter."@en .
-ws:mustNotReportWhenTrue a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:OutputVariable ;
-    rdfs:comment "Boolean output that invalidates the listed outputs when true."@en .
+ws:invalidates a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:OutputVariable ;
+    rdfs:comment "Direction: boolean backend flag -> output. When the flag (subject) is true, the object output must not be reported as a result."@en .
 ws:derivationRule a owl:DatatypeProperty ; rdfs:range xsd:string .
 ws:codeDefault a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ;
     rdfs:comment "Default set by the backend code; stated, never treated as user data."@en .

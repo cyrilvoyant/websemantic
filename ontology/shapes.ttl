@@ -6,7 +6,7 @@
 
 # SHACL shapes executed over a scenario graph merged with the ontology.
 # They read bounds and relations from the graph (ws:hasBound, ws:derivedFrom,
-# ws:sameQuantityAs, ws:partOfGroup) instead of hard-coding them, so the same
+# ws:convertibleTo, ws:partOfGroup) instead of hard-coding them, so the same
 # shapes serve every domain extension.
 
 ws:PrefixDecl a owl:Ontology ;
@@ -47,14 +47,14 @@ ws:SameQuantityShape a sh:NodeShape ;
     sh:targetClass ws:Scenario ;
     sh:sparql [
         a sh:SPARQLConstraint ;
-        sh:message "Relative humidity and initial supersaturation are one quantity and disagree (S0 must equal RH - 1)." ;
+        sh:message "Relative humidity and initial supersaturation describe one state and disagree (S0 must equal RH_fraction - 1)." ;
         sh:prefixes ws:PrefixDecl ;
         sh:select """
             SELECT $this WHERE {
               $this ws:hasParameter ?h, ?s .
               ?h ws:concept ws:PYR_RH ; ws:value ?rh .
               ?s ws:concept ws:PYR_S0 ; ws:value ?s0 .
-              ws:PYR_RH ws:sameQuantityAs ws:PYR_S0 .
+              ws:PYR_RH ws:convertibleTo ws:PYR_S0 .
               FILTER ( ABS(?s0 - (?rh - 1.0)) > 1e-9 )
             }""" ] .
 

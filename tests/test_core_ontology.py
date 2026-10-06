@@ -113,8 +113,13 @@ def test_cq13_total_dose_is_derived_not_independent():
     assert {r.p for r in rows} == {WS.LQL_dose_per_fraction, WS.LQL_n_fractions}
 
 
-def test_cq14_saturation_invalidates_eqd():
-    assert bool(ask_full("ASK { ws:LQL_saturated ws:mustNotReportWhenTrue ws:LQL_eqd_oar_total }")[0])
+def test_cq14_per_course_flags_invalidate_matching_outputs_only():
+    rows = ask_full("SELECT ?flag ?out WHERE { ?flag ws:invalidates ?out }")
+    pairs = {(r.flag, r.out) for r in rows}
+    assert pairs == {(WS.LQL_oar_saturated, WS.LQL_eqd_oar), (WS.LQL_tumour_saturated, WS.LQL_eqd_tumour)}
+    g = full_graph()
+    for flag, _ in pairs:  # direction: the subject is a backend boolean flag, not the invalidated quantity
+        assert "saturated" in str(g.value(flag, WS.apiVariable)) and g.value(flag, WS.canonicalUnit) is None
 
 
 def test_cq15_and_cq19_vague_terms_trigger_clarification_not_values():
@@ -126,12 +131,12 @@ def test_cq15_and_cq19_vague_terms_trigger_clarification_not_values():
 
 
 def test_cq17_relative_humidity_and_s0_are_one_quantity():
-    assert bool(ask_full("ASK { ws:PYR_RH ws:sameQuantityAs ws:PYR_S0 }")[0])
+    assert bool(ask_full("ASK { ws:PYR_RH ws:convertibleTo ws:PYR_S0 ; ws:derivationRule ?r }")[0])
 
 
 def test_cq18_nd_unit_differs_from_input_number_unit():
     rows = ask_full("SELECT ?u ?v WHERE { ws:PYR_Nd ws:canonicalUnit ?u . ws:PYR_N ws:canonicalUnit ?v }")
-    assert [(str(r.u).rsplit('/', 1)[1], str(r.v).rsplit('/', 1)[1]) for r in rows] == [("PER-M3", "NUM-PER-CentiM3")]
+    assert [(str(r.u).rsplit('/', 1)[1], str(r.v).rsplit('/', 1)[1]) for r in rows] == [("PER-M3", "PER-CentiM3")]
 
 
 def test_cq12_parcel_task_requires_eight_parameters_with_units():
