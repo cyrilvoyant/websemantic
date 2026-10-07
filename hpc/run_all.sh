@@ -88,7 +88,18 @@ ensure_env() {  # env_dir lane "import check" pip-args...   (an incomplete venv 
   if ! { [ -x "$env/bin/python" ] && "$env/bin/python" -c "$check" >/dev/null 2>&1; }; then
     rm -rf "$env" && python3 -m venv "$env" || fail "$lane" "venv creation failed"
     "$env/bin/pip" install -q --upgrade pip || fail "$lane" "pip upgrade failed"
-    "$env/bin/pip" install -q "$@" || fail "$lane" "dependency installation failed"
+    # setuptools-scm writes pyrcel/version.py during build. Build from a disposable
+    # copy so installation cannot change the backend verified by the adapter.
+    local build_dir="" arg; local install_args=()
+    for arg in "$@"; do
+      if [ "$arg" = "$HERE/external/pyrcel" ]; then
+        build_dir=$(mktemp -d "$LOGS/pyrcel-build-XXXXXX") || fail "$lane" "build directory creation failed"
+        cp -a "$arg/." "$build_dir/" || fail "$lane" "pyrcel build copy failed"
+        install_args+=("$build_dir")
+      else install_args+=("$arg"); fi
+    done
+    "$env/bin/pip" install -q "${install_args[@]}" || fail "$lane" "dependency installation failed"
+    [ -z "$build_dir" ] || rm -rf "$build_dir"
     "$env/bin/python" -c "$check" || fail "$lane" "import check failed after installation"
   fi
   "$env/bin/pip" freeze > "$LOGS/freeze-$lane.txt" || fail "$lane" "pip freeze failed"
