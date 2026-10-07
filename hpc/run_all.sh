@@ -20,7 +20,7 @@ case "$MODE" in smoke|full) ;; *) echo "MODE must be smoke or full"; exit 1;; es
 CAMPAIGN="${CAMPAIGN:-$(date -u +%Y%m%dT%H%M%SZ)-$MODE}"
 LOGS="$BASE/logs/$CAMPAIGN"; mkdir -p "$LOGS"
 # Open models, two families, served one after the other on the H200 (both ungated on Hugging Face, checked 2026-10-07):
-# Qwen2.5-72B-Instruct (Qwen licence; YaRN x2 for a 64k context) and Mistral-Small-3.2-24B-Instruct-2506 (Apache-2.0).
+# Qwen2.5-72B-Instruct (Qwen licence; native 32k context) and Mistral-Small-3.2-24B-Instruct-2506 (Apache-2.0).
 MODELS="${MODELS:-qwen mistral}"
 GPU_ENV="$BASE/venv-gpu"; CPU_ENV="$BASE/venv-cpu"
 MAX_HOURS="${MAX_HOURS:-48}"; REPLAY_EVERY="${REPLAY_EVERY:-600}"
@@ -141,7 +141,7 @@ SETSID=""; command -v setsid >/dev/null && SETSID="setsid"   # own process group
 model_spec() {  # key -> HF id, served name, extra vLLM arguments
   case "$1" in
     qwen) HF_ID="Qwen/Qwen2.5-72B-Instruct"; SERVED="qwen2.5-72b"
-          EXTRA=(--quantization fp8 --kv-cache-dtype fp8 --enable-prefix-caching --rope-scaling '{"rope_type":"yarn","factor":2.0,"original_max_position_embeddings":32768}');;
+          EXTRA=(--quantization fp8 --kv-cache-dtype fp8 --enable-prefix-caching);;
     mistral) HF_ID="mistralai/Mistral-Small-3.2-24B-Instruct-2506"; SERVED="mistral-small-3.2-24b"
           EXTRA=(--tokenizer-mode mistral --config-format mistral --load-format mistral --enable-prefix-caching);;
     *) return 1;;
@@ -174,7 +174,7 @@ gpu_lane() {
   for KEY in $MODELS; do
     model_spec "$KEY" || fail gpu "unknown model key $KEY"
     status gpu server "starting $HF_ID"
-    $SETSID "$GPU_ENV/bin/vllm" serve "$HF_ID" --served-model-name "$SERVED" --max-model-len 65536 "${EXTRA[@]}" \
+    $SETSID "$GPU_ENV/bin/vllm" serve "$HF_ID" --served-model-name "$SERVED" --max-model-len 32768 "${EXTRA[@]}" \
       --port 8000 --seed 0 > "$LOGS/vllm-$KEY.log" 2>&1 &
     LANE_VLLM=$!; echo "$LANE_VLLM" > "$LOGS/vllm.pid"
     for _ in $(seq 1 180); do                                  # up to 1 h for download + loading
