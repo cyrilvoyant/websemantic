@@ -166,6 +166,18 @@ def mistral(prompt, model):
     return raw["choices"][0]["message"]["content"], usage
 
 
+def local(prompt, model):
+    """OpenAI-compatible local server (vLLM on the HPC): model given as local:<served-name>."""
+    base = os.environ.get("LOCAL_LLM_URL", "http://localhost:8000/v1")
+    payload = {"model": model.split(":", 1)[1], "messages": [{"role": "user", "content": prompt}],
+               "temperature": 0, "response_format": {"type": "json_object"}}
+    req = urllib.request.Request(base + "/chat/completions", data=json.dumps(payload).encode(),
+                                 headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=600) as r:
+        raw = json.load(r)
+    return raw["choices"][0]["message"]["content"], dict(raw.get("usage") or {}, resolved_model=raw.get("model"))
+
+
 def load_key():
     """Read API keys from the private .env (never printed)."""
     env = REPO / ".env"
@@ -188,7 +200,7 @@ def main():
     ap.add_argument("--corpus", default="pilot", help="pilot or qualifiers")
     args = ap.parse_args()
     load_key()
-    out_dir = RESERVE / "runs" / "e1" / args.model
+    out_dir = RESERVE / "runs" / "e1" / args.model.replace(":", "_").replace("/", "_")
     out_dir.mkdir(parents=True, exist_ok=True)
     ctx_cache = {}
     for domain in args.domains.split(","):
@@ -208,7 +220,8 @@ def main():
                               "context_sha256_12": ctx_hash, "instructions_sha256_12": hashlib.sha256(INSTRUCTIONS.encode()).hexdigest()[:12], "context_chars": len(ctx), "request": case["turns"][0],
                               "time": time.strftime("%Y-%m-%dT%H:%M:%S")}
                     try:
-                        call = mistral if args.model.startswith(("mistral", "magistral")) else gemini
+                        call = (local if args.model.startswith("local:") else
+                                mistral if args.model.startswith(("mistral", "magistral")) else gemini)
                         text, usage = call(prompt, args.model)
                         record.update(raw_text=text, usage=usage)
                         try:
