@@ -32,13 +32,32 @@ VLLM_PID=""; GPU_PID=""; CPU_PID=""
 python3 -c "import sys; sys.exit(0 if sys.version_info >= (3, 11) else 1)" || {
   echo "Python >= 3.11 required (pyrcel 2.0.0); found $(python3 --version). Use a JupyterLab H200 terminal."; exit 1; }
 
-# ---------- lock: one run at a time; a stale lock (heartbeat older than 5 min) is taken over ----------
-fresh() { [ -f "$HEARTBEAT" ] && [ $(( $(date +%s) - $(stat -c %Y "$HEARTBEAT") )) -lt 300 ]; }
-if ! mkdir "$LOCK" 2>/dev/null; then
-  if fresh; then echo "Another run_all.sh is active ($(cat "$LOCK/campaign" 2>/dev/null)). Stop."; exit 1; fi
-  echo "Stale lock found (no heartbeat for 5 min): taken over."
-fi
-echo "$CAMPAIGN" > "$LOCK/campaign"; touch "$HEARTBEAT"
+# ---------- lock: one run at a time ----------
+# Atomic acquisition (mkdir). The owner (host:pid:campaign) is recorded. A lock is taken over only if its owner is
+# dead on this host, or (other host / unknown owner) its heartbeat is older than STALE_S. The takeover is atomic
+# (mv aside, then mkdir: one contender wins). The heartbeat is refreshed by a background loop from acquisition to
+# exit, so a long preflight never looks stale; the loop stops by itself if this script dies.
+STALE_S="${STALE_S:-900}"; HEARTBEAT_EVERY="${HEARTBEAT_EVERY:-30}"
+OWNER="$(hostname):$$:$CAMPAIGN"; HB_PID=""
+age() { [ -f "$HEARTBEAT" ] && echo $(( $(date +%s) - $(stat -c %Y "$HEARTBEAT") )) || echo 999999; }
+acquire() {
+  if mkdir "$LOCK" 2>/dev/null; then echo "$OWNER" > "$LOCK/owner"; return 0; fi
+  local owner host pid; owner=$(cat "$LOCK/owner" 2>/dev/null || true)
+  host=${owner%%:*}; pid=$(echo "$owner" | cut -d: -f2)
+  if [ -n "$owner" ] && [ "$host" = "$(hostname)" ]; then
+    kill -0 "$pid" 2>/dev/null && return 1                          # owner alive on this host
+  elif [ "$(age)" -lt "$STALE_S" ]; then
+    return 1                                                         # other host or unknown owner, recent heartbeat
+  fi
+  mv "$LOCK" "$LOCK.stale-$$" 2>/dev/null || return 1
+  rm -rf "$LOCK.stale-$$"
+  mkdir "$LOCK" 2>/dev/null || return 1
+  echo "$OWNER" > "$LOCK/owner"; echo "Stale lock ($owner) taken over."
+}
+acquire || { echo "Another run_all.sh is active ($(cat "$LOCK/owner" 2>/dev/null || echo unknown owner)). Stop."; exit 1; }
+touch "$HEARTBEAT"
+( while kill -0 $$ 2>/dev/null; do touch "$HEARTBEAT"; sleep "$HEARTBEAT_EVERY"; done ) &
+HB_PID=$!
 
 status() {  # lane step detail -> status-<lane>.json, atomic, UTC
   python3 - "$BASE/status-$1.json" "$2" "$3" "$CAMPAIGN" <<'PY'
@@ -56,7 +75,8 @@ cleanup() {
   for p in "$GPU_PID" "$CPU_PID"; do [ -n "$p" ] && kill "$p" 2>/dev/null; done
   VLLM_PID=$(cat "$LOGS/vllm.pid" 2>/dev/null || true)          # safety net if a lane died without its own trap
   if [ -n "$VLLM_PID" ]; then kill -- "-$VLLM_PID" 2>/dev/null || kill "$VLLM_PID" 2>/dev/null; fi
-  rm -rf "$LOCK"
+  [ -n "$HB_PID" ] && kill "$HB_PID" 2>/dev/null
+  [ "$(cat "$LOCK/owner" 2>/dev/null)" = "$OWNER" ] && rm -rf "$LOCK"   # only the owner releases the lock
 }
 trap cleanup EXIT
 trap 'echo "interrupted"; exit 130' INT TERM

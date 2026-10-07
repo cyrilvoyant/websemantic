@@ -68,6 +68,12 @@ UNIT_ALIASES = {"unit:M": {"m", "unit:m", "metre", "mètre", "meters", "metres",
                 "unit:SEC": {"s", "sec", "second", "seconds", "seconde", "secondes", "unit:sec"}}
 DIMENSIONLESS = {"unit:UNITLESS", "unit:NUM"}
 PHYSICAL_TOKENS = set().union(*UNIT_ALIASES.values())   # a dimensionless field given in one of these is a unit error
+# The only tokens accepted for a dimensionless field (besides its declared display unit and aliases); anything else
+# is unit_unverified, never silently accepted.
+DIMENSIONLESS_OK = {"", "1", "-", "none", "unitless", "dimensionless", "sans", "sans unité", "sans dimension",
+                    "nombre", "number", "count", "fraction", "ratio", "unit:unitless", "unit:num", "catégorie", "category",
+                    "tube", "tubes", "voie", "voies", "lane", "lanes", "fractions", "séances", "runs", "réalisations",
+                    "bins", "classes"}
 
 
 def candidate_issue(answer, case):
@@ -91,6 +97,8 @@ def candidate_issue(answer, case):
         if canon in DIMENSIONLESS:
             if given in PHYSICAL_TOKENS - {""}:
                 return f"unit_mismatch:{k}:{given}"
+            if given not in DIMENSIONLESS_OK and given not in official:
+                return f"unit_unverified:{k}:{given}"
         elif not given:
             return f"unit_missing:{k}"
         elif canon in UNIT_ALIASES:

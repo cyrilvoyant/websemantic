@@ -21,6 +21,7 @@ import ast
 import hashlib
 import json
 import os
+import socket
 import sys
 import time
 import urllib.error
@@ -173,15 +174,8 @@ def local(prompt, model):
                "temperature": 0, "max_tokens": 4096, "response_format": {"type": "json_object"}}
     req = urllib.request.Request(base + "/chat/completions", data=json.dumps(payload).encode(),
                                  headers={"Content-Type": "application/json"})
-    for attempt in range(3):  # many parallel clients: a request may queue a long time on the server
-        try:
-            with urllib.request.urlopen(req, timeout=1800) as r:
-                raw = json.load(r)
-            break
-        except (urllib.error.URLError, TimeoutError):
-            if attempt == 2:
-                raise
-            time.sleep(30)
+    with urllib.request.urlopen(req, timeout=1800) as r:  # parallel clients: a request may queue a long time
+        raw = json.load(r)
     return raw["choices"][0]["message"]["content"], dict(raw.get("usage") or {}, resolved_model=raw.get("model"))
 
 
@@ -203,17 +197,27 @@ def write_atomic(path, text):
 
 
 def log_attempt(out_dir, entry):
-    with open(out_dir / "attempts.jsonl", "a", encoding="utf-8") as fh:
+    """One attempts file per process (parallel clients never share a file); every real network call is one line."""
+    with open(out_dir / f"attempts-{socket.gethostname()}-{os.getpid()}.jsonl", "a", encoding="utf-8") as fh:
         fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
+def request_hash(text):
+    return hashlib.sha256(text.encode()).hexdigest()[:12]
+
+
+def stored_key(old):
+    req = old.get("request_sha256_12") or (request_hash(old["request"]) if isinstance(old.get("request"), str) else None)
+    return old.get("context_sha256_12"), old.get("instructions_sha256_12"), req
+
+
 def done(target, key):
-    """A stored answer counts only if it has the same (context, instructions, request) hashes and no failed call;
-    files written before request hashes existed are matched on context and instructions."""
+    """A stored answer counts only if it has the same (context, instructions, request) hashes and no failed call.
+    Files written before request hashes existed are hashed from their stored request text; without it, no reuse."""
     if not target.exists():
         return False
     old = json.loads(target.read_text(encoding="utf-8"))
-    got = (old.get("context_sha256_12"), old.get("instructions_sha256_12"), old.get("request_sha256_12", key[2]))
+    got = stored_key(old)
     return got == key and not old.get("http_error") and not old.get("network_error")
 
 
@@ -256,18 +260,17 @@ def main():
             ctx = contexts[(domain, cond)]
             ctx_hash = manifest[f"{domain}|{cond}"]["context_sha256_12"]
             for case in cases:
-                req_hash = hashlib.sha256(case["turns"][0].encode()).hexdigest()[:12]
+                req_hash = request_hash(case["turns"][0])
                 key = (ctx_hash, instr_hash, req_hash)
                 for rep in range(1, args.reps + 1):
                     target = out_dir / f"{case['id']}_{cond}_r{rep}.json"
                     if done(target, key):
                         continue  # same frozen context, instructions and request: already answered
-                    if target.exists():  # another version (or a failed call) holds the plain name
-                        old = json.loads(target.read_text(encoding="utf-8"))
-                        if (old.get("context_sha256_12"), old.get("instructions_sha256_12"), old.get("request_sha256_12")) != key:
-                            target = out_dir / f"{case['id']}_{cond}_r{rep}_c{ctx_hash[:8]}_i{instr_hash[:8]}_q{req_hash[:8]}.json"
-                            if done(target, key):
-                                continue
+                    # another version (or a failed call) holds the plain name
+                    if target.exists() and stored_key(json.loads(target.read_text(encoding="utf-8"))) != key:
+                        target = out_dir / f"{case['id']}_{cond}_r{rep}_c{ctx_hash[:8]}_i{instr_hash[:8]}_q{req_hash[:8]}.json"
+                        if done(target, key):
+                            continue
                     prompt = INSTRUCTIONS + "\n\n" + ctx + "\n\n## User request\n" + case["turns"][0]
                     record = {"case_id": case["id"], "domain": domain, "condition": cond, "rep": rep, "model": args.model,
                               "context_sha256_12": ctx_hash, "instructions_sha256_12": instr_hash, "request_sha256_12": req_hash,
@@ -275,26 +278,38 @@ def main():
                               "time": time.strftime("%Y-%m-%dT%H:%M:%S")}
                     attempt = {k: record[k] for k in ("case_id", "domain", "condition", "rep", "model", "time",
                                                       "context_sha256_12", "instructions_sha256_12")}
-                    try:
-                        call = (local if args.model.startswith("local:") else
-                                mistral if args.model.startswith(("mistral", "magistral")) else gemini)
-                        text, usage = call(prompt, args.model)
-                        record.update(raw_text=text, usage=usage)
+                    call = (local if args.model.startswith("local:") else
+                            mistral if args.model.startswith(("mistral", "magistral")) else gemini)
+                    tries = 3 if call is local else 1  # local server: network errors retried, each try logged
+                    refused = False
+                    for t in range(1, tries + 1):
+                        stamp = {**attempt, "try": t, "time": time.strftime("%Y-%m-%dT%H:%M:%S")}
                         try:
-                            record["parsed"] = json.loads(text)
-                        except json.JSONDecodeError:
-                            record["parse_error"] = True
-                        log_attempt(out_dir, {**attempt, "outcome": "answer"})
-                    except urllib.error.HTTPError as exc:
-                        log_attempt(out_dir, {**attempt, "outcome": f"http_{exc.code}"})
-                        print(case["id"], cond, "HTTP", exc.code, flush=True)
-                        if exc.code == 429:
-                            time.sleep(60)
-                            continue  # the refusal is logged; the case is retried on the next resume
-                        record["http_error"] = exc.code
-                    except (urllib.error.URLError, TimeoutError) as exc:
-                        log_attempt(out_dir, {**attempt, "outcome": "network_error"})
-                        record["network_error"] = str(exc)[:200]
+                            text, usage = call(prompt, args.model)
+                            record.pop("network_error", None)
+                            record.update(raw_text=text, usage=usage)
+                            try:
+                                record["parsed"] = json.loads(text)
+                            except json.JSONDecodeError:
+                                record["parse_error"] = True
+                            log_attempt(out_dir, {**stamp, "outcome": "answer"})
+                            break
+                        except urllib.error.HTTPError as exc:
+                            log_attempt(out_dir, {**stamp, "outcome": f"http_{exc.code}"})
+                            print(case["id"], cond, "HTTP", exc.code, flush=True)
+                            if exc.code == 429:
+                                time.sleep(60)
+                                refused = True  # the refusal is logged; the case is retried on the next resume
+                            else:
+                                record["http_error"] = exc.code
+                            break
+                        except (urllib.error.URLError, TimeoutError) as exc:
+                            log_attempt(out_dir, {**stamp, "outcome": "network_error"})
+                            record["network_error"] = str(exc)[:200]
+                            if t < tries:
+                                time.sleep(30)
+                    if refused:
+                        continue
                     write_atomic(target, json.dumps(record, ensure_ascii=False, indent=1))
                     print(case["id"], cond, rep, "decision=", (record.get("parsed") or {}).get("decision"), flush=True)
                     time.sleep(args.pause)

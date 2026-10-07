@@ -26,8 +26,7 @@ for d in sorted(glob.glob(os.path.join(base, "benchmark-reserve/runs/e1/*/"))):
         if isinstance(p, dict):
             parsed += 1
             valid += p.get("decision") in DECISIONS and isinstance(p.get("values", []), list)
-    att = os.path.join(d, "attempts.jsonl")
-    attempts = sum(1 for _ in open(att)) if os.path.exists(att) else 0
+    attempts = sum(sum(1 for _ in open(a)) for a in glob.glob(os.path.join(d, "attempts*.jsonl")))  # one file per client
     print("%s: %d answer files, %d parsed JSON objects, %d schema-valid answers, %d attempts"
           % (os.path.basename(d.rstrip("/")), files, parsed, valid, attempts))
 '@
