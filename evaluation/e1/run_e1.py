@@ -106,7 +106,26 @@ def flat_contract(domain):
     return "\n".join(rows)
 
 
+PACK_PARTS = {
+    "O": ["ontology.ttl", "shapes.ttl"],                                            # ontology + SHACL rules
+    "C": ["LLM-CONTRACT.md"],                                                      # LLM contract (rules + qualifiers)
+    "P": ["variables.csv", "units.csv", "outputs.csv", "codemeta.json", "FAIR.md"],  # FAIR / FAIR4RS files
+}
+
+
+def factorial_context(domain, code):
+    """F<O><C><P>: native documentation plus the selected pack components (2^3 design)."""
+    blocks = ["## Native documentation\n" + native_doc(domain)]
+    for flag, part in zip(code[1:], "OCP"):
+        if flag == "1":
+            for name in PACK_PARTS[part]:
+                blocks.append(f"## Semantic pack: {name}\n" + (REPO / "packs" / domain / name).read_text(encoding="utf-8"))
+    return "\n\n".join(blocks)
+
+
 def context(domain, condition):
+    if condition.startswith("F"):
+        return factorial_context(domain, condition)
     blocks = ["## Native documentation\n" + native_doc(domain)]
     if condition in ("B1", "B2", "B3"):
         blocks.append("## Agent guide\n" + (REPO / "AGENTS.md").read_text(encoding="utf-8") + "\n" +
