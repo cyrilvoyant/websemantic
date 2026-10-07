@@ -141,8 +141,13 @@ SETSID=""; command -v setsid >/dev/null && SETSID="setsid"   # own process group
 model_spec() {  # key -> HF id, served name, extra vLLM arguments
   case "$1" in
     qwen) HF_ID="Qwen/Qwen2.5-72B-Instruct"; SERVED="qwen2.5-72b"
-          EXTRA=(--quantization fp8 --kv-cache-dtype fp8 --enable-prefix-caching);;
+          # Native window 32k; YaRN x4 (Qwen model card) set through --hf-overrides, the option current vLLM accepts
+          # (--rope-scaling was refused). The TLS prompts with the ontology reach about 56k tokens.
+          MAXLEN=98304
+          EXTRA=(--quantization fp8 --kv-cache-dtype fp8 --enable-prefix-caching
+                 --hf-overrides '{"rope_scaling":{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768}}');;
     mistral) HF_ID="mistralai/Mistral-Small-3.2-24B-Instruct-2506"; SERVED="mistral-small-3.2-24b"
+          MAXLEN=98304   # native 128k window
           EXTRA=(--tokenizer-mode mistral --config-format mistral --load-format mistral --enable-prefix-caching);;
     *) return 1;;
   esac
@@ -174,7 +179,7 @@ gpu_lane() {
   for KEY in $MODELS; do
     model_spec "$KEY" || fail gpu "unknown model key $KEY"
     status gpu server "starting $HF_ID"
-    $SETSID "$GPU_ENV/bin/vllm" serve "$HF_ID" --served-model-name "$SERVED" --max-model-len 32768 "${EXTRA[@]}" \
+    $SETSID "$GPU_ENV/bin/vllm" serve "$HF_ID" --served-model-name "$SERVED" --max-model-len "$MAXLEN" "${EXTRA[@]}" \
       --port 8000 --seed 0 > "$LOGS/vllm-$KEY.log" 2>&1 &
     LANE_VLLM=$!; echo "$LANE_VLLM" > "$LOGS/vllm.pid"
     for _ in $(seq 1 180); do                                  # up to 1 h for download + loading
