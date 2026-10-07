@@ -80,7 +80,7 @@ status cpu preflight "CPU environment"
 # needs the version given explicitly; the check verifies that exact version is the one imported.
 export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_PYRCEL=2.0.0
 ensure_env "$CPU_ENV" cpu \
-  "import numpy, pandas, yaml, rdflib, pydantic, jax, pyrcel, importlib.metadata as m; assert m.version('pyrcel') == '2.0.0'" \
+  "import numpy, pandas, yaml, rdflib, pydantic, jax, diffrax, equinox, optimistix, pyrcel, importlib.metadata as m; assert m.version('pyrcel') == '2.0.0'" \
   numpy pandas pyyaml rdflib pydantic "jax[cpu]" "$HERE/external/pyrcel"
 { "$CPU_ENV/bin/python" -c "import pyrcel, importlib.metadata as m; print('pyrcel', m.version('pyrcel'), pyrcel.__file__)"
   echo "external/pyrcel source sha256: $(cd "$HERE/external/pyrcel" && find . -type f ! -path './.git*' -print0 | sort -z \
