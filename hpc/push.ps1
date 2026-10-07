@@ -13,4 +13,4 @@ if ($LASTEXITCODE -ne 0) { throw "Copy failed" }
 # Unpack without touching previous results (runs/ and logs/ are never in the archive).
 ssh $Remote "cd $RemoteDir && unzip -oq websemantic-hpc.zip && rm websemantic-hpc.zip && sed -i 's/\r$//' websemantic/semantic-sim-layer/hpc/*.sh && echo 'pushed:' && ls websemantic"
 Write-Host "Done. In a JupyterLab terminal (H200 session, Lustre mounted on /workspace):"
-Write-Host "  cd /workspace/websemantic/websemantic/semantic-sim-layer && nohup bash hpc/run_all.sh > /workspace/websemantic/run_all.out 2>&1 &"
+Write-Host "  cd /workspace/semantic/websemantic/semantic-sim-layer && nohup bash hpc/run_all.sh > /workspace/semantic/run_all.out 2>&1 &"

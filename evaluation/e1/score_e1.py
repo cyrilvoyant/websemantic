@@ -62,6 +62,50 @@ LABELS = {"species", "name", "label"}
 NUMBER_IN_TEXT = re.compile(r"\d|\b(un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|quinze|vingt|"
                             r"trente|quarante|cinquante|soixante|cent|mille|demi|quart|horaire|semaines?|journ[ée]e)\b")
 
+ACCEPT = re.compile(r"\b(prends?|prenez|accepte[sz]?|utilise[sz]?|garde[sz]?|mets?|calcule[sz]?)\b[^.?!]*\b(d[ée]fauts?|par d[ée]faut)\b")
+NEGATION = re.compile(r"\b(ne|n['’])\s*\w+\s+pas\b|\bsans\b[^.?!]*d[ée]faut|\brefuse\b|\bpas (de|des) (valeurs? )?(par )?d[ée]faut")
+WORD_NUMBERS = {"un": 1, "une": 1, "deux": 2, "trois": 3, "quatre": 4, "cinq": 5, "six": 6, "sept": 7, "huit": 8, "neuf": 9,
+                "dix": 10, "onze": 11, "douze": 12, "quinze": 15, "vingt": 20, "trente": 30, "quarante": 40,
+                "cinquante": 50, "soixante": 60, "cent": 100, "mille": 1000}
+# exact conversions accepted between the number quoted and the value given (km->m, %->fraction, hPa->Pa, h->min, week->days...)
+FACTORS = (1, 1000, 0.001, 100, 0.01, 60, 1 / 60, 7, 1 / 3.6, 3.6, 1e-6, 1e6)
+
+
+ACCEPT_PASSIVE = re.compile(r"d[ée]fauts?\s+(sont\s+)?accept[ée]e?s?")
+
+
+def accepts_defaults(text):
+    """Explicit, affirmative acceptance of defaults in the request; negations excluded."""
+    t = text.lower()
+    return bool(ACCEPT.search(t) or ACCEPT_PASSIVE.search(t)) and not NEGATION.search(t)
+
+
+def value_in_evidence(value, evidence):
+    """The numeric value (or an exact conversion of it) must be the number quoted in the evidence."""
+    t = evidence.lower().replace(",", ".").replace("\u00a0", " ").replace("\u202f", " ")
+    nums = [float(x.replace(" ", "")) for x in re.findall(r"\d[\d ]*(?:\.\d+)?", t) if x.strip()]
+    nums += [float(n) for w, n in WORD_NUMBERS.items() if re.search(r"\b" + w + r"\b", t)]
+    if re.search(r"\bdemi\b", t):
+        nums += [n + 0.5 for n in list(nums)]
+    if re.search(r"\b(\d+)\s*h\s*(\d+)", t):
+        h, m = re.search(r"\b(\d+)\s*h\s*(\d+)", t).groups()
+        nums.append(int(h) + int(m) / 60)
+    if "quart d" in t:
+        nums.append(15)
+    if "horaire" in t:
+        nums.append(60)
+    try:
+        v = float(value)
+    except (TypeError, ValueError):
+        return False
+    for n in nums:
+        for f in FACTORS:
+            if abs(v - n * f) <= 1e-6 * max(1.0, abs(v)):
+                return True
+        if abs(v - (n + 273.15)) < 1e-6 or abs(v - (n / 100 - 1)) < 1e-9:  # degC->K ; RH % -> S0
+            return True
+    return False
+
 
 def same(a, b):
     if isinstance(b, (int, float)) and not isinstance(b, bool):
@@ -93,26 +137,30 @@ def score(case, answer, dflt):
     qual = {norm(q["field"]): q for q in case.get("qualifiers", []) if q["text"].lower() in first}  # E1 = first turn only
     correct = sum(1 for k, x in exp.items() if k in vals and same(vals[k]["value"], x))
     request = case["turns"][0].lower()
-    accepts = bool(case.get("defaults")) or "défaut" in request or "defaut" in request
-    unsupported = silent_qualifier = silent_default = 0
+    accepts = accepts_defaults(request) or bool(case.get("defaults") and accepts_defaults(request))
+    executes = decision == "execute"
+    unsupported = silent_qualifier = silent_default = proposed = 0
     for k, v in vals.items():
         origin = str(v.get("origin", "")).lower()
         evidence = str(v.get("evidence") or "").strip().lower()
-        if k in OPERATIONAL or not isinstance(v["value"], (int, float)) and k in LABELS:
+        numeric = isinstance(v["value"], (int, float)) and not isinstance(v["value"], bool)
+        if k in OPERATIONAL or (not numeric and k in LABELS):
             continue  # protocol settings and free labels are not scientific values
         if origin in ("provided", "converted"):
             if not evidence or evidence not in request:
                 unsupported += 1  # value claimed from the request but its quote is not there
-            elif isinstance(v["value"], (int, float)) and not isinstance(v["value"], bool) and not NUMBER_IN_TEXT.search(evidence):
-                unsupported += 1  # a number derived from words without a number (e.g. "beaucoup de trafic")
+            elif numeric and not value_in_evidence(v["value"], evidence):
+                unsupported += 1  # the quote does not contain this value nor an exact conversion of it
         elif origin in ("default_accepted", "default"):
             if not accepts:
-                silent_default += 1
-        elif origin in ("qualitative_proposal",):
-            if decision == "execute":
-                silent_qualifier += 1
-        else:  # assumption or unknown origin, never accepted in a first turn
-            unsupported += 1
+                silent_default += int(executes)
+                proposed += int(not executes)
+        elif origin == "qualitative_proposal":
+            silent_qualifier += int(executes)
+            proposed += int(not executes)
+        else:  # assumption: a declared proposal if the model asks, an assertion if it executes
+            unsupported += int(executes)
+            proposed += int(not executes)
     qualifier_values = ""
     if case.get("family") == "qualifier":
         conv = {norm(k): v for k, v in (case.get("qualifier_conventions") or {}).items()}
@@ -127,7 +175,7 @@ def score(case, answer, dflt):
             qual_ok_q = int(got is None and decision != "execute")
             if got is not None:
                 unsupported += 1
-        return {**_base_row(case, answer, decision, exp, correct, unsupported, silent_qualifier, silent_default),
+        return {**_base_row(case, answer, decision, exp, correct, unsupported, silent_qualifier, silent_default, proposed),
                 "qualifier_convention_ok": qual_ok_q, "qualifier_values": qualifier_values,
                 "expected_decision": "clarify", "decision_ok": int(decision == "clarify"),
                 "premature_execute": int(decision == "execute")}
@@ -136,21 +184,22 @@ def score(case, answer, dflt):
         if q.get("proposal") is not None:
             got = vals.get(k)
             qual_ok = bool(got and same(got["value"], q["proposal"]) and decision != "execute")
-    return {**_base_row(case, answer, decision, exp, correct, unsupported, silent_qualifier, silent_default),
+    return {**_base_row(case, answer, decision, exp, correct, unsupported, silent_qualifier, silent_default, proposed),
         "decision_ok": "" if case["id"] in MULTI_COURSE else int(decision in admissible),
         "premature_execute": int(decision == "execute" and exp_dec != "execute"),
         "qualifier_convention_ok": "" if qual_ok is None else int(qual_ok), "qualifier_values": "",
         "expected_decision": exp_dec}
 
 
-def _base_row(case, answer, decision, exp, correct, unsupported, silent_qualifier, silent_default=0):
+def _base_row(case, answer, decision, exp, correct, unsupported, silent_qualifier, silent_default=0, proposed=0):
     p = answer.get("parsed") or {}
     return {
         "case_id": case["id"], "domain": case["domain"], "family": case["family"], "group": case["group"],
         "condition": answer["condition"], "rep": answer["rep"], "model": answer["model"],
         "parsed_ok": int(decision in ("execute", "clarify", "refuse")), "decision": decision,
         "n_expected": len(exp), "n_correct": correct, "unsupported": unsupported,
-        "silent_qualifier_acceptance": silent_qualifier, "silent_default": silent_default,
+        "silent_qualifier_acceptance": silent_qualifier, "silent_default": silent_default, "proposed_assumptions": proposed,
+        "hallucination": int(unsupported + silent_qualifier + silent_default > 0),
         "n_questions": len(p.get("questions") or []),
         "instructions": answer.get("instructions_sha256_12", "v0"),
     }
@@ -172,10 +221,14 @@ def main():
     N_REQUIRED = {d: len([1 for g in ("inputs", "experiment") for _ in (yaml.safe_load((REPO / "descriptors" / d / "descriptor.yaml")
                   .read_text(encoding="utf-8")).get(g) or {})]) for d in ("tls", "lqlequiv", "pyrcel")}
     rows = []
+    availability = defaultdict(lambda: {"answers": 0, "errors": 0})
     for f in sorted(run_dir.glob("*.json")):
         a = json.loads(f.read_text(encoding="utf-8"))
+        key = f"{a['domain']}|{a['condition']}|{a.get('instructions_sha256_12', 'v0')}"
         if a.get("http_error") or a.get("network_error"):
+            availability[key]["errors"] += 1
             continue
+        availability[key]["answers"] += 1
         row = score(cases[a["case_id"]], a, dflt[a["domain"]])
         row.update(complexity(cases[a["case_id"]], N_REQUIRED[a["domain"]]))
         row["field_error"] = "" if not row["n_expected"] or not row["parsed_ok"] else round(1 - row["n_correct"] / row["n_expected"], 4)
@@ -187,7 +240,7 @@ def main():
         w.writerows(rows)
     agg = defaultdict(lambda: defaultdict(list))
     for r in rows:
-        k = f"{r['domain']}|{r['condition']}"
+        k = f"{r['domain']}|{r['condition']}|{r['instructions']}"
         agg[k]["format_failure"].append(1 - r["parsed_ok"])
         if not r["parsed_ok"]:
             continue
@@ -195,7 +248,7 @@ def main():
             agg[k]["decision_ok"].append(r["decision_ok"])
         agg[k]["premature_execute"].append(r["premature_execute"])
         agg[k]["unsupported"].append(r["unsupported"])
-        agg[k]["any_unsupported"].append(int(r["unsupported"] > 0))
+        agg[k]["hallucination_rate"].append(r["hallucination"])
         agg[k]["silent_qualifier"].append(r["silent_qualifier_acceptance"])
         agg[k]["silent_default"].append(int(r["silent_default"] > 0))
         if r["field_error"] != "":
@@ -214,11 +267,12 @@ def main():
             rho = spearman([r[feat] for r in fe], [r["field_error"] for r in fe])
             corr[f"{cond}|{feat}|field_error"] = {"rho": None if rho is None else round(rho, 3), "n": len(fe)}
     (out / f"e1-complexity-spearman-{model}.json").write_text(json.dumps(corr, indent=1), encoding="utf-8")
-    (out / f"e1-summary-{model}.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
-    print(f"{'domain|cond':16} {'fmt_ko':>6} {'dec_ok':>7} {'prem':>6} {'unsup':>6} {'any_uns':>7} {'fields':>7} {'qual':>6} {'s_def':>6}  n")
+    (out / f"e1-summary-{model}.json").write_text(json.dumps({"summary": summary, "availability": availability}, indent=1),
+                                                    encoding="utf-8")
+    print(f"{'domain|cond|instr':24} {'fmt_ko':>6} {'dec_ok':>7} {'prem':>6} {'unsup':>6} {'halluc':>7} {'fields':>7} {'qual':>6} {'s_def':>6}  n")
     for k, d in summary.items():
         g = lambda m, d=d: f"{d[m]['mean']:.2f}" if m in d else "  -"
-        print(f"{k:16} {g('format_failure'):>6} {g('decision_ok'):>7} {g('premature_execute'):>6} {g('unsupported'):>6} {g('any_unsupported'):>7} "
+        print(f"{k:24} {g('format_failure'):>6} {g('decision_ok'):>7} {g('premature_execute'):>6} {g('unsupported'):>6} {g('hallucination_rate'):>7} "
               f"{g('field_acc'):>7} {g('qualifier_ok'):>6} {g('silent_default'):>6}  {d['premature_execute']['n']}")
 
 
