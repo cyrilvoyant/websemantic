@@ -189,6 +189,17 @@ def load_key():
             os.environ[name.strip()] = value.strip().strip('"')
 
 
+def write_atomic(path, text):
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(text, encoding="utf-8")
+    os.replace(tmp, path)
+
+
+def log_attempt(out_dir, entry):
+    with open(out_dir / "attempts.jsonl", "a", encoding="utf-8") as fh:
+        fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default="gemini-3.5-flash-lite")
@@ -202,23 +213,41 @@ def main():
     load_key()
     out_dir = RESERVE / "runs" / "e1" / args.model.replace(":", "_").replace("/", "_")
     out_dir.mkdir(parents=True, exist_ok=True)
-    ctx_cache = {}
-    for domain in args.domains.split(","):
-        cases = [json.loads(line) for line in (RESERVE / domain / f"{args.corpus}.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()]
+    instr_hash = hashlib.sha256(INSTRUCTIONS.encode()).hexdigest()[:12]
+    domains, conds = args.domains.split(","), args.conditions.split(",")
+    # Contexts are frozen at start: every answer of this run uses exactly these texts.
+    contexts = {(d, c): context(d, c) for d in domains for c in conds}
+    manifest = {f"{d}|{c}": {"context_sha256_12": hashlib.sha256(t.encode()).hexdigest()[:12], "chars": len(t)}
+                for (d, c), t in contexts.items()}
+    write_atomic(out_dir / f"contexts-{time.strftime('%Y%m%dT%H%M%S')}.json",
+                 json.dumps({"instructions_sha256_12": instr_hash, "contexts": manifest}, indent=1))
+    params = {"temperature": 0 if args.model.startswith("local:") else "provider default"}
+    for domain in domains:
+        path = RESERVE / domain / f"{args.corpus}.jsonl"
+        cases = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
         if args.limit:
             cases = cases[: args.limit]
-        for cond in args.conditions.split(","):
-            ctx = ctx_cache.setdefault((domain, cond), context(domain, cond))
-            ctx_hash = hashlib.sha256(ctx.encode()).hexdigest()[:12]
+        for cond in conds:
+            ctx = contexts[(domain, cond)]
+            ctx_hash = manifest[f"{domain}|{cond}"]["context_sha256_12"]
             for case in cases:
                 for rep in range(1, args.reps + 1):
                     target = out_dir / f"{case['id']}_{cond}_r{rep}.json"
                     if target.exists():
-                        continue
+                        old = json.loads(target.read_text(encoding="utf-8"))
+                        if (old.get("context_sha256_12"), old.get("instructions_sha256_12")) == (ctx_hash, instr_hash) \
+                                and not old.get("http_error") and not old.get("network_error"):
+                            continue  # same frozen context and instructions: already answered
+                        target = out_dir / f"{case['id']}_{cond}_r{rep}_c{ctx_hash[:8]}_i{instr_hash[:8]}.json"
+                        if target.exists():
+                            continue
                     prompt = INSTRUCTIONS + "\n\n" + ctx + "\n\n## User request\n" + case["turns"][0]
                     record = {"case_id": case["id"], "domain": domain, "condition": cond, "rep": rep, "model": args.model,
-                              "context_sha256_12": ctx_hash, "instructions_sha256_12": hashlib.sha256(INSTRUCTIONS.encode()).hexdigest()[:12], "context_chars": len(ctx), "request": case["turns"][0],
+                              "context_sha256_12": ctx_hash, "instructions_sha256_12": instr_hash,
+                              "context_chars": len(ctx), "request": case["turns"][0], "generation": params,
                               "time": time.strftime("%Y-%m-%dT%H:%M:%S")}
+                    attempt = {k: record[k] for k in ("case_id", "domain", "condition", "rep", "model", "time",
+                                                      "context_sha256_12", "instructions_sha256_12")}
                     try:
                         call = (local if args.model.startswith("local:") else
                                 mistral if args.model.startswith(("mistral", "magistral")) else gemini)
@@ -228,15 +257,18 @@ def main():
                             record["parsed"] = json.loads(text)
                         except json.JSONDecodeError:
                             record["parse_error"] = True
+                        log_attempt(out_dir, {**attempt, "outcome": "answer"})
                     except urllib.error.HTTPError as exc:
-                        record["http_error"] = exc.code
+                        log_attempt(out_dir, {**attempt, "outcome": f"http_{exc.code}"})
                         print(case["id"], cond, "HTTP", exc.code, flush=True)
                         if exc.code == 429:
                             time.sleep(60)
-                            continue
+                            continue  # the refusal is logged; the case is retried on the next resume
+                        record["http_error"] = exc.code
                     except (urllib.error.URLError, TimeoutError) as exc:
+                        log_attempt(out_dir, {**attempt, "outcome": "network_error"})
                         record["network_error"] = str(exc)[:200]
-                    target.write_text(json.dumps(record, ensure_ascii=False, indent=1), encoding="utf-8")
+                    write_atomic(target, json.dumps(record, ensure_ascii=False, indent=1))
                     print(case["id"], cond, rep, "decision=", (record.get("parsed") or {}).get("decision"), flush=True)
                     time.sleep(args.pause)
 

@@ -255,6 +255,7 @@ def _base_row(case, answer, decision, exp, correct, unsupported, silent_qualifie
         "hallucination": int(unsupported + silent_qualifier + silent_default > 0),
         "n_questions": len(p.get("questions") or []),
         "instructions": answer.get("instructions_sha256_12", "v0"),
+        "context": answer.get("context_sha256_12", "?"),
     }
 
 
@@ -295,7 +296,7 @@ def main():
         w.writerows(rows)
     agg = defaultdict(lambda: defaultdict(list))
     for r in rows:
-        k = f"{r['domain']}|{r['condition']}|{r['instructions']}"
+        k = f"{r['domain']}|{r['condition']}|{r['instructions']}|{r['context'][:6]}"
         agg[k]["format_failure"].append(1 - r["parsed_ok"])
         if not r["parsed_ok"]:
             continue
@@ -312,8 +313,8 @@ def main():
             agg[k]["qualifier_ok"].append(r["qualifier_convention_ok"])
     summary = {k: {m: {"mean": round(sum(v) / len(v), 3), "n": len(v)} for m, v in d.items()} for k, d in sorted(agg.items())}
     corr = {}
-    for cond in sorted({(r["condition"], r["instructions"]) for r in rows}):
-        sub = [r for r in rows if (r["condition"], r["instructions"]) == cond]
+    for cond in sorted({(r["domain"], r["condition"], r["instructions"], r["context"]) for r in rows}):
+        sub = [r for r in rows if (r["domain"], r["condition"], r["instructions"], r["context"]) == cond]
         cond = "|".join(cond)
         for feat in ("n_words", "n_numbers", "n_qualifiers", "n_conversions"):
             for target in ("unsupported", "premature_execute"):
@@ -325,10 +326,10 @@ def main():
     (out / f"e1-complexity-spearman-{model}.json").write_text(json.dumps(corr, indent=1), encoding="utf-8")
     (out / f"e1-summary-{model}.json").write_text(json.dumps({"summary": summary, "availability": availability}, indent=1),
                                                     encoding="utf-8")
-    print(f"{'domain|cond|instr':24} {'fmt_ko':>6} {'dec_ok':>7} {'prem':>6} {'unsup':>6} {'halluc':>7} {'fields':>7} {'qual':>6} {'s_def':>6}  n")
+    print(f"{'domain|cond|instr|ctx':31} {'fmt_ko':>6} {'dec_ok':>7} {'prem':>6} {'unsup':>6} {'halluc':>7} {'fields':>7} {'qual':>6} {'s_def':>6}  n")
     for k, d in summary.items():
         g = lambda m, d=d: f"{d[m]['mean']:.2f}" if m in d else "  -"
-        print(f"{k:24} {g('format_failure'):>6} {g('decision_ok'):>7} {g('premature_execute'):>6} {g('unsupported'):>6} {g('hallucination_rate'):>7} "
+        print(f"{k:31} {g('format_failure'):>6} {g('decision_ok'):>7} {g('premature_execute'):>6} {g('unsupported'):>6} {g('hallucination_rate'):>7} "
               f"{g('field_acc'):>7} {g('qualifier_ok'):>6} {g('silent_default'):>6}  {d['premature_execute']['n']}")
 
 
