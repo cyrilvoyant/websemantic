@@ -87,7 +87,7 @@ ensure_env() {  # env_dir lane "import check" pip-args...   (an incomplete venv 
   local env="$1" lane="$2" check="$3"; shift 3
   if ! { [ -x "$env/bin/python" ] && "$env/bin/python" -c "$check" >/dev/null 2>&1; }; then
     rm -rf "$env" && python3 -m venv "$env" || fail "$lane" "venv creation failed"
-    "$env/bin/pip" install -q --upgrade pip || fail "$lane" "pip upgrade failed"
+    "$env/bin/pip" install --upgrade pip || fail "$lane" "pip upgrade failed"
     # setuptools-scm writes pyrcel/version.py during build. Build from a disposable
     # copy so installation cannot change the backend verified by the adapter.
     local build_dir="" arg; local install_args=()
@@ -98,7 +98,7 @@ ensure_env() {  # env_dir lane "import check" pip-args...   (an incomplete venv 
         install_args+=("$build_dir")
       else install_args+=("$arg"); fi
     done
-    "$env/bin/pip" install -q "${install_args[@]}" || fail "$lane" "dependency installation failed"
+    "$env/bin/pip" install "${install_args[@]}" || fail "$lane" "dependency installation failed"
     [ -z "$build_dir" ] || rm -rf "$build_dir"
     "$env/bin/python" -c "$check" || fail "$lane" "import check failed after installation"
   fi
@@ -148,6 +148,19 @@ model_spec() {  # key -> HF id, served name, extra vLLM arguments
   esac
 }
 
+server_ready() {
+  "$GPU_ENV/bin/python" - "$SERVED" <<'PY'
+import json
+import sys
+from urllib.request import urlopen
+try:
+    with urlopen("http://127.0.0.1:8000/v1/models", timeout=5) as response:
+        models = json.load(response)
+    sys.exit(0 if any(item.get("id") == sys.argv[1] for item in models.get("data", [])) else 1)
+except Exception:
+    sys.exit(1)
+PY
+}
 stop_vllm() {  # lane-level: the PID lives in the lane, is written to a file for the parent, and its group is killed
   if [ -n "${LANE_VLLM:-}" ]; then kill -- "-$LANE_VLLM" 2>/dev/null || kill "$LANE_VLLM" 2>/dev/null
     for _ in $(seq 1 30); do kill -0 "$LANE_VLLM" 2>/dev/null || break; sleep 2; done; fi
@@ -165,11 +178,11 @@ gpu_lane() {
       --port 8000 --seed 0 > "$LOGS/vllm-$KEY.log" 2>&1 &
     LANE_VLLM=$!; echo "$LANE_VLLM" > "$LOGS/vllm.pid"
     for _ in $(seq 1 180); do                                  # up to 1 h for download + loading
-      curl -sf http://localhost:8000/v1/models | grep -q "\"$SERVED\"" && break
+      server_ready && break
       kill -0 "$LANE_VLLM" 2>/dev/null || fail gpu "vLLM stopped for $KEY, see logs/$CAMPAIGN/vllm-$KEY.log"
       sleep 20
     done
-    curl -sf http://localhost:8000/v1/models | grep -q "\"$SERVED\"" || fail gpu "vLLM not serving $SERVED after 1 h"
+    server_ready || fail gpu "vLLM not serving $SERVED after 1 h"
     for CORPUS in $CORPORA; do
       for REP in $REPS; do
         # One client per (domain, condition), all at once: vLLM batches the concurrent requests on the GPU.
