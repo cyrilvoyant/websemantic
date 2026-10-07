@@ -1,5 +1,7 @@
 # Scientific execution contract
 
+Read [LLM-CONTRACT.md](LLM-CONTRACT.md) first (rules, units, qualitative conventions for the three software).
+
 Start with llm.md and agent/README.md for web-file execution without Git. Select agent/files.json (TLS), files-lql.json or files-pyrcel.json; each lists sources, hashes and dependencies. Use python agent/run.py MODEL scenario.json with an explicit accepted scenario. Read the corresponding definitions and descriptor; docs/agent-contract.md gives the detailed TLS workflow. TLS meanings are documented in docs/tls-reference.md, ontology/tls-contract.json and ontology/tls-vocabulary.ttl; LQL and pyrcel definitions are in docs/lql-contract-definitions.md and docs/pyrcel-contract-definitions.md. The TLS scenario schema is ontology/tls-scenario.schema.json.
 
 - Never modify original simulator sources or Git repositories under external/. Only reviewed WebSemantic adapters call their pinned APIs.

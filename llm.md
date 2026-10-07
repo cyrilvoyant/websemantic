@@ -1,5 +1,7 @@
 # Scientific software use
 
+**Read [LLM-CONTRACT.md](LLM-CONTRACT.md) first**: rules, units and the meaning of qualitative words (beaucoup, peu, rare, fort...) for TLS, LQL-Equiv and pyrcel.
+
 Start with [agent/README.md](agent/README.md). It provides the source indexes,
 scenario formats and Python commands for TLS, LQL-Equiv and pyrcel. Git and a
 Gemini key are unnecessary for this path. Python and the declared dependencies
