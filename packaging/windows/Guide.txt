@@ -1,6 +1,6 @@
 WEBSEMANTIC - ESSAIS
 
-Quatre essais à copier. Pour un retour, indiquez la demande, la réponse et le résultat attendu.
+Six essais à copier. Pour un retour, indiquez la demande, la réponse et le résultat attendu.
 
 1 — INSTALLER ET UTILISER
 
@@ -17,7 +17,7 @@ Les qualificatifs proposent des hypothèses à valider : « beaucoup de trafic �
 Code : https://github.com/cyrilvoyant/websemantic
 TLS : https://github.com/cyrilvoyant/tunnel-load-simulator
 
-2 — QUATRE ESSAIS
+2 — SIX ESSAIS
 
 EXEMPLE 1 — JE SAIS CE QUE JE VEUX
 
@@ -69,20 +69,26 @@ Ouvrez votre service habituel avec navigation et exécution Python, puis collez 
 Utilise TLS depuis https://github.com/cyrilvoyant/websemantic avec tes outils Python. Calcule la consommation d’un tunnel fictif de 2 km, 2 tubes, 2 voies par tube, périurbain, LED fixe et ventilation longitudinale, sur 30 jours dès le 01/01/2025, au pas de 15 min, avec 10 réalisations. J’accepte les autres défauts. Réponds brièvement en français : énergie (MWh), énergie annualisée (MWh/an, extrapolation), pic (kW) et lien vers les fichiers. Trace les paramètres, hypothèses, sources et détails d’exécution dans les fichiers, sans les détailler à l’écran.
 
 
-AUTRES ENVIRONNEMENTS
+EXEMPLE 5 — LQL : UN SCHÉMA FICTIF
 
-LQL — choisissez 2. Un seul cursus fictif, pour recherche et enseignement.
+Lancez WebSemantic.cmd et choisissez 2 dans une nouvelle conversation. Collez ces trois textes séparément :
 
-Étudie un schéma fictif : rectum et prostate, 20 fractions de 3 Gy, référence 2 Gy. Propose les informations manquantes sans les accepter.
+Pour un exercice d’enseignement, étudie un seul cours fictif : rectum comme organe à risque, prostate comme cible, 20 fractions de 3 Gy, référence 2 Gy, sans interruption et une séance par jour. Propose les éventuels paramètres manquants sans les accepter.
 
-Montre les paramètres, leurs unités et les coefficients utilisés.
+Montre les paramètres dans un tableau : valeur par défaut, valeur retenue, unité et origine. Explique la différence entre dose physique, BED et dose équivalente, ainsi que les coefficients utilisés.
 
-J’accepte les hypothèses proposées ; calcule et explique les EQD en Gy.
+J’accepte les paramètres proposés pour cet exercice fictif. Calcule et présente brièvement BED et dose équivalente pour l’organe et la cible, en Gy, avec les éventuels drapeaux de validité et le dossier des résultats.
 
-pyrcel — choisissez 3. Une parcelle idéale avec un seul mode d’aérosol.
+Il s’agit d’un exercice de recherche ou d’enseignement, sans décision de traitement. Une valeur invalide ou saturée doit être signalée.
 
-Simule une parcelle à 1 m/s, 283 K, 850 hPa, S0 = -0,02. Un mode lognormal : 1000 particules/cm³, rayon sec médian 0,05 µm, sigma 2 et kappa 0,54. Propose les réglages numériques.
+EXEMPLE 6 — PYRCEL : UNE PARCELLE IDÉALISÉE
 
-Montre les paramètres avec leurs unités ; explique le rayon médian et la durée maximale.
+Lancez WebSemantic.cmd et choisissez 3 dans une nouvelle conversation. Collez ces trois textes séparément :
 
-J’accepte les hypothèses proposées. Calcule et donne la sursaturation maximale et les particules activées, avec leurs unités.
+Simule une parcelle idéale à ascendance constante de 1 m/s, température initiale 283 K, pression 850 hPa et humidité relative 98 %. Un seul mode lognormal : concentration 1000 particules/cm³, rayon sec médian 0,05 µm, sigma géométrique 2 et kappa 0,54. Pour un essai court, simule 30 secondes au pas de sortie de 5 secondes, avec 50 classes de tailles, coefficient d’accommodation 1 et sans arrêt anticipé. Propose toute information manquante sans l’accepter.
+
+Montre les paramètres, valeurs retenues, unités et origines. Explique la conversion de l’humidité relative en sursaturation initiale et la différence entre rayon et diamètre.
+
+J’accepte les paramètres proposés. Calcule et donne brièvement la sursaturation maximale en %, la concentration activée en particules/cm³, la durée effectivement simulée en secondes et le dossier des résultats.
+
+Cette parcelle idéalisée ne représente pas une prévision météo. Si un composant manque, suivez le message du lanceur et relancez Installer.cmd.
