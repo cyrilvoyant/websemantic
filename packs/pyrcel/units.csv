@@ -1,0 +1,11 @@
+unit,symbol,iri,in_qudt,quantity_kind_iri,accepted_exact_conversions
+unit:K,K,http://qudt.org/vocab/unit/K,1,http://qudt.org/vocab/quantitykind/ThermodynamicTemperature,°C +273.15
+unit:M,m,http://qudt.org/vocab/unit/M,1,http://qudt.org/vocab/quantitykind/Length,km x1000; cm x0.01
+unit:M-PER-SEC,m/s,http://qudt.org/vocab/unit/M-PER-SEC,1,http://qudt.org/vocab/quantitykind/Velocity,km/h /3.6
+unit:MicroM,µm,http://qudt.org/vocab/unit/MicroM,1,http://qudt.org/vocab/quantitykind/Length,nm x0.001; m x1e6
+unit:NUM,count,http://qudt.org/vocab/unit/NUM,1,http://qudt.org/vocab/quantitykind/Count,number words (deux -> 2)
+unit:PA,Pa,http://qudt.org/vocab/unit/PA,1,http://qudt.org/vocab/quantitykind/Pressure,hPa x100; kPa x1000
+unit:PER-CentiM3,cm⁻³,http://qudt.org/vocab/unit/PER-CentiM3,1,http://qudt.org/vocab/quantitykind/NumberDensity,m⁻³ x1e-6
+unit:PERCENT,%,http://qudt.org/vocab/unit/PERCENT,1,http://qudt.org/vocab/quantitykind/DimensionlessRatio,fraction x100 (never mix % and fraction)
+unit:SEC,s,http://qudt.org/vocab/unit/SEC,1,http://qudt.org/vocab/quantitykind/Time,min x60
+unit:UNITLESS,1,http://qudt.org/vocab/unit/UNITLESS,1,http://qudt.org/vocab/quantitykind/Dimensionless,percent /100 when the field is a fraction

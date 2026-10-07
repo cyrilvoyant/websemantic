@@ -1,0 +1,5 @@
+output,ontology_concept,unit,unit_symbol,definition
+T,PYR_T,unit:K,K,Native parcel temperature.
+S,PYR_S,unit:UNITLESS,1,Native supersaturation fraction.
+maximum_supersaturation_percent,PYR_Smax_percent,unit:PERCENT,%,Native peak supersaturation multiplied by 100.
+activated_number_cm3,PYR_Nd_cm3,unit:PER-CentiM3,cm⁻³,Native activated concentration divided by 10^6.

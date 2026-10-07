@@ -1,0 +1,20 @@
+output,ontology_concept,unit,unit_symbol,definition
+daily,,,,"derived daily energy sum (kWh) and mean power (kW) of realization 0, not ensemble median"
+representative,,,,"time series of run 0, load decomposition"
+kpis,,,,one row per Monte Carlo run (annual energy uses 365/n_days extrapolation)
+envelope,,,,"hourly median, p10, p90 and mean of total power across runs"
+season_profiles,,,,"mean hourly profile per season, hour and run"
+representative.power_kw,,,kW,power: Puissance électrique calculée.
+representative.energy_kwh,,,kWh,energy: Énergie du pas : power_kw × freq_minutes / 60.
+representative.traffic_index,,,1,relative_traffic_index: Indice relatif de trafic ; pas un nombre de véhicules par jour.
+representative.pollution_event,,,1,event_flag: Indicateur binaire d'événement de pollution simulé.
+representative.accident_event,,,1,event_flag: Indicateur binaire d'accident simulé.
+kpis.total_mwh,,,MWh,energy: Énergie de toute la période : somme des energy_kwh / 1000.
+kpis.annualized_mwh,,,MWh/an,annualized_energy: Extrapolation : total_mwh × 365 / n_days ; pas une année observée.
+kpis.peak_kw,,,kW,power: Puissance électrique calculée.
+kpis.load_factor,,,1,"power_ratio: mean_kw / peak_kw par réalisation ; sans dimension, 0,6 équivaut à 60 %."
+kpis.specific_kwh_m_year,,,kWh/(m·an),"length_normalized_annualized_energy: annualized_mwh × 1000 / length_m ; ensemble des tubes, par mètre de longueur du tunnel, pas par mètre-tube."
+kpis.n_pollution_events,,,1,transition_count: Nombre de transitions 0 vers 1 dans la série pollution_event ; un événement actif au premier pas n'est pas compté.
+kpis.n_accident_events,,,1,transition_count: Nombre de transitions 0 vers 1 dans la série accident_event ; un événement actif au premier pas n'est pas compté.
+daily.energy_kwh,,,kWh,"energy: Somme des énergies des pas natifs de la journée, réalisation 0."
+daily.mean_kw,,,kW,"power: Moyenne des puissances des pas natifs de la journée, réalisation 0."

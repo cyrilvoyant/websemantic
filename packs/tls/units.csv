@@ -1,0 +1,10 @@
+unit,symbol,iri,in_qudt,quantity_kind_iri,accepted_exact_conversions
+unit:DAY,d,http://qudt.org/vocab/unit/DAY,1,http://qudt.org/vocab/quantitykind/Time,week x7
+unit:HR,h,http://qudt.org/vocab/unit/HR,1,http://qudt.org/vocab/quantitykind/Time,7 h 30 -> 7.5; min /60
+unit:KiloW,kW,http://qudt.org/vocab/unit/KiloW,1,http://qudt.org/vocab/quantitykind/Power,W x0.001; MW x1000
+unit:KiloW per km per tube,kW/(km·tube),https://github.com/cyrilvoyant/websemantic/ns#KiloW-PER-KiloM-PER-TUBE,0,http://qudt.org/vocab/quantitykind/Power,not in QUDT: power per km of one tube; 1 kW/km = 1 W/m
+unit:M,m,http://qudt.org/vocab/unit/M,1,http://qudt.org/vocab/quantitykind/Length,km x1000; cm x0.01
+unit:MIN,min,http://qudt.org/vocab/unit/MIN,1,http://qudt.org/vocab/quantitykind/Time,h x60; 'pas horaire' -> 60
+unit:NUM,count,http://qudt.org/vocab/unit/NUM,1,http://qudt.org/vocab/quantitykind/Count,number words (deux -> 2)
+unit:PERCENT,%,http://qudt.org/vocab/unit/PERCENT,1,http://qudt.org/vocab/quantitykind/DimensionlessRatio,fraction x100 (never mix % and fraction)
+unit:UNITLESS,1,http://qudt.org/vocab/unit/UNITLESS,1,http://qudt.org/vocab/quantitykind/Dimensionless,percent /100 when the field is a fraction

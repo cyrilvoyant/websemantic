@@ -1,0 +1,15 @@
+output,ontology_concept,unit,unit_symbol,definition
+physical_dose_gy,LQL_total_dose,unit:GRAY,Gy,Dose physique totale = dose par fraction × fractions ; distincte de BED.
+bed_oar,LQL_bed_oar,unit:GRAY,Gy,BED organe native ; null si non calculable.
+bed_tumour,LQL_bed_tumour,unit:GRAY,Gy,BED tumeur native ; null si non calculable.
+eqd_oar_total,LQL_eqd_oar_total,unit:GRAY,Gy,Dose équivalente organe au fractionnement de référence ; null si invalide ou saturée.
+eqd_tumour_total,LQL_eqd_tumour_total,unit:GRAY,Gy,Dose équivalente tumeur au fractionnement de référence ; null si invalide ou saturée.
+ntcp_percent,LQL_ntcp,unit:PERCENT,%,Probabilité modélisée de complication ; null si EQD invalide ou coefficient absent.
+tcp_percent,LQL_tcp_percent,unit:PERCENT,%,Probabilité modélisée de contrôle tumoral ; null si EQD invalide ou coefficient absent.
+cancer_risk,LQL_cancer_risk,,,"Indice natif du modèle de risque secondaire ; dépend des coefficients tabulés, ne pas interpréter comme pourcentage clinique."
+overall_days_oar,LQL_overall_days_oar,unit:DAY,j,"Durée calendaire native du cursus, organe."
+overall_days_tumour,LQL_overall_days_tumour,unit:DAY,j,"Durée calendaire native du cursus, tumeur."
+oar_total_valid,LQL_oar_total_valid,,,Validité native du total organe.
+tumour_total_valid,LQL_tumour_total_valid,,,Validité native du total tumeur.
+oar_saturated,LQL_oar_saturated,,,true si EQD organe à une borne de recherche.
+tumour_saturated,LQL_tumour_saturated,,,true si EQD tumeur à une borne de recherche.

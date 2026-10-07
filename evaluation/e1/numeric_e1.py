@@ -16,7 +16,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[2]
 RESERVE = REPO.parent / "benchmark-reserve"
 sys.path.insert(0, str(Path(__file__).parent))
-from score_e1 import expected, norm  # noqa: E402
+from score_e1 import expected, norm
 
 
 def rmsd(a, b):
@@ -57,7 +57,7 @@ def tls_case(case, answer):
     p_ref, e_ref = tls_run(ref)
     try:
         p_got, e_got = tls_run(got)
-    except Exception as exc:  # invalid configuration reached the backend
+    except Exception as exc:  # noqa: BLE001 - any backend failure is recorded as an outcome  # invalid configuration reached the backend
         return {"status": f"backend_error: {type(exc).__name__}"}
     r = {"status": "ok", "grid_same": int(grid_same), "quantity": "power_kw",
          "kpi": "total_mwh", "kpi_rel_err": abs(e_got - e_ref) / abs(e_ref)}
@@ -85,7 +85,7 @@ def lql_case(case, answer):
     o_ref, t_ref = run(exp)
     try:
         o, t = run(got)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 - any backend failure is recorded as an outcome
         return {"status": f"backend_error: {type(exc).__name__}"}
     return {"status": "ok", "grid_same": 1, "quantity": "eqd_oar_total,eqd_tumour_total",
             "rmsd": math.sqrt(((o - o_ref) ** 2 + (t - t_ref) ** 2) / 2),
@@ -110,7 +110,7 @@ def pyrcel_case(case, answer):
     s_ref, smax_ref = run(exp)
     try:
         s, smax = run(got)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 - any backend failure is recorded as an outcome
         return {"status": f"backend_error: {type(exc).__name__}"}
     d, nd = rmsd(s, s_ref)
     return {"status": "ok", "grid_same": int(len(s) == len(s_ref)), "quantity": "S", "rmsd": d, "nrmsd": nd,
@@ -122,7 +122,7 @@ def main():
     fn = {"tls": tls_case, "lqlequiv": lql_case, "pyrcel": pyrcel_case}[domain]
     cases = {json.loads(line)["id"]: json.loads(line) for line in (RESERVE / domain / "pilot.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()}
     rows = []
-    for f in sorted((RESERVE / "runs" / "e1" / model).glob(f"*.json")):
+    for f in sorted((RESERVE / "runs" / "e1" / model).glob("*.json")):
         a = json.loads(f.read_text(encoding="utf-8"))
         if a.get("domain") != domain or (a.get("parsed") or {}).get("decision") != "execute":
             continue
