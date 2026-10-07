@@ -1,8 +1,11 @@
 """Numerical consequence of each E1 interpretation, for every output quantity.
 
-Replay happens only when the candidate itself supplied every expected field
-(no completion from the private reference). Candidate and reference configurations
-run on the pinned backend; every output is compared:
+Numerical consequence WITH CONTROLLED COMPLETION: replay only when the candidate itself
+supplied every expected field; fields outside the expected set (defaults the case accepts,
+protocol settings) come from the case scenario and are listed in the "completed_from_case"
+column. This is the consequence of the candidate's interpretation, not an autonomous
+conforming execution. Values are not coerced: a non-integer for an integer field or a unit
+different from the canonical unit gives an explicit status. Every output is compared:
   - time series (same length and same time stamps, otherwise "support_differs",
     never truncated): RMSE and nRMSE = RMSE / mean(reference), RMSE only when the
     reference mean is negligible (|mean| <= 5 % of RMS, e.g. signed supersaturation);
@@ -29,7 +32,7 @@ PYR_SERIES = ["S", "T", "P", "wv", "wc", "z"]
 
 
 def rmse(a, b):
-    if len(a) != len(b) or not b:
+    if len(a) != len(b) or not b or not all(map(math.isfinite, a)) or not all(map(math.isfinite, b)):
         return None, None
     n = len(b)
     e = math.sqrt(sum((a[i] - b[i]) ** 2 for i in range(n)) / n)
@@ -52,6 +55,34 @@ def llm_values(answer):
 
 
 PYR_MODE = ("n", "mu", "sigma", "kappa")
+
+
+INT_FIELDS = {"n_tubes", "n_lanes_per_tube", "n_days", "freq_minutes", "n_runs", "base_seed", "n_fractions", "bins"}
+UNIT_ALIASES = {"unit:M": {"m", "unit:m", "metre", "mètre", "meters", "metres", "mètres"},
+                "unit:KiloW": {"kw", "kilow", "kilowatt", "kilowatts", "unit:kilow"}, "unit:GRAY": {"gy", "unit:gray", "gray"},
+                "unit:K": {"k", "unit:k", "kelvin"}, "unit:PA": {"pa", "unit:pa"},
+                "unit:M-PER-SEC": {"m/s", "unit:m-per-sec"}, "unit:MicroM": {"µm", "μm", "um", "microm", "unit:microm", "micrometre", "micron", "microns"},
+                "unit:PER-CentiM3": {"cm-3", "cm⁻³", "/cm3", "cm^-3", "unit:per-centim3", "per cm3"},
+                "unit:DAY": {"d", "day", "days", "jour", "jours", "unit:day"}, "unit:MIN": {"min", "minute", "minutes", "unit:min"},
+                "unit:HR": {"h", "hour", "hours", "heure", "heures", "unit:hr"}, "unit:PERCENT": {"%", "percent", "unit:percent"}}
+
+
+def candidate_issue(answer, case):
+    """Explicit status if a candidate value would need coercion or is given in another unit."""
+    import yaml
+    d = yaml.safe_load((REPO / "descriptors" / case["domain"] / "descriptor.yaml").read_text(encoding="utf-8"))
+    units = {norm(n): sp.get("unit") for g in ("inputs", "experiment") for n, sp in (d.get(g) or {}).items()}
+    for v in (answer.get("parsed") or {}).get("values") or []:
+        if not isinstance(v, dict) or v.get("value") is None:
+            continue
+        k = norm(v.get("field", ""))
+        if k in expected(case) and k in INT_FIELDS and isinstance(v["value"], float) and not v["value"].is_integer():
+            return f"non_integer_value:{k}"
+        canon, given = units.get(k), str(v.get("unit") or "").strip().lower()
+        official = {canon.lower(), canon.split(":", 1)[-1].lower()} if canon else set()
+        if canon in UNIT_ALIASES and given and given not in UNIT_ALIASES[canon] and given not in official:
+            return f"unit_mismatch:{k}:{given}"
+    return None
 
 
 def complete(case, answer):
@@ -82,10 +113,10 @@ def tls_run(values):
 def tls_configs(case, answer):
     ref_doc = json.loads((RESERVE / "tls" / case["reference_scenarios"][0]).read_text(encoding="utf-8"))["scenario"]
     ref = {k: v["value"] for g in ("inputs", "experiment") for k, v in ref_doc[g].items()}
-    got = dict(ref)  # fields outside expected(): defaults accepted by the case itself
+    got = dict(ref)  # fields outside expected(): defaults accepted by the case itself (controlled completion)
     for k, v in llm_values(answer).items():
         if k in got:
-            got[k] = type(ref[k])(v) if isinstance(ref[k], (int, float)) and not isinstance(v, str) else v
+            got[k] = int(v) if isinstance(ref[k], int) and not isinstance(ref[k], bool) and float(v).is_integer() else v
     return ref, got, tls_run
 
 
@@ -120,11 +151,18 @@ def pyrcel_configs(case, answer):
         if k in got:
             got[k] = float(v)
 
+    proto = {k: ref[k] for k in ("bins", "accom", "t_end", "output_dt", "terminate", "terminate_depth")}
+    cand = llm_values(answer)
+    got_proto = {k: cand.get(k, proto[k]) for k in proto}  # candidate settings are used, divergences are measured
+    exp = dict(exp, _proto=proto)
+    got = dict(got, _proto=got_proto)
+
     def run(x):
         import pyrcel as pm
-        aer = [pm.AerosolSpecies("a", pm.Lognorm(mu=x["mu"], sigma=x["sigma"], N=x["n"]), kappa=x["kappa"], bins=ref["bins"])]
-        m = pm.ParcelModel(aer, V=x["v"], T0=x["t0"], S0=x["s0"], P0=x["p0"], accom=ref["accom"], console=False)
-        o = m.run(t_end=ref["t_end"], output_dt=ref["output_dt"], terminate=ref["terminate"], terminate_depth=ref["terminate_depth"])
+        pr = x["_proto"]
+        aer = [pm.AerosolSpecies("a", pm.Lognorm(mu=x["mu"], sigma=x["sigma"], N=x["n"]), kappa=x["kappa"], bins=int(pr["bins"]))]
+        m = pm.ParcelModel(aer, V=x["v"], T0=x["t0"], S0=x["s0"], P0=x["p0"], accom=pr["accom"], console=False)
+        o = m.run(t_end=pr["t_end"], output_dt=pr["output_dt"], terminate=bool(pr["terminate"]), terminate_depth=pr["terminate_depth"])
         frame, _ = o.to_pandas()
         times = [float(t) for t in o.time]
         series = {c: (times, [float(v) for v in frame[c]]) for c in PYR_SERIES}
@@ -136,16 +174,24 @@ def compare(ref_out, got_out):
     rows = []
     for name, (t_ref, v_ref) in ref_out["series"].items():
         t_got, v_got = got_out["series"][name]
+        if not (len(t_ref) == len(v_ref) > 0 and len(t_got) == len(v_got) > 0):
+            rows.append({"quantity": name, "kind": "series", "status": "empty_or_misaligned_series"})
+            continue
         if t_got != t_ref:
-            rows.append({"quantity": name, "kind": "series", "status": "support_differs"})
+            rows.append({"quantity": name, "kind": "series", "status": "support_differs", "n": len(v_ref)})
             continue
         e, ne = rmse(v_got, v_ref)
+        if e is None:
+            rows.append({"quantity": name, "kind": "series", "status": "non_finite_values", "n": len(v_ref)})
+            continue
         rows.append({"quantity": name, "kind": "series", "status": "ok", "n": len(v_ref), "rmse": e, "nrmse": ne})
+    period_differs = any(r.get("status") == "support_differs" for r in rows)
     for name, r in ref_out["scalars"].items():
         g = got_out["scalars"].get(name)
         ok = r is not None and g is not None
-        rows.append({"quantity": name, "kind": "scalar", "status": "ok" if ok else "undefined_output",
-                     "abs_err": abs(g - r) if ok else None, "rel_err": rel_err(g, r)})
+        status = "period_differs" if period_differs else ("ok" if ok else "undefined_output")
+        rows.append({"quantity": name, "kind": "scalar", "status": status,
+                     "abs_err": abs(g - r) if ok else None, "rel_err": rel_err(g, r) if ok else None})
     return rows
 
 
@@ -172,6 +218,10 @@ def main():
         if not complete(c, a):
             rows.append({**head, "quantity": "*", "status": "incomplete_candidate"})
             continue
+        issue = candidate_issue(a, c)
+        if issue:
+            rows.append({**head, "quantity": "*", "status": issue})
+            continue
         ref_cfg, got_cfg, run = configs(c, a)
         key = json.dumps(ref_cfg, sort_keys=True, default=str)
         if key not in cache:
@@ -181,8 +231,10 @@ def main():
         except Exception as exc:  # noqa: BLE001 - a backend rejection is an outcome
             rows.append({**head, "quantity": "*", "status": f"backend_error: {type(exc).__name__}"})
             continue
-        rows += [{**head, **r} for r in compare(cache[key], got_out)]
-    keys = ["case_id", "condition", "rep", "instructions", "quantity", "kind", "status", "n", "rmse", "nrmse", "abs_err", "rel_err"]
+        filled = sorted(k for k in (ref_cfg if isinstance(ref_cfg, dict) else {}) if k not in llm_values(a) and not k.startswith("_"))
+        rows += [{**head, "completed_from_case": " ".join(filled), **r} for r in compare(cache[key], got_out)]
+    keys = ["case_id", "condition", "rep", "instructions", "quantity", "kind", "status", "n", "rmse", "nrmse", "abs_err", "rel_err",
+            "completed_from_case"]
     with open(REPO / "evaluation" / "e1" / f"e1-numeric-{model}-{domain}.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=keys)
         w.writeheader()
