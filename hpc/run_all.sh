@@ -11,6 +11,9 @@ LOGS="$BASE/logs"; mkdir -p "$LOGS"
 MODEL="${MODEL:-Qwen/Qwen2.5-72B-Instruct}"; SERVED="${SERVED:-qwen2.5-72b}"
 GPU_ENV="$BASE/venv-gpu"; CPU_ENV="$BASE/venv-cpu"
 export HF_HOME="$BASE/hf-cache"
+# The SSH login node has Python 3.6 and no GPU: run this script from a JupyterLab H200 session.
+python3 -c "import sys; sys.exit(0 if sys.version_info >= (3, 10) else 1)" || {
+  echo "Python >= 3.10 required (found $(python3 --version)). Start run_all.sh from a JupyterLab H200 terminal."; exit 1; }
 
 status() {  # lane step detail
   python3 - "$BASE/status.json" "$1" "$2" "$3" <<'PY'
