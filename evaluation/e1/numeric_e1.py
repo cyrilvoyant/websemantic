@@ -1,12 +1,14 @@
-"""Numerical consequence of each E1 interpretation (execute answers on cases with a reference).
+"""Numerical consequence of each E1 interpretation, for every output quantity.
 
 Replay happens only when the candidate itself supplied every expected field
-(no completion from the private reference). The candidate configuration is run on
-the pinned backend and compared with the reference run on an identical support
-(same length and same time stamps; otherwise "support_differs", no truncation):
-RMSE and nRMSE = RMSE / mean(reference); RMSE only when |mean| is negligible
-(signed quantities such as supersaturation). Relative KPI error is undefined for a
-zero reference. Usage: python numeric_e1.py <model> <domain>   (pyrcel needs its env).
+(no completion from the private reference). Candidate and reference configurations
+run on the pinned backend; every output is compared:
+  - time series (same length and same time stamps, otherwise "support_differs",
+    never truncated): RMSE and nRMSE = RMSE / mean(reference), RMSE only when the
+    reference mean is negligible (|mean| <= 5 % of RMS, e.g. signed supersaturation);
+  - scalar indicators: absolute error and relative error (undefined for a zero reference).
+One row per (answer, quantity). Usage: python numeric_e1.py <model> <domain>
+(pyrcel needs its environment).
 """
 
 import csv
@@ -20,10 +22,14 @@ RESERVE = REPO.parent / "benchmark-reserve"
 sys.path.insert(0, str(Path(__file__).parent))
 from score_e1 import expected, norm
 
+TLS_SERIES = ["power_kw", "lighting_kw", "ventilation_kw", "auxiliary_kw", "energy_kwh", "traffic_index"]
+TLS_KPIS = ["total_mwh", "annualized_mwh", "peak_kw", "mean_kw", "load_factor", "specific_kwh_m_year",
+            "n_pollution_events", "n_accident_events"]
+PYR_SERIES = ["S", "T", "P", "wv", "wc", "z"]
+
 
 def rmse(a, b):
-    """RMSE and nRMSE (normalised by the reference mean); refuses different supports."""
-    if len(a) != len(b):
+    if len(a) != len(b) or not b:
         return None, None
     n = len(b)
     e = math.sqrt(sum((a[i] - b[i]) ** 2 for i in range(n)) / n)
@@ -34,13 +40,7 @@ def rmse(a, b):
 
 
 def rel_err(x, ref):
-    return None if ref == 0 else abs(x - ref) / abs(ref)
-
-
-def complete(case, answer):
-    """True if the candidate gave a value for every expected field (no completion from the reference)."""
-    got = llm_values(answer)
-    return all(k in got for k in expected(case))
+    return None if ref is None or x is None or ref == 0 else abs(x - ref) / abs(ref)
 
 
 def llm_values(answer):
@@ -51,67 +51,68 @@ def llm_values(answer):
     return out
 
 
-# ---------- TLS ----------
+PYR_MODE = ("n", "mu", "sigma", "kappa")
+
+
+def complete(case, answer):
+    """The candidate gave every expected field; single-mode pyrcel references need the four mode parameters."""
+    exp = expected(case)
+    if case["domain"] == "pyrcel" and not all(k in exp for k in PYR_MODE):
+        return False  # multi-mode reference (e.g. two aerosol modes): not replayable in this single-mode comparison
+    got = llm_values(answer)
+    return all(k in got for k in exp)
+
+
+# ---------- backends: each run returns {"series": {name: (times, values)}, "scalars": {name: value}} ----------
 def tls_run(values):
     sys.path.insert(0, str(REPO / "external/tunnel-load-simulator/src"))
     import pandas as pd
     from tunnel_load_simulator.simulator import TunnelConfig, run_monte_carlo
-    fields = TunnelConfig.__dataclass_fields__
-    cfg = TunnelConfig(**{k: values[k] for k in fields})
+    cfg = TunnelConfig(**{k: values[k] for k in TunnelConfig.__dataclass_fields__})
     out = run_monte_carlo(cfg, pd.Timestamp(values["start_date"]), int(values["n_days"]), int(values["freq_minutes"]),
                           int(values["n_runs"]), int(values["base_seed"]))
-    return list(out["representative"]["power_kw"]), float(out["kpis"]["total_mwh"].median())
+    rep = out["representative"]
+    times = [str(t) for t in rep["timestamp"]]
+    series = {c: (times, [float(x) for x in rep[c]]) for c in TLS_SERIES}
+    daily = rep.set_index("timestamp")["energy_kwh"].resample("1D").sum()
+    series["daily_energy_kwh"] = ([str(t) for t in daily.index], [float(x) for x in daily])
+    return {"series": series, "scalars": {k: float(out["kpis"][k].median()) for k in TLS_KPIS}}
 
 
-def tls_case(case, answer):
+def tls_configs(case, answer):
     ref_doc = json.loads((RESERVE / "tls" / case["reference_scenarios"][0]).read_text(encoding="utf-8"))["scenario"]
     ref = {k: v["value"] for g in ("inputs", "experiment") for k, v in ref_doc[g].items()}
-    got = dict(ref)  # fields outside expected(): declared defaults accepted by the case itself
+    got = dict(ref)  # fields outside expected(): defaults accepted by the case itself
     for k, v in llm_values(answer).items():
         if k in got:
             got[k] = type(ref[k])(v) if isinstance(ref[k], (int, float)) and not isinstance(v, str) else v
-    grid_same = all(str(got[k]) == str(ref[k]) for k in ("start_date", "n_days", "freq_minutes"))
-    p_ref, e_ref = tls_run(ref)
-    try:
-        p_got, e_got = tls_run(got)
-    except Exception as exc:  # noqa: BLE001 - any backend failure is recorded as an outcome  # invalid configuration reached the backend
-        return {"status": f"backend_error: {type(exc).__name__}"}
-    r = {"status": "ok" if grid_same else "support_differs", "grid_same": int(grid_same), "quantity": "power_kw",
-         "kpi": "total_mwh", "kpi_rel_err": rel_err(e_got, e_ref)}
-    if grid_same:
-        r["rmse"], r["nrmse"] = rmse(p_got, p_ref)
-    return r
+    return ref, got, tls_run
 
 
-# ---------- LQL ----------
-def lql_case(case, answer):
+def lql_run(x):
     sys.path.insert(0, str(REPO / "external/LQL-Equiv-web/src"))
     from lqlequiv import Course, Prescription, compute, load_library
     lib = load_library()
+    plan = Prescription(courses=(Course(float(x["dose_per_fraction"]), float(x["n_fractions"])),),
+                        reference_dose=float(x["reference_dose"]))
+    res = compute(lib.organ(x["organ"]), lib.tumour_site(x["tumour_site"]), plan)
+    c = res.courses[0]
+    return {"series": {}, "scalars": {
+        "bed_oar": c.bed_oar, "bed_tumour": c.bed_tumour, "eqd_oar_total": res.eqd_oar_total,
+        "eqd_tumour_total": res.eqd_tumour_total, "ntcp_percent": res.ntcp_percent, "tcp_percent": res.tcp_percent,
+        "cancer_risk": res.cancer_risk, "overall_days_oar": c.overall_days_oar, "overall_days_tumour": c.overall_days_tumour}}
+
+
+def lql_configs(case, answer):
     exp = expected(case)
     got = dict(exp)
     for k, v in llm_values(answer).items():
         if k in got:
             got[k] = v
-
-    def run(x):
-        plan = Prescription(courses=(Course(float(x["dose_per_fraction"]), float(x["n_fractions"])),),
-                            reference_dose=float(x["reference_dose"]))
-        res = compute(lib.organ(x["organ"]), lib.tumour_site(x["tumour_site"]), plan)
-        return res.eqd_oar_total, res.eqd_tumour_total
-    o_ref, t_ref = run(exp)
-    try:
-        o, t = run(got)
-    except Exception as exc:  # noqa: BLE001 - any backend failure is recorded as an outcome
-        return {"status": f"backend_error: {type(exc).__name__}"}
-    return {"status": "ok", "grid_same": 1, "quantity": "eqd_oar_total",
-            "abs_err_eqd_oar": abs(o - o_ref), "abs_err_eqd_tumour": abs(t - t_ref),
-            "kpi": "eqd_oar_total", "kpi_rel_err": rel_err(o, o_ref), "kpi2_rel_err": rel_err(t, t_ref)}
+    return exp, got, lql_run
 
 
-# ---------- pyrcel ----------
-def pyrcel_case(case, answer):
-    import pyrcel as pm
+def pyrcel_configs(case, answer):
     ref = case["reference"]
     exp = expected(case)
     got = dict(exp)
@@ -120,51 +121,73 @@ def pyrcel_case(case, answer):
             got[k] = float(v)
 
     def run(x):
+        import pyrcel as pm
         aer = [pm.AerosolSpecies("a", pm.Lognorm(mu=x["mu"], sigma=x["sigma"], N=x["n"]), kappa=x["kappa"], bins=ref["bins"])]
         m = pm.ParcelModel(aer, V=x["v"], T0=x["t0"], S0=x["s0"], P0=x["p0"], accom=ref["accom"], console=False)
         o = m.run(t_end=ref["t_end"], output_dt=ref["output_dt"], terminate=ref["terminate"], terminate_depth=ref["terminate_depth"])
-        return list(o.S), list(o.time), o.summary["S_max"]
-    s_ref, t_ref, smax_ref = run(exp)
-    try:
-        s, t, smax = run(got)
-    except Exception as exc:  # noqa: BLE001 - any backend failure is recorded as an outcome
-        return {"status": f"backend_error: {type(exc).__name__}"}
-    same_support = len(t) == len(t_ref) and all(abs(a - b) < 1e-9 for a, b in zip(t, t_ref))
-    r = {"status": "ok" if same_support else "support_differs", "grid_same": int(same_support), "quantity": "S",
-         "kpi": "S_max", "kpi_rel_err": rel_err(smax, smax_ref)}
-    if same_support:
-        r["rmse"], r["nrmse"] = rmse(s, s_ref)
-    return r
+        frame, _ = o.to_pandas()
+        times = [float(t) for t in o.time]
+        series = {c: (times, [float(v) for v in frame[c]]) for c in PYR_SERIES}
+        return {"series": series, "scalars": {"S_max": float(o.summary["S_max"]), "Nd": float(o.Nd), "nd_frac": float(o.nd_frac)}}
+    return exp, got, run
+
+
+def compare(ref_out, got_out):
+    rows = []
+    for name, (t_ref, v_ref) in ref_out["series"].items():
+        t_got, v_got = got_out["series"][name]
+        if t_got != t_ref:
+            rows.append({"quantity": name, "kind": "series", "status": "support_differs"})
+            continue
+        e, ne = rmse(v_got, v_ref)
+        rows.append({"quantity": name, "kind": "series", "status": "ok", "n": len(v_ref), "rmse": e, "nrmse": ne})
+    for name, r in ref_out["scalars"].items():
+        g = got_out["scalars"].get(name)
+        ok = r is not None and g is not None
+        rows.append({"quantity": name, "kind": "scalar", "status": "ok" if ok else "undefined_output",
+                     "abs_err": abs(g - r) if ok else None, "rel_err": rel_err(g, r)})
+    return rows
 
 
 def main():
     model, domain = sys.argv[1], sys.argv[2]
-    fn = {"tls": tls_case, "lqlequiv": lql_case, "pyrcel": pyrcel_case}[domain]
-    cases = {json.loads(line)["id"]: json.loads(line) for line in (RESERVE / domain / "pilot.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()}
-    rows = []
+    configs = {"tls": tls_configs, "lqlequiv": lql_configs, "pyrcel": pyrcel_configs}[domain]
+    cases = {json.loads(line)["id"]: json.loads(line)
+             for line in (RESERVE / domain / "pilot.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()}
+    rows, cache = [], {}
     for f in sorted((RESERVE / "runs" / "e1" / model).glob("*.json")):
         a = json.loads(f.read_text(encoding="utf-8"))
         if a.get("domain") != domain or (a.get("parsed") or {}).get("decision") != "execute":
             continue
         c = cases.get(a["case_id"])
-        if c is None:  # qualifier cases have no numerical reference (decision and convention only)
-            continue
-        if not expected(c) or (domain == "tls" and not c.get("reference_scenarios")):
-            continue
+        if c is None or not expected(c) or (domain == "tls" and not c.get("reference_scenarios")):
+            continue  # qualifier cases and cases without a numerical reference
         if c.get("variants") or c.get("modifications") or c.get("expected_turn_decisions"):
             continue  # E1 scores the first turn only; these references include later turns
+        head = {"case_id": c["id"], "condition": a["condition"], "rep": a["rep"],
+                "instructions": a.get("instructions_sha256_12", "v0")}
+        if domain == "pyrcel" and not all(k in expected(c) for k in PYR_MODE):
+            rows.append({**head, "quantity": "*", "status": "multi_mode_not_compared"})
+            continue
         if not complete(c, a):
-            r = {"case_id": c["id"], "condition": a["condition"], "rep": a["rep"], "status": "incomplete_candidate"}
-        else:
-            r = {"case_id": c["id"], "condition": a["condition"], "rep": a["rep"], **fn(c, a)}
-        r["instructions"] = a.get("instructions_sha256_12", "v0")
-        rows.append(r)
-        print(r, flush=True)
-    keys = sorted({k for r in rows for k in r})
+            rows.append({**head, "quantity": "*", "status": "incomplete_candidate"})
+            continue
+        ref_cfg, got_cfg, run = configs(c, a)
+        key = json.dumps(ref_cfg, sort_keys=True, default=str)
+        if key not in cache:
+            cache[key] = run(ref_cfg)
+        try:
+            got_out = run(got_cfg)
+        except Exception as exc:  # noqa: BLE001 - a backend rejection is an outcome
+            rows.append({**head, "quantity": "*", "status": f"backend_error: {type(exc).__name__}"})
+            continue
+        rows += [{**head, **r} for r in compare(cache[key], got_out)]
+    keys = ["case_id", "condition", "rep", "instructions", "quantity", "kind", "status", "n", "rmse", "nrmse", "abs_err", "rel_err"]
     with open(REPO / "evaluation" / "e1" / f"e1-numeric-{model}-{domain}.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=keys)
         w.writeheader()
         w.writerows(rows)
+    print(domain, len(rows), "rows")
 
 
 if __name__ == "__main__":

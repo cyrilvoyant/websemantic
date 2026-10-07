@@ -12,3 +12,7 @@ runs/
 *.log
 
 /work/
+
+# E1 per-answer results stay private until the campaign closes
+evaluation/e1/e1-*.csv
+evaluation/e1/e1-*.json
