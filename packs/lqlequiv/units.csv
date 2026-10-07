@@ -1,5 +1,5 @@
-unit,symbol,iri,in_qudt,quantity_kind_iri,accepted_exact_conversions
-unit:DAY,d,http://qudt.org/vocab/unit/DAY,1,http://qudt.org/vocab/quantitykind/Time,week x7
-unit:GRAY,Gy,http://qudt.org/vocab/unit/GRAY,1,http://qudt.org/vocab/quantitykind/AbsorbedDose,cGy x0.01
-unit:NUM,count,http://qudt.org/vocab/unit/NUM,1,http://qudt.org/vocab/quantitykind/Count,number words (deux -> 2)
-unit:PERCENT,%,http://qudt.org/vocab/unit/PERCENT,1,http://qudt.org/vocab/quantitykind/DimensionlessRatio,fraction x100 (never mix % and fraction)
+unit,symbol,iri,source,quantity_kind_iri,accepted_exact_conversions
+unit:DAY,d,http://qudt.org/vocab/unit/DAY,QUDT,http://qudt.org/vocab/quantitykind/Time,week x7
+unit:GRAY,Gy,http://qudt.org/vocab/unit/GRAY,QUDT,http://qudt.org/vocab/quantitykind/AbsorbedDose,cGy x0.01
+unit:NUM,count,http://qudt.org/vocab/unit/NUM,QUDT,http://qudt.org/vocab/quantitykind/Count,number words (deux -> 2)
+unit:PERCENT,%,http://qudt.org/vocab/unit/PERCENT,QUDT,http://qudt.org/vocab/quantitykind/DimensionlessRatio,fraction x100 (never mix % and fraction)

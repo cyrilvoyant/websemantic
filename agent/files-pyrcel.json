@@ -91,12 +91,12 @@
     {
       "path": "ontology/core.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/core.ttl",
-      "sha256_lf": "1237445237b0de7b0fc2768e2d1f0093e087d2d0a0851f24bc8ac26bdcc5be8a"
+      "sha256_lf": "9b0ecd06b36940dff6df0b351279c59b80c7d3d74f0b15ea857aea1610da45f8"
     },
     {
       "path": "ontology/pyrcel.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/pyrcel.ttl",
-      "sha256_lf": "7efc5848ad70d3dc04b567144cb9a7bc56637444b86b13e251154e54d7e4cef5"
+      "sha256_lf": "a5a73379fd4b7ef7f88e364c4c526fbbe72a86ae09993fbb09feeec3ebe88903"
     },
     {
       "path": "ontology/shapes.ttl",

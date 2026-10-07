@@ -24,6 +24,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 QUDT = "http://qudt.org/vocab/unit/"
 QK = "http://qudt.org/vocab/quantitykind/"
+WS = "https://github.com/cyrilvoyant/websemantic/ns#"
 DOMAINS = {"tls": "tunnel-load-simulator", "lqlequiv": "LQL-Equiv-web", "pyrcel": "pyrcel"}
 EXT_TTL = {"tls": "tls-vocabulary.ttl", "lqlequiv": "lqlequiv.ttl", "pyrcel": "pyrcel.ttl"}
 
@@ -32,7 +33,7 @@ UNITS = {
     "unit:M": ("m", QUDT + "M", QK + "Length", "km x1000; cm x0.01"),
     "unit:MicroM": ("µm", QUDT + "MicroM", QK + "Length", "nm x0.001; m x1e6"),
     "unit:KiloW": ("kW", QUDT + "KiloW", QK + "Power", "W x0.001; MW x1000"),
-    "unit:KiloW per km per tube": ("kW/(km·tube)", "https://github.com/cyrilvoyant/websemantic/ns#KiloW-PER-KiloM-PER-TUBE",
+    "unit:KiloW per km per tube": ("kW/(km·tube)", WS + "KiloW-PER-KiloM-PER-TUBE",
                                    QK + "Power", "not in QUDT: power per km of one tube; 1 kW/km = 1 W/m"),
     "unit:PERCENT": ("%", QUDT + "PERCENT", QK + "DimensionlessRatio", "fraction x100 (never mix % and fraction)"),
     "unit:UNITLESS": ("1", QUDT + "UNITLESS", QK + "Dimensionless", "percent /100 when the field is a fraction"),
@@ -46,7 +47,16 @@ UNITS = {
     "unit:PA": ("Pa", QUDT + "PA", QK + "Pressure", "hPa x100; kPa x1000"),
     "unit:M-PER-SEC": ("m/s", QUDT + "M-PER-SEC", QK + "Velocity", "km/h /3.6"),
     "unit:PER-CentiM3": ("cm⁻³", QUDT + "PER-CentiM3", QK + "NumberDensity", "m⁻³ x1e-6"),
+    "unit:KiloW-HR": ("kWh", QUDT + "KiloW-HR", QK + "Energy", "MWh x1000"),
+    "unit:MegaW-HR": ("MWh", QUDT + "MegaW-HR", QK + "Energy", "kWh x0.001"),
+    "unit:PER-M3": ("m⁻³", QUDT + "PER-M3", QK + "NumberDensity", "cm⁻³ x1e6"),
+    "local:MegaW-HR-PER-YR": ("MWh/an", WS + "MegaW-HR-PER-YR", QK + "Energy",
+                              "not in QUDT: period energy extrapolated to one year (x 365/n_days)"),
+    "local:KiloW-HR-PER-M-PER-YR": ("kWh/(m·an)", WS + "KiloW-HR-PER-M-PER-YR", QK + "Energy",
+                                    "not in QUDT: annualised energy per metre of tunnel, all tubes"),
 }
+WS_SYMBOL_TO_UNIT = {"kW": "unit:KiloW", "kWh": "unit:KiloW-HR", "MWh": "unit:MegaW-HR", "MWh/an": "local:MegaW-HR-PER-YR",
+                     "kWh/(m·an)": "local:KiloW-HR-PER-M-PER-YR", "1": "unit:UNITLESS", "h": "unit:HR", "%": "unit:PERCENT"}
 
 
 def descriptor(dom):
@@ -82,44 +92,86 @@ def variables_csv(dom, d):
     return buf.getvalue()
 
 
-def units_csv(d):
-    used = {s.get("unit") for g in ("inputs", "experiment") for s in (d.get(g) or {}).values() if s.get("unit")}
-    for o in (d.get("outputs") or {}).values():
-        if isinstance(o, dict) and o.get("unit") in UNITS:
-            used.add(o["unit"])
+def units_csv(d, output_units):
+    used = {sp.get("unit") for g in ("inputs", "experiment") for sp in (d.get(g) or {}).values() if sp.get("unit")}
+    used |= set(output_units)
     buf = io.StringIO()
     w = csv.writer(buf)
-    w.writerow(["unit", "symbol", "iri", "in_qudt", "quantity_kind_iri", "accepted_exact_conversions"])
+    w.writerow(["unit", "symbol", "iri", "source", "quantity_kind_iri", "accepted_exact_conversions"])
     for u in sorted(used):
         if u not in UNITS:
             raise ValueError(f"unit {u} missing from the pack table")
         sym, iri, qk, conv = UNITS[u]
-        w.writerow([u, sym, iri, int(iri.startswith(QUDT)), qk, conv])
+        w.writerow([u, sym, iri, "QUDT" if iri.startswith(QUDT) else "local definition", qk, conv])
     return buf.getvalue()
+
+
+OUT_COLS = ["output", "ontology_concept", "quantity_kind_iri", "unit", "unit_symbol", "unit_iri", "unit_source",
+            "aggregation", "temporal_support", "additive", "validity_flag", "definition"]
+
+
+def ontology_outputs():
+    from rdflib import Graph, Namespace
+    ns = Namespace(WS)
+    g = Graph()
+    for name in ("core.ttl", "lqlequiv.ttl", "pyrcel.ttl"):
+        g.parse(ROOT / "ontology" / name, format="turtle")
+    info = {}
+    for o in g.subjects(None, ns.OutputVariable):
+        local = str(o).split("#")[-1]
+        agg = g.value(o, ns.aggregation)
+        def text(prop, o=o):
+            x = g.value(o, prop)
+            return "" if x is None else str(x)  # a Literal(False) is falsy: test presence, not truth
+        info[local] = {"aggregation": str(agg).split("#")[-1] if agg is not None else "",
+                       "temporal_support": text(ns.temporalSupport), "additive": text(ns.additive).lower(),
+                       "validity_flag": text(ns.validityFlag), "quantity_kind_iri": text(ns.quantityKind)}
+    return info
 
 
 def outputs_csv(dom, d):
-    buf = io.StringIO()
-    w = csv.writer(buf)
-    w.writerow(["output", "ontology_concept", "unit", "unit_symbol", "definition"])
-    outs = d.get("outputs") or {}
-    for name, o in outs.items():
-        if isinstance(o, dict):
-            u = o.get("unit")
-            w.writerow([name, o.get("ontology_concept", ""), u or "", o.get("display_unit") or UNITS.get(u, ("",))[0],
-                        (o.get("definition") or o.get("meaning") or "").replace("\n", " ")])
-        else:
-            w.writerow([name, "", "", "", str(o).replace("\n", " ")])
-    if dom == "tls":  # column-level qualification reviewed against the pinned TLS implementation
+    """One row per output; returns (csv text, set of unit tokens used)."""
+    onto = ontology_outputs()
+    rows, units = [], set()
+    for name, o in (d.get("outputs") or {}).items():
+        if not isinstance(o, dict):
+            continue  # table-level descriptions are expanded column by column below (TLS)
+        u = o.get("unit")
+        info = onto.get(o.get("ontology_concept", ""), {})
+        sym, iri, qk, _ = UNITS.get(u, ("", "", "", ""))
+        if u:
+            units.add(u)
+        rows.append([name, o.get("ontology_concept", ""), info.get("quantity_kind_iri") or qk, u or "", o.get("display_unit") or sym,
+                     iri, ("QUDT" if iri.startswith(QUDT) else "local definition") if iri else "", info.get("aggregation", ""),
+                     info.get("temporal_support", ""), info.get("additive", ""), info.get("validity_flag", ""),
+                     (o.get("definition") or "").replace("\n", " ")])
+    if dom == "tls":  # every numeric column of the native tables, reviewed against the pinned TLS implementation
         from websemantic.adapters.tls_outputs import column_metadata
-        for table, cols in {"representative": ["power_kw", "energy_kwh", "traffic_index", "pollution_event", "accident_event"],
-                            "kpis": ["total_mwh", "annualized_mwh", "peak_kw", "load_factor", "specific_kwh_m_year",
-                                     "n_pollution_events", "n_accident_events"],
-                            "daily": ["energy_kwh", "mean_kw"]}.items():
+        tables = {"representative": (["lighting_kw", "ventilation_kw", "auxiliary_kw", "power_kw", "energy_kwh", "traffic_index",
+                                      "pollution_event", "accident_event"], "native step, realisation 0"),
+                  "kpis": (["total_mwh", "annualized_mwh", "peak_kw", "mean_kw", "load_factor", "specific_kwh_m_year",
+                            "n_pollution_events", "n_accident_events"], "whole simulated period, one value per realisation"),
+                  "daily": (["energy_kwh", "mean_kw"], "calendar day, realisation 0")}
+        aggregation = {"energy_kwh": "AggNativeStep", "total_mwh": "AggSum", "annualized_mwh": "AggExtrapolation",
+                       "specific_kwh_m_year": "AggExtrapolation", "peak_kw": "AggMax", "mean_kw": "AggMean"}
+        for table, (cols, support) in tables.items():
             for c in cols:
                 m = column_metadata(c, table)
-                w.writerow([f"{table}.{c}", "", "", m["unit"] or "", f"{m['quantity']}: {m['meaning']}"])
-    return buf.getvalue()
+                u = WS_SYMBOL_TO_UNIT.get(m["unit"] or "", "")
+                sym, iri, qk, _ = UNITS.get(u, ("", "", "", ""))
+                if u:
+                    units.add(u)
+                additive = "true" if c in ("energy_kwh", "total_mwh") else "false"
+                agg = "AggSum" if table == "daily" and c == "energy_kwh" else (
+                      "AggMean" if table == "daily" else aggregation.get(c, "AggNativeStep" if table == "representative" else ""))
+                rows.append([f"{table}.{c}", "", qk, u, m["unit"] or "", iri,
+                             ("QUDT" if iri.startswith(QUDT) else "local definition") if iri else "", agg, support, additive, "",
+                             f"{m['quantity']}: {m['meaning']}"])
+    buf = io.StringIO()
+    w = csv.writer(buf)
+    w.writerow(OUT_COLS)
+    w.writerows(rows)
+    return buf.getvalue(), units
 
 
 def codemeta(dom, d):
@@ -155,8 +207,10 @@ FAIR = """# FAIR and FAIR4RS coverage of this pack
 |---|---|---|
 | Findable | `codemeta.json`: name, repository, licence, pinned revision, link to this pack | `variables.csv` and `outputs.csv`: stable names linked to ontology concepts |
 | Accessible | original repository URL and pinned revision; pack readable without any account | outputs written as CSV + JSON manifest; units and meanings in plain files |
-| Interoperable | `ontology.ttl` (OWL, PROV-O, SKOS, QUDT alignment) and `shapes.ttl` (SHACL) | every unit and quantity kind as a QUDT IRI (`units.csv`); exact conversions declared |
+| Interoperable | `ontology.ttl` (OWL, PROV-O, SKOS, QUDT alignment) and `shapes.ttl` (SHACL) | each unit as a QUDT IRI, or as an explicitly local definition when QUDT has none (`units.csv`, column source); exact conversions declared |
 | Reusable | `LLM-CONTRACT.md`: task scope, refusal rules, acceptance of assumptions | defaults and qualitative conventions with their authority; aggregation, temporal support and validity flags of each output |
+
+This table states documentary coverage of the principles by the files of this pack; it is not a FAIR certification.
 
 References: Wilkinson et al., Scientific Data 3, 160018 (2016); Barker et al., Scientific Data 9, 622 (2022).
 """
@@ -169,8 +223,9 @@ def main():
         out.mkdir(parents=True, exist_ok=True)
         (out / "LLM-CONTRACT.md").write_text(contract_section(dom), encoding="utf-8")
         (out / "variables.csv").write_text(variables_csv(dom, d), encoding="utf-8")
-        (out / "units.csv").write_text(units_csv(d), encoding="utf-8")
-        (out / "outputs.csv").write_text(outputs_csv(dom, d), encoding="utf-8")
+        outputs_text, output_units = outputs_csv(dom, d)
+        (out / "outputs.csv").write_text(outputs_text, encoding="utf-8")
+        (out / "units.csv").write_text(units_csv(d, output_units), encoding="utf-8")
         ttl = (ROOT / "ontology/core.ttl").read_text(encoding="utf-8") + "\n\n# ---- domain extension ----\n" + \
             (ROOT / "ontology" / EXT_TTL[dom]).read_text(encoding="utf-8")
         (out / "ontology.ttl").write_text(ttl, encoding="utf-8")

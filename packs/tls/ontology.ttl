@@ -248,6 +248,8 @@ ws:dependsOnReference a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdf
 ws:invalidates a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:OutputVariable ;
     rdfs:comment "Direction: boolean backend flag -> output. When the flag (subject) is true, the object output must not be reported as a result."@en .
 ws:derivationRule a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:derivedFromOutput a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:OutputVariable ;
+    rdfs:comment "Output obtained from another output by an exact conversion (unit change, x100...)."@en .
 ws:codeDefault a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ;
     rdfs:comment "Default set by the backend code; stated, never treated as user data."@en .
 ws:validityFlag a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:string .
