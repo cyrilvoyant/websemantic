@@ -64,24 +64,40 @@ UNIT_ALIASES = {"unit:M": {"m", "unit:m", "metre", "mètre", "meters", "metres",
                 "unit:M-PER-SEC": {"m/s", "unit:m-per-sec"}, "unit:MicroM": {"µm", "μm", "um", "microm", "unit:microm", "micrometre", "micron", "microns"},
                 "unit:PER-CentiM3": {"cm-3", "cm⁻³", "/cm3", "cm^-3", "unit:per-centim3", "per cm3"},
                 "unit:DAY": {"d", "day", "days", "jour", "jours", "unit:day"}, "unit:MIN": {"min", "minute", "minutes", "unit:min"},
-                "unit:HR": {"h", "hour", "hours", "heure", "heures", "unit:hr"}, "unit:PERCENT": {"%", "percent", "unit:percent"}}
+                "unit:HR": {"h", "hour", "hours", "heure", "heures", "unit:hr"}, "unit:PERCENT": {"%", "percent", "unit:percent"},
+                "unit:SEC": {"s", "sec", "second", "seconds", "seconde", "secondes", "unit:sec"}}
+DIMENSIONLESS = {"unit:UNITLESS", "unit:NUM"}
+PHYSICAL_TOKENS = set().union(*UNIT_ALIASES.values())   # a dimensionless field given in one of these is a unit error
 
 
 def candidate_issue(answer, case):
-    """Explicit status if a candidate value would need coercion or is given in another unit."""
+    """Explicit status if a candidate value would need coercion or carries a wrong, missing or unverifiable unit.
+    Checked for every field the candidate gives, expected or not."""
     import yaml
     d = yaml.safe_load((REPO / "descriptors" / case["domain"] / "descriptor.yaml").read_text(encoding="utf-8"))
-    units = {norm(n): sp.get("unit") for g in ("inputs", "experiment") for n, sp in (d.get(g) or {}).items()}
+    specs = {norm(n): sp for g in ("inputs", "experiment") for n, sp in (d.get(g) or {}).items()}
+    units = {k: sp.get("unit") for k, sp in specs.items()}
     for v in (answer.get("parsed") or {}).get("values") or []:
         if not isinstance(v, dict) or v.get("value") is None:
             continue
-        k = norm(v.get("field", ""))
-        if k in expected(case) and k in INT_FIELDS and isinstance(v["value"], float) and not v["value"].is_integer():
+        k, x = norm(v.get("field", "")), v["value"]
+        if k in INT_FIELDS and (isinstance(x, bool) or not isinstance(x, (int, float)) or not float(x).is_integer()):
             return f"non_integer_value:{k}"
         canon, given = units.get(k), str(v.get("unit") or "").strip().lower()
-        official = {canon.lower(), canon.split(":", 1)[-1].lower()} if canon else set()
-        if canon in UNIT_ALIASES and given and given not in UNIT_ALIASES[canon] and given not in official:
-            return f"unit_mismatch:{k}:{given}"
+        if not canon:
+            continue
+        official = {canon.lower(), canon.split(":", 1)[-1].lower(), str(specs[k].get("display_unit") or "").lower()} | \
+            {str(a).lower() for a in specs[k].get("unit_aliases") or []}
+        if canon in DIMENSIONLESS:
+            if given in PHYSICAL_TOKENS - {""}:
+                return f"unit_mismatch:{k}:{given}"
+        elif not given:
+            return f"unit_missing:{k}"
+        elif canon in UNIT_ALIASES:
+            if given not in UNIT_ALIASES[canon] and given not in official:
+                return f"unit_mismatch:{k}:{given}"
+        elif given not in official:
+            return f"unit_unverified:{k}:{given}"
     return None
 
 

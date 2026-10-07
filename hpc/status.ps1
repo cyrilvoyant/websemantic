@@ -1,26 +1,38 @@
-# Where are we? Lane status files, valid answers vs attempts per model, last log lines (login node, Python 3.6 is enough).
+# Where are we? Heartbeat, lane status files, per answer folder: files, parsed JSON, schema-valid answers, attempts.
+# Runs on the login node (Python 3.6 is enough). An SSH failure is reported as such, never as an empty status.
 . (Join-Path $PSScriptRoot "hpc.config.ps1")
 $py = @'
-import glob, json, os
-base = os.path.expanduser("BASE")
+import glob, json, os, time
+base = "BASE"
+hb = os.path.join(base, "heartbeat")
+print("now", time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+      "| heartbeat", "%d s ago" % (time.time() - os.path.getmtime(hb)) if os.path.exists(hb) else "none")
 for lane in ("gpu", "cpu"):
     try:
         print(lane, json.load(open(os.path.join(base, "status-%s.json" % lane))))
-    except Exception:
-        print(lane, "no status yet")
+    except Exception as exc:
+        print(lane, "no readable status (%s)" % type(exc).__name__)
+DECISIONS = {"execute", "clarify", "refuse"}
 for d in sorted(glob.glob(os.path.join(base, "benchmark-reserve/runs/e1/*/"))):
-    answers = valid = 0
+    files = parsed = valid = 0
     for f in glob.glob(os.path.join(d, "*.json")):
         if os.path.basename(f).startswith("contexts-"):
             continue
-        answers += 1
+        files += 1
         try:
-            valid += "parsed" in json.load(open(f))
+            p = json.load(open(f)).get("parsed")
         except Exception:
-            pass
-    attempts = sum(1 for _ in open(os.path.join(d, "attempts.jsonl"))) if os.path.exists(os.path.join(d, "attempts.jsonl")) else 0
-    print("%s: %d answers (%d with valid JSON), %d attempts" % (os.path.basename(d.rstrip("/")), answers, valid, attempts))
+            continue
+        if isinstance(p, dict):
+            parsed += 1
+            valid += p.get("decision") in DECISIONS and isinstance(p.get("values", []), list)
+    att = os.path.join(d, "attempts.jsonl")
+    attempts = sum(1 for _ in open(att)) if os.path.exists(att) else 0
+    print("%s: %d answer files, %d parsed JSON objects, %d schema-valid answers, %d attempts"
+          % (os.path.basename(d.rstrip("/")), files, parsed, valid, attempts))
 '@
 $py = $py.Replace("BASE", "$RemoteDir/websemantic")
 $py | ssh $Remote "python3 -"
-ssh $Remote "cd $RemoteDir/websemantic 2>/dev/null && date -u '+now %FT%TZ'; for f in logs/gpu.log logs/cpu.log logs/cpu-failures.log repro/summary.txt; do echo == `$f; tail -n 5 `$f 2>/dev/null; done"
+if ($LASTEXITCODE -ne 0) { Write-Host "SSH/status query FAILED (exit $LASTEXITCODE): state unknown"; exit 1 }
+ssh $Remote "cd '$RemoteDir/websemantic' && L=`$(ls -td logs/*/ 2>/dev/null | head -1) && echo == latest campaign `$L && for f in gpu.log cpu.log e1.log cpu-failures.log repro/summary.txt; do echo == `$f; tail -n 5 `$L`$f 2>/dev/null; done"
+if ($LASTEXITCODE -ne 0) { Write-Host "SSH/log query FAILED (exit $LASTEXITCODE)"; exit 1 }

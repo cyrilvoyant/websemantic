@@ -170,11 +170,18 @@ def local(prompt, model):
     """OpenAI-compatible local server (vLLM on the HPC): model given as local:<served-name>."""
     base = os.environ.get("LOCAL_LLM_URL", "http://localhost:8000/v1")
     payload = {"model": model.split(":", 1)[1], "messages": [{"role": "user", "content": prompt}],
-               "temperature": 0, "response_format": {"type": "json_object"}}
+               "temperature": 0, "max_tokens": 4096, "response_format": {"type": "json_object"}}
     req = urllib.request.Request(base + "/chat/completions", data=json.dumps(payload).encode(),
                                  headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=600) as r:
-        raw = json.load(r)
+    for attempt in range(3):  # many parallel clients: a request may queue a long time on the server
+        try:
+            with urllib.request.urlopen(req, timeout=1800) as r:
+                raw = json.load(r)
+            break
+        except (urllib.error.URLError, TimeoutError):
+            if attempt == 2:
+                raise
+            time.sleep(30)
     return raw["choices"][0]["message"]["content"], dict(raw.get("usage") or {}, resolved_model=raw.get("model"))
 
 
@@ -200,6 +207,16 @@ def log_attempt(out_dir, entry):
         fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
+def done(target, key):
+    """A stored answer counts only if it has the same (context, instructions, request) hashes and no failed call;
+    files written before request hashes existed are matched on context and instructions."""
+    if not target.exists():
+        return False
+    old = json.loads(target.read_text(encoding="utf-8"))
+    got = (old.get("context_sha256_12"), old.get("instructions_sha256_12"), old.get("request_sha256_12", key[2]))
+    return got == key and not old.get("http_error") and not old.get("network_error")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default="gemini-3.5-flash-lite")
@@ -209,9 +226,11 @@ def main():
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--pause", type=float, default=4.0)
     ap.add_argument("--corpus", default="pilot", help="pilot or qualifiers")
+    ap.add_argument("--tag", default="", help="campaign tag: answers go to runs/e1/<model>__<tag>")
     args = ap.parse_args()
     load_key()
-    out_dir = RESERVE / "runs" / "e1" / args.model.replace(":", "_").replace("/", "_")
+    folder = args.model.replace(":", "_").replace("/", "_") + (f"__{args.tag}" if args.tag else "")
+    out_dir = RESERVE / "runs" / "e1" / folder  # one folder per model and campaign tag; scorers take the folder name
     out_dir.mkdir(parents=True, exist_ok=True)
     instr_hash = hashlib.sha256(INSTRUCTIONS.encode()).hexdigest()[:12]
     domains, conds = args.domains.split(","), args.conditions.split(",")
@@ -219,31 +238,39 @@ def main():
     contexts = {(d, c): context(d, c) for d in domains for c in conds}
     manifest = {f"{d}|{c}": {"context_sha256_12": hashlib.sha256(t.encode()).hexdigest()[:12], "chars": len(t)}
                 for (d, c), t in contexts.items()}
-    write_atomic(out_dir / f"contexts-{time.strftime('%Y%m%dT%H%M%S')}.json",
-                 json.dumps({"instructions_sha256_12": instr_hash, "contexts": manifest}, indent=1))
+    corpora = {d: (RESERVE / d / f"{args.corpus}.jsonl").read_text(encoding="utf-8") for d in domains}
+    # The manifest keeps hashes and the frozen texts themselves (private folder), so every run can be reproduced.
+    scope = f"{args.corpus}-{'+'.join(domains)}-{'+'.join(conds)}" if len(domains) * len(conds) <= 3 else args.corpus
+    # One manifest per process: parallel processes (one per domain and condition) never overwrite each other.
+    write_atomic(out_dir / f"contexts-{time.strftime('%Y%m%dT%H%M%S')}-{scope}-p{os.getpid()}.json",
+                 json.dumps({"instructions_sha256_12": instr_hash, "instructions": INSTRUCTIONS, "corpus": args.corpus,
+                             "corpus_sha256_12": {d: hashlib.sha256(t.encode()).hexdigest()[:12] for d, t in corpora.items()},
+                             "contexts": manifest, "context_texts": {f"{d}|{c}": t for (d, c), t in contexts.items()}},
+                            ensure_ascii=False, indent=1))
     params = {"temperature": 0 if args.model.startswith("local:") else "provider default"}
     for domain in domains:
-        path = RESERVE / domain / f"{args.corpus}.jsonl"
-        cases = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+        cases = [json.loads(line) for line in corpora[domain].splitlines() if line.strip()]
         if args.limit:
             cases = cases[: args.limit]
         for cond in conds:
             ctx = contexts[(domain, cond)]
             ctx_hash = manifest[f"{domain}|{cond}"]["context_sha256_12"]
             for case in cases:
+                req_hash = hashlib.sha256(case["turns"][0].encode()).hexdigest()[:12]
+                key = (ctx_hash, instr_hash, req_hash)
                 for rep in range(1, args.reps + 1):
                     target = out_dir / f"{case['id']}_{cond}_r{rep}.json"
-                    if target.exists():
+                    if done(target, key):
+                        continue  # same frozen context, instructions and request: already answered
+                    if target.exists():  # another version (or a failed call) holds the plain name
                         old = json.loads(target.read_text(encoding="utf-8"))
-                        if (old.get("context_sha256_12"), old.get("instructions_sha256_12")) == (ctx_hash, instr_hash) \
-                                and not old.get("http_error") and not old.get("network_error"):
-                            continue  # same frozen context and instructions: already answered
-                        target = out_dir / f"{case['id']}_{cond}_r{rep}_c{ctx_hash[:8]}_i{instr_hash[:8]}.json"
-                        if target.exists():
-                            continue
+                        if (old.get("context_sha256_12"), old.get("instructions_sha256_12"), old.get("request_sha256_12")) != key:
+                            target = out_dir / f"{case['id']}_{cond}_r{rep}_c{ctx_hash[:8]}_i{instr_hash[:8]}_q{req_hash[:8]}.json"
+                            if done(target, key):
+                                continue
                     prompt = INSTRUCTIONS + "\n\n" + ctx + "\n\n## User request\n" + case["turns"][0]
                     record = {"case_id": case["id"], "domain": domain, "condition": cond, "rep": rep, "model": args.model,
-                              "context_sha256_12": ctx_hash, "instructions_sha256_12": instr_hash,
+                              "context_sha256_12": ctx_hash, "instructions_sha256_12": instr_hash, "request_sha256_12": req_hash,
                               "context_chars": len(ctx), "request": case["turns"][0], "generation": params,
                               "time": time.strftime("%Y-%m-%dT%H:%M:%S")}
                     attempt = {k: record[k] for k in ("case_id", "domain", "condition", "rep", "model", "time",
