@@ -3,7 +3,7 @@
 # Python 3.6). /workspace = /lustre/data/cyril.voyant.kg ; project in /workspace/semantic/websemantic.
 # Two lanes in parallel, each in series, each with its own status file (atomic writes):
 #   GPU lane: validated environment -> vLLM server (open model) -> E1 factorial, 3 repetitions, qualifiers then pilot
-#   CPU lane: validated environment -> numerical replay when new answers appear -> final replay -> reproducibility (S9)
+#   CPU lane: validated environment -> reproducibility of the examples (S9) -> replay when new answers appear -> final replay
 # Every step checks its exit code; a failure stops the lane with status "error" (never "done").
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"          # .../websemantic/semantic-sim-layer
@@ -23,7 +23,7 @@ import json, os, sys, time
 path, step, detail = sys.argv[1:]
 tmp = path + ".tmp"
 with open(tmp, "w") as f:
-    json.dump({"step": step, "detail": detail, "time": time.strftime("%Y-%m-%d %H:%M:%S")}, f, indent=1)
+    json.dump({"step": step, "detail": detail, "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}, f, indent=1)
 os.replace(tmp, path)
 PY
 }
@@ -90,13 +90,7 @@ cpu_lane() {
   ensure_env "$CPU_ENV" cpu "import numpy, pandas, yaml, rdflib, pydantic, jax, pyrcel" \
     numpy pandas pyyaml rdflib pydantic "jax[cpu]" "$HERE/external/pyrcel"
   export JAX_ENABLE_X64=true JAX_PLATFORMS=cpu PYTHONPATH="$HERE/src:$HERE/evaluation/e1"
-  while kill -0 "$gpu_pid" 2>/dev/null; do                     # replay only when new answers appeared
-    now=$(count_answers)
-    if [ "$now" != "$last" ]; then replay_all "$now answers"; last="$now"; fi
-    [ $(( $(date +%s) - start )) -gt $(( MAX_HOURS * 3600 )) ] && fail cpu "time limit ${MAX_HOURS} h reached"
-    sleep 600
-  done
-  replay_all "final" || fail cpu "final replay: $? failure(s), see logs/cpu-failures.log"
+  # Preflight (fail fast): the three published examples must replay on the pinned backends (S9).
   status cpu reproducibility "replay of the three examples (S9)"
   mkdir -p "$BASE/repro"; : > "$BASE/repro/summary.txt"
   local bad=0
@@ -106,6 +100,13 @@ cpu_lane() {
     else echo "$M FAILED (exit $?)" >> "$BASE/repro/summary.txt"; bad=1; fi
   done
   [ "$bad" -eq 0 ] || fail cpu "reproducibility failures, see repro/summary.txt"
+  while kill -0 "$gpu_pid" 2>/dev/null; do                     # replay only when new answers appeared
+    now=$(count_answers)
+    if [ "$now" != "$last" ]; then replay_all "$now answers"; last="$now"; fi
+    [ $(( $(date +%s) - start )) -gt $(( MAX_HOURS * 3600 )) ] && fail cpu "time limit ${MAX_HOURS} h reached"
+    sleep 600
+  done
+  replay_all "final" || fail cpu "final replay: $? failure(s), see logs/cpu-failures.log"
   status cpu done "replay and reproducibility finished"
 }
 

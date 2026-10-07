@@ -14,7 +14,14 @@ if ($localSha -ne $remoteSha) { throw "Checksum mismatch ($localSha vs $remoteSh
 ssh $Remote "rm -f $remoteTgz"; Check "Remote cleanup"
 tar -xzf (Join-Path $dest "results.tgz") -C $dest; Check "Extraction"
 # Merge model answers into the local reserved folder; existing files are never overwritten.
-robocopy (Join-Path $dest "benchmark-reserve\runs") (Join-Path $LocalRoot "benchmark-reserve\runs") /E /XC /XN /XO /NFL /NDL /NJH /NJS | Out-Null
+# Same name with different content = collision: reported and the merge is refused (nothing is silently dropped).
+$srcRuns = Join-Path $dest "benchmark-reserve\runs"; $dstRuns = Join-Path $LocalRoot "benchmark-reserve\runs"
+$collisions = Get-ChildItem $srcRuns -Recurse -File | Where-Object {
+    $local = Join-Path $dstRuns $_.FullName.Substring($srcRuns.Length + 1)
+    (Test-Path $local) -and ((Get-FileHash $local).Hash -ne (Get-FileHash $_.FullName).Hash)
+}
+if ($collisions) { $collisions.FullName | Write-Host; throw "$(@($collisions).Count) collision(s): same name, different content. Merge refused; results kept in $dest" }
+robocopy $srcRuns $dstRuns /E /XC /XN /XO /NFL /NDL /NJH /NJS | Out-Null
 if ($LASTEXITCODE -ge 8) { throw "robocopy failed (exit $LASTEXITCODE)" }
 $python = Join-Path $LocalRoot "semantic-sim-layer\.venv\Scripts\python.exe"
 Get-ChildItem (Join-Path $LocalRoot "benchmark-reserve\runs\e1") -Directory | ForEach-Object {

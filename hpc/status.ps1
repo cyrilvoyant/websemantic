@@ -23,4 +23,4 @@ for d in sorted(glob.glob(os.path.join(base, "benchmark-reserve/runs/e1/*/"))):
 '@
 $py = $py.Replace("BASE", "$RemoteDir/websemantic")
 $py | ssh $Remote "python3 -"
-ssh $Remote "cd $RemoteDir/websemantic 2>/dev/null && for f in logs/gpu.log logs/cpu.log; do echo == `$f; tail -n 5 `$f 2>/dev/null; done"
+ssh $Remote "cd $RemoteDir/websemantic 2>/dev/null && date -u '+now %FT%TZ'; for f in logs/gpu.log logs/cpu.log logs/cpu-failures.log repro/summary.txt; do echo == `$f; tail -n 5 `$f 2>/dev/null; done"
