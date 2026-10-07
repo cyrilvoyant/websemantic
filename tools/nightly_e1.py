@@ -12,6 +12,7 @@ import importlib
 import json
 import os
 import shutil
+import subprocess
 import sys
 import time
 import urllib.error
@@ -53,6 +54,7 @@ def main():
     ap.add_argument("--output", required=True)
     ap.add_argument("--wait-pid", type=int, default=0)
     ap.add_argument("--report-only", action="store_true")
+    ap.add_argument("--fresh", action="store_true", help="Never import historical answers")
     ap.add_argument("--until", required=True, help="Europe/Paris ISO local time")
     args = ap.parse_args()
     repo = Path(__file__).resolve().parents[1]
@@ -65,7 +67,9 @@ def main():
     frozen_reserve = out / "benchmark-reserve"
     log_path = base / "trilog.md"
     started = time.monotonic()
-    state = {"started_utc": datetime.now(timezone.utc).isoformat(), "deadline": until.isoformat()}
+    revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo, text=True).strip()
+    state = {"started_utc": datetime.now(timezone.utc).isoformat(), "deadline": until.isoformat(),
+             "source_revision": revision, "fresh": args.fresh}
 
     def note(message):
         stamp = datetime.now(ZoneInfo("Europe/Paris")).isoformat(timespec="seconds")
@@ -128,11 +132,13 @@ def main():
                     for rep in (1, 2, 3):
                         expected[(case["id"], condition, rep)] = (ctx, instr_hash, harness.request_hash(case["turns"][0]))
     atomic(out / "protocol.json", {"model": model, "conditions": CONDITIONS.split(","), "domains": DOMAINS,
-                                   "repetitions": 3, "target": target_count,
+                                   "repetitions": 3, "target": target_count, "fresh": args.fresh,
                                    "instruction_hash": instr_hash, "numeric_scope": "controlled completion"})
-    note(f"Démarrage superviseur local : cible {target_count} réponses, huit conditions × corpus pilot/qualifiers × trois répétitions. Sources/corpus figés et SHA256, aucun backend original modifié. Attente du processus existant PID {args.wait_pid} avant tout nouvel appel ; rapports incrémentaux privés dans {out}.")
+    note(f"Démarrage superviseur local : cible {target_count} réponses, huit conditions × corpus pilot/qualifiers × trois répétitions, fresh={args.fresh}. Sources/corpus figés et SHA256, aucun backend original modifié. Attente du processus existant PID {args.wait_pid} avant tout nouvel appel ; rapports incrémentaux privés dans {out}.")
 
     def import_matching():
+        if args.fresh:
+            return 0
         copied = 0
         original = reserved / "runs/e1" / model
         for f in original.glob("*.json"):
