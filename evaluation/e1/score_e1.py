@@ -63,48 +63,90 @@ NUMBER_IN_TEXT = re.compile(r"\d|\b(un|une|deux|trois|quatre|cinq|six|sept|huit|
                             r"trente|quarante|cinquante|soixante|cent|mille|demi|quart|horaire|semaines?|journ[ée]e)\b")
 
 ACCEPT = re.compile(r"\b(prends?|prenez|accepte[sz]?|utilise[sz]?|garde[sz]?|mets?|calcule[sz]?)\b[^.?!]*\b(d[ée]fauts?|par d[ée]faut)\b")
+ACCEPT_PASSIVE = re.compile(r"d[ée]fauts?\s+(sont\s+)?accept[ée]e?s?")
+ACCEPT_ELLIPTIC = re.compile(r"(valeurs?|param[eè]tres?)\s+par\s+d[ée]faut\s*(pour le reste|,\s*calcul|\.\s*calcul|accept)")
 NEGATION = re.compile(r"\b(ne|n['’])\s*\w+\s+pas\b|\bsans\b[^.?!]*d[ée]faut|\brefuse\b|\bpas (de|des) (valeurs? )?(par )?d[ée]faut")
+CONDITIONAL = re.compile(r"\bsi\b[^.?!]*d[ée]faut|d[ée]faut[^.?!]*\bsi\b")
 WORD_NUMBERS = {"un": 1, "une": 1, "deux": 2, "trois": 3, "quatre": 4, "cinq": 5, "six": 6, "sept": 7, "huit": 8, "neuf": 9,
                 "dix": 10, "onze": 11, "douze": 12, "quinze": 15, "vingt": 20, "trente": 30, "quarante": 40,
                 "cinquante": 50, "soixante": 60, "cent": 100, "mille": 1000}
-# exact conversions accepted between the number quoted and the value given (km->m, %->fraction, hPa->Pa, h->min, week->days...)
-FACTORS = (1, 1000, 0.001, 100, 0.01, 60, 1 / 60, 7, 1 / 3.6, 3.6, 1e-6, 1e6)
-
-
-ACCEPT_PASSIVE = re.compile(r"d[ée]fauts?\s+(sont\s+)?accept[ée]e?s?")
+NUMBER = re.compile(r"[-−]?\s?\d[\d \u00a0\u202f]*(?:[.,]\d+)?")
+# exact conversions per canonical unit: (factor, offset, token that must appear in the quote; None = bare number allowed)
+CONVERSIONS = {
+    "unit:M": [(1, 0, None), (1000, 0, r"\bkm\b|kilom"), (0.01, 0, r"\bcm\b")],
+    "unit:MicroM": [(1, 0, None), (0.001, 0, r"\bnm\b"), (1e6, 0, r"(?<![µu])\bm\b")],
+    "unit:KiloW": [(1, 0, None), (0.001, 0, r"\bw\b"), (1000, 0, r"\bmw\b")],
+    "unit:KiloW per km per tube": [(1, 0, None)],
+    "unit:PERCENT": [(1, 0, None)],
+    "unit:UNITLESS": [(1, 0, None), (0.01, 0, r"%|pour ?cent")],
+    "unit:NUM": [(1, 0, None)],
+    "unit:HR": [(1, 0, None), (1 / 60, 0, r"\bmin")],
+    "unit:MIN": [(1, 0, None), (60, 0, r"\bh\b|heure")],
+    "unit:SEC": [(1, 0, None), (60, 0, r"\bmin")],
+    "unit:DAY": [(1, 0, None), (7, 0, r"semaine")],
+    "unit:GRAY": [(1, 0, None)],
+    "unit:K": [(1, 0, None), (1, 273.15, r"°\s*c|celsius|degr")],
+    "unit:PA": [(1, 0, None), (100, 0, r"hpa"), (1000, 0, r"kpa")],
+    "unit:M-PER-SEC": [(1, 0, None), (1 / 3.6, 0, r"km/h")],
+    "unit:PER-CentiM3": [(1, 0, None)],
+}
 
 
 def accepts_defaults(text):
-    """Explicit, affirmative acceptance of defaults in the request; negations excluded."""
+    """Explicit, affirmative, unconditional acceptance of defaults in the request."""
     t = text.lower()
-    return bool(ACCEPT.search(t) or ACCEPT_PASSIVE.search(t)) and not NEGATION.search(t)
+    affirmative = ACCEPT.search(t) or ACCEPT_PASSIVE.search(t) or ACCEPT_ELLIPTIC.search(t)
+    return bool(affirmative) and not NEGATION.search(t) and not CONDITIONAL.search(t)
 
 
-def value_in_evidence(value, evidence):
-    """The numeric value (or an exact conversion of it) must be the number quoted in the evidence."""
-    t = evidence.lower().replace(",", ".").replace("\u00a0", " ").replace("\u202f", " ")
-    nums = [float(x.replace(" ", "")) for x in re.findall(r"\d[\d ]*(?:\.\d+)?", t) if x.strip()]
+def quoted_numbers(evidence):
+    t = evidence.lower().replace("−", "-")
+    nums = []
+    for x in NUMBER.findall(t):
+        x = re.sub(r"[\s\u00a0\u202f]", "", x).replace(",", ".")
+        try:
+            nums.append(float(x))
+        except ValueError:
+            pass
     nums += [float(n) for w, n in WORD_NUMBERS.items() if re.search(r"\b" + w + r"\b", t)]
     if re.search(r"\bdemi\b", t):
         nums += [n + 0.5 for n in list(nums)]
-    if re.search(r"\b(\d+)\s*h\s*(\d+)", t):
-        h, m = re.search(r"\b(\d+)\s*h\s*(\d+)", t).groups()
-        nums.append(int(h) + int(m) / 60)
+    m = re.search(r"\b(\d+)\s*h\s*(\d+)", t)
+    if m:
+        nums.append(int(m.group(1)) + int(m.group(2)) / 60)
     if "quart d" in t:
-        nums.append(15)
+        nums.append(15.0)
     if "horaire" in t:
-        nums.append(60)
+        nums.append(60.0)
+    return t, nums
+
+
+def value_in_evidence(value, evidence, unit=None, field=None):
+    """The value equals a quoted number, or an exact conversion allowed for the field's canonical unit
+    with its unit token present in the quote. Signs are preserved. Field-specific: RH -> S0."""
     try:
         v = float(value)
     except (TypeError, ValueError):
         return False
+    t, nums = quoted_numbers(evidence)
+    rules = CONVERSIONS.get(unit, [(1, 0, None)])
     for n in nums:
-        for f in FACTORS:
-            if abs(v - n * f) <= 1e-6 * max(1.0, abs(v)):
+        for factor, offset, token in rules:
+            if token and not re.search(token, t):
+                continue
+            if abs(v - (n * factor + offset)) <= 1e-6 * max(1.0, abs(v)):
                 return True
-        if abs(v - (n + 273.15)) < 1e-6 or abs(v - (n / 100 - 1)) < 1e-9:  # degC->K ; RH % -> S0
+        rh_to_s0 = field == "s0" and re.search(r"humid|\bhr\b", t)
+        if rh_to_s0 and (abs(v - (n / 100 - 1)) < 1e-9 or abs(v - (n - 1)) < 1e-9):
             return True
     return False
+
+
+def value_matches_category(value, evidence):
+    """A category must be named in the quote (word overlap), not only exist in the descriptor."""
+    words = [w for w in re.findall(r"[a-zà-ÿ]+", str(value).lower()) if len(w) > 2]
+    t = evidence.lower()
+    return any(w[:5] in t for w in words) if words else False
 
 
 def same(a, b):
@@ -114,6 +156,14 @@ def same(a, b):
         except (TypeError, ValueError):
             return False
     return str(a).strip().lower() == str(b).strip().lower()
+
+
+UNITS_BY_DOMAIN = {}
+
+
+def field_units(domain):
+    d = yaml.safe_load((REPO / "descriptors" / domain / "descriptor.yaml").read_text(encoding="utf-8"))
+    return {norm(n): s.get("unit") for g in ("inputs", "experiment") for n, s in (d.get(g) or {}).items()}
 
 
 def defaults(domain):
@@ -139,17 +189,20 @@ def score(case, answer, dflt):
     request = case["turns"][0].lower()
     accepts = accepts_defaults(request) or bool(case.get("defaults") and accepts_defaults(request))
     executes = decision == "execute"
-    unsupported = silent_qualifier = silent_default = proposed = 0
+    unsupported = silent_qualifier = silent_default = proposed = operational = 0
     for k, v in vals.items():
         origin = str(v.get("origin", "")).lower()
         evidence = str(v.get("evidence") or "").strip().lower()
         numeric = isinstance(v["value"], (int, float)) and not isinstance(v["value"], bool)
-        if k in OPERATIONAL or (not numeric and k in LABELS):
-            continue  # protocol settings and free labels are not scientific values
+        if k in OPERATIONAL:
+            operational += 1  # reported separately: protocol settings change results but are not scientific inputs
+            continue
+        if not numeric and k in LABELS:
+            continue
         if origin in ("provided", "converted"):
             if not evidence or evidence not in request:
                 unsupported += 1  # value claimed from the request but its quote is not there
-            elif numeric and not value_in_evidence(v["value"], evidence):
+            elif numeric and not value_in_evidence(v["value"], evidence, UNITS_BY_DOMAIN[case["domain"]].get(k), k):
                 unsupported += 1  # the quote does not contain this value nor an exact conversion of it
         elif origin in ("default_accepted", "default"):
             if not accepts:
@@ -175,23 +228,22 @@ def score(case, answer, dflt):
             qual_ok_q = int(got is None and decision != "execute")
             if got is not None:
                 unsupported += 1
-        return {**_base_row(case, answer, decision, exp, correct, unsupported, silent_qualifier, silent_default, proposed),
+        return {**_base_row(case, answer, decision, exp, correct, unsupported, silent_qualifier, silent_default, proposed, operational),
                 "qualifier_convention_ok": qual_ok_q, "qualifier_values": qualifier_values,
                 "expected_decision": "clarify", "decision_ok": int(decision == "clarify"),
                 "premature_execute": int(decision == "execute")}
-    qual_ok = None
-    for k, q in qual.items():
-        if q.get("proposal") is not None:
-            got = vals.get(k)
-            qual_ok = bool(got and same(got["value"], q["proposal"]) and decision != "execute")
-    return {**_base_row(case, answer, decision, exp, correct, unsupported, silent_qualifier, silent_default, proposed),
+    slots = [bool(vals.get(k) and same(vals[k]["value"], q["proposal"]) and decision != "execute")
+             for k, q in qual.items() if q.get("proposal") is not None]
+    qual_ok = all(slots) if slots else None
+    return {**_base_row(case, answer, decision, exp, correct, unsupported, silent_qualifier, silent_default, proposed, operational),
         "decision_ok": "" if case["id"] in MULTI_COURSE else int(decision in admissible),
         "premature_execute": int(decision == "execute" and exp_dec != "execute"),
         "qualifier_convention_ok": "" if qual_ok is None else int(qual_ok), "qualifier_values": "",
         "expected_decision": exp_dec}
 
 
-def _base_row(case, answer, decision, exp, correct, unsupported, silent_qualifier, silent_default=0, proposed=0):
+def _base_row(case, answer, decision, exp, correct, unsupported, silent_qualifier, silent_default=0, proposed=0,
+              operational=0):
     p = answer.get("parsed") or {}
     return {
         "case_id": case["id"], "domain": case["domain"], "family": case["family"], "group": case["group"],
@@ -199,6 +251,7 @@ def _base_row(case, answer, decision, exp, correct, unsupported, silent_qualifie
         "parsed_ok": int(decision in ("execute", "clarify", "refuse")), "decision": decision,
         "n_expected": len(exp), "n_correct": correct, "unsupported": unsupported,
         "silent_qualifier_acceptance": silent_qualifier, "silent_default": silent_default, "proposed_assumptions": proposed,
+        "operational_values_reported": operational,
         "hallucination": int(unsupported + silent_qualifier + silent_default > 0),
         "n_questions": len(p.get("questions") or []),
         "instructions": answer.get("instructions_sha256_12", "v0"),
@@ -217,6 +270,8 @@ def main():
                     c = json.loads(line)
                     cases[c["id"]] = c
     dflt = {d: defaults(d) for d in ("tls", "lqlequiv", "pyrcel")}
+    global UNITS_BY_DOMAIN
+    UNITS_BY_DOMAIN = {d: field_units(d) for d in ("tls", "lqlequiv", "pyrcel")}
     global N_REQUIRED
     N_REQUIRED = {d: len([1 for g in ("inputs", "experiment") for _ in (yaml.safe_load((REPO / "descriptors" / d / "descriptor.yaml")
                   .read_text(encoding="utf-8")).get(g) or {})]) for d in ("tls", "lqlequiv", "pyrcel")}
@@ -257,9 +312,10 @@ def main():
             agg[k]["qualifier_ok"].append(r["qualifier_convention_ok"])
     summary = {k: {m: {"mean": round(sum(v) / len(v), 3), "n": len(v)} for m, v in d.items()} for k, d in sorted(agg.items())}
     corr = {}
-    for cond in sorted({r["condition"] for r in rows}):
-        sub = [r for r in rows if r["condition"] == cond]
-        for feat in ("n_words", "n_numbers", "n_qualifiers", "n_conversions", "n_missing"):
+    for cond in sorted({(r["condition"], r["instructions"]) for r in rows}):
+        sub = [r for r in rows if (r["condition"], r["instructions"]) == cond]
+        cond = "|".join(cond)
+        for feat in ("n_words", "n_numbers", "n_qualifiers", "n_conversions"):
             for target in ("unsupported", "premature_execute"):
                 rho = spearman([r[feat] for r in sub], [r[target] for r in sub])
                 corr[f"{cond}|{feat}|{target}"] = {"rho": None if rho is None else round(rho, 3), "n": len(sub)}
@@ -291,9 +347,7 @@ def complexity(case, n_required):
     numbers = re.findall(r"\d+(?:[.,]\d+)?", text)
     quals = sum(1 for w in words if w in QUALIFIER_WORDS)
     conversions = sum(len(re.findall(p, text)) for p in CONVERSION_PATTERNS)
-    given = len(expected(case))
-    return {"n_words": len(words), "n_numbers": len(numbers), "n_qualifiers": quals, "n_conversions": conversions,
-            "n_missing": max(n_required - given, 0)}
+    return {"n_words": len(words), "n_numbers": len(numbers), "n_qualifiers": quals, "n_conversions": conversions}
 
 
 def spearman(x, y):
