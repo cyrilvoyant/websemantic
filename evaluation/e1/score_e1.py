@@ -166,7 +166,7 @@ def main():
     (out / f"e1-summary-{model}.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
     print(f"{'domain|cond':16} {'fmt_ko':>6} {'dec_ok':>7} {'prem':>6} {'unsup':>6} {'any_uns':>7} {'fields':>7} {'qual':>6}  n")
     for k, d in summary.items():
-        g = lambda m, d=d: f"{d[m]['mean']:.2f}" if m in d else "  -"  # noqa: E731
+        g = lambda m, d=d: f"{d[m]['mean']:.2f}" if m in d else "  -"
         print(f"{k:16} {g('format_failure'):>6} {g('decision_ok'):>7} {g('premature_execute'):>6} {g('unsupported'):>6} {g('any_unsupported'):>7} "
               f"{g('field_acc'):>7} {g('qualifier_ok'):>6}  {d['premature_execute']['n']}")
 
