@@ -16,7 +16,7 @@ $steps = @(
     "cp -a benchmark-reserve/runs '$snap/benchmark-reserve/'",
     "cp -a logs '$snap/'",
     "for f in status-*.json; do if [ -e `"`$f`" ]; then cp -a `"`$f`" '$snap/'; fi; done",
-    "find semantic-sim-layer/evaluation/e1 -maxdepth 1 -name 'e1-*' -exec cp -a {} '$snap/semantic-sim-layer/evaluation/e1/' +",
+    "find semantic-sim-layer/evaluation/e1 -maxdepth 1 -name 'e1-*' -exec cp -a -t '$snap/semantic-sim-layer/evaluation/e1/' {} +",
     "tar czf '$tgz' -C '$snap' .",
     "rm -rf '$snap'"
 )
