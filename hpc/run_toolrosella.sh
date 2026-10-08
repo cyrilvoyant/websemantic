@@ -52,7 +52,12 @@ fi
 # No uv: ToolRosella prefers uv when present, but "uv venv" creates environments without pip, so the
 # repository requirements are never installed (seen 2026-10-08). Without uv it uses its venv branch (with pip),
 # the closest to the conda setup recommended by its authors (conda is absent from the container).
-"$TR/.venv/bin/pip" uninstall -q -y uv 2>/dev/null; command -v uv >/dev/null && log "warning: uv still on PATH ($(command -v uv))"
+# Uninstalling uv from the ToolRosella venv is not enough: the container has another uv on PATH (run of
+# 2026-10-08T15:29Z still took the uv branch). A shim named uv that fails, first on PATH, makes ToolRosella's
+# "uv --version" check fail, so it falls back to its venv branch. Only ToolRosella's processes see the shim.
+"$TR/.venv/bin/pip" uninstall -q -y uv 2>/dev/null
+NOUV="$OUT/no-uv"; mkdir -p "$NOUV"
+printf '#!/bin/sh\necho "uv disabled for the ToolRosella baseline" >&2\nexit 127\n' > "$NOUV/uv"; chmod +x "$NOUV/uv"
 "$TR/.venv/bin/pip" freeze > "$OUT/freeze-toolrosella.txt"
 # vLLM needs a dummy key; the variable name is built so that the archive secret scan is not misled.
 KEYVAR="OPENAI""_API_KEY"
@@ -97,13 +102,16 @@ done
 log "vLLM ready"
 
 # 4. ToolRosella MCP construction, one repository at a time (a failure is a result, not a stop)
-export PATH="$TR/.venv/bin:$PATH"
+export PATH="$NOUV:$TR/.venv/bin:$PATH"
+uv --version >/dev/null 2>&1 && die "uv still usable, ToolRosella would take its pip-less uv branch"
+log "uv masked (real uv: $(PATH="${PATH#*:}" command -v uv || echo none))"
 for entry in "${REPOS[@]}"; do
   url="${entry% *}"; name="$(basename "$url")"
   log "ToolRosella on $name"
   ( cd "$TR" && timeout 3h python main.py "Please use $url to build MCP tools." --max-repositories 1 \
       --workspace "$WS" > "$OUT/toolrosella-$name.log" 2>&1 )
   log "ToolRosella $name exit $? ; $(tail -n 1 "$OUT/toolrosella-$name.log")"
+  log "  env: $(grep -ao '"type": *"[a-z]*"' "$WS/$name/mcp_output/env_info.json" 2>/dev/null | head -1)"
 done
 
 # 5. Tool lists as an MCP client sees them
