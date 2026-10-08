@@ -31,10 +31,12 @@
     dcterms:publisher <https://github.com/cyrilvoyant/websemantic> ;
     dcterms:source <https://github.com/cyrilvoyant/websemantic> ;
     dcterms:license <https://polyformproject.org/licenses/noncommercial/1.0.0> ;
-    dcterms:bibliographicCitation "WebSemantic contributors (2026). WebSemantic core ontology, version 0.2.0. https://github.com/cyrilvoyant/websemantic" ;
+    dcterms:bibliographicCitation "Voyant, C. (2026). websemantic, version 0.2.0. Zenodo. https://doi.org/10.5281/zenodo.23238902" ;
     vann:preferredNamespacePrefix "ws" ;
     vann:preferredNamespaceUri "https://github.com/cyrilvoyant/websemantic/ns#" ;
     bibo:status "draft" ;
+    bibo:doi "10.5281/zenodo.23238902" ;
+    dcterms:identifier <https://doi.org/10.5281/zenodo.23238902> ;
     rdfs:seeAlso <https://doi.org/10.1038/s41597-022-01710-x> .
 
 <https://orcid.org/0000-0003-0242-7377> a schema:Person ; schema:name "Cyril Voyant" ; schema:url <https://person.cyrilvoyant.com> .

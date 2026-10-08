@@ -40,5 +40,6 @@
     "https://github.com/cyrilvoyant/LQL-Equiv-web (pinned dfc9a338205b8864b8e3470c4ae245b019e88844)",
     "pvlib==0.16.1"
   ],
-  "dateModified": "2026-10-08"
+  "dateModified": "2026-10-08",
+  "identifier": "https://doi.org/10.5281/zenodo.23238902"
 }

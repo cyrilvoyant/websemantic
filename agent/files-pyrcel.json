@@ -91,7 +91,7 @@
     {
       "path": "ontology/core.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/core.ttl",
-      "sha256_lf": "59d6e92f571651f231a0296f9db6e809a21ad35cf3b31a0e6c4102078f354b89"
+      "sha256_lf": "75c2180b329862dfe0e1d51a3b2430ff073f696353cdb49a2fd72debe46296d0"
     },
     {
       "path": "ontology/pyrcel.ttl",
