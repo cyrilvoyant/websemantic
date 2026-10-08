@@ -131,7 +131,11 @@ done
 status gpu preflight "GPU environment"
 nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv > "$LOGS/gpu.txt" 2>&1 \
   || fail gpu "no GPU visible: start run_all.sh from a JupyterLab H200 session"
-ensure_env "$GPU_ENV" gpu "import vllm, yaml, mistral_common" "vllm>=0.9.1,<1" "mistral_common>=1.6.2" pyyaml
+# The H200 driver (570.86) supports CUDA <= 12.8. vLLM 0.31 pulled torch 2.13 built for CUDA 13 ("driver too old",
+# 2026-10-08). vLLM 0.11.0 pins torch 2.8.0, built for CUDA 12.8 on PyPI; transformers kept < 5 for that vLLM.
+# The check pins these versions, so a venv with another vLLM is rebuilt, and initialises CUDA on the GPU.
+ensure_env "$GPU_ENV" gpu   "import vllm, torch, yaml, mistral_common; assert vllm.__version__ == '0.11.0', vllm.__version__; assert torch.version.cuda.startswith('12.'), torch.version.cuda; torch.zeros(1).cuda()"   "vllm==0.11.0" "transformers>=4.55.2,<5" pyyaml
+"$GPU_ENV/bin/python" -c "import torch; x = torch.ones(1024, device='cuda'); assert float(x.sum()) == 1024; print('cuda ok', torch.__version__, torch.version.cuda, torch.cuda.get_device_name(0))"   >> "$LOGS/gpu.txt" 2>&1 || fail gpu "CUDA test failed (driver/torch mismatch?), see logs/$CAMPAIGN/gpu.txt"
 
 # ---------- 2. lanes ----------
 if [ "$MODE" = smoke ]; then CORPORA="qualifiers"; REPS="1"; CONDS="F000,F111"; LIMIT=2
@@ -142,13 +146,13 @@ SETSID=""; command -v setsid >/dev/null && SETSID="setsid"   # own process group
 model_spec() {  # key -> HF id, served name, extra vLLM arguments
   case "$1" in
     qwen) HF_ID="Qwen/Qwen2.5-72B-Instruct"; SERVED="qwen2.5-72b"
-          # Native window 32k; YaRN x4 (Qwen model card). vLLM 0.31 runs on transformers 5, where the key is
-          # rope_parameters (rope_scaling was silently ignored, 2026-10-08 smoke). No VLLM_ALLOW_LONG_MAX_MODEL_LEN:
+          # Native window 32k; YaRN x4 (Qwen model card). The key is rope_scaling under transformers 4 and
+          # rope_parameters under transformers 5: both are given. No VLLM_ALLOW_LONG_MAX_MODEL_LEN:
           # if YaRN is not applied, vLLM must refuse the long window rather than run unscaled positions.
           # The TLS prompts with the ontology reach about 56k tokens.
           MAXLEN=98304
           EXTRA=(--quantization fp8 --kv-cache-dtype fp8 --enable-prefix-caching
-                 --hf-overrides '{"rope_parameters":{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768,"rope_theta":1000000.0}}');;
+                 --hf-overrides '{"rope_scaling":{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768},"rope_parameters":{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768,"rope_theta":1000000.0}}');;
     mistral) HF_ID="mistralai/Mistral-Small-3.2-24B-Instruct-2506"; SERVED="mistral-small-3.2-24b"
           MAXLEN=98304   # native 128k window
           EXTRA=(--tokenizer-mode mistral --config-format mistral --load-format mistral --enable-prefix-caching);;
