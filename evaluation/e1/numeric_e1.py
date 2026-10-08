@@ -182,7 +182,11 @@ def pyrcel_configs(case, answer):
     got = dict(got, _proto=got_proto)
 
     def run(x):
+        # Same pinned source as the adapter (external/pyrcel), not an installed copy: a build without .git
+        # omits the package data (data/std_atm.csv), seen on the H200 on 2026-10-08.
+        sys.path.insert(0, str(REPO / "external" / "pyrcel"))
         import pyrcel as pm
+        assert Path(pm.__file__).resolve().parent == (REPO / "external" / "pyrcel" / "pyrcel").resolve(), pm.__file__
         pr = x["_proto"]
         aer = [pm.AerosolSpecies("a", pm.Lognorm(mu=x["mu"], sigma=x["sigma"], N=x["n"]), kappa=x["kappa"], bins=int(pr["bins"]))]
         m = pm.ParcelModel(aer, V=x["v"], T0=x["t0"], S0=x["s0"], P0=x["p0"], accom=pr["accom"], console=False)
