@@ -29,8 +29,22 @@ nvidia-smi >/dev/null 2>&1 || die "no GPU: start from a JupyterLab H200 terminal
 [ -x "$GPU_ENV/bin/vllm" ] || die "venv-gpu missing: run run_all.sh once (smoke) first"
 
 # 1. ToolRosella at the pinned commit, in its own venv (+ uv, + the scientific stack so the export can import services)
-if [ ! -d "$TR/.git" ]; then git clone -q https://github.com/DEFENSE-SEU/ToolRosella.git "$TR" || die "clone failed"; fi
-git -C "$TR" checkout -q "$TR_COMMIT" || die "checkout $TR_COMMIT failed"
+# The JupyterLab container has no git: the pinned commit is downloaded as an archive.
+if [ ! -f "$TR/main.py" ]; then
+  mkdir -p "$TR" && python3 - "$TR" "$TR_COMMIT" <<'PY' || die "ToolRosella download failed"
+import io, sys, tarfile, urllib.request
+dest, commit = sys.argv[1], sys.argv[2]
+data = urllib.request.urlopen(f"https://codeload.github.com/DEFENSE-SEU/ToolRosella/tar.gz/{commit}", timeout=120).read()
+with tarfile.open(fileobj=io.BytesIO(data)) as t:
+    for m in t.getmembers():
+        parts = m.name.split("/", 1)
+        if len(parts) == 2 and parts[1]:
+            m.name = parts[1]
+            t.extract(m, dest)
+print("ToolRosella", commit, "extracted")
+PY
+fi
+echo "$TR_COMMIT" > "$OUT/toolrosella-commit.txt"
 if [ ! -x "$TR/.venv/bin/python" ]; then
   python3 -m venv "$TR/.venv" && "$TR/.venv/bin/pip" install -q --upgrade pip \
     && "$TR/.venv/bin/pip" install -q -r "$TR/requirements.txt" uv gitingest numpy pandas scipy matplotlib || die "ToolRosella install failed"
@@ -53,12 +67,15 @@ TOOLROSELLA_RUN_PLANNING_AGENT=false
 TOOLROSELLA_ROOT=.
 EOF
 
-# 2. Pinned sources pre-placed where ToolRosella looks for them (it skips cloning when source/.git exists)
+# 2. Pinned sources pre-placed where ToolRosella looks for them. They come from external/ (the pinned submodules
+# shipped in the archive); an empty source/.git marker makes ToolRosella skip its own git clone.
 WS="$OUT/workspace"
 for entry in "${REPOS[@]}"; do
   url="${entry% *}"; rev="${entry#* }"; name="$(basename "$url")"
-  git clone -q "$url" "$WS/$name/source" && git -C "$WS/$name/source" checkout -q "$rev" || die "pinned clone $name@$rev failed"
-  log "source $name at $(git -C "$WS/$name/source" rev-parse --short HEAD)"
+  [ -d "$HERE/external/$name" ] || die "external/$name missing in the archive"
+  mkdir -p "$WS/$name/source" && cp -a "$HERE/external/$name/." "$WS/$name/source/" && mkdir -p "$WS/$name/source/.git" \
+    || die "copy of $name failed"
+  log "source $name from external/ (pinned $rev)"
 done
 
 # 3. Generator: Qwen2.5-72B on vLLM, same settings as the campaign
