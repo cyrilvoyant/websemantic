@@ -65,7 +65,7 @@
     {
       "path": "descriptors/lqlequiv/descriptor.yaml",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/descriptors/lqlequiv/descriptor.yaml",
-      "sha256_lf": "08263276bbafce1581343c28f196e92f90ed45258dd874c623e10bfccb37d916"
+      "sha256_lf": "fd6f4d05316ae570a3c9af873af131916e4bdc112fa512b8c9860834c55faa2f"
     },
     {
       "path": "examples/lql-complete.json",

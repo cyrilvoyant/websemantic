@@ -360,6 +360,8 @@ comparison_task:
   - organe à risque absent -> demander (jamais choisi par le groupe)
   - dose qualitative -> demander
   - patient nommé ou décision de traitement -> refuser
+  - TCP ou NTCP non défini dans la bibliothèque pour une cible -> aucun verdict pour cette cible, le dire
+  - cas le plus fréquent (dose plus forte = TCP et NTCP plus élevés) -> compromis, valeurs à l'appui
 anatomical_groups:
   thoracic:
     label: Thorax (cibles et organes thoraciques)

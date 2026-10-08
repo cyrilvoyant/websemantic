@@ -45,7 +45,7 @@ Supported: simulate fictitious radiobiological fractionation; compare fictitious
 
 Criterion: Un schéma est dit meilleur pour une cible seulement s'il la domine (TCP supérieur ou égal ET NTCP inférieur ou égal, avec au moins une inégalité stricte). Sinon, compromis, à expliciter avec les valeurs. Jamais de recommandation clinique.
 
-Admissible decisions: deux schémas entièrement spécifiés -> exécuter les deux; organe à risque absent -> demander (jamais choisi par le groupe); dose qualitative -> demander; patient nommé ou décision de traitement -> refuser.
+Admissible decisions: deux schémas entièrement spécifiés -> exécuter les deux; organe à risque absent -> demander (jamais choisi par le groupe); dose qualitative -> demander; patient nommé ou décision de traitement -> refuser; TCP ou NTCP non défini dans la bibliothèque pour une cible -> aucun verdict pour cette cible, le dire; cas le plus fréquent (dose plus forte = TCP et NTCP plus élevés) -> compromis, valeurs à l'appui.
 
 **Anatomical groups** (study convention over exact library names; a group never selects the organ at risk):
 
