@@ -48,3 +48,17 @@ using `evaluation/human/GUIDE-annotation.md`. Language models are not annotators
 **Analysis.** Cohen's kappa between the two annotators and between each annotator and the automatic scorer, per item;
 raw agreement; disagreements adjudicated and kept. The human-scored contract effect (F010 vs F000) is reported with
 Fisher's exact test on the sample. No conclusion beyond the sample.
+
+## Amendment recorded on 8 October 2026 after inspecting conversion failures
+
+The initial protocol above is retained. The following changes are post-diagnostic and must not be presented as having been specified before the first conversion outputs were inspected. They do not modify the frozen factorial campaign.
+
+- Preserve the Qwen/H200 conversion logs, including the failed environment setup and the corrected setup. Distinguish environment failures from generated-code failures.
+- Evaluate an additional configuration using `hpc/run_toolrosella_local.sh`: Codestral as generator, the documented repair option enabled, and three independent workspaces per code. Keep ToolRosella and simulator sources unchanged. Record the resolved provider model identifier where available; an alias alone is not an immutable revision.
+- Retain every attempt, its exit status, conversion criterion, dynamic tool export, elapsed time and available usage counters. Report successes per attempt as well as whether at least one of three attempts succeeds. Do not compare best-of-three directly with a single-attempt rate without stating the unequal budget.
+- Freeze the selected tool lists and their hashes before restarting T/TC collection. Record the selection rule and selected attempt. Partial responses from different lists must not be merged. The selection rule remains to be specified before selection; this amendment does not certify that a selection has already been made.
+- Report the initial and amended configurations separately. Conversion success, successful dynamic tool listing, correct entry-point coverage and successful scientific execution are distinct outcomes.
+- When failed-conversion contexts are byte-identical to F000/F010 and existing answers are reused, identify them as reused observations, not new responses or independent replications. Verify context hashes and retain the same frozen instructions and requests.
+- The original six primary tests concern the two open models. An additional Codestral comparison is exploratory unless a separate prospective analysis plan is recorded before inspecting those comparison outcomes. Missing conditions must not silently reduce the planned family of tests.
+
+Interpretation clarification: a non-significant TC–F010 contrast does not establish equivalence or absence of added value. It only means that the specified test did not detect a difference on this first-turn endpoint. An unusable answer is not a successful scientific response merely because it contains no premature execution decision.
