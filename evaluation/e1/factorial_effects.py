@@ -2,8 +2,8 @@
 
 Reads the scorer output e1-scores-<folder>.csv of each answer folder given on the command line. For each software,
 metric and factor, the proportion with the factor is compared with the proportion without it (the other two factors
-pooled), with Fisher's exact test on the 2x2 counts. Rows (cases x repetitions) are not independent observations:
-p-values are descriptive. Output: e1-factorial-effects.csv and figure e1-factorial-effects.{pdf,png} (private).
+pooled). Rows (cases x repetitions) are not independent: the Fisher p-value in the CSV is kept for traceability only
+and is not shown on the figure; inference is made at request level (paired, de-duplicated analysis). Output: e1-factorial-effects.csv and figure e1-factorial-effects.{pdf,png} (private).
 """
 
 import csv
@@ -66,11 +66,12 @@ def plot(rows):
             for k, model in enumerate(models):
                 sel = {r["factor"]: r for r in rows if r["model"] == model and r["domain"] == dom and r["metric"] == m}
                 xs = [x + (k - (len(models) - 1) / 2) * width for x in range(len(FACTORS))]
-                ys = [sel[f]["difference"] if f in sel else 0 for f in FACTORS]
-                a.bar(xs, ys, width, color=colors[k % len(colors)], label=model if (i, j) == (0, 0) else None)
-                for x, f in zip(xs, FACTORS):
-                    if f in sel and sel[f]["fisher_p"] < 0.05:
-                        a.text(x, sel[f]["difference"], "*", ha="center", va="bottom" if sel[f]["difference"] >= 0 else "top")
+                for x, f in zip(xs, FACTORS):  # a missing metric is shown as ND, never as a zero difference
+                    if f in sel:
+                        a.bar(x, sel[f]["difference"], width, color=colors[k % len(colors)],
+                              label=model if (i, j, f) == (0, 0, "O") else None)
+                    else:
+                        a.text(x, 0, "ND", ha="center", va="bottom", fontsize=7, color="grey")
             a.axhline(0, color="black", lw=0.6)
             a.set_xticks(range(len(FACTORS)), ["ontology (O)", "contract (C)", "FAIR files (P)"])
             if i == 0:
