@@ -4,14 +4,19 @@ title: 'websemantic: a software-agnostic semantic layer from human intent to qua
   simulated data'
 type: software
 authors:
-- name: WebSemantic contributors
+- given-names: Cyril
+  family-names: Voyant
+  affiliation: Mines Paris, PSL University, Centre for Observation, Impacts, Energy (O.I.E.), Sophia-Antipolis, France
+  orcid: https://orcid.org/0000-0003-0242-7377
+  website: https://person.cyrilvoyant.com
 repository-code: https://github.com/cyrilvoyant/websemantic
 license: PolyForm-Noncommercial-1.0.0
-version: 0.0.1
-date-released: '2026-10-03'
+version: 0.2.0
+date-released: '2026-10-08'
 abstract: 'Semantic framework for preparing scientific simulation scenarios, validating
   typed configurations and qualifying numerical outputs with explicit provenance.
-  The current implementation runs a pinned TLS backend and exports CSV, JSON and RDF.
+  One descriptor per software is compiled into an LLM contract, an ontology with SHACL shapes and FAIR
+  metadata; three unchanged backends are linked at pinned revisions (TLS, LQL-Equiv, pyrcel).
   Outputs are synthetic and have not been validated against field measurements.
 
   '
@@ -27,12 +32,24 @@ keywords:
 references:
 - type: software
   title: Tunnel Load Simulator — SmartTunnel project
+  authors:
+  - given-names: Haytham
+    family-names: El-Houari
+  - given-names: Cyril
+    family-names: Voyant
   doi: 10.5281/zenodo.20080042
   repository-code: https://github.com/cyrilvoyant/tunnel-load-simulator
 - type: software
   title: LQL-Equiv-web
+  authors:
+  - given-names: Cyril
+    family-names: Voyant
   doi: 10.5281/zenodo.21948623
   repository-code: https://github.com/cyrilvoyant/LQL-Equiv-web
 - type: software
-  title: pvlib python
-  repository-code: https://github.com/pvlib/pvlib-python
+  title: 'pyrcel: cloud parcel model'
+  authors:
+  - given-names: Daniel
+    family-names: Rothenberg
+  version: 2.0.0
+  repository-code: https://github.com/darothen/pyrcel

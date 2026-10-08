@@ -2,8 +2,8 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "name": "websemantic",
-  "description": "Semantic framework for configuring scientific simulators, recording assumptions and qualifying numerical outputs. TLS integration with typed parameters, explicit validation and versioned provenance.",
-  "version": "0.0.1",
+  "description": "Software-agnostic semantic layer: one descriptor per scientific software compiled into an LLM contract, an ontology with SHACL shapes and FAIR metadata; unchanged backends (TLS, LQL-Equiv, pyrcel) at pinned revisions.",
+  "version": "0.2.0",
   "dateCreated": "2026-10-03",
   "license": "https://spdx.org/licenses/PolyForm-Noncommercial-1.0.0.html",
   "codeRepository": "https://github.com/cyrilvoyant/websemantic",
@@ -15,8 +15,14 @@
   },
   "author": [
     {
-      "@type": "Organization",
-      "name": "WebSemantic contributors"
+      "@type": "Person",
+      "@id": "https://orcid.org/0000-0003-0242-7377",
+      "givenName": "Cyril",
+      "familyName": "Voyant",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Mines Paris, PSL University, Centre for Observation, Impacts, Energy (O.I.E.)"
+      }
     }
   ],
   "keywords": [
@@ -33,5 +39,6 @@
     "https://github.com/cyrilvoyant/tunnel-load-simulator (pinned 748e053e129669cf3e896d381e3c0ac01c763edd)",
     "https://github.com/cyrilvoyant/LQL-Equiv-web (pinned dfc9a338205b8864b8e3470c4ae245b019e88844)",
     "pvlib==0.16.1"
-  ]
+  ],
+  "dateModified": "2026-10-08"
 }
