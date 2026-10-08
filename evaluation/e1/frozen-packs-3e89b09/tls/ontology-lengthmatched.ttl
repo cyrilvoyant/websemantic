@@ -1,0 +1,2141 @@
+@prefix ws:    <https://github.com/cyrilvoyant/websemantic/ns#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix prov:  <http://www.w3.org/ns/prov#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix qudt:  <http://qudt.org/schema/qudt/> .
+@prefix unit:  <http://qudt.org/vocab/unit/> .
+@prefix qk:    <http://qudt.org/vocab/quantitykind/> .
+@prefix schema: <https://schema.org/> .
+@prefix ws:   <https://github.com/cyrilvoyant/websemantic/ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix qk:   <http://qudt.org/vocab/quantitykind/> .
+
+
+# WebSemantic core ontology.
+# One common core; each scientific software is described by instances of it,
+# never by new core classes. Alignments use rdfs:subClassOf / rdfs:seeAlso only:
+# no owl:equivalentClass is asserted towards external vocabularies.
+
+<https://github.com/cyrilvoyant/websemantic/ns/core> a owl:Ontology ;
+    dcterms:title "WebSemantic core ontology"@en ;
+    dcterms:description "Common vocabulary linking user requests, software contracts, accepted assumptions, executions and qualified simulation outputs."@en ;
+    owl:versionInfo "0.1.0" ;
+    dcterms:created "2026-10-06"^^xsd:date ;
+    dcterms:license <https://polyformproject.org/licenses/noncommercial/1.0.0> ;
+    rdfs:seeAlso <https://doi.org/10.1038/s41597-022-01710-x> .
+
+########################################################################
+# 1. Software and contracts
+########################################################################
+
+ws:Software a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:seeAlso schema:SoftwareSourceCode ;
+    rdfs:label "Software"@en, "Logiciel"@fr ;
+    rdfs:comment "Scientific software used unmodified, identified by repository, pinned revision and concept DOI."@en .
+
+ws:Contract a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Contract"@en, "Contrat"@fr ;
+    rdfs:comment "Published, machine-readable description of how a software may be configured for declared tasks and how its outputs must be read."@en .
+
+ws:TaskProfile a owl:Class ;
+    rdfs:label "Task profile"@en, "Profil de tâche"@fr ;
+    rdfs:comment "A bounded use of the software that the contract supports or explicitly excludes."@en .
+
+ws:ParameterDefinition a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Parameter definition"@en, "Définition de paramètre"@fr ;
+    rdfs:comment "Concept-level description of an input: meaning, quantity kind, canonical unit, bounds, API variable."@en .
+
+ws:OutputVariable a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Output variable"@en, "Variable de sortie"@fr ;
+    rdfs:comment "Concept-level description of a computed column: quantity kind, unit, aggregation, temporal support."@en .
+
+ws:Bound a owl:Class ;
+    rdfs:label "Bound"@en, "Borne"@fr ;
+    rdfs:comment "Numerical limit with its authority. A user-interface slider limit is not a physical constraint."@en .
+
+ws:BoundAuthority a owl:Class ;
+    rdfs:label "Bound authority"@en .
+
+ws:ValidityLimit a owl:Class ;
+    rdfs:label "Validity limit"@en, "Limite de validité"@fr ;
+    rdfs:comment "Declared condition outside which results must not be used (e.g. no calibration, no clinical decision)."@en .
+
+ws:Aggregation a owl:Class ;
+    rdfs:label "Aggregation"@en, "Agrégation"@fr .
+
+ws:DataOrigin a owl:Class ;
+    rdfs:label "Data origin"@en, "Origine des données"@fr .
+
+########################################################################
+# 2. Qualitative semantics (beaucoup, peu, faible, très élevé, ...)
+########################################################################
+
+ws:QualitativeTerm a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Qualitative term"@en, "Terme qualitatif"@fr ;
+    rdfs:comment "Word or phrase expressing an ordinal level. It has no numerical meaning by itself."@en .
+
+ws:QualifierMapping a owl:Class ;
+    rdfs:label "Qualifier mapping"@en, "Convention qualitative"@fr ;
+    rdfs:comment "Parameter-specific convention turning a qualitative term into a proposed value. Always a proposal requiring acceptance."@en .
+
+ws:ClarificationPolicy a owl:Class ;
+    rdfs:label "Clarification policy"@en ;
+    rdfs:comment "Rule stating that a term or request has no mapping for a parameter and must trigger a question."@en .
+
+########################################################################
+# 3. Requests, scenarios and value records
+########################################################################
+
+ws:Request a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Request"@en, "Demande"@fr .
+
+ws:Evidence a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Evidence"@en, "Preuve"@fr ;
+    rdfs:comment "Exact text span of a request supporting a value. Its presence does not prove semantic correctness."@en .
+
+ws:Scenario a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Scenario"@en, "Scénario"@fr .
+
+ws:Experiment a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Experiment settings"@en, "Réglages d'expérience"@fr ;
+    rdfs:comment "Time grid, horizon, realisations and seed; distinct from physical inputs."@en .
+
+ws:Parameter a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Parameter record"@en, "Enregistrement de paramètre"@fr ;
+    rdfs:comment "Value of one parameter in one scenario, with unit, origin, evidence and acceptance state."@en .
+
+ws:UserValue a owl:Class ;
+    rdfs:subClassOf ws:Parameter ;
+    rdfs:label "User-provided value"@en .
+
+ws:Hypothesis a owl:Class ;
+    rdfs:subClassOf ws:Parameter ;
+    rdfs:label "Proposed assumption"@en, "Hypothèse proposée"@fr ;
+    rdfs:comment "Default, qualitative convention or sourced proposal. Not executable until accepted."@en .
+
+ws:OperationalSetting a owl:Class ;
+    rdfs:subClassOf ws:Parameter ;
+    rdfs:label "Operational setting"@en ;
+    rdfs:comment "Technical choice authorised by declared policy (e.g. fixed seed)."@en .
+
+ws:UnknownValue a owl:Class ;
+    rdfs:subClassOf ws:Parameter ;
+    rdfs:label "Unknown value"@en, "Valeur inconnue"@fr .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( ws:UserValue ws:Hypothesis ws:OperationalSetting ws:UnknownValue ) .
+
+########################################################################
+# 4. Activities (PROV-O)
+########################################################################
+
+ws:Interpretation a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Interpretation"@en ;
+    rdfs:comment "Extraction of candidate values from a request, by a language model or a rule."@en .
+
+ws:Normalisation a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Deterministic normalisation"@en ;
+    rdfs:comment "Exact unit or number conversion (2 km -> 2000 m). Not a domain inference."@en .
+
+ws:Acceptance a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Acceptance"@en, "Accord"@fr ;
+    rdfs:comment "Explicit user decision making a hypothesis executable."@en .
+
+ws:Validation a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Validation gate"@en .
+
+ws:Execution a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Execution"@en, "Exécution"@fr .
+
+ws:SimulationOutput a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:seeAlso schema:Dataset ;
+    rdfs:label "Simulation output"@en, "Sortie de simulation"@fr .
+
+ws:Qualification a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Output qualification"@en, "Qualification des sorties"@fr ;
+    rdfs:comment "Machine-readable statement of units, aggregation, scope, data origin, uncertainty coverage and admitted uses."@en .
+
+########################################################################
+# 5. Object properties
+########################################################################
+
+ws:hasContract a owl:ObjectProperty ; rdfs:domain ws:Software ; rdfs:range ws:Contract .
+ws:supportsTask a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:TaskProfile .
+ws:excludesTask a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:TaskProfile .
+ws:declaresParameter a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:ParameterDefinition .
+ws:declaresOutput a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:OutputVariable .
+ws:declaresValidityLimit a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:ValidityLimit .
+
+ws:requiresParameter a owl:ObjectProperty ;
+    rdfs:domain ws:TaskProfile ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "Parameter that must be provided or accepted for the task."@en .
+ws:producesOutput a owl:ObjectProperty ; rdfs:domain ws:TaskProfile ; rdfs:range ws:OutputVariable .
+
+ws:quantityKind a owl:ObjectProperty ;
+    rdfs:range qudt:QuantityKind ;
+    rdfs:comment "QUDT quantity kind of a parameter or output."@en .
+ws:canonicalUnit a owl:ObjectProperty ;
+    rdfs:range qudt:Unit ;
+    rdfs:comment "QUDT unit in which values are stored and validated."@en .
+ws:hasBound a owl:ObjectProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:Bound .
+ws:authority a owl:ObjectProperty ; rdfs:domain ws:Bound ; rdfs:range ws:BoundAuthority .
+ws:aggregation a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:Aggregation .
+ws:dataOrigin a owl:ObjectProperty ; rdfs:range ws:DataOrigin .
+
+ws:term a owl:ObjectProperty ; rdfs:domain ws:QualifierMapping ; rdfs:range ws:QualitativeTerm .
+ws:appliesTo a owl:ObjectProperty ;
+    rdfs:domain [ owl:unionOf ( ws:QualifierMapping ws:ClarificationPolicy ) ] ;
+    rdfs:range ws:ParameterDefinition .
+
+ws:concept a owl:ObjectProperty ; rdfs:domain ws:Parameter ; rdfs:range ws:ParameterDefinition .
+ws:hasParameter a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:Parameter .
+ws:hasExperiment a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:Experiment .
+ws:forTask a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:TaskProfile .
+ws:supportedBy a owl:ObjectProperty ; rdfs:domain ws:UserValue ; rdfs:range ws:Evidence .
+ws:fromRequest a owl:ObjectProperty ; rdfs:domain ws:Evidence ; rdfs:range ws:Request .
+ws:followsConvention a owl:ObjectProperty ; rdfs:domain ws:Hypothesis ; rdfs:range ws:QualifierMapping .
+ws:acceptedBy a owl:ObjectProperty ; rdfs:domain ws:Hypothesis ; rdfs:range ws:Acceptance .
+ws:qualifiedBy a owl:ObjectProperty ; rdfs:domain ws:SimulationOutput ; rdfs:range ws:Qualification .
+
+########################################################################
+# 6. Datatype properties
+########################################################################
+
+ws:apiVariable a owl:DatatypeProperty ; rdfs:range xsd:string ;
+    rdfs:comment "Exact backend identifier (e.g. TunnelConfig.length_m)."@en .
+ws:fieldPath a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:repository a owl:DatatypeProperty ; rdfs:range xsd:anyURI .
+ws:pinnedRevision a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:conceptDOI a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:boundValue a owl:DatatypeProperty ; rdfs:domain ws:Bound .
+ws:boundKind a owl:DatatypeProperty ; rdfs:domain ws:Bound ; rdfs:range xsd:string ;
+    rdfs:comment "min, max, min_exclusive or max_exclusive."@en .
+ws:proposedValue a owl:DatatypeProperty ; rdfs:domain ws:QualifierMapping .
+ws:requiresAcceptance a owl:DatatypeProperty ; rdfs:domain ws:QualifierMapping ; rdfs:range xsd:boolean .
+ws:sourceNote a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:value a owl:DatatypeProperty ; rdfs:domain ws:Parameter .
+ws:accepted a owl:DatatypeProperty ; rdfs:domain ws:Parameter ; rdfs:range xsd:boolean .
+ws:evidenceText a owl:DatatypeProperty ; rdfs:domain ws:Evidence ; rdfs:range xsd:string .
+ws:temporalSupport a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:string ;
+    rdfs:comment "native step, daily, hourly envelope, whole period, per course..."@en .
+ws:additive a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:boolean ;
+    rdfs:comment "True if values may be summed over time steps (energy), false otherwise (power, ratios, doses per course)."@en .
+
+# Relational properties used by the domain extensions (condition B3).
+ws:derivedFrom a owl:ObjectProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "The quantity is computed from others; an inconsistent stated value is a conflict."@en .
+ws:convertibleTo a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "Two expressions of one physical state related by the stated ws:derivationRule (e.g. S0 = RH_fraction - 1). Not a numerical equality and not a unit change alone."@en .
+ws:dependsOnReference a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "Output meaningful only with the stated reference parameter."@en .
+ws:invalidates a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:OutputVariable ;
+    rdfs:comment "Direction: boolean backend flag -> output. When the flag (subject) is true, the object output must not be reported as a result."@en .
+ws:derivationRule a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:derivedFromOutput a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:OutputVariable ;
+    rdfs:comment "Output obtained from another output by an exact conversion (unit change, x100...)."@en .
+ws:codeDefault a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ;
+    rdfs:comment "Default set by the backend code; stated, never treated as user data."@en .
+ws:validityFlag a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:string .
+ws:groupInstance a owl:DatatypeProperty ; rdfs:domain ws:Parameter ; rdfs:range xsd:string ;
+    rdfs:comment "Identifier of the course, aerosol mode or other repeated group a record belongs to; checks never mix instances."@en .
+ws:requiresInstance a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range xsd:boolean ;
+    rdfs:comment "Records of this parameter must carry ws:groupInstance (repeated course, aerosol mode...)."@en .
+ws:partOfGroup a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range xsd:string ;
+    rdfs:comment "Parameters that must be supplied together."@en .
+
+########################################################################
+# 7. Controlled individuals
+########################################################################
+
+ws:AuthorityCode a ws:BoundAuthority ; rdfs:label "enforced by backend code"@en .
+ws:AuthorityUI a ws:BoundAuthority ; rdfs:label "user-interface limit, not physical"@en .
+ws:AuthorityPolicy a ws:BoundAuthority ; rdfs:label "experimental policy of the study"@en .
+ws:AuthorityDomain a ws:BoundAuthority ; rdfs:label "domain literature or expert"@en .
+
+ws:SyntheticSimulation a ws:DataOrigin ; rdfs:label "synthetic simulation"@en .
+ws:Measured a ws:DataOrigin ; rdfs:label "measured"@en .
+ws:Assumed a ws:DataOrigin ; rdfs:label "assumed"@en .
+
+ws:AggNativeStep a ws:Aggregation ; rdfs:label "value at native time step"@en .
+ws:AggSum a ws:Aggregation ; rdfs:label "sum over steps"@en .
+ws:AggMean a ws:Aggregation ; rdfs:label "mean over steps"@en .
+ws:AggMax a ws:Aggregation ; rdfs:label "maximum over steps"@en .
+ws:AggQuantileAcrossRuns a ws:Aggregation ; rdfs:label "empirical quantile across realisations, not a confidence interval"@en .
+ws:AggExtrapolation a ws:Aggregation ; rdfs:label "linear extrapolation (e.g. 365/n_days), not an observed year"@en .
+ws:AggPerCourse a ws:Aggregation ; rdfs:label "per treatment course"@en .
+
+# Ordinal qualitative scale shared by all software. Values are given only by
+# parameter-specific ws:QualifierMapping instances in each contract.
+ws:QualitativeScale a skos:ConceptScheme ; skos:prefLabel "Échelle qualitative commune"@fr, "Shared qualitative scale"@en .
+ws:LevelVeryLow  a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "très faible"@fr, "very low"@en ; skos:altLabel "très peu"@fr ; ws:rank 1 .
+ws:LevelLow      a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "faible"@fr, "low"@en ; skos:altLabel "peu"@fr, "court"@fr ; ws:rank 2 .
+ws:LevelTypical  a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "courant"@fr, "typical"@en ; skos:altLabel "moyen"@fr, "normal"@fr ; ws:rank 3 .
+ws:LevelHigh     a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "élevé"@fr, "high"@en ; skos:altLabel "beaucoup"@fr, "fort"@fr, "long"@fr ; ws:rank 4 .
+ws:LevelVeryHigh a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "très élevé"@fr, "very high"@en ; skos:altLabel "énormément"@fr, "très fort"@fr ; ws:rank 5 .
+
+ws:rank a owl:DatatypeProperty ; rdfs:domain ws:QualitativeTerm ; rdfs:range xsd:integer .
+
+########################################################################
+# 8. Software instances (identity and task profiles only; full parameter
+#    definitions are exported from each descriptor)
+########################################################################
+
+ws:TLS a ws:Software ;
+    rdfs:label "Tunnel Load Simulator" ;
+    ws:repository "https://github.com/cyrilvoyant/tunnel-load-simulator"^^xsd:anyURI ;
+    ws:pinnedRevision "748e053e129669cf3e896d381e3c0ac01c763edd" ;
+    ws:conceptDOI "10.5281/zenodo.20080042" ;
+    ws:hasContract ws:TLSContract .
+
+ws:TLSContract a ws:Contract ;
+    ws:supportsTask ws:TaskTunnelDemand ;
+    ws:excludesTask ws:TaskTunnelCertification ;
+    ws:declaresValidityLimit ws:LimitNoCalibration .
+
+ws:TaskTunnelDemand a ws:TaskProfile ;
+    rdfs:label "Estimate electricity demand of a road tunnel under stated assumptions"@en .
+ws:TaskTunnelCertification a ws:TaskProfile ;
+    rdfs:label "Certify design values or predict consumption of a real tunnel"@en .
+ws:LimitNoCalibration a ws:ValidityLimit ;
+    rdfs:label "Synthetic first-order model, not calibrated against measured tunnels"@en .
+
+ws:LQLEquiv a ws:Software ;
+    rdfs:label "LQL-Equiv" ;
+    ws:repository "https://github.com/cyrilvoyant/LQL-Equiv-web"^^xsd:anyURI ;
+    ws:pinnedRevision "dfc9a338205b8864b8e3470c4ae245b019e88844" ;
+    ws:conceptDOI "10.5281/zenodo.21948623" ;
+    ws:hasContract ws:LQLContract .
+
+ws:LQLContract a ws:Contract ;
+    ws:supportsTask ws:TaskFractionationEquivalence ;
+    ws:excludesTask ws:TaskPatientDecision ;
+    ws:declaresValidityLimit ws:LimitNotMedicalDevice .
+
+ws:TaskFractionationEquivalence a ws:TaskProfile ;
+    rdfs:label "Compare fractionation schedules (BED, EQD2, NTCP, TCP) for research and education"@en .
+ws:TaskPatientDecision a ws:TaskProfile ;
+    rdfs:label "Prescribe, modify or validate treatment for an individual patient"@en .
+ws:LimitNotMedicalDevice a ws:ValidityLimit ;
+    rdfs:label "Research and education software; not a medical device"@en .
+
+ws:Pyrcel a ws:Software ;
+    rdfs:label "pyrcel" ;
+    ws:repository "https://github.com/darothen/pyrcel"^^xsd:anyURI ;
+    ws:pinnedRevision "977e9094644ec4a17d658d657094651928591c89" ;
+    rdfs:comment "Version 2.0.0, BSD-3-Clause, used unmodified."@en ;
+    ws:hasContract ws:PyrcelContract .
+
+ws:PyrcelContract a ws:Contract ;
+    ws:supportsTask ws:TaskParcelActivation ;
+    ws:excludesTask ws:TaskWeatherForecast ;
+    ws:declaresValidityLimit ws:LimitAdiabaticParcel .
+
+ws:TaskParcelActivation a ws:TaskProfile ;
+    rdfs:label "Simulate adiabatic parcel ascent and aerosol activation for a stated updraft, initial state and aerosol population"@en .
+ws:TaskWeatherForecast a ws:TaskProfile ;
+    rdfs:label "Forecast clouds or precipitation for a real place and time"@en .
+ws:LimitAdiabaticParcel a ws:ValidityLimit ;
+    rdfs:label "Zero-dimensional adiabatic parcel; not a weather forecast or a cloud-resolving simulation"@en .
+
+########################################################################
+# 9. Worked example of a qualifier mapping (TLS relative traffic), taken
+#    from docs/qualificatifs.md. Full tables are exported from descriptors.
+########################################################################
+
+ws:TLS_traffic_level a ws:ParameterDefinition ;
+    skos:prefLabel "Trafic relatif"@fr, "Relative traffic"@en ;
+    ws:apiVariable "TunnelConfig.traffic_level" ;
+    ws:fieldPath "inputs.traffic_level" ;
+    ws:quantityKind qk:Dimensionless ;
+    ws:canonicalUnit unit:UNITLESS ;
+    skos:definition "Multiplier of the reference traffic profile; not vehicles per day."@en .
+
+ws:TLSContract ws:declaresParameter ws:TLS_traffic_level .
+
+ws:TLS_traffic_low a ws:QualifierMapping ;
+    ws:term ws:LevelLow ; ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 0.3 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." .
+ws:TLS_traffic_typical a ws:QualifierMapping ;
+    ws:term ws:LevelTypical ; ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 1.0 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Reference level of the backend profile." .
+ws:TLS_traffic_high a ws:QualifierMapping ;
+    ws:term ws:LevelHigh ; ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 1.5 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." .
+ws:TLS_traffic_veryhigh a ws:QualifierMapping ;
+    ws:term ws:LevelVeryHigh ; ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 2.0 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." .
+
+ws:TLS_lighting_type a ws:ParameterDefinition ;
+    skos:prefLabel "Éclairage"@fr ;
+    ws:apiVariable "TunnelConfig.lighting_type" ;
+    ws:fieldPath "inputs.lighting_type" ;
+    skos:definition "Lighting technology and control; not an illuminance."@en .
+
+ws:TLS_lighting_intensity_policy a ws:ClarificationPolicy ;
+    ws:appliesTo ws:TLS_lighting_type ;
+    rdfs:comment "Intensity words (fortement / faiblement éclairé) have no mapping: TLS has no illuminance parameter. Ask the user."@en .
+
+ws:TLS_specific_energy a ws:OutputVariable ;
+    skos:prefLabel "Énergie spécifique annualisée"@fr ;
+    ws:apiVariable "kpis.specific_kwh_m_year" ;
+    ws:quantityKind qk:Energy ;
+    ws:aggregation ws:AggExtrapolation ;
+    ws:additive false ;
+    ws:temporalSupport "whole period, extrapolated by 365/n_days, per metre of tunnel (all tubes)" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:TLS_power a ws:OutputVariable ;
+    skos:prefLabel "Puissance électrique"@fr ;
+    ws:apiVariable "representative.power_kw" ;
+    ws:quantityKind qk:Power ;
+    ws:canonicalUnit unit:KiloW ;
+    ws:aggregation ws:AggNativeStep ;
+    ws:additive false ;
+    ws:temporalSupport "native step" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:TLS_energy_step a ws:OutputVariable ;
+    skos:prefLabel "Énergie du pas"@fr ;
+    ws:apiVariable "representative.energy_kwh" ;
+    ws:quantityKind qk:Energy ;
+    ws:canonicalUnit unit:KiloW-HR ;
+    ws:aggregation ws:AggNativeStep ;
+    ws:additive true ;
+    ws:temporalSupport "native step" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+
+# ---- domain extension ----
+
+# LQL-Equiv extension: instances of the common core only (no new classes).
+# Source: docs/lql-contract-definitions.md (draft, scientific review pending).
+
+ws:TaskFractionationEquivalence
+    ws:requiresParameter ws:LQL_organ, ws:LQL_tumour_site, ws:LQL_dose_per_fraction,
+                         ws:LQL_n_fractions, ws:LQL_reference_dose ;
+    ws:producesOutput ws:LQL_bed_oar, ws:LQL_eqd_oar, ws:LQL_eqd_oar_total, ws:LQL_ntcp ;
+    skos:note "BED, EQD and probabilities are compared one quantity at a time; never concatenated."@en .
+
+ws:LQLContract ws:declaresParameter ws:LQL_organ, ws:LQL_tumour_site, ws:LQL_dose_per_fraction,
+        ws:LQL_n_fractions, ws:LQL_gap_days, ws:LQL_reference_dose, ws:LQL_bifractionated, ws:LQL_total_dose ;
+    ws:declaresOutput ws:LQL_bed_oar, ws:LQL_eqd_oar, ws:LQL_eqd_oar_total, ws:LQL_eqd_tumour, ws:LQL_eqd_tumour_total,
+        ws:LQL_ntcp, ws:LQL_oar_saturated, ws:LQL_tumour_saturated, ws:LQL_saturated .
+
+ws:LQL_organ a ws:ParameterDefinition ;
+    skos:prefLabel "Organe à risque"@fr ; ws:apiVariable "compute(organ, ...) positional 1" ; ws:fieldPath "organ" ;
+    skos:definition "Organ at risk from the shipped library (34 entries); never chosen silently."@en .
+
+ws:LQL_tumour_site a ws:ParameterDefinition ;
+    skos:prefLabel "Site tumoral"@fr ; ws:apiVariable "compute(..., tumour, ...) positional 2" ; ws:fieldPath "tumour_site" ;
+    skos:definition "Tumour site from the shipped library (20 entries)."@en .
+
+ws:LQL_dose_per_fraction a ws:ParameterDefinition ; ws:requiresInstance true ;
+    skos:prefLabel "Dose par fraction"@fr ; ws:apiVariable "Course.dose_per_fraction" ; ws:fieldPath "courses[k].dose_per_fraction" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] .
+
+ws:LQL_n_fractions a ws:ParameterDefinition ; ws:requiresInstance true ;
+    skos:prefLabel "Nombre de fractions"@fr ; ws:apiVariable "Course.n_fractions" ; ws:fieldPath "courses[k].n_fractions" ;
+    ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:NUM ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] ,
+                [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 1 ; ws:authority ws:AuthorityPolicy ;
+                  rdfs:comment "Integer >= 1 for physical schedules (profile policy); the API accepts floats."@en ] .
+
+ws:LQL_gap_days a ws:ParameterDefinition ; ws:requiresInstance true ;
+    skos:prefLabel "Interruption"@fr ; ws:apiVariable "Course.gap_days" ; ws:fieldPath "courses[k].gap_days" ;
+    ws:quantityKind qk:Time ; ws:canonicalUnit unit:DAY ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] .
+
+ws:LQL_reference_dose a ws:ParameterDefinition ;
+    skos:prefLabel "Dose de référence par fraction"@fr ; ws:apiVariable "Prescription.reference_dose" ; ws:fieldPath "reference_dose" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:codeDefault 2.0 ;
+    skos:definition "Defines the EQD reference fractionation; always stated in answers."@en ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] ,
+                [ a ws:Bound ; ws:boundKind "min_exclusive" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityPolicy ;
+                  rdfs:comment "0 is constructible but does not guarantee a computable EQD."@en ] .
+
+ws:LQL_bifractionated a ws:ParameterDefinition ;
+    skos:prefLabel "Deux fractions par jour"@fr ; ws:apiVariable "Prescription.bifractionated" ; ws:fieldPath "bifractionated" ;
+    ws:codeDefault false .
+
+ws:LQL_total_dose a ws:ParameterDefinition ; ws:requiresInstance true ;
+    skos:prefLabel "Dose totale"@fr ; ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ;
+    ws:derivedFrom ws:LQL_dose_per_fraction, ws:LQL_n_fractions ;
+    ws:derivationRule "total_dose = dose_per_fraction * n_fractions; a stated total that disagrees is a conflict" .
+
+ws:LQL_bed_oar a ws:OutputVariable ;
+    skos:prefLabel "BED organe"@fr ; ws:apiVariable "CourseResult.bed_oar" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
+    ws:additive true ; ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_eqd_oar a ws:OutputVariable ;
+    skos:prefLabel "EQD organe"@fr ; ws:apiVariable "CourseResult.eqd_oar" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
+    ws:dependsOnReference ws:LQL_reference_dose ; ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_eqd_oar_total a ws:OutputVariable ;
+    skos:prefLabel "EQD organe cumulée"@fr ; ws:apiVariable "Result.eqd_oar_total" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggSum ;
+    ws:dependsOnReference ws:LQL_reference_dose ; ws:validityFlag "Result.oar_total_valid" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_ntcp a ws:OutputVariable ;
+    skos:prefLabel "NTCP"@fr ; ws:apiVariable "Result.ntcp_percent" ; ws:canonicalUnit unit:PERCENT ;
+    skos:definition "Model estimate for research and education, not a patient-specific probability."@en ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_eqd_tumour a ws:OutputVariable ;
+    skos:prefLabel "EQD tumeur"@fr ; ws:apiVariable "CourseResult.eqd_tumour" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
+    ws:dependsOnReference ws:LQL_reference_dose ; ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_eqd_tumour_total a ws:OutputVariable ;
+    skos:prefLabel "EQD tumeur cumulée"@fr ; ws:apiVariable "Result.eqd_tumour_total" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggSum ;
+    ws:dependsOnReference ws:LQL_reference_dose ; ws:validityFlag "Result.tumour_total_valid" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+# Per-course backend flags invalidate the matching per-course output only.
+ws:LQL_oar_saturated a ws:OutputVariable ;
+    skos:prefLabel "Saturation EQD organe (cours)"@fr ; ws:apiVariable "CourseResult.oar_saturated" ;
+    ws:invalidates ws:LQL_eqd_oar .
+
+ws:LQL_tumour_saturated a ws:OutputVariable ;
+    skos:prefLabel "Saturation EQD tumeur (cours)"@fr ; ws:apiVariable "CourseResult.tumour_saturated" ;
+    ws:invalidates ws:LQL_eqd_tumour .
+
+# Global summary flag: true if any course flag is true. It signals a problem but
+# does not by itself identify which output is invalid, so it invalidates nothing directly.
+ws:LQL_saturated a ws:OutputVariable ;
+    skos:prefLabel "Saturation (résumé global)"@fr ; ws:apiVariable "Result.saturated" ;
+    rdfs:comment "Any-course summary of CourseResult.oar_saturated / tumour_saturated; read the per-course flags."@en .
+
+# Qualitative expressions
+ws:LQL_conventional a ws:QualifierMapping ;
+    ws:term ws:LevelTypical ; skos:altLabel "fractionnement conventionnel"@fr, "classique"@fr ;
+    ws:appliesTo ws:LQL_dose_per_fraction ; ws:proposedValue 2.0 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Conventional fractionation, 2 Gy per fraction; proposal to accept." .
+
+ws:LQL_hypo_moderate a ws:ClarificationPolicy ;
+    skos:altLabel "hypofractionnement modéré"@fr ; ws:appliesTo ws:LQL_dose_per_fraction ;
+    rdfs:comment "No numerical convention before sourced review: the user states the dose per fraction."@en .
+
+ws:LQL_hypo_extreme a ws:ClarificationPolicy ;
+    skos:altLabel "hypofractionnement extrême"@fr, "stéréotaxique"@fr ; ws:appliesTo ws:LQL_dose_per_fraction .
+
+ws:LQL_hyperfractionation a ws:ClarificationPolicy ;
+    skos:altLabel "hyperfractionnement"@fr ; ws:appliesTo ws:LQL_bifractionated ;
+    rdfs:comment "The word alone does not fix two sessions a day."@en .
+
+# Outputs and flags exposed by the single-course profile of the LQL descriptor (aligned on its ontology_concept names).
+ws:LQLContract ws:declaresOutput ws:LQL_bed_tumour, ws:LQL_tcp_percent, ws:LQL_cancer_risk,
+        ws:LQL_overall_days_oar, ws:LQL_overall_days_tumour, ws:LQL_oar_total_valid, ws:LQL_tumour_total_valid .
+
+ws:LQL_bed_tumour a ws:OutputVariable ;
+    skos:prefLabel "BED tumeur"@fr ; ws:apiVariable "CourseResult.bed_tumour" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_tcp_percent a ws:OutputVariable ;
+    skos:prefLabel "TCP"@fr ; ws:apiVariable "Result.tcp_percent" ; ws:canonicalUnit unit:PERCENT ;
+    skos:definition "Model estimate for research and education; sigmoid stated by Options.tcp_model."@en ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_cancer_risk a ws:OutputVariable ;
+    skos:prefLabel "Indice de risque de cancer radio-induit"@fr ; ws:apiVariable "Result.cancer_risk" ;
+    skos:definition "Native model index from tabulated coefficients; not a clinical percentage; None when the tissue has no coefficients."@en ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_overall_days_oar a ws:OutputVariable ;
+    skos:prefLabel "Durée calendaire (organe)"@fr ; ws:apiVariable "CourseResult.overall_days_oar" ;
+    ws:quantityKind qk:Time ; ws:canonicalUnit unit:DAY ; ws:aggregation ws:AggPerCourse .
+
+ws:LQL_overall_days_tumour a ws:OutputVariable ;
+    skos:prefLabel "Durée calendaire (tumeur)"@fr ; ws:apiVariable "CourseResult.overall_days_tumour" ;
+    ws:quantityKind qk:Time ; ws:canonicalUnit unit:DAY ; ws:aggregation ws:AggPerCourse .
+
+# Validity flags: true means valid (inverse polarity of the saturation flags).
+ws:LQL_oar_total_valid a ws:OutputVariable ;
+    skos:prefLabel "Validité du total organe"@fr ; ws:apiVariable "Result.oar_total_valid" ;
+    rdfs:comment "True when the cumulative organ EQD is defined; when false, LQL_eqd_oar_total must not be reported."@en .
+
+ws:LQL_tumour_total_valid a ws:OutputVariable ;
+    skos:prefLabel "Validité du total tumeur"@fr ; ws:apiVariable "Result.tumour_total_valid" ;
+    rdfs:comment "True when the cumulative tumour EQD is defined; when false, LQL_eqd_tumour_total must not be reported."@en .
+
+# WebSemantic core ontology.
+# One common core; each scientific software is described by instances of it,
+# never by new core classes. Alignments use rdfs:subClassOf / rdfs:seeAlso only:
+# no owl:equivalentClass is asserted towards external vocabularies.
+
+<https://github.com/cyrilvoyant/websemantic/ns/core> a owl:Ontology ;
+    dcterms:title "WebSemantic core ontology"@en ;
+    dcterms:description "Common vocabulary linking user requests, software contracts, accepted assumptions, executions and qualified simulation outputs."@en ;
+    owl:versionInfo "0.1.0" ;
+    dcterms:created "2026-10-06"^^xsd:date ;
+    dcterms:license <https://polyformproject.org/licenses/noncommercial/1.0.0> ;
+    rdfs:seeAlso <https://doi.org/10.1038/s41597-022-01710-x> .
+
+########################################################################
+# 1. Software and contracts
+########################################################################
+
+ws:Software a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:seeAlso schema:SoftwareSourceCode ;
+    rdfs:label "Software"@en, "Logiciel"@fr ;
+    rdfs:comment "Scientific software used unmodified, identified by repository, pinned revision and concept DOI."@en .
+
+ws:Contract a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Contract"@en, "Contrat"@fr ;
+    rdfs:comment "Published, machine-readable description of how a software may be configured for declared tasks and how its outputs must be read."@en .
+
+ws:TaskProfile a owl:Class ;
+    rdfs:label "Task profile"@en, "Profil de tâche"@fr ;
+    rdfs:comment "A bounded use of the software that the contract supports or explicitly excludes."@en .
+
+ws:ParameterDefinition a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Parameter definition"@en, "Définition de paramètre"@fr ;
+    rdfs:comment "Concept-level description of an input: meaning, quantity kind, canonical unit, bounds, API variable."@en .
+
+ws:OutputVariable a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Output variable"@en, "Variable de sortie"@fr ;
+    rdfs:comment "Concept-level description of a computed column: quantity kind, unit, aggregation, temporal support."@en .
+
+ws:Bound a owl:Class ;
+    rdfs:label "Bound"@en, "Borne"@fr ;
+    rdfs:comment "Numerical limit with its authority. A user-interface slider limit is not a physical constraint."@en .
+
+ws:BoundAuthority a owl:Class ;
+    rdfs:label "Bound authority"@en .
+
+ws:ValidityLimit a owl:Class ;
+    rdfs:label "Validity limit"@en, "Limite de validité"@fr ;
+    rdfs:comment "Declared condition outside which results must not be used (e.g. no calibration, no clinical decision)."@en .
+
+ws:Aggregation a owl:Class ;
+    rdfs:label "Aggregation"@en, "Agrégation"@fr .
+
+ws:DataOrigin a owl:Class ;
+    rdfs:label "Data origin"@en, "Origine des données"@fr .
+
+########################################################################
+# 2. Qualitative semantics (beaucoup, peu, faible, très élevé, ...)
+########################################################################
+
+ws:QualitativeTerm a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Qualitative term"@en, "Terme qualitatif"@fr ;
+    rdfs:comment "Word or phrase expressing an ordinal level. It has no numerical meaning by itself."@en .
+
+ws:QualifierMapping a owl:Class ;
+    rdfs:label "Qualifier mapping"@en, "Convention qualitative"@fr ;
+    rdfs:comment "Parameter-specific convention turning a qualitative term into a proposed value. Always a proposal requiring acceptance."@en .
+
+ws:ClarificationPolicy a owl:Class ;
+    rdfs:label "Clarification policy"@en ;
+    rdfs:comment "Rule stating that a term or request has no mapping for a parameter and must trigger a question."@en .
+
+########################################################################
+# 3. Requests, scenarios and value records
+########################################################################
+
+ws:Request a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Request"@en, "Demande"@fr .
+
+ws:Evidence a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Evidence"@en, "Preuve"@fr ;
+    rdfs:comment "Exact text span of a request supporting a value. Its presence does not prove semantic correctness."@en .
+
+ws:Scenario a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Scenario"@en, "Scénario"@fr .
+
+ws:Experiment a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Experiment settings"@en, "Réglages d'expérience"@fr ;
+    rdfs:comment "Time grid, horizon, realisations and seed; distinct from physical inputs."@en .
+
+ws:Parameter a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Parameter record"@en, "Enregistrement de paramètre"@fr ;
+    rdfs:comment "Value of one parameter in one scenario, with unit, origin, evidence and acceptance state."@en .
+
+ws:UserValue a owl:Class ;
+    rdfs:subClassOf ws:Parameter ;
+    rdfs:label "User-provided value"@en .
+
+ws:Hypothesis a owl:Class ;
+    rdfs:subClassOf ws:Parameter ;
+    rdfs:label "Proposed assumption"@en, "Hypothèse proposée"@fr ;
+    rdfs:comment "Default, qualitative convention or sourced proposal. Not executable until accepted."@en .
+
+ws:OperationalSetting a owl:Class ;
+    rdfs:subClassOf ws:Parameter ;
+    rdfs:label "Operational setting"@en ;
+    rdfs:comment "Technical choice authorised by declared policy (e.g. fixed seed)."@en .
+
+ws:UnknownValue a owl:Class ;
+    rdfs:subClassOf ws:Parameter ;
+    rdfs:label "Unknown value"@en, "Valeur inconnue"@fr .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( ws:UserValue ws:Hypothesis ws:OperationalSetting ws:UnknownValue ) .
+
+########################################################################
+# 4. Activities (PROV-O)
+########################################################################
+
+ws:Interpretation a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Interpretation"@en ;
+    rdfs:comment "Extraction of candidate values from a request, by a language model or a rule."@en .
+
+ws:Normalisation a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Deterministic normalisation"@en ;
+    rdfs:comment "Exact unit or number conversion (2 km -> 2000 m). Not a domain inference."@en .
+
+ws:Acceptance a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Acceptance"@en, "Accord"@fr ;
+    rdfs:comment "Explicit user decision making a hypothesis executable."@en .
+
+ws:Validation a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Validation gate"@en .
+
+ws:Execution a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Execution"@en, "Exécution"@fr .
+
+ws:SimulationOutput a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:seeAlso schema:Dataset ;
+    rdfs:label "Simulation output"@en, "Sortie de simulation"@fr .
+
+ws:Qualification a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Output qualification"@en, "Qualification des sorties"@fr ;
+    rdfs:comment "Machine-readable statement of units, aggregation, scope, data origin, uncertainty coverage and admitted uses."@en .
+
+########################################################################
+# 5. Object properties
+########################################################################
+
+ws:hasContract a owl:ObjectProperty ; rdfs:domain ws:Software ; rdfs:range ws:Contract .
+ws:supportsTask a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:TaskProfile .
+ws:excludesTask a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:TaskProfile .
+ws:declaresParameter a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:ParameterDefinition .
+ws:declaresOutput a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:OutputVariable .
+ws:declaresValidityLimit a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:ValidityLimit .
+
+ws:requiresParameter a owl:ObjectProperty ;
+    rdfs:domain ws:TaskProfile ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "Parameter that must be provided or accepted for the task."@en .
+ws:producesOutput a owl:ObjectProperty ; rdfs:domain ws:TaskProfile ; rdfs:range ws:OutputVariable .
+
+ws:quantityKind a owl:ObjectProperty ;
+    rdfs:range qudt:QuantityKind ;
+    rdfs:comment "QUDT quantity kind of a parameter or output."@en .
+ws:canonicalUnit a owl:ObjectProperty ;
+    rdfs:range qudt:Unit ;
+    rdfs:comment "QUDT unit in which values are stored and validated."@en .
+ws:hasBound a owl:ObjectProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:Bound .
+ws:authority a owl:ObjectProperty ; rdfs:domain ws:Bound ; rdfs:range ws:BoundAuthority .
+ws:aggregation a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:Aggregation .
+ws:dataOrigin a owl:ObjectProperty ; rdfs:range ws:DataOrigin .
+
+ws:term a owl:ObjectProperty ; rdfs:domain ws:QualifierMapping ; rdfs:range ws:QualitativeTerm .
+ws:appliesTo a owl:ObjectProperty ;
+    rdfs:domain [ owl:unionOf ( ws:QualifierMapping ws:ClarificationPolicy ) ] ;
+    rdfs:range ws:ParameterDefinition .
+
+ws:concept a owl:ObjectProperty ; rdfs:domain ws:Parameter ; rdfs:range ws:ParameterDefinition .
+ws:hasParameter a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:Parameter .
+ws:hasExperiment a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:Experiment .
+ws:forTask a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:TaskProfile .
+ws:supportedBy a owl:ObjectProperty ; rdfs:domain ws:UserValue ; rdfs:range ws:Evidence .
+ws:fromRequest a owl:ObjectProperty ; rdfs:domain ws:Evidence ; rdfs:range ws:Request .
+ws:followsConvention a owl:ObjectProperty ; rdfs:domain ws:Hypothesis ; rdfs:range ws:QualifierMapping .
+ws:acceptedBy a owl:ObjectProperty ; rdfs:domain ws:Hypothesis ; rdfs:range ws:Acceptance .
+ws:qualifiedBy a owl:ObjectProperty ; rdfs:domain ws:SimulationOutput ; rdfs:range ws:Qualification .
+
+########################################################################
+# 6. Datatype properties
+########################################################################
+
+ws:apiVariable a owl:DatatypeProperty ; rdfs:range xsd:string ;
+    rdfs:comment "Exact backend identifier (e.g. TunnelConfig.length_m)."@en .
+ws:fieldPath a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:repository a owl:DatatypeProperty ; rdfs:range xsd:anyURI .
+ws:pinnedRevision a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:conceptDOI a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:boundValue a owl:DatatypeProperty ; rdfs:domain ws:Bound .
+ws:boundKind a owl:DatatypeProperty ; rdfs:domain ws:Bound ; rdfs:range xsd:string ;
+    rdfs:comment "min, max, min_exclusive or max_exclusive."@en .
+ws:proposedValue a owl:DatatypeProperty ; rdfs:domain ws:QualifierMapping .
+ws:requiresAcceptance a owl:DatatypeProperty ; rdfs:domain ws:QualifierMapping ; rdfs:range xsd:boolean .
+ws:sourceNote a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:value a owl:DatatypeProperty ; rdfs:domain ws:Parameter .
+ws:accepted a owl:DatatypeProperty ; rdfs:domain ws:Parameter ; rdfs:range xsd:boolean .
+ws:evidenceText a owl:DatatypeProperty ; rdfs:domain ws:Evidence ; rdfs:range xsd:string .
+ws:temporalSupport a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:string ;
+    rdfs:comment "native step, daily, hourly envelope, whole period, per course..."@en .
+ws:additive a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:boolean ;
+    rdfs:comment "True if values may be summed over time steps (energy), false otherwise (power, ratios, doses per course)."@en .
+
+# Relational properties used by the domain extensions (condition B3).
+ws:derivedFrom a owl:ObjectProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "The quantity is computed from others; an inconsistent stated value is a conflict."@en .
+ws:convertibleTo a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "Two expressions of one physical state related by the stated ws:derivationRule (e.g. S0 = RH_fraction - 1). Not a numerical equality and not a unit change alone."@en .
+ws:dependsOnReference a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "Output meaningful only with the stated reference parameter."@en .
+ws:invalidates a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:OutputVariable ;
+    rdfs:comment "Direction: boolean backend flag -> output. When the flag (subject) is true, the object output must not be reported as a result."@en .
+ws:derivationRule a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:derivedFromOutput a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:OutputVariable ;
+    rdfs:comment "Output obtained from another output by an exact conversion (unit change, x100...)."@en .
+ws:codeDefault a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ;
+    rdfs:comment "Default set by the backend code; stated, never treated as user data."@en .
+ws:validityFlag a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:string .
+ws:groupInstance a owl:DatatypeProperty ; rdfs:domain ws:Parameter ; rdfs:range xsd:string ;
+    rdfs:comment "Identifier of the course, aerosol mode or other repeated group a record belongs to; checks never mix instances."@en .
+ws:requiresInstance a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range xsd:boolean ;
+    rdfs:comment "Records of this parameter must carry ws:groupInstance (repeated course, aerosol mode...)."@en .
+ws:partOfGroup a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range xsd:string ;
+    rdfs:comment "Parameters that must be supplied together."@en .
+
+########################################################################
+# 7. Controlled individuals
+########################################################################
+
+ws:AuthorityCode a ws:BoundAuthority ; rdfs:label "enforced by backend code"@en .
+ws:AuthorityUI a ws:BoundAuthority ; rdfs:label "user-interface limit, not physical"@en .
+ws:AuthorityPolicy a ws:BoundAuthority ; rdfs:label "experimental policy of the study"@en .
+ws:AuthorityDomain a ws:BoundAuthority ; rdfs:label "domain literature or expert"@en .
+
+ws:SyntheticSimulation a ws:DataOrigin ; rdfs:label "synthetic simulation"@en .
+ws:Measured a ws:DataOrigin ; rdfs:label "measured"@en .
+ws:Assumed a ws:DataOrigin ; rdfs:label "assumed"@en .
+
+ws:AggNativeStep a ws:Aggregation ; rdfs:label "value at native time step"@en .
+ws:AggSum a ws:Aggregation ; rdfs:label "sum over steps"@en .
+ws:AggMean a ws:Aggregation ; rdfs:label "mean over steps"@en .
+ws:AggMax a ws:Aggregation ; rdfs:label "maximum over steps"@en .
+ws:AggQuantileAcrossRuns a ws:Aggregation ; rdfs:label "empirical quantile across realisations, not a confidence interval"@en .
+ws:AggExtrapolation a ws:Aggregation ; rdfs:label "linear extrapolation (e.g. 365/n_days), not an observed year"@en .
+ws:AggPerCourse a ws:Aggregation ; rdfs:label "per treatment course"@en .
+
+# Ordinal qualitative scale shared by all software. Values are given only by
+# parameter-specific ws:QualifierMapping instances in each contract.
+ws:QualitativeScale a skos:ConceptScheme ; skos:prefLabel "Échelle qualitative commune"@fr, "Shared qualitative scale"@en .
+ws:LevelVeryLow  a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "très faible"@fr, "very low"@en ; skos:altLabel "très peu"@fr ; ws:rank 1 .
+ws:LevelLow      a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "faible"@fr, "low"@en ; skos:altLabel "peu"@fr, "court"@fr ; ws:rank 2 .
+ws:LevelTypical  a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "courant"@fr, "typical"@en ; skos:altLabel "moyen"@fr, "normal"@fr ; ws:rank 3 .
+ws:LevelHigh     a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "élevé"@fr, "high"@en ; skos:altLabel "beaucoup"@fr, "fort"@fr, "long"@fr ; ws:rank 4 .
+ws:LevelVeryHigh a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "très élevé"@fr, "very high"@en ; skos:altLabel "énormément"@fr, "très fort"@fr ; ws:rank 5 .
+
+ws:rank a owl:DatatypeProperty ; rdfs:domain ws:QualitativeTerm ; rdfs:range xsd:integer .
+
+########################################################################
+# 8. Software instances (identity and task profiles only; full parameter
+#    definitions are exported from each descriptor)
+########################################################################
+
+ws:TLS a ws:Software ;
+    rdfs:label "Tunnel Load Simulator" ;
+    ws:repository "https://github.com/cyrilvoyant/tunnel-load-simulator"^^xsd:anyURI ;
+    ws:pinnedRevision "748e053e129669cf3e896d381e3c0ac01c763edd" ;
+    ws:conceptDOI "10.5281/zenodo.20080042" ;
+    ws:hasContract ws:TLSContract .
+
+ws:TLSContract a ws:Contract ;
+    ws:supportsTask ws:TaskTunnelDemand ;
+    ws:excludesTask ws:TaskTunnelCertification ;
+    ws:declaresValidityLimit ws:LimitNoCalibration .
+
+ws:TaskTunnelDemand a ws:TaskProfile ;
+    rdfs:label "Estimate electricity demand of a road tunnel under stated assumptions"@en .
+ws:TaskTunnelCertification a ws:TaskProfile ;
+    rdfs:label "Certify design values or predict consumption of a real tunnel"@en .
+ws:LimitNoCalibration a ws:ValidityLimit ;
+    rdfs:label "Synthetic first-order model, not calibrated against measured tunnels"@en .
+
+ws:LQLEquiv a ws:Software ;
+    rdfs:label "LQL-Equiv" ;
+    ws:repository "https://github.com/cyrilvoyant/LQL-Equiv-web"^^xsd:anyURI ;
+    ws:pinnedRevision "dfc9a338205b8864b8e3470c4ae245b019e88844" ;
+    ws:conceptDOI "10.5281/zenodo.21948623" ;
+    ws:hasContract ws:LQLContract .
+
+ws:LQLContract a ws:Contract ;
+    ws:supportsTask ws:TaskFractionationEquivalence ;
+    ws:excludesTask ws:TaskPatientDecision ;
+    ws:declaresValidityLimit ws:LimitNotMedicalDevice .
+
+ws:TaskFractionationEquivalence a ws:TaskProfile ;
+    rdfs:label "Compare fractionation schedules (BED, EQD2, NTCP, TCP) for research and education"@en .
+ws:TaskPatientDecision a ws:TaskProfile ;
+    rdfs:label "Prescribe, modify or validate treatment for an individual patient"@en .
+ws:LimitNotMedicalDevice a ws:ValidityLimit ;
+    rdfs:label "Research and education software; not a medical device"@en .
+
+ws:Pyrcel a ws:Software ;
+    rdfs:label "pyrcel" ;
+    ws:repository "https://github.com/darothen/pyrcel"^^xsd:anyURI ;
+    ws:pinnedRevision "977e9094644ec4a17d658d657094651928591c89" ;
+    rdfs:comment "Version 2.0.0, BSD-3-Clause, used unmodified."@en ;
+    ws:hasContract ws:PyrcelContract .
+
+ws:PyrcelContract a ws:Contract ;
+    ws:supportsTask ws:TaskParcelActivation ;
+    ws:excludesTask ws:TaskWeatherForecast ;
+    ws:declaresValidityLimit ws:LimitAdiabaticParcel .
+
+ws:TaskParcelActivation a ws:TaskProfile ;
+    rdfs:label "Simulate adiabatic parcel ascent and aerosol activation for a stated updraft, initial state and aerosol population"@en .
+ws:TaskWeatherForecast a ws:TaskProfile ;
+    rdfs:label "Forecast clouds or precipitation for a real place and time"@en .
+ws:LimitAdiabaticParcel a ws:ValidityLimit ;
+    rdfs:label "Zero-dimensional adiabatic parcel; not a weather forecast or a cloud-resolving simulation"@en .
+
+########################################################################
+# 9. Worked example of a qualifier mapping (TLS relative traffic), taken
+#    from docs/qualificatifs.md. Full tables are exported from descriptors.
+########################################################################
+
+ws:TLS_traffic_level a ws:ParameterDefinition ;
+    skos:prefLabel "Trafic relatif"@fr, "Relative traffic"@en ;
+    ws:apiVariable "TunnelConfig.traffic_level" ;
+    ws:fieldPath "inputs.traffic_level" ;
+    ws:quantityKind qk:Dimensionless ;
+    ws:canonicalUnit unit:UNITLESS ;
+    skos:definition "Multiplier of the reference traffic profile; not vehicles per day."@en .
+
+ws:TLSContract ws:declaresParameter ws:TLS_traffic_level .
+
+ws:TLS_traffic_low a ws:QualifierMapping ;
+    ws:term ws:LevelLow ; ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 0.3 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." .
+ws:TLS_traffic_typical a ws:QualifierMapping ;
+    ws:term ws:LevelTypical ; ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 1.0 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Reference level of the backend profile." .
+ws:TLS_traffic_high a ws:QualifierMapping ;
+    ws:term ws:LevelHigh ; ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 1.5 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." .
+ws:TLS_traffic_veryhigh a ws:QualifierMapping ;
+    ws:term ws:LevelVeryHigh ; ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 2.0 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." .
+
+ws:TLS_lighting_type a ws:ParameterDefinition ;
+    skos:prefLabel "Éclairage"@fr ;
+    ws:apiVariable "TunnelConfig.lighting_type" ;
+    ws:fieldPath "inputs.lighting_type" ;
+    skos:definition "Lighting technology and control; not an illuminance."@en .
+
+ws:TLS_lighting_intensity_policy a ws:ClarificationPolicy ;
+    ws:appliesTo ws:TLS_lighting_type ;
+    rdfs:comment "Intensity words (fortement / faiblement éclairé) have no mapping: TLS has no illuminance parameter. Ask the user."@en .
+
+ws:TLS_specific_energy a ws:OutputVariable ;
+    skos:prefLabel "Énergie spécifique annualisée"@fr ;
+    ws:apiVariable "kpis.specific_kwh_m_year" ;
+    ws:quantityKind qk:Energy ;
+    ws:aggregation ws:AggExtrapolation ;
+    ws:additive false ;
+    ws:temporalSupport "whole period, extrapolated by 365/n_days, per metre of tunnel (all tubes)" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:TLS_power a ws:OutputVariable ;
+    skos:prefLabel "Puissance électrique"@fr ;
+    ws:apiVariable "representative.power_kw" ;
+    ws:quantityKind qk:Power ;
+    ws:canonicalUnit unit:KiloW ;
+    ws:aggregation ws:AggNativeStep ;
+    ws:additive false ;
+    ws:temporalSupport "native step" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:TLS_energy_step a ws:OutputVariable ;
+    skos:prefLabel "Énergie du pas"@fr ;
+    ws:apiVariable "representative.energy_kwh" ;
+    ws:quantityKind qk:Energy ;
+    ws:canonicalUnit unit:KiloW-HR ;
+    ws:aggregation ws:AggNativeStep ;
+    ws:additive true ;
+    ws:temporalSupport "native step" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+
+# ---- domain extension ----
+
+# pyrcel extension: instances of the common core only (no new classes).
+# Source: docs/pyrcel-contract-definitions.md (draft, scientific review pending).
+
+ws:TaskParcelActivation
+    ws:requiresParameter ws:PYR_V, ws:PYR_T0, ws:PYR_P0, ws:PYR_S0,
+                         ws:PYR_N, ws:PYR_mu, ws:PYR_sigma, ws:PYR_kappa ;
+    ws:producesOutput ws:PYR_S, ws:PYR_Smax, ws:PYR_Nd .
+
+ws:PyrcelContract ws:declaresParameter ws:PYR_V, ws:PYR_T0, ws:PYR_P0, ws:PYR_S0, ws:PYR_RH,
+        ws:PYR_N, ws:PYR_mu, ws:PYR_sigma, ws:PYR_kappa ;
+    ws:declaresOutput ws:PYR_S, ws:PYR_Smax, ws:PYR_Nd, ws:PYR_T .
+
+ws:PYR_V a ws:ParameterDefinition ;
+    skos:prefLabel "Vitesse ascendante"@fr ; ws:apiVariable "ParcelModel(V=)" ; ws:fieldPath "V" ;
+    ws:quantityKind qk:Velocity ; ws:canonicalUnit unit:M-PER-SEC ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min_exclusive" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityPolicy ] .
+
+ws:PYR_T0 a ws:ParameterDefinition ;
+    skos:prefLabel "Température initiale"@fr ; ws:apiVariable "ParcelModel(T0=)" ; ws:fieldPath "T0" ;
+    ws:quantityKind qk:ThermodynamicTemperature ; ws:canonicalUnit unit:K .
+
+ws:PYR_P0 a ws:ParameterDefinition ;
+    skos:prefLabel "Pression initiale"@fr ; ws:apiVariable "ParcelModel(P0=)" ; ws:fieldPath "P0" ;
+    ws:quantityKind qk:Pressure ; ws:canonicalUnit unit:PA .
+
+ws:PYR_S0 a ws:ParameterDefinition ;
+    skos:prefLabel "Sursaturation initiale"@fr ; ws:apiVariable "ParcelModel(S0=)" ; ws:fieldPath "S0" ;
+    ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:UNITLESS ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min_exclusive" ; ws:boundValue -1.0 ; ws:authority ws:AuthorityPolicy ] ,
+                [ a ws:Bound ; ws:boundKind "max" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityPolicy ] .
+
+ws:PYR_RH a ws:ParameterDefinition ;
+    skos:prefLabel "Humidité relative initiale"@fr ; ws:fieldPath "RH (user expression)" ;
+    ws:quantityKind qk:Dimensionless ;
+    ws:convertibleTo ws:PYR_S0 ;
+    ws:derivationRule "S0 = RH_percent/100 - 1 = RH_fraction - 1; RH and S0 both given and inconsistent is a conflict" .
+
+ws:PYR_N a ws:ParameterDefinition ;
+    skos:prefLabel "Concentration en nombre du mode"@fr ; ws:apiVariable "Lognorm(N=)" ; ws:fieldPath "aerosols[k].N" ;
+    ws:quantityKind qk:NumberDensity ; ws:canonicalUnit unit:PER-CentiM3 ;
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; ws:requiresInstance true .
+
+ws:PYR_mu a ws:ParameterDefinition ;
+    skos:prefLabel "Rayon sec médian"@fr ; ws:apiVariable "Lognorm(mu=)" ; ws:fieldPath "aerosols[k].mu" ;
+    ws:quantityKind qk:Length ; ws:canonicalUnit unit:MicroM ;
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; ws:requiresInstance true .
+
+ws:PYR_sigma a ws:ParameterDefinition ;
+    skos:prefLabel "Écart-type géométrique"@fr ; ws:apiVariable "Lognorm(sigma=)" ; ws:fieldPath "aerosols[k].sigma" ;
+    ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:UNITLESS ;
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; ws:requiresInstance true .
+
+ws:PYR_kappa a ws:ParameterDefinition ;
+    skos:prefLabel "Hygroscopicité κ"@fr ; ws:apiVariable "AerosolSpecies(kappa=)" ; ws:fieldPath "aerosols[k].kappa" ;
+    ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:UNITLESS ;
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; ws:requiresInstance true .
+
+ws:PYR_T a ws:OutputVariable ;
+    skos:prefLabel "Température de la parcelle"@fr ; ws:apiVariable "to_pandas() T" ;
+    ws:canonicalUnit unit:K ; ws:aggregation ws:AggNativeStep ; ws:additive false ;
+    ws:temporalSupport "nominal output_dt; terminal sample may be irregular" ; ws:dataOrigin ws:SyntheticSimulation .
+
+ws:PYR_S a ws:OutputVariable ;
+    skos:prefLabel "Sursaturation"@fr ; ws:apiVariable "to_pandas() S" ;
+    ws:canonicalUnit unit:UNITLESS ; ws:aggregation ws:AggNativeStep ; ws:additive false ;
+    ws:temporalSupport "nominal output_dt; terminal sample may be irregular" ; ws:dataOrigin ws:SyntheticSimulation .
+
+ws:PYR_Smax a ws:OutputVariable ;
+    skos:prefLabel "Sursaturation maximale"@fr ; ws:apiVariable "summary['S_max']" ;
+    ws:canonicalUnit unit:UNITLESS ; ws:aggregation ws:AggMax ; ws:additive false ;
+    skos:note "From the peak locator; may differ from the maximum of the sampled S column."@en ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:PYR_Nd a ws:OutputVariable ;
+    skos:prefLabel "Gouttelettes activées"@fr ; ws:apiVariable "ModelOutput.Nd" ;
+    ws:quantityKind qk:NumberDensity ; ws:canonicalUnit unit:PER-M3 ;
+    skos:note "Returned in m^-3, while input N is in cm^-3."@en ;
+    ws:temporalSupport "end of run" ; ws:dataOrigin ws:SyntheticSimulation .
+
+# Qualitative expressions: clarification until sourced conventions exist.
+ws:PYR_updraft_words a ws:ClarificationPolicy ;
+    skos:altLabel "faible ascendance"@fr, "ascendance modérée"@fr, "forte ascendance"@fr ; ws:appliesTo ws:PYR_V .
+ws:PYR_air_mass_words a ws:ClarificationPolicy ;
+    skos:altLabel "air pur"@fr, "air marin"@fr, "air pollué"@fr, "air continental"@fr ; ws:appliesTo ws:PYR_N .
+ws:PYR_near_saturation a ws:ClarificationPolicy ;
+    skos:altLabel "air presque saturé"@fr ; ws:appliesTo ws:PYR_S0 .
+
+# Derived outputs reported by the pyrcel descriptor (exact conversions of native outputs).
+ws:PyrcelContract ws:declaresOutput ws:PYR_Smax_percent, ws:PYR_Nd_cm3 .
+
+ws:PYR_Smax_percent a ws:OutputVariable ;
+    skos:prefLabel "Sursaturation maximale (%)"@fr ; ws:canonicalUnit unit:PERCENT ;
+    ws:derivedFromOutput ws:PYR_Smax ; ws:derivationRule "S_max x 100" ; ws:aggregation ws:AggMax ; ws:additive false ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:PYR_Nd_cm3 a ws:OutputVariable ;
+    skos:prefLabel "Gouttelettes activées (cm⁻³)"@fr ; ws:quantityKind qk:NumberDensity ; ws:canonicalUnit unit:PER-CentiM3 ;
+    ws:derivedFromOutput ws:PYR_Nd ; ws:derivationRule "Nd / 1e6 (m^-3 -> cm^-3)" ; ws:temporalSupport "end of run" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+# WebSemantic core ontology.
+# One common core; each scientific software is described by instances of it,
+# never by new core classes. Alignments use rdfs:subClassOf / rdfs:seeAlso only:
+# no owl:equivalentClass is asserted towards external vocabularies.
+
+<https://github.com/cyrilvoyant/websemantic/ns/core> a owl:Ontology ;
+    dcterms:title "WebSemantic core ontology"@en ;
+    dcterms:description "Common vocabulary linking user requests, software contracts, accepted assumptions, executions and qualified simulation outputs."@en ;
+    owl:versionInfo "0.1.0" ;
+    dcterms:created "2026-10-06"^^xsd:date ;
+    dcterms:license <https://polyformproject.org/licenses/noncommercial/1.0.0> ;
+    rdfs:seeAlso <https://doi.org/10.1038/s41597-022-01710-x> .
+
+########################################################################
+# 1. Software and contracts
+########################################################################
+
+ws:Software a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:seeAlso schema:SoftwareSourceCode ;
+    rdfs:label "Software"@en, "Logiciel"@fr ;
+    rdfs:comment "Scientific software used unmodified, identified by repository, pinned revision and concept DOI."@en .
+
+ws:Contract a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Contract"@en, "Contrat"@fr ;
+    rdfs:comment "Published, machine-readable description of how a software may be configured for declared tasks and how its outputs must be read."@en .
+
+ws:TaskProfile a owl:Class ;
+    rdfs:label "Task profile"@en, "Profil de tâche"@fr ;
+    rdfs:comment "A bounded use of the software that the contract supports or explicitly excludes."@en .
+
+ws:ParameterDefinition a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Parameter definition"@en, "Définition de paramètre"@fr ;
+    rdfs:comment "Concept-level description of an input: meaning, quantity kind, canonical unit, bounds, API variable."@en .
+
+ws:OutputVariable a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Output variable"@en, "Variable de sortie"@fr ;
+    rdfs:comment "Concept-level description of a computed column: quantity kind, unit, aggregation, temporal support."@en .
+
+ws:Bound a owl:Class ;
+    rdfs:label "Bound"@en, "Borne"@fr ;
+    rdfs:comment "Numerical limit with its authority. A user-interface slider limit is not a physical constraint."@en .
+
+ws:BoundAuthority a owl:Class ;
+    rdfs:label "Bound authority"@en .
+
+ws:ValidityLimit a owl:Class ;
+    rdfs:label "Validity limit"@en, "Limite de validité"@fr ;
+    rdfs:comment "Declared condition outside which results must not be used (e.g. no calibration, no clinical decision)."@en .
+
+ws:Aggregation a owl:Class ;
+    rdfs:label "Aggregation"@en, "Agrégation"@fr .
+
+ws:DataOrigin a owl:Class ;
+    rdfs:label "Data origin"@en, "Origine des données"@fr .
+
+########################################################################
+# 2. Qualitative semantics (beaucoup, peu, faible, très élevé, ...)
+########################################################################
+
+ws:QualitativeTerm a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Qualitative term"@en, "Terme qualitatif"@fr ;
+    rdfs:comment "Word or phrase expressing an ordinal level. It has no numerical meaning by itself."@en .
+
+ws:QualifierMapping a owl:Class ;
+    rdfs:label "Qualifier mapping"@en, "Convention qualitative"@fr ;
+    rdfs:comment "Parameter-specific convention turning a qualitative term into a proposed value. Always a proposal requiring acceptance."@en .
+
+ws:ClarificationPolicy a owl:Class ;
+    rdfs:label "Clarification policy"@en ;
+    rdfs:comment "Rule stating that a term or request has no mapping for a parameter and must trigger a question."@en .
+
+########################################################################
+# 3. Requests, scenarios and value records
+########################################################################
+
+ws:Request a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Request"@en, "Demande"@fr .
+
+ws:Evidence a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Evidence"@en, "Preuve"@fr ;
+    rdfs:comment "Exact text span of a request supporting a value. Its presence does not prove semantic correctness."@en .
+
+ws:Scenario a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Scenario"@en, "Scénario"@fr .
+
+ws:Experiment a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Experiment settings"@en, "Réglages d'expérience"@fr ;
+    rdfs:comment "Time grid, horizon, realisations and seed; distinct from physical inputs."@en .
+
+ws:Parameter a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Parameter record"@en, "Enregistrement de paramètre"@fr ;
+    rdfs:comment "Value of one parameter in one scenario, with unit, origin, evidence and acceptance state."@en .
+
+ws:UserValue a owl:Class ;
+    rdfs:subClassOf ws:Parameter ;
+    rdfs:label "User-provided value"@en .
+
+ws:Hypothesis a owl:Class ;
+    rdfs:subClassOf ws:Parameter ;
+    rdfs:label "Proposed assumption"@en, "Hypothèse proposée"@fr ;
+    rdfs:comment "Default, qualitative convention or sourced proposal. Not executable until accepted."@en .
+
+ws:OperationalSetting a owl:Class ;
+    rdfs:subClassOf ws:Parameter ;
+    rdfs:label "Operational setting"@en ;
+    rdfs:comment "Technical choice authorised by declared policy (e.g. fixed seed)."@en .
+
+ws:UnknownValue a owl:Class ;
+    rdfs:subClassOf ws:Parameter ;
+    rdfs:label "Unknown value"@en, "Valeur inconnue"@fr .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( ws:UserValue ws:Hypothesis ws:OperationalSetting ws:UnknownValue ) .
+
+########################################################################
+# 4. Activities (PROV-O)
+########################################################################
+
+ws:Interpretation a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Interpretation"@en ;
+    rdfs:comment "Extraction of candidate values from a request, by a language model or a rule."@en .
+
+ws:Normalisation a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Deterministic normalisation"@en ;
+    rdfs:comment "Exact unit or number conversion (2 km -> 2000 m). Not a domain inference."@en .
+
+ws:Acceptance a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Acceptance"@en, "Accord"@fr ;
+    rdfs:comment "Explicit user decision making a hypothesis executable."@en .
+
+ws:Validation a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Validation gate"@en .
+
+ws:Execution a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Execution"@en, "Exécution"@fr .
+
+ws:SimulationOutput a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:seeAlso schema:Dataset ;
+    rdfs:label "Simulation output"@en, "Sortie de simulation"@fr .
+
+ws:Qualification a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Output qualification"@en, "Qualification des sorties"@fr ;
+    rdfs:comment "Machine-readable statement of units, aggregation, scope, data origin, uncertainty coverage and admitted uses."@en .
+
+########################################################################
+# 5. Object properties
+########################################################################
+
+ws:hasContract a owl:ObjectProperty ; rdfs:domain ws:Software ; rdfs:range ws:Contract .
+ws:supportsTask a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:TaskProfile .
+ws:excludesTask a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:TaskProfile .
+ws:declaresParameter a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:ParameterDefinition .
+ws:declaresOutput a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:OutputVariable .
+ws:declaresValidityLimit a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:ValidityLimit .
+
+ws:requiresParameter a owl:ObjectProperty ;
+    rdfs:domain ws:TaskProfile ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "Parameter that must be provided or accepted for the task."@en .
+ws:producesOutput a owl:ObjectProperty ; rdfs:domain ws:TaskProfile ; rdfs:range ws:OutputVariable .
+
+ws:quantityKind a owl:ObjectProperty ;
+    rdfs:range qudt:QuantityKind ;
+    rdfs:comment "QUDT quantity kind of a parameter or output."@en .
+ws:canonicalUnit a owl:ObjectProperty ;
+    rdfs:range qudt:Unit ;
+    rdfs:comment "QUDT unit in which values are stored and validated."@en .
+ws:hasBound a owl:ObjectProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:Bound .
+ws:authority a owl:ObjectProperty ; rdfs:domain ws:Bound ; rdfs:range ws:BoundAuthority .
+ws:aggregation a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:Aggregation .
+ws:dataOrigin a owl:ObjectProperty ; rdfs:range ws:DataOrigin .
+
+ws:term a owl:ObjectProperty ; rdfs:domain ws:QualifierMapping ; rdfs:range ws:QualitativeTerm .
+ws:appliesTo a owl:ObjectProperty ;
+    rdfs:domain [ owl:unionOf ( ws:QualifierMapping ws:ClarificationPolicy ) ] ;
+    rdfs:range ws:ParameterDefinition .
+
+ws:concept a owl:ObjectProperty ; rdfs:domain ws:Parameter ; rdfs:range ws:ParameterDefinition .
+ws:hasParameter a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:Parameter .
+ws:hasExperiment a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:Experiment .
+ws:forTask a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:TaskProfile .
+ws:supportedBy a owl:ObjectProperty ; rdfs:domain ws:UserValue ; rdfs:range ws:Evidence .
+ws:fromRequest a owl:ObjectProperty ; rdfs:domain ws:Evidence ; rdfs:range ws:Request .
+ws:followsConvention a owl:ObjectProperty ; rdfs:domain ws:Hypothesis ; rdfs:range ws:QualifierMapping .
+ws:acceptedBy a owl:ObjectProperty ; rdfs:domain ws:Hypothesis ; rdfs:range ws:Acceptance .
+ws:qualifiedBy a owl:ObjectProperty ; rdfs:domain ws:SimulationOutput ; rdfs:range ws:Qualification .
+
+########################################################################
+# 6. Datatype properties
+########################################################################
+
+ws:apiVariable a owl:DatatypeProperty ; rdfs:range xsd:string ;
+    rdfs:comment "Exact backend identifier (e.g. TunnelConfig.length_m)."@en .
+ws:fieldPath a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:repository a owl:DatatypeProperty ; rdfs:range xsd:anyURI .
+ws:pinnedRevision a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:conceptDOI a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:boundValue a owl:DatatypeProperty ; rdfs:domain ws:Bound .
+ws:boundKind a owl:DatatypeProperty ; rdfs:domain ws:Bound ; rdfs:range xsd:string ;
+    rdfs:comment "min, max, min_exclusive or max_exclusive."@en .
+ws:proposedValue a owl:DatatypeProperty ; rdfs:domain ws:QualifierMapping .
+ws:requiresAcceptance a owl:DatatypeProperty ; rdfs:domain ws:QualifierMapping ; rdfs:range xsd:boolean .
+ws:sourceNote a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:value a owl:DatatypeProperty ; rdfs:domain ws:Parameter .
+ws:accepted a owl:DatatypeProperty ; rdfs:domain ws:Parameter ; rdfs:range xsd:boolean .
+ws:evidenceText a owl:DatatypeProperty ; rdfs:domain ws:Evidence ; rdfs:range xsd:string .
+ws:temporalSupport a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:string ;
+    rdfs:comment "native step, daily, hourly envelope, whole period, per course..."@en .
+ws:additive a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:boolean ;
+    rdfs:comment "True if values may be summed over time steps (energy), false otherwise (power, ratios, doses per course)."@en .
+
+# Relational properties used by the domain extensions (condition B3).
+ws:derivedFrom a owl:ObjectProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "The quantity is computed from others; an inconsistent stated value is a conflict."@en .
+ws:convertibleTo a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "Two expressions of one physical state related by the stated ws:derivationRule (e.g. S0 = RH_fraction - 1). Not a numerical equality and not a unit change alone."@en .
+ws:dependsOnReference a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "Output meaningful only with the stated reference parameter."@en .
+ws:invalidates a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:OutputVariable ;
+    rdfs:comment "Direction: boolean backend flag -> output. When the flag (subject) is true, the object output must not be reported as a result."@en .
+ws:derivationRule a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:derivedFromOutput a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:OutputVariable ;
+    rdfs:comment "Output obtained from another output by an exact conversion (unit change, x100...)."@en .
+ws:codeDefault a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ;
+    rdfs:comment "Default set by the backend code; stated, never treated as user data."@en .
+ws:validityFlag a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:string .
+ws:groupInstance a owl:DatatypeProperty ; rdfs:domain ws:Parameter ; rdfs:range xsd:string ;
+    rdfs:comment "Identifier of the course, aerosol mode or other repeated group a record belongs to; checks never mix instances."@en .
+ws:requiresInstance a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range xsd:boolean ;
+    rdfs:comment "Records of this parameter must carry ws:groupInstance (repeated course, aerosol mode...)."@en .
+ws:partOfGroup a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range xsd:string ;
+    rdfs:comment "Parameters that must be supplied together."@en .
+
+########################################################################
+# 7. Controlled individuals
+########################################################################
+
+ws:AuthorityCode a ws:BoundAuthority ; rdfs:label "enforced by backend code"@en .
+ws:AuthorityUI a ws:BoundAuthority ; rdfs:label "user-interface limit, not physical"@en .
+ws:AuthorityPolicy a ws:BoundAuthority ; rdfs:label "experimental policy of the study"@en .
+ws:AuthorityDomain a ws:BoundAuthority ; rdfs:label "domain literature or expert"@en .
+
+ws:SyntheticSimulation a ws:DataOrigin ; rdfs:label "synthetic simulation"@en .
+ws:Measured a ws:DataOrigin ; rdfs:label "measured"@en .
+ws:Assumed a ws:DataOrigin ; rdfs:label "assumed"@en .
+
+ws:AggNativeStep a ws:Aggregation ; rdfs:label "value at native time step"@en .
+ws:AggSum a ws:Aggregation ; rdfs:label "sum over steps"@en .
+ws:AggMean a ws:Aggregation ; rdfs:label "mean over steps"@en .
+ws:AggMax a ws:Aggregation ; rdfs:label "maximum over steps"@en .
+ws:AggQuantileAcrossRuns a ws:Aggregation ; rdfs:label "empirical quantile across realisations, not a confidence interval"@en .
+ws:AggExtrapolation a ws:Aggregation ; rdfs:label "linear extrapolation (e.g. 365/n_days), not an observed year"@en .
+ws:AggPerCourse a ws:Aggregation ; rdfs:label "per treatment course"@en .
+
+# Ordinal qualitative scale shared by all software. Values are given only by
+# parameter-specific ws:QualifierMapping instances in each contract.
+ws:QualitativeScale a skos:ConceptScheme ; skos:prefLabel "Échelle qualitative commune"@fr, "Shared qualitative scale"@en .
+ws:LevelVeryLow  a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "très faible"@fr, "very low"@en ; skos:altLabel "très peu"@fr ; ws:rank 1 .
+ws:LevelLow      a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "faible"@fr, "low"@en ; skos:altLabel "peu"@fr, "court"@fr ; ws:rank 2 .
+ws:LevelTypical  a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "courant"@fr, "typical"@en ; skos:altLabel "moyen"@fr, "normal"@fr ; ws:rank 3 .
+ws:LevelHigh     a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "élevé"@fr, "high"@en ; skos:altLabel "beaucoup"@fr, "fort"@fr, "long"@fr ; ws:rank 4 .
+ws:LevelVeryHigh a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "très élevé"@fr, "very high"@en ; skos:altLabel "énormément"@fr, "très fort"@fr ; ws:rank 5 .
+
+ws:rank a owl:DatatypeProperty ; rdfs:domain ws:QualitativeTerm ; rdfs:range xsd:integer .
+
+########################################################################
+# 8. Software instances (identity and task profiles only; full parameter
+#    definitions are exported from each descriptor)
+########################################################################
+
+ws:TLS a ws:Software ;
+    rdfs:label "Tunnel Load Simulator" ;
+    ws:repository "https://github.com/cyrilvoyant/tunnel-load-simulator"^^xsd:anyURI ;
+    ws:pinnedRevision "748e053e129669cf3e896d381e3c0ac01c763edd" ;
+    ws:conceptDOI "10.5281/zenodo.20080042" ;
+    ws:hasContract ws:TLSContract .
+
+ws:TLSContract a ws:Contract ;
+    ws:supportsTask ws:TaskTunnelDemand ;
+    ws:excludesTask ws:TaskTunnelCertification ;
+    ws:declaresValidityLimit ws:LimitNoCalibration .
+
+ws:TaskTunnelDemand a ws:TaskProfile ;
+    rdfs:label "Estimate electricity demand of a road tunnel under stated assumptions"@en .
+ws:TaskTunnelCertification a ws:TaskProfile ;
+    rdfs:label "Certify design values or predict consumption of a real tunnel"@en .
+ws:LimitNoCalibration a ws:ValidityLimit ;
+    rdfs:label "Synthetic first-order model, not calibrated against measured tunnels"@en .
+
+ws:LQLEquiv a ws:Software ;
+    rdfs:label "LQL-Equiv" ;
+    ws:repository "https://github.com/cyrilvoyant/LQL-Equiv-web"^^xsd:anyURI ;
+    ws:pinnedRevision "dfc9a338205b8864b8e3470c4ae245b019e88844" ;
+    ws:conceptDOI "10.5281/zenodo.21948623" ;
+    ws:hasContract ws:LQLContract .
+
+ws:LQLContract a ws:Contract ;
+    ws:supportsTask ws:TaskFractionationEquivalence ;
+    ws:excludesTask ws:TaskPatientDecision ;
+    ws:declaresValidityLimit ws:LimitNotMedicalDevice .
+
+ws:TaskFractionationEquivalence a ws:TaskProfile ;
+    rdfs:label "Compare fractionation schedules (BED, EQD2, NTCP, TCP) for research and education"@en .
+ws:TaskPatientDecision a ws:TaskProfile ;
+    rdfs:label "Prescribe, modify or validate treatment for an individual patient"@en .
+ws:LimitNotMedicalDevice a ws:ValidityLimit ;
+    rdfs:label "Research and education software; not a medical device"@en .
+
+ws:Pyrcel a ws:Software ;
+    rdfs:label "pyrcel" ;
+    ws:repository "https://github.com/darothen/pyrcel"^^xsd:anyURI ;
+    ws:pinnedRevision "977e9094644ec4a17d658d657094651928591c89" ;
+    rdfs:comment "Version 2.0.0, BSD-3-Clause, used unmodified."@en ;
+    ws:hasContract ws:PyrcelContract .
+
+ws:PyrcelContract a ws:Contract ;
+    ws:supportsTask ws:TaskParcelActivation ;
+    ws:excludesTask ws:TaskWeatherForecast ;
+    ws:declaresValidityLimit ws:LimitAdiabaticParcel .
+
+ws:TaskParcelActivation a ws:TaskProfile ;
+    rdfs:label "Simulate adiabatic parcel ascent and aerosol activation for a stated updraft, initial state and aerosol population"@en .
+ws:TaskWeatherForecast a ws:TaskProfile ;
+    rdfs:label "Forecast clouds or precipitation for a real place and time"@en .
+ws:LimitAdiabaticParcel a ws:ValidityLimit ;
+    rdfs:label "Zero-dimensional adiabatic parcel; not a weather forecast or a cloud-resolving simulation"@en .
+
+########################################################################
+# 9. Worked example of a qualifier mapping (TLS relative traffic), taken
+#    from docs/qualificatifs.md. Full tables are exported from descriptors.
+########################################################################
+
+ws:TLS_traffic_level a ws:ParameterDefinition ;
+    skos:prefLabel "Trafic relatif"@fr, "Relative traffic"@en ;
+    ws:apiVariable "TunnelConfig.traffic_level" ;
+    ws:fieldPath "inputs.traffic_level" ;
+    ws:quantityKind qk:Dimensionless ;
+    ws:canonicalUnit unit:UNITLESS ;
+    skos:definition "Multiplier of the reference traffic profile; not vehicles per day."@en .
+
+ws:TLSContract ws:declaresParameter ws:TLS_traffic_level .
+
+ws:TLS_traffic_low a ws:QualifierMapping ;
+    ws:term ws:LevelLow ; ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 0.3 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." .
+ws:TLS_traffic_typical a ws:QualifierMapping ;
+    ws:term ws:LevelTypical ; ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 1.0 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Reference level of the backend profile." .
+ws:TLS_traffic_high a ws:QualifierMapping ;
+    ws:term ws:LevelHigh ; ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 1.5 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." .
+ws:TLS_traffic_veryhigh a ws:QualifierMapping ;
+    ws:term ws:LevelVeryHigh ; ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 2.0 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." .
+
+ws:TLS_lighting_type a ws:ParameterDefinition ;
+    skos:prefLabel "Éclairage"@fr ;
+    ws:apiVariable "TunnelConfig.lighting_type" ;
+    ws:fieldPath "inputs.lighting_type" ;
+    skos:definition "Lighting technology and control; not an illuminance."@en .
+
+ws:TLS_lighting_intensity_policy a ws:ClarificationPolicy ;
+    ws:appliesTo ws:TLS_lighting_type ;
+    rdfs:comment "Intensity words (fortement / faiblement éclairé) have no mapping: TLS has no illuminance parameter. Ask the user."@en .
+
+ws:TLS_specific_energy a ws:OutputVariable ;
+    skos:prefLabel "Énergie spécifique annualisée"@fr ;
+    ws:apiVariable "kpis.specific_kwh_m_year" ;
+    ws:quantityKind qk:Energy ;
+    ws:aggregation ws:AggExtrapolation ;
+    ws:additive false ;
+    ws:temporalSupport "whole period, extrapolated by 365/n_days, per metre of tunnel (all tubes)" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:TLS_power a ws:OutputVariable ;
+    skos:prefLabel "Puissance électrique"@fr ;
+    ws:apiVariable "representative.power_kw" ;
+    ws:quantityKind qk:Power ;
+    ws:canonicalUnit unit:KiloW ;
+    ws:aggregation ws:AggNativeStep ;
+    ws:additive false ;
+    ws:temporalSupport "native step" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:TLS_energy_step a ws:OutputVariable ;
+    skos:prefLabel "Énergie du pas"@fr ;
+    ws:apiVariable "representative.energy_kwh" ;
+    ws:quantityKind qk:Energy ;
+    ws:canonicalUnit unit:KiloW-HR ;
+    ws:aggregation ws:AggNativeStep ;
+    ws:additive true ;
+    ws:temporalSupport "native step" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+
+# ---- domain extension ----
+
+# LQL-Equiv extension: instances of the common core only (no new classes).
+# Source: docs/lql-contract-definitions.md (draft, scientific review pending).
+
+ws:TaskFractionationEquivalence
+    ws:requiresParameter ws:LQL_organ, ws:LQL_tumour_site, ws:LQL_dose_per_fraction,
+                         ws:LQL_n_fractions, ws:LQL_reference_dose ;
+    ws:producesOutput ws:LQL_bed_oar, ws:LQL_eqd_oar, ws:LQL_eqd_oar_total, ws:LQL_ntcp ;
+    skos:note "BED, EQD and probabilities are compared one quantity at a time; never concatenated."@en .
+
+ws:LQLContract ws:declaresParameter ws:LQL_organ, ws:LQL_tumour_site, ws:LQL_dose_per_fraction,
+        ws:LQL_n_fractions, ws:LQL_gap_days, ws:LQL_reference_dose, ws:LQL_bifractionated, ws:LQL_total_dose ;
+    ws:declaresOutput ws:LQL_bed_oar, ws:LQL_eqd_oar, ws:LQL_eqd_oar_total, ws:LQL_eqd_tumour, ws:LQL_eqd_tumour_total,
+        ws:LQL_ntcp, ws:LQL_oar_saturated, ws:LQL_tumour_saturated, ws:LQL_saturated .
+
+ws:LQL_organ a ws:ParameterDefinition ;
+    skos:prefLabel "Organe à risque"@fr ; ws:apiVariable "compute(organ, ...) positional 1" ; ws:fieldPath "organ" ;
+    skos:definition "Organ at risk from the shipped library (34 entries); never chosen silently."@en .
+
+ws:LQL_tumour_site a ws:ParameterDefinition ;
+    skos:prefLabel "Site tumoral"@fr ; ws:apiVariable "compute(..., tumour, ...) positional 2" ; ws:fieldPath "tumour_site" ;
+    skos:definition "Tumour site from the shipped library (20 entries)."@en .
+
+ws:LQL_dose_per_fraction a ws:ParameterDefinition ; ws:requiresInstance true ;
+    skos:prefLabel "Dose par fraction"@fr ; ws:apiVariable "Course.dose_per_fraction" ; ws:fieldPath "courses[k].dose_per_fraction" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] .
+
+ws:LQL_n_fractions a ws:ParameterDefinition ; ws:requiresInstance true ;
+    skos:prefLabel "Nombre de fractions"@fr ; ws:apiVariable "Course.n_fractions" ; ws:fieldPath "courses[k].n_fractions" ;
+    ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:NUM ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] ,
+                [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 1 ; ws:authority ws:AuthorityPolicy ;
+                  rdfs:comment "Integer >= 1 for physical schedules (profile policy); the API accepts floats."@en ] .
+
+ws:LQL_gap_days a ws:ParameterDefinition ; ws:requiresInstance true ;
+    skos:prefLabel "Interruption"@fr ; ws:apiVariable "Course.gap_days" ; ws:fieldPath "courses[k].gap_days" ;
+    ws:quantityKind qk:Time ; ws:canonicalUnit unit:DAY ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] .
+
+ws:LQL_reference_dose a ws:ParameterDefinition ;
+    skos:prefLabel "Dose de référence par fraction"@fr ; ws:apiVariable "Prescription.reference_dose" ; ws:fieldPath "reference_dose" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:codeDefault 2.0 ;
+    skos:definition "Defines the EQD reference fractionation; always stated in answers."@en ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] ,
+                [ a ws:Bound ; ws:boundKind "min_exclusive" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityPolicy ;
+                  rdfs:comment "0 is constructible but does not guarantee a computable EQD."@en ] .
+
+ws:LQL_bifractionated a ws:ParameterDefinition ;
+    skos:prefLabel "Deux fractions par jour"@fr ; ws:apiVariable "Prescription.bifractionated" ; ws:fieldPath "bifractionated" ;
+    ws:codeDefault false .
+
+ws:LQL_total_dose a ws:ParameterDefinition ; ws:requiresInstance true ;
+    skos:prefLabel "Dose totale"@fr ; ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ;
+    ws:derivedFrom ws:LQL_dose_per_fraction, ws:LQL_n_fractions ;
+    ws:derivationRule "total_dose = dose_per_fraction * n_fractions; a stated total that disagrees is a conflict" .
+
+ws:LQL_bed_oar a ws:OutputVariable ;
+    skos:prefLabel "BED organe"@fr ; ws:apiVariable "CourseResult.bed_oar" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
+    ws:additive true ; ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_eqd_oar a ws:OutputVariable ;
+    skos:prefLabel "EQD organe"@fr ; ws:apiVariable "CourseResult.eqd_oar" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
+    ws:dependsOnReference ws:LQL_reference_dose ; ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_eqd_oar_total a ws:OutputVariable ;
+    skos:prefLabel "EQD organe cumulée"@fr ; ws:apiVariable "Result.eqd_oar_total" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggSum ;
+    ws:dependsOnReference ws:LQL_reference_dose ; ws:validityFlag "Result.oar_total_valid" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_ntcp a ws:OutputVariable ;
+    skos:prefLabel "NTCP"@fr ; ws:apiVariable "Result.ntcp_percent" ; ws:canonicalUnit unit:PERCENT ;
+    skos:definition "Model estimate for research and education, not a patient-specific probability."@en ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_eqd_tumour a ws:OutputVariable ;
+    skos:prefLabel "EQD tumeur"@fr ; ws:apiVariable "CourseResult.eqd_tumour" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
+    ws:dependsOnReference ws:LQL_reference_dose ; ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_eqd_tumour_total a ws:OutputVariable ;
+    skos:prefLabel "EQD tumeur cumulée"@fr ; ws:apiVariable "Result.eqd_tumour_total" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggSum ;
+    ws:dependsOnReference ws:LQL_reference_dose ; ws:validityFlag "Result.tumour_total_valid" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+# Per-course backend flags invalidate the matching per-course output only.
+ws:LQL_oar_saturated a ws:OutputVariable ;
+    skos:prefLabel "Saturation EQD organe (cours)"@fr ; ws:apiVariable "CourseResult.oar_saturated" ;
+    ws:invalidates ws:LQL_eqd_oar .
+
+ws:LQL_tumour_saturated a ws:OutputVariable ;
+    skos:prefLabel "Saturation EQD tumeur (cours)"@fr ; ws:apiVariable "CourseResult.tumour_saturated" ;
+    ws:invalidates ws:LQL_eqd_tumour .
+
+# Global summary flag: true if any course flag is true. It signals a problem but
+# does not by itself identify which output is invalid, so it invalidates nothing directly.
+ws:LQL_saturated a ws:OutputVariable ;
+    skos:prefLabel "Saturation (résumé global)"@fr ; ws:apiVariable "Result.saturated" ;
+    rdfs:comment "Any-course summary of CourseResult.oar_saturated / tumour_saturated; read the per-course flags."@en .
+
+# Qualitative expressions
+ws:LQL_conventional a ws:QualifierMapping ;
+    ws:term ws:LevelTypical ; skos:altLabel "fractionnement conventionnel"@fr, "classique"@fr ;
+    ws:appliesTo ws:LQL_dose_per_fraction ; ws:proposedValue 2.0 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Conventional fractionation, 2 Gy per fraction; proposal to accept." .
+
+ws:LQL_hypo_moderate a ws:ClarificationPolicy ;
+    skos:altLabel "hypofractionnement modéré"@fr ; ws:appliesTo ws:LQL_dose_per_fraction ;
+    rdfs:comment "No numerical convention before sourced review: the user states the dose per fraction."@en .
+
+ws:LQL_hypo_extreme a ws:ClarificationPolicy ;
+    skos:altLabel "hypofractionnement extrême"@fr, "stéréotaxique"@fr ; ws:appliesTo ws:LQL_dose_per_fraction .
+
+ws:LQL_hyperfractionation a ws:ClarificationPolicy ;
+    skos:altLabel "hyperfractionnement"@fr ; ws:appliesTo ws:LQL_bifractionated ;
+    rdfs:comment "The word alone does not fix two sessions a day."@en .
+
+# Outputs and flags exposed by the single-course profile of the LQL descriptor (aligned on its ontology_concept names).
+ws:LQLContract ws:declaresOutput ws:LQL_bed_tumour, ws:LQL_tcp_percent, ws:LQL_cancer_risk,
+        ws:LQL_overall_days_oar, ws:LQL_overall_days_tumour, ws:LQL_oar_total_valid, ws:LQL_tumour_total_valid .
+
+ws:LQL_bed_tumour a ws:OutputVariable ;
+    skos:prefLabel "BED tumeur"@fr ; ws:apiVariable "CourseResult.bed_tumour" ;
+    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_tcp_percent a ws:OutputVariable ;
+    skos:prefLabel "TCP"@fr ; ws:apiVariable "Result.tcp_percent" ; ws:canonicalUnit unit:PERCENT ;
+    skos:definition "Model estimate for research and education; sigmoid stated by Options.tcp_model."@en ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_cancer_risk a ws:OutputVariable ;
+    skos:prefLabel "Indice de risque de cancer radio-induit"@fr ; ws:apiVariable "Result.cancer_risk" ;
+    skos:definition "Native model index from tabulated coefficients; not a clinical percentage; None when the tissue has no coefficients."@en ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_overall_days_oar a ws:OutputVariable ;
+    skos:prefLabel "Durée calendaire (organe)"@fr ; ws:apiVariable "CourseResult.overall_days_oar" ;
+    ws:quantityKind qk:Time ; ws:canonicalUnit unit:DAY ; ws:aggregation ws:AggPerCourse .
+
+ws:LQL_overall_days_tumour a ws:OutputVariable ;
+    skos:prefLabel "Durée calendaire (tumeur)"@fr ; ws:apiVariable "CourseResult.overall_days_tumour" ;
+    ws:quantityKind qk:Time ; ws:canonicalUnit unit:DAY ; ws:aggregation ws:AggPerCourse .
+
+# Validity flags: true means valid (inverse polarity of the saturation flags).
+ws:LQL_oar_total_valid a ws:OutputVariable ;
+    skos:prefLabel "Validité du total organe"@fr ; ws:apiVariable "Result.oar_total_valid" ;
+    rdfs:comment "True when the cumulative organ EQD is defined; when false, LQL_eqd_oar_total must not be reported."@en .
+
+ws:LQL_tumour_total_valid a ws:OutputVariable ;
+    skos:prefLabel "Validité du total tumeur"@fr ; ws:apiVariable "Result.tumour_total_valid" ;
+    rdfs:comment "True when the cumulative tumour EQD is defined; when false, LQL_eqd_tumour_total must not be reported."@en .
+
+# WebSemantic core ontology.
+# One common core; each scientific software is described by instances of it,
+# never by new core classes. Alignments use rdfs:subClassOf / rdfs:seeAlso only:
+# no owl:equivalentClass is asserted towards external vocabularies.
+
+<https://github.com/cyrilvoyant/websemantic/ns/core> a owl:Ontology ;
+    dcterms:title "WebSemantic core ontology"@en ;
+    dcterms:description "Common vocabulary linking user requests, software contracts, accepted assumptions, executions and qualified simulation outputs."@en ;
+    owl:versionInfo "0.1.0" ;
+    dcterms:created "2026-10-06"^^xsd:date ;
+    dcterms:license <https://polyformproject.org/licenses/noncommercial/1.0.0> ;
+    rdfs:seeAlso <https://doi.org/10.1038/s41597-022-01710-x> .
+
+########################################################################
+# 1. Software and contracts
+########################################################################
+
+ws:Software a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:seeAlso schema:SoftwareSourceCode ;
+    rdfs:label "Software"@en, "Logiciel"@fr ;
+    rdfs:comment "Scientific software used unmodified, identified by repository, pinned revision and concept DOI."@en .
+
+ws:Contract a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Contract"@en, "Contrat"@fr ;
+    rdfs:comment "Published, machine-readable description of how a software may be configured for declared tasks and how its outputs must be read."@en .
+
+ws:TaskProfile a owl:Class ;
+    rdfs:label "Task profile"@en, "Profil de tâche"@fr ;
+    rdfs:comment "A bounded use of the software that the contract supports or explicitly excludes."@en .
+
+ws:ParameterDefinition a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Parameter definition"@en, "Définition de paramètre"@fr ;
+    rdfs:comment "Concept-level description of an input: meaning, quantity kind, canonical unit, bounds, API variable."@en .
+
+ws:OutputVariable a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Output variable"@en, "Variable de sortie"@fr ;
+    rdfs:comment "Concept-level description of a computed column: quantity kind, unit, aggregation, temporal support."@en .
+
+ws:Bound a owl:Class ;
+    rdfs:label "Bound"@en, "Borne"@fr ;
+    rdfs:comment "Numerical limit with its authority. A user-interface slider limit is not a physical constraint."@en .
+
+ws:BoundAuthority a owl:Class ;
+    rdfs:label "Bound authority"@en .
+
+ws:ValidityLimit a owl:Class ;
+    rdfs:label "Validity limit"@en, "Limite de validité"@fr ;
+    rdfs:comment "Declared condition outside which results must not be used (e.g. no calibration, no clinical decision)."@en .
+
+ws:Aggregation a owl:Class ;
+    rdfs:label "Aggregation"@en, "Agrégation"@fr .
+
+ws:DataOrigin a owl:Class ;
+    rdfs:label "Data origin"@en, "Origine des données"@fr .
+
+########################################################################
+# 2. Qualitative semantics (beaucoup, peu, faible, très élevé, ...)
+########################################################################
+
+ws:QualitativeTerm a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Qualitative term"@en, "Terme qualitatif"@fr ;
+    rdfs:comment "Word or phrase expressing an ordinal level. It has no numerical meaning by itself."@en .
+
+ws:QualifierMapping a owl:Class ;
+    rdfs:label "Qualifier mapping"@en, "Convention qualitative"@fr ;
+    rdfs:comment "Parameter-specific convention turning a qualitative term into a proposed value. Always a proposal requiring acceptance."@en .
+
+ws:ClarificationPolicy a owl:Class ;
+    rdfs:label "Clarification policy"@en ;
+    rdfs:comment "Rule stating that a term or request has no mapping for a parameter and must trigger a question."@en .
+
+########################################################################
+# 3. Requests, scenarios and value records
+########################################################################
+
+ws:Request a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Request"@en, "Demande"@fr .
+
+ws:Evidence a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Evidence"@en, "Preuve"@fr ;
+    rdfs:comment "Exact text span of a request supporting a value. Its presence does not prove semantic correctness."@en .
+
+ws:Scenario a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Scenario"@en, "Scénario"@fr .
+
+ws:Experiment a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Experiment settings"@en, "Réglages d'expérience"@fr ;
+    rdfs:comment "Time grid, horizon, realisations and seed; distinct from physical inputs."@en .
+
+ws:Parameter a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Parameter record"@en, "Enregistrement de paramètre"@fr ;
+    rdfs:comment "Value of one parameter in one scenario, with unit, origin, evidence and acceptance state."@en .
+
+ws:UserValue a owl:Class ;
+    rdfs:subClassOf ws:Parameter ;
+    rdfs:label "User-provided value"@en .
+
+ws:Hypothesis a owl:Class ;
+    rdfs:subClassOf ws:Parameter ;
+    rdfs:label "Proposed assumption"@en, "Hypothèse proposée"@fr ;
+    rdfs:comment "Default, qualitative convention or sourced proposal. Not executable until accepted."@en .
+
+ws:OperationalSetting a owl:Class ;
+    rdfs:subClassOf ws:Parameter ;
+    rdfs:label "Operational setting"@en ;
+    rdfs:comment "Technical choice authorised by declared policy (e.g. fixed seed)."@en .
+
+ws:UnknownValue a owl:Class ;
+    rdfs:subClassOf ws:Parameter ;
+    rdfs:label "Unknown value"@en, "Valeur inconnue"@fr .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( ws:UserValue ws:Hypothesis ws:OperationalSetting ws:UnknownValue ) .
+
+########################################################################
+# 4. Activities (PROV-O)
+########################################################################
+
+ws:Interpretation a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Interpretation"@en ;
+    rdfs:comment "Extraction of candidate values from a request, by a language model or a rule."@en .
+
+ws:Normalisation a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Deterministic normalisation"@en ;
+    rdfs:comment "Exact unit or number conversion (2 km -> 2000 m). Not a domain inference."@en .
+
+ws:Acceptance a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Acceptance"@en, "Accord"@fr ;
+    rdfs:comment "Explicit user decision making a hypothesis executable."@en .
+
+ws:Validation a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Validation gate"@en .
+
+ws:Execution a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Execution"@en, "Exécution"@fr .
+
+ws:SimulationOutput a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:seeAlso schema:Dataset ;
+    rdfs:label "Simulation output"@en, "Sortie de simulation"@fr .
+
+ws:Qualification a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Output qualification"@en, "Qualification des sorties"@fr ;
+    rdfs:comment "Machine-readable statement of units, aggregation, scope, data origin, uncertainty coverage and admitted uses."@en .
+
+########################################################################
+# 5. Object properties
+########################################################################
+
+ws:hasContract a owl:ObjectProperty ; rdfs:domain ws:Software ; rdfs:range ws:Contract .
+ws:supportsTask a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:TaskProfile .
+ws:excludesTask a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:TaskProfile .
+ws:declaresParameter a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:ParameterDefinition .
+ws:declaresOutput a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:OutputVariable .
+ws:declaresValidityLimit a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:ValidityLimit .
+
+ws:requiresParameter a owl:ObjectProperty ;
+    rdfs:domain ws:TaskProfile ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "Parameter that must be provided or accepted for the task."@en .
+ws:producesOutput a owl:ObjectProperty ; rdfs:domain ws:TaskProfile ; rdfs:range ws:OutputVariable .
+
+ws:quantityKind a owl:ObjectProperty ;
+    rdfs:range qudt:QuantityKind ;
+    rdfs:comment "QUDT quantity kind of a parameter or output."@en .
+ws:canonicalUnit a owl:ObjectProperty ;
+    rdfs:range qudt:Unit ;
+    rdfs:comment "QUDT unit in which values are stored and validated."@en .
+ws:hasBound a owl:ObjectProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:Bound .
+ws:authority a owl:ObjectProperty ; rdfs:domain ws:Bound ; rdfs:range ws:BoundAuthority .
+ws:aggregation a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:Aggregation .
+ws:dataOrigin a owl:ObjectProperty ; rdfs:range ws:DataOrigin .
+
+ws:term a owl:ObjectProperty ; rdfs:domain ws:QualifierMapping ; rdfs:range ws:QualitativeTerm .
+ws:appliesTo a owl:ObjectProperty ;
+    rdfs:domain [ owl:unionOf ( ws:QualifierMapping ws:ClarificationPolicy ) ] ;
+    rdfs:range ws:ParameterDefinition .
+
+ws:concept a owl:ObjectProperty ; rdfs:domain ws:Parameter ; rdfs:range ws:ParameterDefinition .
+ws:hasParameter a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:Parameter .
+ws:hasExperiment a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:Experiment .
+ws:forTask a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:TaskProfile .
+ws:supportedBy a owl:ObjectProperty ; rdfs:domain ws:UserValue ; rdfs:range ws:Evidence .
+ws:fromRequest a owl:ObjectProperty ; rdfs:domain ws:Evidence ; rdfs:range ws:Request .
+ws:followsConvention a owl:ObjectProperty ; rdfs:domain ws:Hypothesis ; rdfs:range ws:QualifierMapping .
+ws:acceptedBy a owl:ObjectProperty ; rdfs:domain ws:Hypothesis ; rdfs:range ws:Acceptance .
+ws:qualifiedBy a owl:ObjectProperty ; rdfs:domain ws:SimulationOutput ; rdfs:range ws:Qualification .
+
+########################################################################
+# 6. Datatype properties
+########################################################################
+
+ws:apiVariable a owl:DatatypeProperty ; rdfs:range xsd:string ;
+    rdfs:comment "Exact backend identifier (e.g. TunnelConfig.length_m)."@en .
+ws:fieldPath a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:repository a owl:DatatypeProperty ; rdfs:range xsd:anyURI .
+ws:pinnedRevision a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:conceptDOI a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:boundValue a owl:DatatypeProperty ; rdfs:domain ws:Bound .
+ws:boundKind a owl:DatatypeProperty ; rdfs:domain ws:Bound ; rdfs:range xsd:string ;
+    rdfs:comment "min, max, min_exclusive or max_exclusive."@en .
+ws:proposedValue a owl:DatatypeProperty ; rdfs:domain ws:QualifierMapping .
+ws:requiresAcceptance a owl:DatatypeProperty ; rdfs:domain ws:QualifierMapping ; rdfs:range xsd:boolean .
+ws:sourceNote a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:value a owl:DatatypeProperty ; rdfs:domain ws:Parameter .
+ws:accepted a owl:DatatypeProperty ; rdfs:domain ws:Parameter ; rdfs:range xsd:boolean .
+ws:evidenceText a owl:DatatypeProperty ; rdfs:domain ws:Evidence ; rdfs:range xsd:string .
+ws:temporalSupport a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:string ;
+    rdfs:comment "native step, daily, hourly envelope, whole period, per course..."@en .
+ws:additive a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:boolean ;
+    rdfs:comment "True if values may be summed over time steps (energy), false otherwise (power, ratios, doses per course)."@en .
+
+# Relational properties used by the domain extensions (condition B3).
+ws:derivedFrom a owl:ObjectProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "The quantity is computed from others; an inconsistent stated value is a conflict."@en .
+ws:convertibleTo a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "Two expressions of one physical state related by the stated ws:derivationRule (e.g. S0 = RH_fraction - 1). Not a numerical equality and not a unit change alone."@en .
+ws:dependsOnReference a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:ParameterDefinition ;
+    rdfs:comment "Output meaningful only with the stated reference parameter."@en .
+ws:invalidates a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:OutputVariable ;
+    rdfs:comment "Direction: boolean backend flag -> output. When the flag (subject) is true, the object output must not be reported as a result."@en .
+ws:derivationRule a owl:DatatypeProperty ; rdfs:range xsd:string .
+ws:derivedFromOutput a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:OutputVariable ;
+    rdfs:comment "Output obtained from another output by an exact conversion (unit change, x100...)."@en .
+ws:codeDefault a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ;
+    rdfs:comment "Default set by the backend code; stated, never treated as user data."@en .
+ws:validityFlag a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:string .
+ws:groupInstance a owl:DatatypeProperty ; rdfs:domain ws:Parameter ; rdfs:range xsd:string ;
+    rdfs:comment "Identifier of the course, aerosol mode or other repeated group a record belongs to; checks never mix instances."@en .
+ws:requiresInstance a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range xsd:boolean ;
+    rdfs:comment "Records of this parameter must carry ws:groupInstance (repeated course, aerosol mode...)."@en .
+ws:partOfGroup a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range xsd:string ;
+    rdfs:comment "Parameters that must be supplied together."@en .
+
+########################################################################
+# 7. Controlled individuals
+########################################################################
+
+ws:AuthorityCode a ws:BoundAuthority ; rdfs:label "enforced by backend code"@en .
+ws:AuthorityUI a ws:BoundAuthority ; rdfs:label "user-interface limit, not physical"@en .
+ws:AuthorityPolicy a ws:BoundAuthority ; rdfs:label "experimental policy of the study"@en .
+ws:AuthorityDomain a ws:BoundAuthority ; rdfs:label "domain literature or expert"@en .
+
+ws:SyntheticSimulation a ws:DataOrigin ; rdfs:label "synthetic simulation"@en .
+ws:Measured a ws:DataOrigin ; rdfs:label "measured"@en .
+ws:Assumed a ws:DataOrigin ; rdfs:label "assumed"@en .
+
+ws:AggNativeStep a ws:Aggregation ; rdfs:label "value at native time step"@en .
+ws:AggSum a ws:Aggregation ; rdfs:label "sum over steps"@en .
+ws:AggMean a ws:Aggregation ; rdfs:label "mean over steps"@en .
+ws:AggMax a ws:Aggregation ; rdfs:label "maximum over steps"@en .
+ws:AggQuantileAcrossRuns a ws:Aggregation ; rdfs:label "empirical quantile across realisations, not a confidence interval"@en .
+ws:AggExtrapolation a ws:Aggregation ; rdfs:label "linear extrapolation (e.g. 365/n_days), not an observed year"@en .
+ws:AggPerCourse a ws:Aggregation ; rdfs:label "per treatment course"@en .
+
+# Ordinal qualitative scale shared by all software. Values are given only by
+# parameter-specific ws:QualifierMapping instances in each contract.
+ws:QualitativeScale a skos:ConceptScheme ; skos:prefLabel "Échelle qualitative commune"@fr, "Shared qualitative scale"@en .
+ws:LevelVeryLow  a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "très faible"@fr, "very low"@en ; skos:altLabel "très peu"@fr ; ws:rank 1 .
+ws:LevelLow      a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "faible"@fr, "low"@en ; skos:altLabel "peu"@fr, "court"@fr ; ws:rank 2 .
+ws:LevelTypical  a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "courant"@fr, "typical"@en ; skos:altLabel "moyen"@fr, "normal"@fr ; ws:rank 3 .
+ws:LevelHigh     a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "élevé"@fr, "high"@en ; skos:altLabel "beaucoup"@fr, "fort"@fr, "long"@fr ; ws:rank 4 .
+ws:LevelVeryHigh a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "très élevé"@fr, "very high"@en ; skos:altLabel "énormément"@fr, "très fort"@fr ; ws:rank 5 .
+
+ws:rank a owl:DatatypeProperty ; rdfs:domain ws:QualitativeTerm ; rdfs:range xsd:integer .
+
+########################################################################
+# 8. Software instances (identity and task profiles only; full parameter
+#    definitions are exported from each descriptor)
+########################################################################
+
+ws:TLS a ws:Software ;
+    rdfs:label "Tunnel Load Simulator" ;
+    ws:repository "https://github.com/cyrilvoyant/tunnel-load-simulator"^^xsd:anyURI ;
+    ws:pinnedRevision "748e053e129669cf3e896d381e3c0ac01c763edd" ;
+    ws:conceptDOI "10.5281/zenodo.20080042" ;
+    ws:hasContract ws:TLSContract .
+
+ws:TLSContract a ws:Contract ;
+    ws:supportsTask ws:TaskTunnelDemand ;
+    ws:excludesTask ws:TaskTunnelCertification ;
+    ws:declaresValidityLimit ws:LimitNoCalibration .
+
+ws:TaskTunnelDemand a ws:TaskProfile ;
+    rdfs:label "Estimate electricity demand of a road tunnel under stated assumptions"@en .
+ws:TaskTunnelCertification a ws:TaskProfile ;
+    rdfs:label "Certify design values or predict consumption of a real tunnel"@en .
+ws:LimitNoCalibration a ws:ValidityLimit ;
+    rdfs:label "Synthetic first-order model, not calibrated against measured tunnels"@en .
+
+ws:LQLEquiv a ws:Software ;
+    rdfs:label "LQL-Equiv" ;
+    ws:repository "https://github.com/cyrilvoyant/LQL-Equiv-web"^^xsd:anyURI ;
+    ws:pinnedRevision "dfc9a338205b8864b8e3470c4ae245b019e88844" ;
+    ws:conceptDOI "10.5281/zenodo.21948623" ;
+    ws:hasContract ws:LQLContract .
+
+ws:LQLContract a ws:Contract ;
+    ws:supportsTask ws:TaskFractionationEquivalence ;
+    ws:excludesTask ws:TaskPatientDecision ;
+    ws:declaresValidityLimit ws:LimitNotMedicalDevice .
+
+ws:TaskFractionationEquivalence a ws:TaskProfile ;
+    rdfs:label "Compare fractionation schedules (BED, EQD2, NTCP, TCP) for research and education"@en .
+ws:TaskPatientDecision a ws:TaskProfile ;
+    rdfs:label "Prescribe, modify or validate treatment for an individual patient"@en .
+ws:LimitNotMedicalDevice a ws:ValidityLimit ;
+    rdfs:label "Research and education software; not a medical device"@en .
+
+ws:Pyrcel a ws:Software ;
+    rdfs:label "pyrcel" ;
+    ws:repository "https://github.com/darothen/pyrcel"^^xsd:anyURI ;
+    ws:pinnedRevision "977e9094644ec4a17d658d657094651928591c89" ;
+    rdfs:comment "Version 2.0.0, BSD-3-Clause, used unmodified."@en ;
+    ws:hasContract ws:PyrcelContract .
+
+ws:PyrcelContract a ws:Contract ;
+    ws:supportsTask ws:TaskParcelActivation ;
+    ws:excludesTask ws:TaskWeatherForecast ;
+    ws:declaresValidityLimit ws:LimitAdiabaticParcel .
+
+ws:TaskParcelActivation a ws:TaskProfile ;
+    rdfs:label "Simulate adiabatic parcel ascent and aerosol activation for a stated updraft, initial state and aerosol population"@en .
+ws:TaskWeatherForecast a ws:TaskProfile ;
+    rdfs:label "Forecast clouds or precipitation for a real place and time"@en .
+ws:LimitAdiabaticParcel a ws:ValidityLimit ;
+    rdfs:label "Zero-dimensional adiabatic parcel; not a weather forecast or a cloud-resolving simulation"@en .
+
+########################################################################
+# 9. Worked example of a qualifier mapping (TLS relative traffic), taken
+#    from docs/qualificatifs.md. Full tables are exported from descriptors.
+########################################################################
+
+ws:TLS_traffic_level a ws:ParameterDefinition ;
+    skos:prefLabel "Trafic relatif"@fr, "Relative traffic"@en ;
+    ws:apiVariable "TunnelConfig.traffic_level" ;
+    ws:fieldPath "inputs.traffic_level" ;
+    ws:quantityKind qk:Dimensionless ;
+    ws:canonicalUnit unit:UNITLESS ;
+    skos:definition "Multiplier of the reference traffic profile; not vehicles per day."@en .
+
+ws:TLSContract ws:declaresParameter ws:TLS_traffic_level .
+
+ws:TLS_traffic_low a ws:QualifierMapping ;
+    ws:term ws:LevelLow ; ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 0.3 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." .
+ws:TLS_traffic_typical a ws:QualifierMapping ;
+    ws:term ws:LevelTypical ; ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 1.0 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Reference level of the backend profile." .
+ws:TLS_traffic_high a ws:QualifierMapping ;
+    ws:term ws:LevelHigh ; ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 1.5 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." .
+ws:TLS_traffic_veryhigh a ws:QualifierMapping ;
+    ws:term ws:LevelVeryHigh ; ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 2.0 ; ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." .
+
+ws:TLS_lighting_type a ws:ParameterDefinition ;
+    skos:prefLabel "Éclairage"@fr ;
+    ws:apiVariable "TunnelConfig.lighting_type" ;
+    ws:fieldPath "inputs.lighting_type" ;
+    skos:definition "Lighting technology and control; not an illuminance."@en .
+
+ws:TLS_lighting_intensity_policy a ws:ClarificationPolicy ;
+    ws:appliesTo ws:TLS_lighting_type ;
+    rdfs:comment "Intensity words (fortement / faiblement éclairé) have no mapping: TLS has no illuminance parameter. Ask the user."@en .
+
+ws:TLS_specific_energy a ws:OutputVariable ;
+    skos:prefLabel "Énergie spécifique annualisée"@fr ;
+    ws:apiVariable "kpis.specific_kwh_m_year" ;
+    ws:quantityKind qk:Energy ;
+    ws:aggregation ws:AggExtrapolation ;
+    ws:additive false ;
+    ws:temporalSupport "whole period, extrapolated by 365/n_days, per metre of tunnel (all tubes)" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:TLS_power a ws:OutputVariable ;
+    skos:prefLabel "Puissance électrique"@fr ;
+    ws:apiVariable "representative.power_kw" ;
+    ws:quantityKind qk:Power ;
+    ws:canonicalUnit unit:KiloW ;
+    ws:aggregation ws:AggNativeStep ;
+    ws:additive false ;
+    ws:temporalSupport "native step" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:TLS_energy_step a ws:OutputVariable ;
+    skos:prefLabel "Énergie du pas"@fr ;
+    ws:apiVariable "representative.energy_kwh" ;
+    ws:quantityKind qk:Energy ;
+    ws:canonicalUnit unit:KiloW-HR ;
+    ws:aggregation ws:AggNativeStep ;
+    ws:additive true ;
+    ws:temporalSupport "native step" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+
+# ---- domain extension ----
+
+# pyrcel extension: instances of the common core only (no new classes).
+# Source: docs/pyrcel-contract-definitions.md (draft, scientific review pending).
+
+ws:TaskParcelActivation
+    ws:requiresParameter ws:PYR_V, ws:PYR_T0, ws:PYR_P0, ws:PYR_S0,
+                         ws:PYR_N, ws:PYR_mu, ws:PYR_sigma, ws:PYR_kappa ;
+    ws:producesOutput ws:PYR_S, ws:PYR_Smax, ws:PYR_Nd .
+
+ws:PyrcelContract ws:declaresParameter ws:PYR_V, ws:PYR_T0, ws:PYR_P0, ws:PYR_S0, ws:PYR_RH,
+        ws:PYR_N, ws:PYR_mu, ws:PYR_sigma, ws:PYR_kappa ;
+    ws:declaresOutput ws:PYR_S, ws:PYR_Smax, ws:PYR_Nd, ws:PYR_T .
+
+ws:PYR_V a ws:ParameterDefinition ;
+    skos:prefLabel "Vitesse ascendante"@fr ; ws:apiVariable "ParcelModel(V=)" ; ws:fieldPath "V" ;
+    ws:quantityKind qk:Velocity ; ws:canonicalUnit unit:M-PER-SEC ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min_exclusive" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityPolicy ] .
+
+ws:PYR_T0 a ws:ParameterDefinition ;
+    skos:prefLabel "Température initiale"@fr ; ws:apiVariable "ParcelModel(T0=)" ; ws:fieldPath "T0" ;
+    ws:quantityKind qk:ThermodynamicTemperature ; ws:canonicalUnit unit:K .
+
+ws:PYR_P0 a ws:ParameterDefinition ;
+    skos:prefLabel "Pression initiale"@fr ; ws:apiVariable "ParcelModel(P0=)" ; ws:fieldPath "P0" ;
+    ws:quantityKind qk:Pressure ; ws:canonicalUnit unit:PA .
+
+ws:PYR_S0 a ws:ParameterDefinition ;
+    skos:prefLabel "Sursaturation initiale"@fr ; ws:apiVariable "ParcelModel(S0=)" ; ws:fieldPath "S0" ;
+    ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:UNITLESS ;
+    ws:hasBound [ a ws:Bound ; ws:boundKind "min_exclusive" ; ws:boundValue -1.0 ; ws:authority ws:AuthorityPolicy ] ,
+                [ a ws:Bound ; ws:boundKind "max" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityPolicy ] .
+
+ws:PYR_RH a ws:ParameterDefinition ;
+    skos:prefLabel "Humidité relative initiale"@fr ; ws:fieldPath "RH (user expression)" ;
+    ws:quantityKind qk:Dimensionless ;
+    ws:convertibleTo ws:PYR_S0 ;
+    ws:derivationRule "S0 = RH_percent/100 - 1 = RH_fraction - 1; RH and S0 both given and inconsistent is a conflict" .
+
+ws:PYR_N a ws:ParameterDefinition ;
+    skos:prefLabel "Concentration en nombre du mode"@fr ; ws:apiVariable "Lognorm(N=)" ; ws:fieldPath "aerosols[k].N" ;
+    ws:quantityKind qk:NumberDensity ; ws:canonicalUnit unit:PER-CentiM3 ;
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; ws:requiresInstance true .

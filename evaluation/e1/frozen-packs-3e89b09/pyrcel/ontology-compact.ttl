@@ -1,0 +1,350 @@
+@prefix qk: <http://qudt.org/vocab/quantitykind/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix ws: <https://github.com/cyrilvoyant/websemantic/ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ws:LQLContract a ws:Contract ;
+    ws:declaresValidityLimit ws:LimitNotMedicalDevice ;
+    ws:excludesTask ws:TaskPatientDecision ;
+    ws:supportsTask ws:TaskFractionationEquivalence .
+
+ws:LevelVeryLow a ws:QualitativeTerm ;
+    skos:altLabel "très peu"@fr ;
+    skos:inScheme ws:QualitativeScale ;
+    skos:prefLabel "very low"@en,
+        "très faible"@fr ;
+    ws:rank 1 .
+
+ws:PYR_air_mass_words a ws:ClarificationPolicy ;
+    skos:altLabel "air continental"@fr,
+        "air marin"@fr,
+        "air pollué"@fr,
+        "air pur"@fr ;
+    ws:appliesTo ws:PYR_N .
+
+ws:PYR_near_saturation a ws:ClarificationPolicy ;
+    skos:altLabel "air presque saturé"@fr ;
+    ws:appliesTo ws:PYR_S0 .
+
+ws:PYR_updraft_words a ws:ClarificationPolicy ;
+    skos:altLabel "ascendance modérée"@fr,
+        "faible ascendance"@fr,
+        "forte ascendance"@fr ;
+    ws:appliesTo ws:PYR_V .
+
+ws:PyrcelContract a ws:Contract ;
+    ws:declaresOutput ws:PYR_Nd,
+        ws:PYR_Nd_cm3,
+        ws:PYR_S,
+        ws:PYR_Smax,
+        ws:PYR_Smax_percent,
+        ws:PYR_T ;
+    ws:declaresParameter ws:PYR_N,
+        ws:PYR_P0,
+        ws:PYR_RH,
+        ws:PYR_S0,
+        ws:PYR_T0,
+        ws:PYR_V,
+        ws:PYR_kappa,
+        ws:PYR_mu,
+        ws:PYR_sigma ;
+    ws:declaresValidityLimit ws:LimitAdiabaticParcel ;
+    ws:excludesTask ws:TaskWeatherForecast ;
+    ws:supportsTask ws:TaskParcelActivation .
+
+ws:TLSContract a ws:Contract ;
+    ws:declaresParameter ws:TLS_traffic_level ;
+    ws:declaresValidityLimit ws:LimitNoCalibration ;
+    ws:excludesTask ws:TaskTunnelCertification ;
+    ws:supportsTask ws:TaskTunnelDemand .
+
+ws:TLS_energy_step a ws:OutputVariable ;
+    skos:prefLabel "Énergie du pas"@fr ;
+    ws:additive true ;
+    ws:aggregation ws:AggNativeStep ;
+    ws:apiVariable "representative.energy_kwh" ;
+    ws:canonicalUnit unit:KiloW-HR ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:quantityKind qk:Energy ;
+    ws:temporalSupport "native step" .
+
+ws:TLS_lighting_intensity_policy a ws:ClarificationPolicy ;
+    rdfs:comment "Intensity words (fortement / faiblement éclairé) have no mapping: TLS has no illuminance parameter. Ask the user."@en ;
+    ws:appliesTo ws:TLS_lighting_type .
+
+ws:TLS_power a ws:OutputVariable ;
+    skos:prefLabel "Puissance électrique"@fr ;
+    ws:additive false ;
+    ws:aggregation ws:AggNativeStep ;
+    ws:apiVariable "representative.power_kw" ;
+    ws:canonicalUnit unit:KiloW ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:quantityKind qk:Power ;
+    ws:temporalSupport "native step" .
+
+ws:TLS_specific_energy a ws:OutputVariable ;
+    skos:prefLabel "Énergie spécifique annualisée"@fr ;
+    ws:additive false ;
+    ws:aggregation ws:AggExtrapolation ;
+    ws:apiVariable "kpis.specific_kwh_m_year" ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:quantityKind qk:Energy ;
+    ws:temporalSupport "whole period, extrapolated by 365/n_days, per metre of tunnel (all tubes)" .
+
+ws:TLS_traffic_high a ws:QualifierMapping ;
+    ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 1.5 ;
+    ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." ;
+    ws:term ws:LevelHigh .
+
+ws:TLS_traffic_low a ws:QualifierMapping ;
+    ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 0.3 ;
+    ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." ;
+    ws:term ws:LevelLow .
+
+ws:TLS_traffic_typical a ws:QualifierMapping ;
+    ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 1.0 ;
+    ws:requiresAcceptance true ;
+    ws:sourceNote "Reference level of the backend profile." ;
+    ws:term ws:LevelTypical .
+
+ws:TLS_traffic_veryhigh a ws:QualifierMapping ;
+    ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 2.0 ;
+    ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." ;
+    ws:term ws:LevelVeryHigh .
+
+ws:LevelHigh a ws:QualitativeTerm ;
+    skos:altLabel "beaucoup"@fr,
+        "fort"@fr,
+        "long"@fr ;
+    skos:inScheme ws:QualitativeScale ;
+    skos:prefLabel "high"@en,
+        "élevé"@fr ;
+    ws:rank 4 .
+
+ws:LevelLow a ws:QualitativeTerm ;
+    skos:altLabel "court"@fr,
+        "peu"@fr ;
+    skos:inScheme ws:QualitativeScale ;
+    skos:prefLabel "low"@en,
+        "faible"@fr ;
+    ws:rank 2 .
+
+ws:LevelTypical a ws:QualitativeTerm ;
+    skos:altLabel "moyen"@fr,
+        "normal"@fr ;
+    skos:inScheme ws:QualitativeScale ;
+    skos:prefLabel "typical"@en,
+        "courant"@fr ;
+    ws:rank 3 .
+
+ws:LevelVeryHigh a ws:QualitativeTerm ;
+    skos:altLabel "très fort"@fr,
+        "énormément"@fr ;
+    skos:inScheme ws:QualitativeScale ;
+    skos:prefLabel "very high"@en,
+        "très élevé"@fr ;
+    ws:rank 5 .
+
+ws:LimitAdiabaticParcel a ws:ValidityLimit ;
+    rdfs:label "Zero-dimensional adiabatic parcel; not a weather forecast or a cloud-resolving simulation"@en .
+
+ws:LimitNoCalibration a ws:ValidityLimit ;
+    rdfs:label "Synthetic first-order model, not calibrated against measured tunnels"@en .
+
+ws:LimitNotMedicalDevice a ws:ValidityLimit ;
+    rdfs:label "Research and education software; not a medical device"@en .
+
+ws:PYR_Nd_cm3 a ws:OutputVariable ;
+    skos:prefLabel "Gouttelettes activées (cm⁻³)"@fr ;
+    ws:canonicalUnit unit:PER-CentiM3 ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:derivationRule "Nd / 1e6 (m^-3 -> cm^-3)" ;
+    ws:derivedFromOutput ws:PYR_Nd ;
+    ws:quantityKind qk:NumberDensity ;
+    ws:temporalSupport "end of run" .
+
+ws:PYR_RH a ws:ParameterDefinition ;
+    skos:prefLabel "Humidité relative initiale"@fr ;
+    ws:convertibleTo ws:PYR_S0 ;
+    ws:derivationRule "S0 = RH_percent/100 - 1 = RH_fraction - 1; RH and S0 both given and inconsistent is a conflict" ;
+    ws:fieldPath "RH (user expression)" ;
+    ws:quantityKind qk:Dimensionless .
+
+ws:PYR_Smax_percent a ws:OutputVariable ;
+    skos:prefLabel "Sursaturation maximale (%)"@fr ;
+    ws:additive false ;
+    ws:aggregation ws:AggMax ;
+    ws:canonicalUnit unit:PERCENT ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:derivationRule "S_max x 100" ;
+    ws:derivedFromOutput ws:PYR_Smax .
+
+ws:PYR_T a ws:OutputVariable ;
+    skos:prefLabel "Température de la parcelle"@fr ;
+    ws:additive false ;
+    ws:aggregation ws:AggNativeStep ;
+    ws:apiVariable "to_pandas() T" ;
+    ws:canonicalUnit unit:K ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:temporalSupport "nominal output_dt; terminal sample may be irregular" .
+
+ws:TLS_lighting_type a ws:ParameterDefinition ;
+    skos:definition "Lighting technology and control; not an illuminance."@en ;
+    skos:prefLabel "Éclairage"@fr ;
+    ws:apiVariable "TunnelConfig.lighting_type" ;
+    ws:fieldPath "inputs.lighting_type" .
+
+ws:TaskFractionationEquivalence a ws:TaskProfile ;
+    rdfs:label "Compare fractionation schedules (BED, EQD2, NTCP, TCP) for research and education"@en .
+
+ws:TaskParcelActivation a ws:TaskProfile ;
+    rdfs:label "Simulate adiabatic parcel ascent and aerosol activation for a stated updraft, initial state and aerosol population"@en ;
+    ws:producesOutput ws:PYR_Nd,
+        ws:PYR_S,
+        ws:PYR_Smax ;
+    ws:requiresParameter ws:PYR_N,
+        ws:PYR_P0,
+        ws:PYR_S0,
+        ws:PYR_T0,
+        ws:PYR_V,
+        ws:PYR_kappa,
+        ws:PYR_mu,
+        ws:PYR_sigma .
+
+ws:TaskPatientDecision a ws:TaskProfile ;
+    rdfs:label "Prescribe, modify or validate treatment for an individual patient"@en .
+
+ws:TaskTunnelCertification a ws:TaskProfile ;
+    rdfs:label "Certify design values or predict consumption of a real tunnel"@en .
+
+ws:TaskTunnelDemand a ws:TaskProfile ;
+    rdfs:label "Estimate electricity demand of a road tunnel under stated assumptions"@en .
+
+ws:TaskWeatherForecast a ws:TaskProfile ;
+    rdfs:label "Forecast clouds or precipitation for a real place and time"@en .
+
+ws:PYR_P0 a ws:ParameterDefinition ;
+    skos:prefLabel "Pression initiale"@fr ;
+    ws:apiVariable "ParcelModel(P0=)" ;
+    ws:canonicalUnit unit:PA ;
+    ws:fieldPath "P0" ;
+    ws:quantityKind qk:Pressure .
+
+ws:PYR_S a ws:OutputVariable ;
+    skos:prefLabel "Sursaturation"@fr ;
+    ws:additive false ;
+    ws:aggregation ws:AggNativeStep ;
+    ws:apiVariable "to_pandas() S" ;
+    ws:canonicalUnit unit:UNITLESS ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:temporalSupport "nominal output_dt; terminal sample may be irregular" .
+
+ws:PYR_T0 a ws:ParameterDefinition ;
+    skos:prefLabel "Température initiale"@fr ;
+    ws:apiVariable "ParcelModel(T0=)" ;
+    ws:canonicalUnit unit:K ;
+    ws:fieldPath "T0" ;
+    ws:quantityKind qk:ThermodynamicTemperature .
+
+ws:PYR_kappa a ws:ParameterDefinition ;
+    skos:prefLabel "Hygroscopicité κ"@fr ;
+    ws:apiVariable "AerosolSpecies(kappa=)" ;
+    ws:canonicalUnit unit:UNITLESS ;
+    ws:fieldPath "aerosols[k].kappa" ;
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ;
+    ws:quantityKind qk:Dimensionless ;
+    ws:requiresInstance true .
+
+ws:PYR_mu a ws:ParameterDefinition ;
+    skos:prefLabel "Rayon sec médian"@fr ;
+    ws:apiVariable "Lognorm(mu=)" ;
+    ws:canonicalUnit unit:MicroM ;
+    ws:fieldPath "aerosols[k].mu" ;
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ;
+    ws:quantityKind qk:Length ;
+    ws:requiresInstance true .
+
+ws:PYR_sigma a ws:ParameterDefinition ;
+    skos:prefLabel "Écart-type géométrique"@fr ;
+    ws:apiVariable "Lognorm(sigma=)" ;
+    ws:canonicalUnit unit:UNITLESS ;
+    ws:fieldPath "aerosols[k].sigma" ;
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ;
+    ws:quantityKind qk:Dimensionless ;
+    ws:requiresInstance true .
+
+ws:PYR_N a ws:ParameterDefinition ;
+    skos:prefLabel "Concentration en nombre du mode"@fr ;
+    ws:apiVariable "Lognorm(N=)" ;
+    ws:canonicalUnit unit:PER-CentiM3 ;
+    ws:fieldPath "aerosols[k].N" ;
+    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ;
+    ws:quantityKind qk:NumberDensity ;
+    ws:requiresInstance true .
+
+ws:PYR_Nd a ws:OutputVariable ;
+    skos:note "Returned in m^-3, while input N is in cm^-3."@en ;
+    skos:prefLabel "Gouttelettes activées"@fr ;
+    ws:apiVariable "ModelOutput.Nd" ;
+    ws:canonicalUnit unit:PER-M3 ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:quantityKind qk:NumberDensity ;
+    ws:temporalSupport "end of run" .
+
+ws:PYR_Smax a ws:OutputVariable ;
+    skos:note "From the peak locator; may differ from the maximum of the sampled S column."@en ;
+    skos:prefLabel "Sursaturation maximale"@fr ;
+    ws:additive false ;
+    ws:aggregation ws:AggMax ;
+    ws:apiVariable "summary['S_max']" ;
+    ws:canonicalUnit unit:UNITLESS ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:PYR_V a ws:ParameterDefinition ;
+    skos:prefLabel "Vitesse ascendante"@fr ;
+    ws:apiVariable "ParcelModel(V=)" ;
+    ws:canonicalUnit unit:M-PER-SEC ;
+    ws:fieldPath "V" ;
+    ws:hasBound [ a ws:Bound ;
+            ws:authority ws:AuthorityPolicy ;
+            ws:boundKind "min_exclusive" ;
+            ws:boundValue 0.0 ] ;
+    ws:quantityKind qk:Velocity .
+
+ws:PYR_S0 a ws:ParameterDefinition ;
+    skos:prefLabel "Sursaturation initiale"@fr ;
+    ws:apiVariable "ParcelModel(S0=)" ;
+    ws:canonicalUnit unit:UNITLESS ;
+    ws:fieldPath "S0" ;
+    ws:hasBound [ a ws:Bound ;
+            ws:authority ws:AuthorityPolicy ;
+            ws:boundKind "min_exclusive" ;
+            ws:boundValue -1.0 ],
+        [ a ws:Bound ;
+            ws:authority ws:AuthorityPolicy ;
+            ws:boundKind "max" ;
+            ws:boundValue 0.0 ] ;
+    ws:quantityKind qk:Dimensionless .
+
+ws:QualitativeScale a skos:ConceptScheme ;
+    skos:prefLabel "Shared qualitative scale"@en,
+        "Échelle qualitative commune"@fr .
+
+ws:TLS_traffic_level a ws:ParameterDefinition ;
+    skos:definition "Multiplier of the reference traffic profile; not vehicles per day."@en ;
+    skos:prefLabel "Relative traffic"@en,
+        "Trafic relatif"@fr ;
+    ws:apiVariable "TunnelConfig.traffic_level" ;
+    ws:canonicalUnit unit:UNITLESS ;
+    ws:fieldPath "inputs.traffic_level" ;
+    ws:quantityKind qk:Dimensionless .
+

@@ -1,0 +1,18 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "name": "pyrcel",
+  "codeRepository": "https://github.com/darothen/pyrcel",
+  "license": "https://spdx.org/licenses/BSD-3-Clause",
+  "version": "2.0.0",
+  "programmingLanguage": "Python",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Daniel",
+      "familyName": "Rothenberg"
+    }
+  ],
+  "websemantic:pinnedRevision": "977e9094644ec4a17d658d657094651928591c89",
+  "websemantic:semanticPack": "https://github.com/cyrilvoyant/websemantic/tree/main/packs/pyrcel"
+}

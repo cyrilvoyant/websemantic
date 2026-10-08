@@ -1,0 +1,5 @@
+output,ontology_concept,quantity_kind_iri,unit,unit_symbol,unit_iri,unit_source,aggregation,temporal_support,additive,validity_flag,definition
+T,PYR_T,http://qudt.org/vocab/quantitykind/ThermodynamicTemperature,unit:K,K,http://qudt.org/vocab/unit/K,QUDT,AggNativeStep,nominal output_dt; terminal sample may be irregular,false,,Native parcel temperature.
+S,PYR_S,http://qudt.org/vocab/quantitykind/Dimensionless,unit:UNITLESS,1,http://qudt.org/vocab/unit/UNITLESS,QUDT,AggNativeStep,nominal output_dt; terminal sample may be irregular,false,,Native supersaturation fraction.
+maximum_supersaturation_percent,PYR_Smax_percent,http://qudt.org/vocab/quantitykind/DimensionlessRatio,unit:PERCENT,%,http://qudt.org/vocab/unit/PERCENT,QUDT,AggMax,,false,,Native peak supersaturation multiplied by 100.
+activated_number_cm3,PYR_Nd_cm3,http://qudt.org/vocab/quantitykind/NumberDensity,unit:PER-CentiM3,cm⁻³,http://qudt.org/vocab/unit/PER-CentiM3,QUDT,,end of run,,,Native activated concentration divided by 10^6.

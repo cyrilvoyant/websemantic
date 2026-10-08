@@ -1,0 +1,428 @@
+@prefix qk: <http://qudt.org/vocab/quantitykind/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix ws: <https://github.com/cyrilvoyant/websemantic/ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ws:LQLContract a ws:Contract ;
+    ws:declaresOutput ws:LQL_bed_oar,
+        ws:LQL_bed_tumour,
+        ws:LQL_cancer_risk,
+        ws:LQL_eqd_oar,
+        ws:LQL_eqd_oar_total,
+        ws:LQL_eqd_tumour,
+        ws:LQL_eqd_tumour_total,
+        ws:LQL_ntcp,
+        ws:LQL_oar_saturated,
+        ws:LQL_oar_total_valid,
+        ws:LQL_overall_days_oar,
+        ws:LQL_overall_days_tumour,
+        ws:LQL_saturated,
+        ws:LQL_tcp_percent,
+        ws:LQL_tumour_saturated,
+        ws:LQL_tumour_total_valid ;
+    ws:declaresParameter ws:LQL_bifractionated,
+        ws:LQL_dose_per_fraction,
+        ws:LQL_gap_days,
+        ws:LQL_n_fractions,
+        ws:LQL_organ,
+        ws:LQL_reference_dose,
+        ws:LQL_total_dose,
+        ws:LQL_tumour_site ;
+    ws:declaresValidityLimit ws:LimitNotMedicalDevice ;
+    ws:excludesTask ws:TaskPatientDecision ;
+    ws:supportsTask ws:TaskFractionationEquivalence .
+
+ws:LQL_conventional a ws:QualifierMapping ;
+    skos:altLabel "classique"@fr,
+        "fractionnement conventionnel"@fr ;
+    ws:appliesTo ws:LQL_dose_per_fraction ;
+    ws:proposedValue 2.0 ;
+    ws:requiresAcceptance true ;
+    ws:sourceNote "Conventional fractionation, 2 Gy per fraction; proposal to accept." ;
+    ws:term ws:LevelTypical .
+
+ws:LQL_hyperfractionation a ws:ClarificationPolicy ;
+    rdfs:comment "The word alone does not fix two sessions a day."@en ;
+    skos:altLabel "hyperfractionnement"@fr ;
+    ws:appliesTo ws:LQL_bifractionated .
+
+ws:LQL_hypo_extreme a ws:ClarificationPolicy ;
+    skos:altLabel "hypofractionnement extrême"@fr,
+        "stéréotaxique"@fr ;
+    ws:appliesTo ws:LQL_dose_per_fraction .
+
+ws:LQL_hypo_moderate a ws:ClarificationPolicy ;
+    rdfs:comment "No numerical convention before sourced review: the user states the dose per fraction."@en ;
+    skos:altLabel "hypofractionnement modéré"@fr ;
+    ws:appliesTo ws:LQL_dose_per_fraction .
+
+ws:LevelVeryLow a ws:QualitativeTerm ;
+    skos:altLabel "très peu"@fr ;
+    skos:inScheme ws:QualitativeScale ;
+    skos:prefLabel "very low"@en,
+        "très faible"@fr ;
+    ws:rank 1 .
+
+ws:PyrcelContract a ws:Contract ;
+    ws:declaresValidityLimit ws:LimitAdiabaticParcel ;
+    ws:excludesTask ws:TaskWeatherForecast ;
+    ws:supportsTask ws:TaskParcelActivation .
+
+ws:TLSContract a ws:Contract ;
+    ws:declaresParameter ws:TLS_traffic_level ;
+    ws:declaresValidityLimit ws:LimitNoCalibration ;
+    ws:excludesTask ws:TaskTunnelCertification ;
+    ws:supportsTask ws:TaskTunnelDemand .
+
+ws:TLS_energy_step a ws:OutputVariable ;
+    skos:prefLabel "Énergie du pas"@fr ;
+    ws:additive true ;
+    ws:aggregation ws:AggNativeStep ;
+    ws:apiVariable "representative.energy_kwh" ;
+    ws:canonicalUnit unit:KiloW-HR ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:quantityKind qk:Energy ;
+    ws:temporalSupport "native step" .
+
+ws:TLS_lighting_intensity_policy a ws:ClarificationPolicy ;
+    rdfs:comment "Intensity words (fortement / faiblement éclairé) have no mapping: TLS has no illuminance parameter. Ask the user."@en ;
+    ws:appliesTo ws:TLS_lighting_type .
+
+ws:TLS_power a ws:OutputVariable ;
+    skos:prefLabel "Puissance électrique"@fr ;
+    ws:additive false ;
+    ws:aggregation ws:AggNativeStep ;
+    ws:apiVariable "representative.power_kw" ;
+    ws:canonicalUnit unit:KiloW ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:quantityKind qk:Power ;
+    ws:temporalSupport "native step" .
+
+ws:TLS_specific_energy a ws:OutputVariable ;
+    skos:prefLabel "Énergie spécifique annualisée"@fr ;
+    ws:additive false ;
+    ws:aggregation ws:AggExtrapolation ;
+    ws:apiVariable "kpis.specific_kwh_m_year" ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:quantityKind qk:Energy ;
+    ws:temporalSupport "whole period, extrapolated by 365/n_days, per metre of tunnel (all tubes)" .
+
+ws:TLS_traffic_high a ws:QualifierMapping ;
+    ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 1.5 ;
+    ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." ;
+    ws:term ws:LevelHigh .
+
+ws:TLS_traffic_low a ws:QualifierMapping ;
+    ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 0.3 ;
+    ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." ;
+    ws:term ws:LevelLow .
+
+ws:TLS_traffic_typical a ws:QualifierMapping ;
+    ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 1.0 ;
+    ws:requiresAcceptance true ;
+    ws:sourceNote "Reference level of the backend profile." ;
+    ws:term ws:LevelTypical .
+
+ws:TLS_traffic_veryhigh a ws:QualifierMapping ;
+    ws:appliesTo ws:TLS_traffic_level ;
+    ws:proposedValue 2.0 ;
+    ws:requiresAcceptance true ;
+    ws:sourceNote "Study convention, not a traffic count." ;
+    ws:term ws:LevelVeryHigh .
+
+ws:LQL_bed_tumour a ws:OutputVariable ;
+    skos:prefLabel "BED tumeur"@fr ;
+    ws:aggregation ws:AggPerCourse ;
+    ws:apiVariable "CourseResult.bed_tumour" ;
+    ws:canonicalUnit unit:GRAY ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:quantityKind qk:AbsorbedDose .
+
+ws:LQL_cancer_risk a ws:OutputVariable ;
+    skos:definition "Native model index from tabulated coefficients; not a clinical percentage; None when the tissue has no coefficients."@en ;
+    skos:prefLabel "Indice de risque de cancer radio-induit"@fr ;
+    ws:apiVariable "Result.cancer_risk" ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_eqd_tumour_total a ws:OutputVariable ;
+    skos:prefLabel "EQD tumeur cumulée"@fr ;
+    ws:aggregation ws:AggSum ;
+    ws:apiVariable "Result.eqd_tumour_total" ;
+    ws:canonicalUnit unit:GRAY ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:dependsOnReference ws:LQL_reference_dose ;
+    ws:quantityKind qk:AbsorbedDose ;
+    ws:validityFlag "Result.tumour_total_valid" .
+
+ws:LQL_gap_days a ws:ParameterDefinition ;
+    skos:prefLabel "Interruption"@fr ;
+    ws:apiVariable "Course.gap_days" ;
+    ws:canonicalUnit unit:DAY ;
+    ws:fieldPath "courses[k].gap_days" ;
+    ws:hasBound [ a ws:Bound ;
+            ws:authority ws:AuthorityCode ;
+            ws:boundKind "min" ;
+            ws:boundValue 0.0 ] ;
+    ws:quantityKind qk:Time ;
+    ws:requiresInstance true .
+
+ws:LQL_oar_saturated a ws:OutputVariable ;
+    skos:prefLabel "Saturation EQD organe (cours)"@fr ;
+    ws:apiVariable "CourseResult.oar_saturated" ;
+    ws:invalidates ws:LQL_eqd_oar .
+
+ws:LQL_oar_total_valid a ws:OutputVariable ;
+    rdfs:comment "True when the cumulative organ EQD is defined; when false, LQL_eqd_oar_total must not be reported."@en ;
+    skos:prefLabel "Validité du total organe"@fr ;
+    ws:apiVariable "Result.oar_total_valid" .
+
+ws:LQL_overall_days_oar a ws:OutputVariable ;
+    skos:prefLabel "Durée calendaire (organe)"@fr ;
+    ws:aggregation ws:AggPerCourse ;
+    ws:apiVariable "CourseResult.overall_days_oar" ;
+    ws:canonicalUnit unit:DAY ;
+    ws:quantityKind qk:Time .
+
+ws:LQL_overall_days_tumour a ws:OutputVariable ;
+    skos:prefLabel "Durée calendaire (tumeur)"@fr ;
+    ws:aggregation ws:AggPerCourse ;
+    ws:apiVariable "CourseResult.overall_days_tumour" ;
+    ws:canonicalUnit unit:DAY ;
+    ws:quantityKind qk:Time .
+
+ws:LQL_saturated a ws:OutputVariable ;
+    rdfs:comment "Any-course summary of CourseResult.oar_saturated / tumour_saturated; read the per-course flags."@en ;
+    skos:prefLabel "Saturation (résumé global)"@fr ;
+    ws:apiVariable "Result.saturated" .
+
+ws:LQL_tcp_percent a ws:OutputVariable ;
+    skos:definition "Model estimate for research and education; sigmoid stated by Options.tcp_model."@en ;
+    skos:prefLabel "TCP"@fr ;
+    ws:apiVariable "Result.tcp_percent" ;
+    ws:canonicalUnit unit:PERCENT ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_total_dose a ws:ParameterDefinition ;
+    skos:prefLabel "Dose totale"@fr ;
+    ws:canonicalUnit unit:GRAY ;
+    ws:derivationRule "total_dose = dose_per_fraction * n_fractions; a stated total that disagrees is a conflict" ;
+    ws:derivedFrom ws:LQL_dose_per_fraction,
+        ws:LQL_n_fractions ;
+    ws:quantityKind qk:AbsorbedDose ;
+    ws:requiresInstance true .
+
+ws:LQL_tumour_saturated a ws:OutputVariable ;
+    skos:prefLabel "Saturation EQD tumeur (cours)"@fr ;
+    ws:apiVariable "CourseResult.tumour_saturated" ;
+    ws:invalidates ws:LQL_eqd_tumour .
+
+ws:LQL_tumour_total_valid a ws:OutputVariable ;
+    rdfs:comment "True when the cumulative tumour EQD is defined; when false, LQL_eqd_tumour_total must not be reported."@en ;
+    skos:prefLabel "Validité du total tumeur"@fr ;
+    ws:apiVariable "Result.tumour_total_valid" .
+
+ws:LevelHigh a ws:QualitativeTerm ;
+    skos:altLabel "beaucoup"@fr,
+        "fort"@fr,
+        "long"@fr ;
+    skos:inScheme ws:QualitativeScale ;
+    skos:prefLabel "high"@en,
+        "élevé"@fr ;
+    ws:rank 4 .
+
+ws:LevelLow a ws:QualitativeTerm ;
+    skos:altLabel "court"@fr,
+        "peu"@fr ;
+    skos:inScheme ws:QualitativeScale ;
+    skos:prefLabel "low"@en,
+        "faible"@fr ;
+    ws:rank 2 .
+
+ws:LevelVeryHigh a ws:QualitativeTerm ;
+    skos:altLabel "très fort"@fr,
+        "énormément"@fr ;
+    skos:inScheme ws:QualitativeScale ;
+    skos:prefLabel "very high"@en,
+        "très élevé"@fr ;
+    ws:rank 5 .
+
+ws:LimitAdiabaticParcel a ws:ValidityLimit ;
+    rdfs:label "Zero-dimensional adiabatic parcel; not a weather forecast or a cloud-resolving simulation"@en .
+
+ws:LimitNoCalibration a ws:ValidityLimit ;
+    rdfs:label "Synthetic first-order model, not calibrated against measured tunnels"@en .
+
+ws:LimitNotMedicalDevice a ws:ValidityLimit ;
+    rdfs:label "Research and education software; not a medical device"@en .
+
+ws:TLS_lighting_type a ws:ParameterDefinition ;
+    skos:definition "Lighting technology and control; not an illuminance."@en ;
+    skos:prefLabel "Éclairage"@fr ;
+    ws:apiVariable "TunnelConfig.lighting_type" ;
+    ws:fieldPath "inputs.lighting_type" .
+
+ws:TaskFractionationEquivalence a ws:TaskProfile ;
+    rdfs:label "Compare fractionation schedules (BED, EQD2, NTCP, TCP) for research and education"@en ;
+    skos:note "BED, EQD and probabilities are compared one quantity at a time; never concatenated."@en ;
+    ws:producesOutput ws:LQL_bed_oar,
+        ws:LQL_eqd_oar,
+        ws:LQL_eqd_oar_total,
+        ws:LQL_ntcp ;
+    ws:requiresParameter ws:LQL_dose_per_fraction,
+        ws:LQL_n_fractions,
+        ws:LQL_organ,
+        ws:LQL_reference_dose,
+        ws:LQL_tumour_site .
+
+ws:TaskParcelActivation a ws:TaskProfile ;
+    rdfs:label "Simulate adiabatic parcel ascent and aerosol activation for a stated updraft, initial state and aerosol population"@en .
+
+ws:TaskPatientDecision a ws:TaskProfile ;
+    rdfs:label "Prescribe, modify or validate treatment for an individual patient"@en .
+
+ws:TaskTunnelCertification a ws:TaskProfile ;
+    rdfs:label "Certify design values or predict consumption of a real tunnel"@en .
+
+ws:TaskTunnelDemand a ws:TaskProfile ;
+    rdfs:label "Estimate electricity demand of a road tunnel under stated assumptions"@en .
+
+ws:TaskWeatherForecast a ws:TaskProfile ;
+    rdfs:label "Forecast clouds or precipitation for a real place and time"@en .
+
+ws:LQL_bed_oar a ws:OutputVariable ;
+    skos:prefLabel "BED organe"@fr ;
+    ws:additive true ;
+    ws:aggregation ws:AggPerCourse ;
+    ws:apiVariable "CourseResult.bed_oar" ;
+    ws:canonicalUnit unit:GRAY ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:quantityKind qk:AbsorbedDose .
+
+ws:LQL_bifractionated a ws:ParameterDefinition ;
+    skos:prefLabel "Deux fractions par jour"@fr ;
+    ws:apiVariable "Prescription.bifractionated" ;
+    ws:codeDefault false ;
+    ws:fieldPath "bifractionated" .
+
+ws:LQL_eqd_oar_total a ws:OutputVariable ;
+    skos:prefLabel "EQD organe cumulée"@fr ;
+    ws:aggregation ws:AggSum ;
+    ws:apiVariable "Result.eqd_oar_total" ;
+    ws:canonicalUnit unit:GRAY ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:dependsOnReference ws:LQL_reference_dose ;
+    ws:quantityKind qk:AbsorbedDose ;
+    ws:validityFlag "Result.oar_total_valid" .
+
+ws:LQL_eqd_tumour a ws:OutputVariable ;
+    skos:prefLabel "EQD tumeur"@fr ;
+    ws:aggregation ws:AggPerCourse ;
+    ws:apiVariable "CourseResult.eqd_tumour" ;
+    ws:canonicalUnit unit:GRAY ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:dependsOnReference ws:LQL_reference_dose ;
+    ws:quantityKind qk:AbsorbedDose .
+
+ws:LQL_ntcp a ws:OutputVariable ;
+    skos:definition "Model estimate for research and education, not a patient-specific probability."@en ;
+    skos:prefLabel "NTCP"@fr ;
+    ws:apiVariable "Result.ntcp_percent" ;
+    ws:canonicalUnit unit:PERCENT ;
+    ws:dataOrigin ws:SyntheticSimulation .
+
+ws:LQL_organ a ws:ParameterDefinition ;
+    skos:definition "Organ at risk from the shipped library (34 entries); never chosen silently."@en ;
+    skos:prefLabel "Organe à risque"@fr ;
+    ws:apiVariable "compute(organ, ...) positional 1" ;
+    ws:fieldPath "organ" .
+
+ws:LQL_tumour_site a ws:ParameterDefinition ;
+    skos:definition "Tumour site from the shipped library (20 entries)."@en ;
+    skos:prefLabel "Site tumoral"@fr ;
+    ws:apiVariable "compute(..., tumour, ...) positional 2" ;
+    ws:fieldPath "tumour_site" .
+
+ws:LevelTypical a ws:QualitativeTerm ;
+    skos:altLabel "moyen"@fr,
+        "normal"@fr ;
+    skos:inScheme ws:QualitativeScale ;
+    skos:prefLabel "typical"@en,
+        "courant"@fr ;
+    ws:rank 3 .
+
+ws:LQL_eqd_oar a ws:OutputVariable ;
+    skos:prefLabel "EQD organe"@fr ;
+    ws:aggregation ws:AggPerCourse ;
+    ws:apiVariable "CourseResult.eqd_oar" ;
+    ws:canonicalUnit unit:GRAY ;
+    ws:dataOrigin ws:SyntheticSimulation ;
+    ws:dependsOnReference ws:LQL_reference_dose ;
+    ws:quantityKind qk:AbsorbedDose .
+
+ws:LQL_n_fractions a ws:ParameterDefinition ;
+    skos:prefLabel "Nombre de fractions"@fr ;
+    ws:apiVariable "Course.n_fractions" ;
+    ws:canonicalUnit unit:NUM ;
+    ws:fieldPath "courses[k].n_fractions" ;
+    ws:hasBound [ a ws:Bound ;
+            ws:authority ws:AuthorityCode ;
+            ws:boundKind "min" ;
+            ws:boundValue 0.0 ],
+        [ a ws:Bound ;
+            rdfs:comment "Integer >= 1 for physical schedules (profile policy); the API accepts floats."@en ;
+            ws:authority ws:AuthorityPolicy ;
+            ws:boundKind "min" ;
+            ws:boundValue 1 ] ;
+    ws:quantityKind qk:Dimensionless ;
+    ws:requiresInstance true .
+
+ws:QualitativeScale a skos:ConceptScheme ;
+    skos:prefLabel "Shared qualitative scale"@en,
+        "Échelle qualitative commune"@fr .
+
+ws:TLS_traffic_level a ws:ParameterDefinition ;
+    skos:definition "Multiplier of the reference traffic profile; not vehicles per day."@en ;
+    skos:prefLabel "Relative traffic"@en,
+        "Trafic relatif"@fr ;
+    ws:apiVariable "TunnelConfig.traffic_level" ;
+    ws:canonicalUnit unit:UNITLESS ;
+    ws:fieldPath "inputs.traffic_level" ;
+    ws:quantityKind qk:Dimensionless .
+
+ws:LQL_dose_per_fraction a ws:ParameterDefinition ;
+    skos:prefLabel "Dose par fraction"@fr ;
+    ws:apiVariable "Course.dose_per_fraction" ;
+    ws:canonicalUnit unit:GRAY ;
+    ws:fieldPath "courses[k].dose_per_fraction" ;
+    ws:hasBound [ a ws:Bound ;
+            ws:authority ws:AuthorityCode ;
+            ws:boundKind "min" ;
+            ws:boundValue 0.0 ] ;
+    ws:quantityKind qk:AbsorbedDose ;
+    ws:requiresInstance true .
+
+ws:LQL_reference_dose a ws:ParameterDefinition ;
+    skos:definition "Defines the EQD reference fractionation; always stated in answers."@en ;
+    skos:prefLabel "Dose de référence par fraction"@fr ;
+    ws:apiVariable "Prescription.reference_dose" ;
+    ws:canonicalUnit unit:GRAY ;
+    ws:codeDefault 2.0 ;
+    ws:fieldPath "reference_dose" ;
+    ws:hasBound [ a ws:Bound ;
+            ws:authority ws:AuthorityCode ;
+            ws:boundKind "min" ;
+            ws:boundValue 0.0 ],
+        [ a ws:Bound ;
+            rdfs:comment "0 is constructible but does not guarantee a computable EQD."@en ;
+            ws:authority ws:AuthorityPolicy ;
+            ws:boundKind "min_exclusive" ;
+            ws:boundValue 0.0 ] ;
+    ws:quantityKind qk:AbsorbedDose .
+

@@ -1,0 +1,17 @@
+{
+ "tls": {
+  "full_O_chars": 119665,
+  "compact_chars": 93809,
+  "lengthmatched_chars": 119660
+ },
+ "lqlequiv": {
+  "full_O_chars": 38285,
+  "compact_chars": 16306,
+  "lengthmatched_chars": 38362
+ },
+ "pyrcel": {
+  "full_O_chars": 34138,
+  "compact_chars": 12347,
+  "lengthmatched_chars": 34111
+ }
+}

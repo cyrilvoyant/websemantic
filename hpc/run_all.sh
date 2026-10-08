@@ -145,6 +145,7 @@ ensure_env "$GPU_ENV" gpu   "import vllm, torch, yaml, mistral_common; assert vl
 # ---------- 2. lanes ----------
 if [ "$MODE" = smoke ]; then CORPORA="qualifiers"; REPS="1"; CONDS="F000,F111"; LIMIT=2
 else CORPORA="qualifiers pilot"; REPS="1 2 3"; CONDS="F000,F100,F010,F001,F110,F101,F011,F111"; LIMIT=0; fi
+CONDS="${CONDS_OVERRIDE:-$CONDS}"   # e.g. CONDS_OVERRIDE=L2,L3 for the preregistered length control
 TAG="$CAMPAIGN"
 SETSID=""; command -v setsid >/dev/null && SETSID="setsid"   # own process group: vLLM workers stopped together
 

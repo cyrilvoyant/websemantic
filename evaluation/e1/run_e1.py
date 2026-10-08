@@ -124,7 +124,29 @@ def factorial_context(domain, code):
     return "\n\n".join(blocks)
 
 
+FROZEN_PACKS = Path(__file__).resolve().parent / "frozen-packs-3e89b09"   # campaign version of the packs
+
+
+def length_context(domain, condition):
+    """Preregistered length control (evaluation/PREREG-length-control.md), on the frozen campaign packs.
+    Same layout as F110 (native documentation, O block, contract): L2 = own semantic content only,
+    L3 = off-topic RDF of the same length as the full O package. FROZEN-F010/F110 rebuild the campaign contexts."""
+    pack = FROZEN_PACKS / domain
+    blocks = ["## Native documentation\n" + native_doc(domain)]
+    if condition in ("FROZEN-F110",):
+        for name in ("ontology.ttl", "shapes.ttl"):
+            blocks.append(f"## Semantic pack: {name}\n" + (pack / name).read_text(encoding="utf-8"))
+    elif condition == "L2":
+        blocks.append("## Semantic pack: ontology.ttl\n" + (pack / "ontology-compact.ttl").read_text(encoding="utf-8"))
+    elif condition == "L3":
+        blocks.append("## Additional RDF vocabulary\n" + (pack / "ontology-lengthmatched.ttl").read_text(encoding="utf-8"))
+    blocks.append("## Semantic pack: LLM-CONTRACT.md\n" + (pack / "LLM-CONTRACT.md").read_text(encoding="utf-8"))
+    return "\n\n".join(blocks)
+
+
 def context(domain, condition):
+    if condition in ("L2", "L3", "FROZEN-F010", "FROZEN-F110"):
+        return length_context(domain, condition)
     if condition.startswith("F"):
         return factorial_context(domain, condition)
     blocks = ["## Native documentation\n" + native_doc(domain)]
