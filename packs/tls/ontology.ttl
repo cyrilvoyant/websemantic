@@ -496,6 +496,56 @@ ws:term rdfs:label "term"@en .
 ws:validityFlag rdfs:label "validity flag"@en .
 ws:value rdfs:label "value"@en .
 
+########################################################################
+# Definitions of the remaining core terms (FOOPS VOC4), written from their use in descriptors, scenarios and shapes.
+########################################################################
+ws:Aggregation rdfs:comment "How an output value summarises its native values: per step, per course, sum, mean, median across realisations or maximum. Fixes which values can be added or compared."@en .
+ws:BoundAuthority rdfs:comment "Origin of a bound: the backend code itself, a profile policy of the contract, or a scientific source. A code bound cannot be relaxed by the contract."@en .
+ws:DataOrigin rdfs:comment "Nature of the data behind a value or output, e.g. synthetic simulation, user statement or measurement. Simulated outputs are never presented as measurements."@en .
+ws:Execution rdfs:comment "Controlled run of a pinned backend on a validated scenario, producing simulation outputs and a manifest."@en .
+ws:Request rdfs:comment "Natural-language request of a user, kept verbatim as the source of the evidence spans that support provided values."@en .
+ws:Scenario rdfs:comment "Machine-readable configuration built from a request: task, parameters with origin and acceptance, and experiment settings. Only a validated scenario is executed."@en .
+ws:SimulationOutput rdfs:comment "Result produced by an execution (series, indicators, flags), linked to its scenario, software revision and qualification."@en .
+ws:UnknownValue rdfs:comment "Parameter whose value is neither given, derived, nor accepted; it blocks execution and leads to a clarification."@en .
+ws:UserValue rdfs:comment "Parameter value stated in the request, or an exact unit conversion of a stated value, supported by evidence from the request."@en .
+ws:Validation rdfs:comment "Activity checking a scenario against the contract before execution: types, units, bounds, complete groups, acceptance and relational shapes."@en .
+ws:accepted rdfs:comment "True when the user explicitly accepted a proposed default or convention; an unaccepted proposal cannot be executed."@en .
+ws:boundValue rdfs:comment "Numerical limit of a bound, in the canonical unit of the parameter."@en .
+ws:conceptDOI rdfs:comment "DOI that resolves to all versions of an archived software or dataset (Zenodo concept DOI)."@en .
+ws:derivationRule rdfs:comment "Documented rule linking a quantity to others (e.g. total dose = dose per fraction x fractions). Documentary; executed checks are the SHACL shapes and the Python gate."@en .
+ws:evidenceText rdfs:comment "Exact span of the request that supports a value; quoted, never paraphrased."@en .
+ws:fieldPath rdfs:comment "Path of the field in the published scenario JSON (e.g. inputs.length_m, courses[k].dose_per_fraction)."@en .
+ws:pinnedRevision rdfs:comment "Exact source revision (commit or tag) of the backend used for execution."@en .
+ws:proposedValue rdfs:comment "Numerical value that a qualitative convention proposes for a parameter, in its canonical unit, pending acceptance."@en .
+ws:rank rdfs:comment "Position of a qualitative term on the shared ordinal scale (1 very low to 5 very high); carries no number by itself."@en .
+ws:repository rdfs:comment "URL of the original source repository of a software."@en .
+ws:requiresAcceptance rdfs:comment "True when a convention may only be proposed and must be accepted by the user before execution."@en .
+ws:sourceNote rdfs:comment "Short statement of the source or rationale of a convention, default or bound."@en .
+ws:validityFlag rdfs:comment "Name of the backend flag that marks an output as invalid or saturated (e.g. Result.oar_total_valid); flagged values are not reported as valid results."@en .
+ws:value rdfs:comment "Value of a parameter in a scenario, expressed in the canonical unit of its definition."@en .
+ws:acceptedBy rdfs:comment "Links a hypothesis to the explicit acceptance that allows its use in execution."@en .
+ws:aggregation rdfs:comment "Links an output variable to the aggregation that defines it."@en .
+ws:appliesTo rdfs:comment "Links a qualifier mapping or clarification policy to the parameter it concerns."@en .
+ws:authority rdfs:comment "Links a bound to its authority (code, profile policy or source)."@en .
+ws:concept rdfs:comment "Links a parameter value in a scenario to the parameter definition that gives its meaning, unit and bounds."@en .
+ws:dataOrigin rdfs:comment "Links a value or output to the nature of its data (simulated, stated, measured)."@en .
+ws:declaresOutput rdfs:comment "Links a contract to an output variable it publishes with quantity, unit and aggregation."@en .
+ws:declaresParameter rdfs:comment "Links a contract to a parameter definition it publishes."@en .
+ws:declaresValidityLimit rdfs:comment "Links a contract to a declared limit of validity or use (e.g. not a medical device)."@en .
+ws:excludesTask rdfs:comment "Links a contract to a task profile it explicitly refuses (e.g. patient treatment decision)."@en .
+ws:followsConvention rdfs:comment "Links a hypothesis to the qualitative convention it applies."@en .
+ws:forTask rdfs:comment "Links a scenario to the supported task profile it instantiates."@en .
+ws:fromRequest rdfs:comment "Links evidence to the request it is quoted from."@en .
+ws:hasBound rdfs:comment "Links a parameter definition to one of its bounds."@en .
+ws:hasContract rdfs:comment "Links a software to its semantic contract."@en .
+ws:hasExperiment rdfs:comment "Links a scenario to its experiment settings (period, step, realisations, seed or solver settings)."@en .
+ws:hasParameter rdfs:comment "Links a scenario to one of its parameter values."@en .
+ws:producesOutput rdfs:comment "Links a task profile to an output variable it produces."@en .
+ws:qualifiedBy rdfs:comment "Links a simulation output to its qualification (quantity, unit, support, origin, limits)."@en .
+ws:supportedBy rdfs:comment "Links a user value to the request evidence that supports it."@en .
+ws:supportsTask rdfs:comment "Links a contract to a task profile it supports."@en .
+ws:term rdfs:comment "Links a qualifier mapping to the qualitative term of the shared scale that it interprets."@en .
+
 
 # ---- domain extension ----
 @prefix prov: <http://www.w3.org/ns/prov#> .

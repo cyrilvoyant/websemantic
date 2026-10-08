@@ -76,7 +76,7 @@
     {
       "path": "ontology/core.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/core.ttl",
-      "sha256_lf": "75c2180b329862dfe0e1d51a3b2430ff073f696353cdb49a2fd72debe46296d0"
+      "sha256_lf": "d3b390c0d34cdee8675e2854320e2469e7fb7bf8686eaeead206e328f79d5b44"
     },
     {
       "path": "ontology/tls-vocabulary.ttl",
