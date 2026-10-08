@@ -282,6 +282,7 @@ outputs:
 tasks:
   supported:
   - simulate fictitious radiobiological fractionation
+  - compare fictitious schedules for one target, a list of targets or an anatomical group (compare_schedules)
   excluded:
   - patient treatment decision
   - clinical dose prescription
@@ -341,3 +342,53 @@ model_equations:
     Les coefficients des tissus et options sont enregistrés dans le manifeste.
   unit: Gy
   reference: lqlequiv.model.compute ; dose_per_fraction et n_fractions
+# --- Comparisons and anatomical groups (Cyril, 2026-10-08). Group membership is a study convention over the exact
+# library names; it never selects an organ at risk: the organ must be stated or asked.
+qualitative_policy: Pour LQL-Equiv, toute expression qualitative de dose, de nombre de séances ou de
+  fractionnement (sauf « fractionnement conventionnel » = 2 Gy proposé) conduit à une question ; aucune
+  valeur n'est proposée ni devinée. Peu de paramètres, conséquences fortes (NTCP de 3 % à 47 % selon la
+  dose lue pour « hypofractionnement modéré » en 20 séances).
+comparison_task:
+  task: compare_schedules
+  label: Comparer deux schémas fictifs (ou plus) pour une cible, une liste de cibles ou un groupe anatomique
+  scope: une ligne par cible et par schéma ; même organe à risque, même dose de référence pour tous les schémas
+  criterion: Un schéma est dit meilleur pour une cible seulement s'il la domine (TCP supérieur ou égal ET
+    NTCP inférieur ou égal, avec au moins une inégalité stricte). Sinon, compromis, à expliciter avec
+    les valeurs. Jamais de recommandation clinique.
+  admissible_decisions:
+  - deux schémas entièrement spécifiés -> exécuter les deux
+  - organe à risque absent -> demander (jamais choisi par le groupe)
+  - dose qualitative -> demander
+  - patient nommé ou décision de traitement -> refuser
+anatomical_groups:
+  thoracic:
+    label: Thorax (cibles et organes thoraciques)
+    aliases: [thoracique, thorax, cibles thoraciques, volumes cibles thoraciques]
+    tumour_sites: [Lung, Oesophagus, Breast carcinoma]
+    organs: [Heart, Lung, Oesophagus, Spinal cord, Brachial plexus, Rib cage]
+  head_and_neck:
+    label: Tête et cou (ORL)
+    aliases: [ORL, tête et cou, cervico-facial]
+    tumour_sites: [Tonsil, Vocal cord, Larynx, Oral mucosa, Nasopharynx, Oropharynx]
+    organs: [Temporomandibular joint, Oral cavity / oropharynx, Larynx / supraglottis, Oral mucosa, Parotid,
+      Middle / external ear, Thyroid]
+  central_nervous_system:
+    label: Système nerveux central
+    aliases: [cérébral, encéphale, SNC, neuro]
+    tumour_sites: [Glioblastoma (LQ-L), Medulloblastoma (LQ-L)]
+    organs: [Brain, Brainstem, Optic chiasm, Optic nerve, Eye, Retina, Spinal cord]
+  pelvis:
+    label: Pelvis
+    aliases: [pelvien, pelvis, petit bassin]
+    tumour_sites: [Prostate, Rectum, Cervix (LQ-L)]
+    organs: [Rectum, Bladder, Femoral head, Testis, Small bowel, Colon, Cauda equina]
+  abdomen:
+    label: Abdomen
+    aliases: [abdominal, abdomen]
+    tumour_sites: []
+    organs: [Stomach, Liver, Kidney, Small bowel, Colon]
+  skin:
+    label: Peau
+    aliases: [cutané, peau]
+    tumour_sites: [Skin carcinoma, Skin melanoma (LQ-L)]
+    organs: [Skin (acute), Skin (late)]

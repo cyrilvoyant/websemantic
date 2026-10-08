@@ -57,6 +57,22 @@ def section(dom):
     lines += ["", "**Qualitative conventions** (propose the value, then ask for acceptance):", ""]
     lines += (["| Expression | Field | Proposed value |", "|---|---|---|"] + quals) if quals else ["None declared."]
     lines += ["", f"**Clarify, never convert:** {CLARIFY[dom]}.", ""]
+    # Optional, software-agnostic blocks: declared only by descriptors that need them.
+    if d.get("qualitative_policy"):
+        lines += [f"**Qualitative policy:** {cell(d['qualitative_policy'])}", ""]
+    comp = d.get("comparison_task")
+    if comp:
+        lines += [f"**Task `{comp['task']}`** — {cell(comp['label'])}. Scope: {cell(comp['scope'])}.", "",
+                  f"Criterion: {cell(comp['criterion'])}", "",
+                  "Admissible decisions: " + "; ".join(cell(x) for x in comp.get("admissible_decisions", [])) + ".", ""]
+    groups = d.get("anatomical_groups")
+    if groups:
+        lines += ["**Anatomical groups** (study convention over exact library names; a group never selects the organ at risk):", "",
+                  "| Group | Expressions | Tumour sites | Organs |", "|---|---|---|---|"]
+        for key, g in groups.items():
+            lines.append(f"| `{key}` ({cell(g['label'])}) | {', '.join(f'« {a} »' for a in g.get('aliases', []))} | "
+                         f"{cell(', '.join(g.get('tumour_sites', [])) or '—')} | {cell(', '.join(g.get('organs', [])))} |")
+        lines.append("")
     return lines
 
 

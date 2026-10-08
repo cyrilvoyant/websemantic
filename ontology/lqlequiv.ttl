@@ -160,3 +160,80 @@ ws:LQL_oar_total_valid a ws:OutputVariable ;
 ws:LQL_tumour_total_valid a ws:OutputVariable ;
     skos:prefLabel "Validité du total tumeur"@fr ; ws:apiVariable "Result.tumour_total_valid" ;
     rdfs:comment "True when the cumulative tumour EQD is defined; when false, LQL_eqd_tumour_total must not be reported."@en .
+
+# --- Schedule comparison and anatomical groups (descriptor: comparison_task, anatomical_groups).
+# Groups are SKOS collections over the exact library names; membership never selects the organ at risk.
+ws:TaskScheduleComparison a ws:TaskProfile ;
+    rdfs:label "Compare fictitious schedules for one target, a list of targets or an anatomical group"@en ;
+    ws:requiresParameter ws:LQL_organ, ws:LQL_tumour_site, ws:LQL_dose_per_fraction, ws:LQL_n_fractions, ws:LQL_reference_dose ;
+    ws:producesOutput ws:LQL_tcp_percent, ws:LQL_ntcp, ws:LQL_eqd_tumour_total, ws:LQL_eqd_oar_total, ws:LQL_bed_tumour ;
+    ws:derivationRule "A schedule is better for a target only if it dominates: TCP >= and NTCP <= with at least one strict inequality; otherwise trade-off. Never a clinical recommendation." ;
+    skos:note "Same organ at risk and same reference dose for all schedules; one result row per target and schedule."@en .
+
+ws:LQLContract ws:supportsTask ws:TaskScheduleComparison .
+
+ws:LQL_qualitative_policy a ws:ClarificationPolicy ;
+    ws:appliesTo ws:LQL_dose_per_fraction, ws:LQL_n_fractions ;
+    rdfs:comment "Any qualitative dose, session or fractionation wording is asked, never converted (except the conventional 2 Gy proposal)."@en .
+
+ws:LQL_AnatomyScheme a skos:ConceptScheme ; skos:prefLabel "Groupes anatomiques LQL-Equiv"@fr .
+
+ws:LQL_group_thoracic a skos:Collection ; skos:prefLabel "Thorax (cibles et organes thoraciques)"@fr ; skos:altLabel "thoracique"@fr, "thorax"@fr, "cibles thoraciques"@fr, "volumes cibles thoraciques"@fr ;
+    skos:member ws:LQL_site_Lung, ws:LQL_site_Oesophagus, ws:LQL_site_Breast_carcinoma, ws:LQL_organ_Heart, ws:LQL_organ_Lung, ws:LQL_organ_Oesophagus, ws:LQL_organ_Spinal_cord, ws:LQL_organ_Brachial_plexus, ws:LQL_organ_Rib_cage .
+ws:LQL_site_Lung a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Lung" ; skos:note "tumour_site value of LQL_tumour_site" .
+ws:LQL_site_Oesophagus a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oesophagus" ; skos:note "tumour_site value of LQL_tumour_site" .
+ws:LQL_site_Breast_carcinoma a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Breast carcinoma" ; skos:note "tumour_site value of LQL_tumour_site" .
+ws:LQL_organ_Heart a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Heart" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Lung a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Lung" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Oesophagus a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oesophagus" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Spinal_cord a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Spinal cord" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Brachial_plexus a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Brachial plexus" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Rib_cage a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Rib cage" ; skos:note "organ value of LQL_organ" .
+ws:LQL_group_head_and_neck a skos:Collection ; skos:prefLabel "Tête et cou (ORL)"@fr ; skos:altLabel "ORL"@fr, "tête et cou"@fr, "cervico-facial"@fr ;
+    skos:member ws:LQL_site_Tonsil, ws:LQL_site_Vocal_cord, ws:LQL_site_Larynx, ws:LQL_site_Oral_mucosa, ws:LQL_site_Nasopharynx, ws:LQL_site_Oropharynx, ws:LQL_organ_Temporomandibular_joint, ws:LQL_organ_Oral_cavity_oropharynx, ws:LQL_organ_Larynx_supraglottis, ws:LQL_organ_Oral_mucosa, ws:LQL_organ_Parotid, ws:LQL_organ_Middle_external_ear, ws:LQL_organ_Thyroid .
+ws:LQL_site_Tonsil a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Tonsil" ; skos:note "tumour_site value of LQL_tumour_site" .
+ws:LQL_site_Vocal_cord a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Vocal cord" ; skos:note "tumour_site value of LQL_tumour_site" .
+ws:LQL_site_Larynx a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Larynx" ; skos:note "tumour_site value of LQL_tumour_site" .
+ws:LQL_site_Oral_mucosa a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oral mucosa" ; skos:note "tumour_site value of LQL_tumour_site" .
+ws:LQL_site_Nasopharynx a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Nasopharynx" ; skos:note "tumour_site value of LQL_tumour_site" .
+ws:LQL_site_Oropharynx a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oropharynx" ; skos:note "tumour_site value of LQL_tumour_site" .
+ws:LQL_organ_Temporomandibular_joint a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Temporomandibular joint" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Oral_cavity_oropharynx a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oral cavity / oropharynx" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Larynx_supraglottis a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Larynx / supraglottis" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Oral_mucosa a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oral mucosa" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Parotid a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Parotid" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Middle_external_ear a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Middle / external ear" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Thyroid a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Thyroid" ; skos:note "organ value of LQL_organ" .
+ws:LQL_group_central_nervous_system a skos:Collection ; skos:prefLabel "Système nerveux central"@fr ; skos:altLabel "cérébral"@fr, "encéphale"@fr, "SNC"@fr, "neuro"@fr ;
+    skos:member ws:LQL_site_Glioblastoma_LQ_L, ws:LQL_site_Medulloblastoma_LQ_L, ws:LQL_organ_Brain, ws:LQL_organ_Brainstem, ws:LQL_organ_Optic_chiasm, ws:LQL_organ_Optic_nerve, ws:LQL_organ_Eye, ws:LQL_organ_Retina, ws:LQL_organ_Spinal_cord .
+ws:LQL_site_Glioblastoma_LQ_L a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Glioblastoma (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
+ws:LQL_site_Medulloblastoma_LQ_L a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Medulloblastoma (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
+ws:LQL_organ_Brain a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Brain" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Brainstem a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Brainstem" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Optic_chiasm a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Optic chiasm" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Optic_nerve a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Optic nerve" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Eye a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Eye" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Retina a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Retina" ; skos:note "organ value of LQL_organ" .
+ws:LQL_group_pelvis a skos:Collection ; skos:prefLabel "Pelvis"@fr ; skos:altLabel "pelvien"@fr, "pelvis"@fr, "petit bassin"@fr ;
+    skos:member ws:LQL_site_Prostate, ws:LQL_site_Rectum, ws:LQL_site_Cervix_LQ_L, ws:LQL_organ_Rectum, ws:LQL_organ_Bladder, ws:LQL_organ_Femoral_head, ws:LQL_organ_Testis, ws:LQL_organ_Small_bowel, ws:LQL_organ_Colon, ws:LQL_organ_Cauda_equina .
+ws:LQL_site_Prostate a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Prostate" ; skos:note "tumour_site value of LQL_tumour_site" .
+ws:LQL_site_Rectum a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Rectum" ; skos:note "tumour_site value of LQL_tumour_site" .
+ws:LQL_site_Cervix_LQ_L a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Cervix (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
+ws:LQL_organ_Rectum a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Rectum" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Bladder a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Bladder" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Femoral_head a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Femoral head" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Testis a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Testis" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Small_bowel a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Small bowel" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Colon a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Colon" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Cauda_equina a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Cauda equina" ; skos:note "organ value of LQL_organ" .
+ws:LQL_group_abdomen a skos:Collection ; skos:prefLabel "Abdomen"@fr ; skos:altLabel "abdominal"@fr, "abdomen"@fr ;
+    skos:member ws:LQL_organ_Stomach, ws:LQL_organ_Liver, ws:LQL_organ_Kidney, ws:LQL_organ_Small_bowel, ws:LQL_organ_Colon .
+ws:LQL_organ_Stomach a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Stomach" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Liver a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Liver" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Kidney a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Kidney" ; skos:note "organ value of LQL_organ" .
+ws:LQL_group_skin a skos:Collection ; skos:prefLabel "Peau"@fr ; skos:altLabel "cutané"@fr, "peau"@fr ;
+    skos:member ws:LQL_site_Skin_carcinoma, ws:LQL_site_Skin_melanoma_LQ_L, ws:LQL_organ_Skin_acute, ws:LQL_organ_Skin_late .
+ws:LQL_site_Skin_carcinoma a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Skin carcinoma" ; skos:note "tumour_site value of LQL_tumour_site" .
+ws:LQL_site_Skin_melanoma_LQ_L a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Skin melanoma (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
+ws:LQL_organ_Skin_acute a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Skin (acute)" ; skos:note "organ value of LQL_organ" .
+ws:LQL_organ_Skin_late a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Skin (late)" ; skos:note "organ value of LQL_organ" .

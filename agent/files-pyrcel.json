@@ -106,7 +106,7 @@
     {
       "path": "ontology/competency-questions.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/competency-questions.md",
-      "sha256_lf": "cfd502d94624d77873072945b0f63fad57502d27a1c214c240a21e8819c85d7b"
+      "sha256_lf": "e0ffbd34eeb4d1777392c79bc18c37259a7b7a4eeb1da0205b11f2bc6b6a03ec"
     },
     {
       "path": "ontology/README.md",
@@ -116,7 +116,7 @@
     {
       "path": "llm.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/llm.md",
-      "sha256_lf": "ebf140dec50879b0b5d5941bc001572097f2c099052d78f598e8e8bdab35de17"
+      "sha256_lf": "37a9b2448921a2655099bb4cd09dacceccb7bfe083dbfe56cd4628dd75076cc5"
     },
     {
       "path": "agent/README.md",

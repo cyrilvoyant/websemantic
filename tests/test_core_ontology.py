@@ -148,3 +148,29 @@ def test_cq12_parcel_task_requires_eight_parameters_with_units():
 def test_all_canonical_units_are_qudt():
     for _, _, unit in full_graph().triples((None, WS.canonicalUnit, None)):
         assert str(unit).startswith("http://qudt.org/vocab/unit/")
+
+
+def test_cq21_thoracic_targets_from_group():
+    rows = ask_full("""SELECT ?n WHERE { ws:LQL_group_thoracic skos:member ?m . ?m skos:prefLabel ?n ;
+                       skos:note ?k FILTER(CONTAINS(?k, "tumour_site")) }""")
+    assert sorted(str(r[0]) for r in rows) == ["Breast carcinoma", "Lung", "Oesophagus"]
+
+
+def test_cq22_group_members_are_library_values_not_a_choice_of_organ():
+    import yaml
+    d = yaml.safe_load((ROOT / "descriptors" / "lqlequiv" / "descriptor.yaml").read_text(encoding="utf-8"))
+    names = set(d["inputs"]["organ"]["values"]) | set(d["inputs"]["tumour_site"]["values"])
+    labels = {str(r[0]) for r in ask_full("SELECT ?n WHERE { ?m skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel ?n }")}
+    assert labels and labels <= names
+    assert not ask_full("SELECT ?x WHERE { ws:TaskScheduleComparison ws:codeDefault ?x }")
+
+
+def test_cq23_better_means_dominance():
+    rule = str(ask_full("SELECT ?r WHERE { ws:TaskScheduleComparison ws:derivationRule ?r }")[0][0])
+    assert "dominates" in rule and "trade-off" in rule
+    assert ask_full("ASK { ws:LQLContract ws:supportsTask ws:TaskScheduleComparison }")[0] is True
+
+
+def test_cq24_moderate_hypofractionation_is_asked():
+    assert ask_full("""ASK { ?p a ws:ClarificationPolicy ; skos:altLabel "hypofractionnement modéré"@fr ;
+                         ws:appliesTo ws:LQL_dose_per_fraction }""")[0] is True

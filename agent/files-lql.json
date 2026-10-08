@@ -65,7 +65,7 @@
     {
       "path": "descriptors/lqlequiv/descriptor.yaml",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/descriptors/lqlequiv/descriptor.yaml",
-      "sha256_lf": "62aec5122ac402ba4ac455d5c22c61bdaf40031df0ae68aed011b5aa445881a7"
+      "sha256_lf": "08263276bbafce1581343c28f196e92f90ed45258dd874c623e10bfccb37d916"
     },
     {
       "path": "examples/lql-complete.json",
@@ -85,7 +85,7 @@
     {
       "path": "ontology/lqlequiv.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/lqlequiv.ttl",
-      "sha256_lf": "1dd461596dee677407102041e6b9f661df21910263340e83ca6b9bbf0a13bc23"
+      "sha256_lf": "d96e0e52074a17830d0b5131668fc69f6b1e3fd1545b6ea6b7a2275b35b818d5"
     },
     {
       "path": "ontology/shapes.ttl",
@@ -95,7 +95,7 @@
     {
       "path": "ontology/competency-questions.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/competency-questions.md",
-      "sha256_lf": "cfd502d94624d77873072945b0f63fad57502d27a1c214c240a21e8819c85d7b"
+      "sha256_lf": "e0ffbd34eeb4d1777392c79bc18c37259a7b7a4eeb1da0205b11f2bc6b6a03ec"
     },
     {
       "path": "ontology/README.md",
@@ -105,7 +105,7 @@
     {
       "path": "llm.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/llm.md",
-      "sha256_lf": "ebf140dec50879b0b5d5941bc001572097f2c099052d78f598e8e8bdab35de17"
+      "sha256_lf": "37a9b2448921a2655099bb4cd09dacceccb7bfe083dbfe56cd4628dd75076cc5"
     },
     {
       "path": "agent/README.md",

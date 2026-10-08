@@ -18,7 +18,7 @@ Execution is done by the reviewed Python entry points (`agent/README.md`). Never
 
 Original code: https://github.com/cyrilvoyant/LQL-Equiv-web (pinned revision in `descriptors/lqlequiv/descriptor.yaml`).
 
-Supported: simulate fictitious radiobiological fractionation. Out of scope: any treatment decision for a patient.
+Supported: simulate fictitious radiobiological fractionation; compare fictitious schedules for one target, a list of targets or an anatomical group (compare_schedules). Out of scope: any treatment decision for a patient.
 
 | Field | Unit or categories | Bounds | Default (proposal only) | Meaning |
 |---|---|---|---|---|
@@ -38,3 +38,22 @@ Supported: simulate fictitious radiobiological fractionation. Out of scope: any 
 | « fractionnement conventionnel », « dose conventionnelle » | `dose_per_fraction` | 2 unit:GRAY |
 
 **Clarify, never convert:** « hypofractionnement modéré / extrême », « stéréotaxique », « hyperfractionnement », « dose élevée », « peu de séances ».
+
+**Qualitative policy:** Pour LQL-Equiv, toute expression qualitative de dose, de nombre de séances ou de fractionnement (sauf « fractionnement conventionnel » = 2 Gy proposé) conduit à une question ; aucune valeur n'est proposée ni devinée. Peu de paramètres, conséquences fortes (NTCP de 3 % à 47 % selon la dose lue pour « hypofractionnement modéré » en 20 séances).
+
+**Task `compare_schedules`** — Comparer deux schémas fictifs (ou plus) pour une cible, une liste de cibles ou un groupe anatomique. Scope: une ligne par cible et par schéma ; même organe à risque, même dose de référence pour tous les schémas.
+
+Criterion: Un schéma est dit meilleur pour une cible seulement s'il la domine (TCP supérieur ou égal ET NTCP inférieur ou égal, avec au moins une inégalité stricte). Sinon, compromis, à expliciter avec les valeurs. Jamais de recommandation clinique.
+
+Admissible decisions: deux schémas entièrement spécifiés -> exécuter les deux; organe à risque absent -> demander (jamais choisi par le groupe); dose qualitative -> demander; patient nommé ou décision de traitement -> refuser.
+
+**Anatomical groups** (study convention over exact library names; a group never selects the organ at risk):
+
+| Group | Expressions | Tumour sites | Organs |
+|---|---|---|---|
+| `thoracic` (Thorax (cibles et organes thoraciques)) | « thoracique », « thorax », « cibles thoraciques », « volumes cibles thoraciques » | Lung, Oesophagus, Breast carcinoma | Heart, Lung, Oesophagus, Spinal cord, Brachial plexus, Rib cage |
+| `head_and_neck` (Tête et cou (ORL)) | « ORL », « tête et cou », « cervico-facial » | Tonsil, Vocal cord, Larynx, Oral mucosa, Nasopharynx, Oropharynx | Temporomandibular joint, Oral cavity / oropharynx, Larynx / supraglottis, Oral mucosa, Parotid, Middle / external ear, Thyroid |
+| `central_nervous_system` (Système nerveux central) | « cérébral », « encéphale », « SNC », « neuro » | Glioblastoma (LQ-L), Medulloblastoma (LQ-L) | Brain, Brainstem, Optic chiasm, Optic nerve, Eye, Retina, Spinal cord |
+| `pelvis` (Pelvis) | « pelvien », « pelvis », « petit bassin » | Prostate, Rectum, Cervix (LQ-L) | Rectum, Bladder, Femoral head, Testis, Small bowel, Colon, Cauda equina |
+| `abdomen` (Abdomen) | « abdominal », « abdomen » | — | Stomach, Liver, Kidney, Small bowel, Colon |
+| `skin` (Peau) | « cutané », « peau » | Skin carcinoma, Skin melanoma (LQ-L) | Skin (acute), Skin (late) |

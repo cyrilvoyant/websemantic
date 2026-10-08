@@ -25,6 +25,10 @@ Each question states the expected answer and the mechanism that answers it: **gr
 | CQ18 | In which unit is `Nd` returned? | m⁻³, while input N is in cm⁻³ | graph | tested |
 | CQ19 | Does « air pollué » fix an aerosol population? | No: clarification | graph | tested |
 | CQ20 | Is a rain forecast for a city in scope? | No: refuse | rules | pending adapter |
+| CQ21 | Which tumour sites are « les volumes cibles thoraciques » ? | Lung, Oesophagus, Breast carcinoma (SKOS collection over library names) | graph | tested |
+| CQ22 | Does an anatomical group choose the organ at risk? | No: the organ is stated or asked | graph + rules | tested (graph) |
+| CQ23 | When is a schedule « meilleur » for a target? | Only if it dominates (TCP ≥ and NTCP ≤, one strict); else trade-off | graph | tested |
+| CQ24 | Does « hypofractionnement modéré » give a dose per fraction? | No: always asked for LQL-Equiv | graph | tested |
 
 Domain extensions (`lqlequiv.ttl`, `pyrcel.ttl`) add instances only; a test checks that they declare no new class. This shows reuse of the core for these two cases, not a general proof of domain independence. `derivationRule` strings are documentary; the executed checks are the SHACL shapes (`shapes.ttl`): numeric type, bounds and complete groups are generic (read from the graph, per course or aerosol-mode instance); the LQL total-dose and pyrcel RH/S0 shapes are domain-specific. Unit and quantity-kind IRIs were checked to resolve on qudt.org on 6 October 2026.
 
