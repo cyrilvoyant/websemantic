@@ -80,7 +80,7 @@
     {
       "path": "ontology/core.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/core.ttl",
-      "sha256_lf": "9b0ecd06b36940dff6df0b351279c59b80c7d3d74f0b15ea857aea1610da45f8"
+      "sha256_lf": "be93880b319bf7697cb7dc75fea84f0153b6594fe7e275cd46d90c78e27a11d6"
     },
     {
       "path": "ontology/lqlequiv.ttl",

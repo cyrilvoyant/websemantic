@@ -10,6 +10,8 @@
 @prefix unit:  <http://qudt.org/vocab/unit/> .
 @prefix qk:    <http://qudt.org/vocab/quantitykind/> .
 @prefix schema: <https://schema.org/> .
+@prefix vann:  <http://purl.org/vocab/vann/> .
+@prefix bibo:  <http://purl.org/ontology/bibo/> .
 
 # WebSemantic core ontology.
 # One common core; each scientific software is described by instances of it,
@@ -19,10 +21,23 @@
 <https://github.com/cyrilvoyant/websemantic/ns/core> a owl:Ontology ;
     dcterms:title "WebSemantic core ontology"@en ;
     dcterms:description "Common vocabulary linking user requests, software contracts, accepted assumptions, executions and qualified simulation outputs."@en ;
-    owl:versionInfo "0.1.0" ;
+    owl:versionInfo "0.2.0" ;
+    owl:versionIRI <https://github.com/cyrilvoyant/websemantic/ns/core/0.2.0> ;
+    owl:priorVersion <https://github.com/cyrilvoyant/websemantic/ns/core/0.1.0> ;
     dcterms:created "2026-10-06"^^xsd:date ;
+    dcterms:issued "2026-10-08"^^xsd:date ;
+    dcterms:modified "2026-10-08"^^xsd:date ;
+    dcterms:creator <https://person.cyrilvoyant.com> ;
+    dcterms:publisher <https://github.com/cyrilvoyant/websemantic> ;
+    dcterms:source <https://github.com/cyrilvoyant/websemantic> ;
     dcterms:license <https://polyformproject.org/licenses/noncommercial/1.0.0> ;
+    dcterms:bibliographicCitation "WebSemantic contributors (2026). WebSemantic core ontology, version 0.2.0. https://github.com/cyrilvoyant/websemantic" ;
+    vann:preferredNamespacePrefix "ws" ;
+    vann:preferredNamespaceUri "https://github.com/cyrilvoyant/websemantic/ns#" ;
+    bibo:status "draft" ;
     rdfs:seeAlso <https://doi.org/10.1038/s41597-022-01710-x> .
+
+<https://person.cyrilvoyant.com> a schema:Person ; schema:name "Cyril Voyant" .
 
 ########################################################################
 # 1. Software and contracts
@@ -424,3 +439,57 @@ ws:TLS_energy_step a ws:OutputVariable ;
     ws:additive true ;
     ws:temporalSupport "native step" ;
     ws:dataOrigin ws:SyntheticSimulation .
+
+# Human-readable labels derived from the term names (FOOPS VOC3); definitions are only given where written.
+ws:accepted rdfs:label "accepted"@en .
+ws:acceptedBy rdfs:label "accepted by"@en .
+ws:additive rdfs:label "additive"@en .
+ws:aggregation rdfs:label "aggregation"@en .
+ws:apiVariable rdfs:label "api variable"@en .
+ws:appliesTo rdfs:label "applies to"@en .
+ws:authority rdfs:label "authority"@en .
+ws:boundKind rdfs:label "bound kind"@en .
+ws:boundValue rdfs:label "bound value"@en .
+ws:canonicalUnit rdfs:label "canonical unit"@en .
+ws:codeDefault rdfs:label "code default"@en .
+ws:concept rdfs:label "concept"@en .
+ws:conceptDOI rdfs:label "concept doi"@en .
+ws:convertibleTo rdfs:label "convertible to"@en .
+ws:dataOrigin rdfs:label "data origin"@en .
+ws:declaresOutput rdfs:label "declares output"@en .
+ws:declaresParameter rdfs:label "declares parameter"@en .
+ws:declaresValidityLimit rdfs:label "declares validity limit"@en .
+ws:dependsOnReference rdfs:label "depends on reference"@en .
+ws:derivationRule rdfs:label "derivation rule"@en .
+ws:derivedFrom rdfs:label "derived from"@en .
+ws:derivedFromOutput rdfs:label "derived from output"@en .
+ws:evidenceText rdfs:label "evidence text"@en .
+ws:excludesTask rdfs:label "excludes task"@en .
+ws:fieldPath rdfs:label "field path"@en .
+ws:followsConvention rdfs:label "follows convention"@en .
+ws:forTask rdfs:label "for task"@en .
+ws:fromRequest rdfs:label "from request"@en .
+ws:groupInstance rdfs:label "group instance"@en .
+ws:hasBound rdfs:label "has bound"@en .
+ws:hasContract rdfs:label "has contract"@en .
+ws:hasExperiment rdfs:label "has experiment"@en .
+ws:hasParameter rdfs:label "has parameter"@en .
+ws:invalidates rdfs:label "invalidates"@en .
+ws:partOfGroup rdfs:label "part of group"@en .
+ws:pinnedRevision rdfs:label "pinned revision"@en .
+ws:producesOutput rdfs:label "produces output"@en .
+ws:proposedValue rdfs:label "proposed value"@en .
+ws:qualifiedBy rdfs:label "qualified by"@en .
+ws:quantityKind rdfs:label "quantity kind"@en .
+ws:rank rdfs:label "rank"@en .
+ws:repository rdfs:label "repository"@en .
+ws:requiresAcceptance rdfs:label "requires acceptance"@en .
+ws:requiresInstance rdfs:label "requires instance"@en .
+ws:requiresParameter rdfs:label "requires parameter"@en .
+ws:sourceNote rdfs:label "source note"@en .
+ws:supportedBy rdfs:label "supported by"@en .
+ws:supportsTask rdfs:label "supports task"@en .
+ws:temporalSupport rdfs:label "temporal support"@en .
+ws:term rdfs:label "term"@en .
+ws:validityFlag rdfs:label "validity flag"@en .
+ws:value rdfs:label "value"@en .
