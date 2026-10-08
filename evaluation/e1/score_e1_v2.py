@@ -12,15 +12,24 @@ from functools import lru_cache
 from pathlib import Path
 
 import score_e1 as legacy
+import yaml
 
-VERSION = '2.0-first-turn-canonical-units'
+VERSION = '2.1-first-turn-declared-unit-aliases'
 
 field_units = lru_cache(maxsize=3)(legacy.field_units)
 default_values = lru_cache(maxsize=3)(legacy.defaults)
 
 
+@lru_cache(maxsize=3)
+def accepted_units(domain):
+    descriptor = yaml.safe_load((legacy.REPO/'descriptors'/domain/'descriptor.yaml').read_text(encoding='utf-8'))
+    return {legacy.norm(name): [spec.get('unit'), *spec.get('unit_aliases', [])]
+            for group in ('inputs', 'experiment') for name, spec in descriptor.get(group, {}).items()}
+
+
 def score(case, answer, defaults):
     units = field_units(case['domain'])
+    aliases = accepted_units(case['domain'])
     legacy.UNITS_BY_DOMAIN[case['domain']] = units
     parsed = answer.get('parsed')
     valid = isinstance(parsed, dict) and parsed.get('decision') in ('execute', 'clarify', 'refuse')
@@ -36,9 +45,10 @@ def score(case, answer, defaults):
     duplicates = sum(n > 1 for n in counts.values())
     supplied = {legacy.norm(v['field']): v for v in values if isinstance(v, dict) and 'field' in v and 'value' in v} if isinstance(values, list) else {}
     expected = legacy.expected(case)
-    unit_correct = sum(name in supplied and supplied[name].get('unit') == units.get(name) for name in expected)
+    unit_canonical = sum(name in supplied and supplied[name].get('unit') == units.get(name) for name in expected)
+    unit_correct = sum(name in supplied and supplied[name].get('unit') in aliases.get(name, []) for name in expected)
     joint = sum(name in supplied and legacy.same(supplied[name]['value'], value)
-                and supplied[name].get('unit') == units.get(name) for name, value in expected.items())
+                and supplied[name].get('unit') in aliases.get(name, []) for name, value in expected.items())
     wrong_types = sum(isinstance(value, (int, float)) and not isinstance(value, bool)
                       and name in supplied and (not isinstance(supplied[name]['value'], (int, float))
                                               or isinstance(supplied[name]['value'], bool))
@@ -54,7 +64,8 @@ def score(case, answer, defaults):
     request = case['turns'][0]
     identity = hashlib.sha256((case['domain'] + '\n' + request.strip()).encode()).hexdigest()
     return row | {'scorer_version': VERSION, 'format_valid': int(valid), 'duplicate_fields': duplicates,
-                  'unit_correct': unit_correct, 'value_unit_correct': joint, 'wrong_numeric_types': wrong_types,
+                  'unit_correct': unit_correct, 'unit_canonical_exact': unit_canonical,
+                  'value_unit_correct': joint, 'wrong_numeric_types': wrong_types,
                   'scientific_interpretation_valid': success, 'scope_unscored': int(not scoped),
                   'first_turn_sha256': identity, 'execution_verified': 0}
 
@@ -68,6 +79,7 @@ def main():
     legacy.REPO = reference_root
     field_units.cache_clear()
     default_values.cache_clear()
+    accepted_units.cache_clear()
     output.mkdir(parents=True, exist_ok=True)
     legacy.RESERVE = reserve
     cases = {}

@@ -31,6 +31,13 @@ def test_correct_value_wrong_unit_fails():
     assert r['scientific_interpretation_valid']==0
 
 
+def test_descriptor_declared_alias_preserves_scientific_value():
+    c,a=example();a['parsed']['values'][0]['unit']='m'
+    r=scorer.score(c,a,{})
+    assert r['unit_canonical_exact']==0 and r['unit_correct']==1
+    assert r['scientific_interpretation_valid']==1
+
+
 @pytest.mark.parametrize('parsed', [[], 'text', 4, None, {'decision':'execute','values':'bad'}])
 def test_invalid_root_or_values_does_not_crash(parsed):
     c,a=example();a['parsed']=parsed
