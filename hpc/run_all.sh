@@ -21,7 +21,7 @@ CAMPAIGN="${CAMPAIGN:-$(date -u +%Y%m%dT%H%M%SZ)-$MODE}"
 LOGS="$BASE/logs/$CAMPAIGN"; mkdir -p "$LOGS"
 # Open models, two families, served one after the other on the H200 (both ungated on Hugging Face, checked 2026-10-07):
 # Qwen2.5-72B-Instruct (Qwen licence; native 32k context) and Mistral-Small-3.2-24B-Instruct-2506 (Apache-2.0).
-MODELS="${MODELS:-qwen mistral}"
+MODELS="${MODELS:-mistral qwen}"
 GPU_ENV="$BASE/venv-gpu"; CPU_ENV="$BASE/venv-cpu"
 MAX_HOURS="${MAX_HOURS:-48}"; REPLAY_EVERY="${REPLAY_EVERY:-600}"
 LOCK="$BASE/run_all.lock.d"; HEARTBEAT="$BASE/heartbeat"
@@ -73,6 +73,7 @@ PY
 
 cleanup() {
   for p in "$GPU_PID" "$CPU_PID"; do [ -n "$p" ] && kill "$p" 2>/dev/null; done
+  [ -n "$CPU_PID" ] && [ -z "${CPU_RC:-}" ] && status cpu stopped "stopped by the supervisor (other lane ended)"
   VLLM_PID=$(cat "$LOGS/vllm.pid" 2>/dev/null || true)          # safety net if a lane died without its own trap
   if [ -n "$VLLM_PID" ]; then kill -- "-$VLLM_PID" 2>/dev/null || kill "$VLLM_PID" 2>/dev/null; fi
   [ -n "$HB_PID" ] && kill "$HB_PID" 2>/dev/null
@@ -141,11 +142,13 @@ SETSID=""; command -v setsid >/dev/null && SETSID="setsid"   # own process group
 model_spec() {  # key -> HF id, served name, extra vLLM arguments
   case "$1" in
     qwen) HF_ID="Qwen/Qwen2.5-72B-Instruct"; SERVED="qwen2.5-72b"
-          # Native window 32k; YaRN x4 (Qwen model card) set through --hf-overrides, the option current vLLM accepts
-          # (--rope-scaling was refused). The TLS prompts with the ontology reach about 56k tokens.
+          # Native window 32k; YaRN x4 (Qwen model card). vLLM 0.31 runs on transformers 5, where the key is
+          # rope_parameters (rope_scaling was silently ignored, 2026-10-08 smoke). No VLLM_ALLOW_LONG_MAX_MODEL_LEN:
+          # if YaRN is not applied, vLLM must refuse the long window rather than run unscaled positions.
+          # The TLS prompts with the ontology reach about 56k tokens.
           MAXLEN=98304
           EXTRA=(--quantization fp8 --kv-cache-dtype fp8 --enable-prefix-caching
-                 --hf-overrides '{"rope_scaling":{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768}}');;
+                 --hf-overrides '{"rope_parameters":{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768,"rope_theta":1000000.0}}');;
     mistral) HF_ID="mistralai/Mistral-Small-3.2-24B-Instruct-2506"; SERVED="mistral-small-3.2-24b"
           MAXLEN=98304   # native 128k window
           EXTRA=(--tokenizer-mode mistral --config-format mistral --load-format mistral --enable-prefix-caching);;
@@ -176,6 +179,7 @@ gpu_lane() {
   LANE_VLLM=""
   trap stop_vllm EXIT
   trap 'stop_vllm; exit 143' TERM INT
+  local not_served=""
   for KEY in $MODELS; do
     model_spec "$KEY" || fail gpu "unknown model key $KEY"
     status gpu server "starting $HF_ID"
@@ -184,10 +188,13 @@ gpu_lane() {
     LANE_VLLM=$!; echo "$LANE_VLLM" > "$LOGS/vllm.pid"
     for _ in $(seq 1 180); do                                  # up to 1 h for download + loading
       server_ready && break
-      kill -0 "$LANE_VLLM" 2>/dev/null || fail gpu "vLLM stopped for $KEY, see logs/$CAMPAIGN/vllm-$KEY.log"
+      kill -0 "$LANE_VLLM" 2>/dev/null || break
       sleep 20
     done
-    server_ready || fail gpu "vLLM not serving $SERVED after 1 h"
+    if ! server_ready; then  # this model is skipped, the next one still runs; the lane ends in error
+      echo "vLLM not serving $SERVED, see logs/$CAMPAIGN/vllm-$KEY.log"; tail -n 5 "$LOGS/vllm-$KEY.log"
+      stop_vllm; not_served="$not_served $KEY"; continue
+    fi
     for CORPUS in $CORPORA; do
       for REP in $REPS; do
         # One client per (domain, condition), all at once: vLLM batches the concurrent requests on the GPU.
@@ -208,6 +215,7 @@ gpu_lane() {
     done
     stop_vllm
   done
+  [ -z "$not_served" ] || fail gpu "models not served:$not_served (see logs/$CAMPAIGN/vllm-<model>.log); others finished"
   status gpu done "campaign finished ($MODELS)"
 }
 

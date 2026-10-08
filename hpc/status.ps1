@@ -33,5 +33,5 @@ for d in sorted(glob.glob(os.path.join(base, "benchmark-reserve/runs/e1/*/"))):
 $py = $py.Replace("BASE", "$RemoteDir/websemantic")
 $py | ssh $Remote "python3 -"
 if ($LASTEXITCODE -ne 0) { Write-Host "SSH/status query FAILED (exit $LASTEXITCODE): state unknown"; exit 1 }
-ssh $Remote "cd '$RemoteDir/websemantic' && L=`$(ls -td logs/*/ 2>/dev/null | head -1) && echo == latest campaign `$L && for f in gpu.log cpu.log e1.log cpu-failures.log repro/summary.txt; do echo == `$f; if [ -f `"`$L`$f`" ]; then tail -n 5 `"`$L`$f`" || exit 1; else echo pending; fi; done"
+ssh $Remote "cd '$RemoteDir/websemantic' && L=`$(ls -td logs/*/ 2>/dev/null | head -1) && echo == latest campaign `$L && for f in gpu.log cpu.log cpu-failures.log repro/summary.txt vllm-mistral.log vllm-qwen.log; do echo == `$f; if [ -f `"`$L`$f`" ]; then tail -n 5 `"`$L`$f`" || exit 1; else echo pending; fi; done"
 if ($LASTEXITCODE -ne 0) { Write-Host "SSH/log query FAILED (exit $LASTEXITCODE)"; exit 1 }
