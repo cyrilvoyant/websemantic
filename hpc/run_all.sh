@@ -150,6 +150,7 @@ CONDS="${CONDS_OVERRIDE:-$CONDS}"   # e.g. CONDS_OVERRIDE=L2,L3 for the preregis
 # baseline: T/TC of failed conversions equal the campaign F000/F010 and are not collected again).
 PAIRS="${PAIRS_OVERRIDE:-}"
 if [ -n "$PAIRS" ]; then CONDS=$(printf '%s\n' $PAIRS | cut -d: -f2 | sort -u | paste -sd, -); fi
+CORPORA="${CORPORA_OVERRIDE:-$CORPORA}"   # e.g. CORPORA_OVERRIDE=extension for the held-out requests
 TAG="$CAMPAIGN"
 SETSID=""; command -v setsid >/dev/null && SETSID="setsid"   # own process group: vLLM workers stopped together
 

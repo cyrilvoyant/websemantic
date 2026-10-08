@@ -28,7 +28,7 @@ CONDS = {f"F{i:03b}" for i in range(8)}
 def first_turns():
     out = {}
     for d in DOMAINS:
-        for corpus in ("pilot", "qualifiers"):
+        for corpus in ("pilot", "qualifiers", "extension"):  # extension = held-out cases (PREREG-heldout-extension.md)
             for line in (RESERVE / d / f"{corpus}.jsonl").read_text(encoding="utf-8").splitlines():
                 if line.strip():
                     c = json.loads(line)

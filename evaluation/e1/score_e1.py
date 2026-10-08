@@ -264,7 +264,7 @@ def main():
     run_dir = RESERVE / "runs" / "e1" / model
     cases = {}
     for dom in ("tls", "lqlequiv", "pyrcel"):
-        for corpus in ("pilot", "qualifiers"):
+        for corpus in ("pilot", "qualifiers", "extension"):  # extension = held-out cases (PREREG-heldout-extension.md)
             path = RESERVE / dom / f"{corpus}.jsonl"
             for line in (path.read_text(encoding="utf-8").splitlines() if path.exists() else []):
                 if line.strip():
