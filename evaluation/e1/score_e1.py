@@ -279,6 +279,8 @@ def main():
     rows = []
     availability = defaultdict(lambda: {"answers": 0, "errors": 0})
     for f in sorted(run_dir.glob("*.json")):
+        if f.name.startswith("contexts-"):
+            continue  # frozen context manifest, not an answer
         a = json.loads(f.read_text(encoding="utf-8"))
         key = f"{a['domain']}|{a['condition']}|{a.get('instructions_sha256_12', 'v0')}"
         if a.get("http_error") or a.get("network_error"):
