@@ -16,3 +16,5 @@ runs/
 # E1 per-answer results stay private until the campaign closes
 evaluation/e1/e1-*.csv
 evaluation/e1/e1-*.json
+evaluation/e1/e1-*.png
+evaluation/e1/e1-*.pdf
