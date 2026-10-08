@@ -15,7 +15,7 @@ ALLOW = {
     "semantic-sim-layer": ["src", "descriptors", "ontology", "packs", "evaluation", "examples", "external", "hpc", "tools",
                            "agent", "LLM-CONTRACT.md", "AGENTS.md", "llm.md", "pyproject.toml", "README.md", "LICENSE",
                            "CITATION.cff", "codemeta.json"],
-    "benchmark-reserve": ["tls", "lqlequiv", "pyrcel", "knowledge-prior", "tools", "VALIDATION-pilote.md"],
+    "benchmark-reserve": ["tls", "lqlequiv", "pyrcel", "knowledge-prior", "tools", "toolrosella", "VALIDATION-pilote.md"],
 }
 SKIP_PARTS = {".git", "__pycache__", ".venv", "runs", "work", ".pytest_cache", ".ruff_cache"}
 SKIP_FILE = re.compile(r"(^\.env)|(\.(pem|key|p12|pfx|zip|tgz)$)|(credential|secret)", re.IGNORECASE)

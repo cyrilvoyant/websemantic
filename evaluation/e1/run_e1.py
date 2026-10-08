@@ -156,9 +156,34 @@ def length_context(domain, condition):
     return result
 
 
+TOOLROSELLA = RESERVE / "toolrosella" / "toolrosella-20261008T173041Z"   # frozen by build_toolrosella_lists.py
+
+
+def toolrosella_context(domain, condition):
+    """Preregistered ToolRosella baseline (evaluation/PREREG-toolrosella-and-human.md), on the frozen campaign texts.
+    T = native documentation + the tools/list of the generated MCP server (no tool block when the conversion failed,
+    as preregistered, so T equals the campaign F000); TC = T + frozen contract. TX/TCX (exploratory, declared as such)
+    use the tools generated for failed conversions as well."""
+    frozen_f010 = length_context(domain, "FROZEN-F010")  # verifies instructions, frozen packs and documentation
+    native = "## Native documentation\n" + native_doc(domain)
+    contract = "## Semantic pack: LLM-CONTRACT.md\n" + (FROZEN_PACKS / domain / "LLM-CONTRACT.md").read_text(encoding="utf-8")
+    if frozen_f010 != native + "\n\n" + contract:
+        raise ValueError("Native documentation or contract differs from the campaign; review before collection")
+    kind = "primary" if condition in ("T", "TC") else "exploratory"
+    tools = json.loads((TOOLROSELLA / kind / f"{domain}.json").read_text(encoding="utf-8"))
+    blocks = [native]
+    if tools:
+        blocks.append("## MCP server tools (tools/list)\n" + json.dumps(tools, indent=1, ensure_ascii=False))
+    if condition in ("TC", "TCX"):
+        blocks.append(contract)
+    return "\n\n".join(blocks)
+
+
 def context(domain, condition):
     if condition in ("L2", "L3", "FROZEN-F010", "FROZEN-F110"):
         return length_context(domain, condition)
+    if condition in ("T", "TC", "TX", "TCX"):
+        return toolrosella_context(domain, condition)
     if condition.startswith("F"):
         return factorial_context(domain, condition)
     blocks = ["## Native documentation\n" + native_doc(domain)]

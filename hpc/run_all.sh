@@ -146,6 +146,10 @@ ensure_env "$GPU_ENV" gpu   "import vllm, torch, yaml, mistral_common; assert vl
 if [ "$MODE" = smoke ]; then CORPORA="qualifiers"; REPS="1"; CONDS="F000,F111"; LIMIT=2
 else CORPORA="qualifiers pilot"; REPS="1 2 3"; CONDS="F000,F100,F010,F001,F110,F101,F011,F111"; LIMIT=0; fi
 CONDS="${CONDS_OVERRIDE:-$CONDS}"   # e.g. CONDS_OVERRIDE=L2,L3 for the preregistered length control
+# PAIRS_OVERRIDE="pyrcel:T pyrcel:TC tls:TX ..." restricts the run to these (domain, condition) pairs (ToolRosella
+# baseline: T/TC of failed conversions equal the campaign F000/F010 and are not collected again).
+PAIRS="${PAIRS_OVERRIDE:-}"
+if [ -n "$PAIRS" ]; then CONDS=$(printf '%s\n' $PAIRS | cut -d: -f2 | sort -u | paste -sd, -); fi
 TAG="$CAMPAIGN"
 SETSID=""; command -v setsid >/dev/null && SETSID="setsid"   # own process group: vLLM workers stopped together
 
@@ -214,6 +218,7 @@ gpu_lane() {
         local pids=() names=() i
         for D in tls lqlequiv pyrcel; do
           for C in ${CONDS//,/ }; do
+            if [ -n "$PAIRS" ] && ! printf '%s\n' $PAIRS | grep -qx "$D:$C"; then continue; fi
             "$GPU_ENV/bin/python" "$HERE/evaluation/e1/run_e1.py" --model "local:$SERVED" --tag "$TAG" --corpus "$CORPUS" \
               --domains "$D" --conditions "$C" --reps "$REP" --limit "$LIMIT" --pause 0 \
               >> "$LOGS/e1-$KEY-$D-$C.log" 2>&1 &
