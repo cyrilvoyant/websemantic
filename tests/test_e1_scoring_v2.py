@@ -65,3 +65,60 @@ def test_numeric_string_is_not_executable_numeric_type():
 def test_unreferenced_execution_is_unscored():
     c,a=example();c['expected_fields']={}
     assert scorer.score(c,a,{})['scientific_interpretation_valid']==''
+
+
+@pytest.mark.parametrize('value,quote,unit,field', [
+    (3218.688,'2 miles','unit:M','length_m'), (0.6096,'deux pieds','unit:M','length_m'),
+    (85000,'850 mbar','unit:PA','p0'), (.5,'50 cm/s','unit:M-PER-SEC','v'),
+    (.05,'diamètre 0,1 µm','unit:MicroM','mu')])
+def test_additional_exact_conversions(value,quote,unit,field):
+    assert scorer.evidence_value(value,quote,unit,field)
+
+
+def test_mile_conversion_does_not_count_as_unsupported():
+    c,a=example();c['turns']=['Tunnel de 2 miles. Calcule.'];c['expected_fields']['inputs.length_m']=3218.688
+    a['parsed']['values'][0].update(value=3218.688,evidence='2 miles')
+    assert scorer.score(c,a,{})['scientific_interpretation_valid']==1
+
+
+def test_false_conversion_stays_unsupported():
+    assert not scorer.evidence_value(2000,'2 miles','unit:M','length_m')
+
+
+def test_admissible_alternative_is_scored():
+    c,a=example();c['decision']='clarify';c['admissible']=['execute']
+    assert scorer.score(c,a,{})['scientific_interpretation_valid']==1
+
+
+def test_comparison_verdict_does_not_credit_unchecked_config():
+    c,a=example();c['expected_fields']={};c['expected_comparison']={'Prostate':{'verdict':'trade-off'}}
+    a['parsed']['comparisons']=[{'target':'Prostate','verdict':'tradeoff'}]
+    r=scorer.score(c,a,{})
+    assert r['comparison_verdict_valid']==1 and r['scientific_interpretation_valid']==''
+
+
+def test_undefined_kpi_requires_indeterminate_verdict():
+    case={'expected_comparison':{'Lung':{'verdict':'not decidable: undefined'}}}
+    assert scorer.comparison_score(case,{'comparisons':[{'target':'Lung','verdict':'tradeoff'}]})[0]==0
+    assert scorer.comparison_score(case,{'comparisons':[{'target':'Lung','verdict':'indeterminate'}]})[0]==1
+
+
+def test_integral_count_must_be_json_integer():
+    c,a=example();c['expected_fields']={'inputs.n_tubes':2};c['turns']=['deux tubes']
+    a['parsed']['values']=[{'field':'inputs.n_tubes','value':2.,'unit':'unit:NUM','origin':'provided','evidence':'deux tubes'}]
+    assert scorer.score(c,a,{})['type_or_bound_errors']==1
+
+
+def test_variant_metadata_is_not_an_answer():
+    c,a=example();c['variant']={'to':'length_m=99'}
+    assert scorer.score(c,a,{})['scientific_interpretation_valid']==1
+
+def test_comparison_respects_declared_left_right():
+    case={'expected_comparison':{'Prostate':{'verdict':'A dominates','tcp_ntcp_percent':{'A':[90,5],'B':[80,10]}}}}
+    assert scorer.comparison_score(case,{'comparisons':[{'target':'Prostate','left':'B','right':'A','verdict':'left_dominates'}]})[0]==0
+    assert scorer.comparison_score(case,{'comparisons':[{'target':'Prostate','left':'B','right':'A','verdict':'right_dominates'}]})[0]==1
+
+
+def test_malformed_comparison_target_is_failure():
+    case={'expected_comparison':{'Prostate':{'verdict':'trade-off'}}}
+    assert scorer.comparison_score(case,{'comparisons':[{'target':['Prostate'],'verdict':'tradeoff'}]})[0]==0

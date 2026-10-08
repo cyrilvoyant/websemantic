@@ -10,7 +10,7 @@
     {
       "path": "agent/run.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/agent/run.py",
-      "sha256_lf": "b09b7b36d17efb397f8cd8e133444c1e8f2b9c8d6b5c3ea1996b5857a547e629"
+      "sha256_lf": "3c40aac9e3db9ac632e2e953bd22c015413ab63d2f9307219b296f6f78cc6a56"
     },
     {
       "path": "src/websemantic/__init__.py",
@@ -121,6 +121,21 @@
       "path": "external/LQL-Equiv-web/LICENSE",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/LQL-Equiv-web/dfc9a338205b8864b8e3470c4ae245b019e88844/LICENSE",
       "sha256_lf": "737e1e4a98810302c856a118ca717186aca2ade17f1bf8bdf90f097befa0921e"
+    },
+    {
+      "path": "src/websemantic/lql_comparison.py",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/lql_comparison.py",
+      "sha256_lf": "d7fb8116ed2235ac8ee653c7833111ff713cd8df67bc52b3c1d9823453981bfc"
+    },
+    {
+      "path": "examples/lql-comparison.json",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/examples/lql-comparison.json",
+      "sha256_lf": "64898d3545811b3d8d7be054c6f9bc8f5fbd42568a44781b3435550e08b3d170"
+    },
+    {
+      "path": "docs/lql-comparison.md",
+      "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/docs/lql-comparison.md",
+      "sha256_lf": "5bc0f895a18ddc814fbd7b9cb430ac6b7912d8dc383381c744503387f15b1c8e"
     },
     {
       "path": "external/LQL-Equiv-web/src/lqlequiv/model.py",

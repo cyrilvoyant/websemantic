@@ -17,7 +17,9 @@ This is an **interpretation screen**, not end-to-end task success. It does not
 prove autonomous execution, the truth of retrieved sources, or complete schema
 and backend validity. Version 2.1 separates exact canonical labels from declared
 aliases, to avoid counting a formatting difference as a scientific error. Other
-encodings and conversions remain unverified; they are not guessed. Scopes without sufficient references are unscored,
+Version 2.2 adds evidence-backed mile/foot, mbar, cm/s and aerosol diameter/radius
+conversions, declared bounds/category checks and unknown-field rejection. Other
+conversions remain unverified; they are not guessed. Scopes without sufficient references are unscored,
 including the previous multi-course and multi-scenario gaps. Invalid formats and
 provider failures remain in the response table; availability uses the separate
 attempt log, including attempts without response files.
@@ -27,3 +29,8 @@ requests, scenario groups, repetitions, conditions, source versions and provider
 modalities. Do not treat repeated requests or outputs as independent samples.
 Partial collections support descriptive reports; they do not support a complete
 factorial effect estimate.
+
+Use `--reference-root` for the frozen descriptors and `--folders` for an explicit
+campaign selection. `admissible` decisions are respected. `expected_comparison`
+is a separate verdict check, not evidence of valid configurations or execution.
+Unsupported multi-course/comparison primary scores remain unscored.

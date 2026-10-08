@@ -11,7 +11,7 @@
     {
       "path": "agent/run.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/agent/run.py",
-      "sha256_lf": "b09b7b36d17efb397f8cd8e133444c1e8f2b9c8d6b5c3ea1996b5857a547e629"
+      "sha256_lf": "3c40aac9e3db9ac632e2e953bd22c015413ab63d2f9307219b296f6f78cc6a56"
     },
     {
       "path": "agent/run_tls.py",

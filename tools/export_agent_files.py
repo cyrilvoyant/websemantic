@@ -49,6 +49,9 @@ def export_transfer(model, folder, adapter, repository, commit, backend, license
              'ontology/README.md', 'llm.md', 'agent/README.md',
              'LICENSE', 'external/' + backend + '/' + license_name]
     source = ROOT / 'external' / backend
+    if model == 'lql':
+        names += ['src/websemantic/lql_comparison.py', 'examples/lql-comparison.json',
+                  'docs/lql-comparison.md']
     selected = source / ('src/lqlequiv' if model == 'lql' else 'pyrcel')
     names += [p.relative_to(ROOT).as_posix() for p in selected.rglob('*')
               if p.is_file() and p.suffix in ('.py', '.json', '.csv') and '__pycache__' not in p.parts]

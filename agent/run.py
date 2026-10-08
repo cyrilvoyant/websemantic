@@ -55,16 +55,22 @@ def main(argv=None):
         from websemantic.replay import load_scenario
 
         document = json.loads(args.scenario.read_text(encoding="utf-8"))
-        scenario = load_scenario(document)
         descriptor = load_descriptor(root, args.model)
         if "software" in document and document["software"] != descriptor["software"]:
             raise ValueError("Saved software identity differs from the selected descriptor.")
-        gate = validate(scenario, descriptor)
-        if gate.decision != "execute":
-            print(json.dumps(asdict(gate), ensure_ascii=False))
-            return 2
-        versions = {name: importlib.metadata.version(name) for name in index["dependencies"]}
-        target, indicators = execute(scenario, descriptor, root, args.output_dir)
+        if args.model == "lql" and document.get("task") == "compare_schedules":
+            from websemantic.lql_comparison import run as compare_schedules
+
+            versions = {name: importlib.metadata.version(name) for name in index["dependencies"]}
+            target, indicators = compare_schedules(document, descriptor, root, args.output_dir)
+        else:
+            scenario = load_scenario(document)
+            gate = validate(scenario, descriptor)
+            if gate.decision != "execute":
+                print(json.dumps(asdict(gate), ensure_ascii=False))
+                return 2
+            versions = {name: importlib.metadata.version(name) for name in index["dependencies"]}
+            target, indicators = execute(scenario, descriptor, root, args.output_dir)
         manifest_path = target / "manifest.json"
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         manifest["source_materialization"] = {"method": "published_file_hashes", "files": index["files"]}
