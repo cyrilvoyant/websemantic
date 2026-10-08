@@ -47,8 +47,12 @@ fi
 echo "$TR_COMMIT" > "$OUT/toolrosella-commit.txt"
 if [ ! -x "$TR/.venv/bin/python" ]; then
   python3 -m venv "$TR/.venv" && "$TR/.venv/bin/pip" install -q --upgrade pip \
-    && "$TR/.venv/bin/pip" install -q -r "$TR/requirements.txt" uv gitingest numpy pandas scipy matplotlib || die "ToolRosella install failed"
+    && "$TR/.venv/bin/pip" install -q -r "$TR/requirements.txt" gitingest numpy pandas scipy matplotlib || die "ToolRosella install failed"
 fi
+# No uv: ToolRosella prefers uv when present, but "uv venv" creates environments without pip, so the
+# repository requirements are never installed (seen 2026-10-08). Without uv it uses its venv branch (with pip),
+# the closest to the conda setup recommended by its authors (conda is absent from the container).
+"$TR/.venv/bin/pip" uninstall -q -y uv 2>/dev/null; command -v uv >/dev/null && log "warning: uv still on PATH ($(command -v uv))"
 "$TR/.venv/bin/pip" freeze > "$OUT/freeze-toolrosella.txt"
 # vLLM needs a dummy key; the variable name is built so that the archive secret scan is not misled.
 KEYVAR="OPENAI""_API_KEY"
