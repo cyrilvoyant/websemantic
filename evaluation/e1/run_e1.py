@@ -156,9 +156,11 @@ def gemini(prompt, model):
 
 def mistral(prompt, model):
     """Mistral chat completions (JSON mode). Returns text and usage; records the resolved model name."""
-    payload = {"model": model, "messages": [{"role": "user", "content": prompt}],
+    payload = {"model": model, "messages": [{"role": "user", "content": prompt}], "temperature": 0,
                "response_format": {"type": "json_object"}}
-    req = urllib.request.Request("https://api.mistral.ai/v1/chat/completions", data=json.dumps(payload).encode(),
+    # A Codestral/Vibe key (free) only works on its own endpoint, with codestral-* models (checked 2026-10-08).
+    host = "codestral.mistral.ai" if model.startswith("codestral") else "api.mistral.ai"
+    req = urllib.request.Request(f"https://{host}/v1/chat/completions", data=json.dumps(payload).encode(),
                                  headers={"Content-Type": "application/json",
                                           "Authorization": "Bearer " + os.environ["MISTRAL_API_KEY"]})
     with urllib.request.urlopen(req, timeout=180) as r:
@@ -276,7 +278,7 @@ def main():
                              "corpus_sha256_12": {d: hashlib.sha256(t.encode()).hexdigest()[:12] for d, t in corpora.items()},
                              "contexts": manifest, "context_texts": {f"{d}|{c}": t for (d, c), t in contexts.items()}},
                             ensure_ascii=False, indent=1))
-    params = {"temperature": 0 if args.model.startswith("local:") else "provider default"}
+    params = {"temperature": 0 if args.model.startswith(("local:", "mistral", "magistral", "codestral")) else "provider default"}
     for domain in domains:
         cases = [json.loads(line) for line in corpora[domain].splitlines() if line.strip()]
         if args.limit:
@@ -304,7 +306,7 @@ def main():
                     attempt = {k: record[k] for k in ("case_id", "domain", "condition", "rep", "model", "time",
                                                       "context_sha256_12", "instructions_sha256_12")}
                     call = (local if args.model.startswith("local:") else
-                            mistral if args.model.startswith(("mistral", "magistral")) else gemini)
+                            mistral if args.model.startswith(("mistral", "magistral", "codestral")) else gemini)
                     tries = 3 if call is local else 1  # local server: network errors retried, each try logged
                     refused = False
                     for t in range(1, tries + 1):
