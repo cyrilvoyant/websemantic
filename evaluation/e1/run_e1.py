@@ -156,7 +156,8 @@ def length_context(domain, condition):
     return result
 
 
-TOOLROSELLA = RESERVE / "toolrosella" / "toolrosella-20261008T173041Z"   # frozen by build_toolrosella_lists.py
+# Frozen tool lists (build_toolrosella_lists.py); WS_TOOLROSELLA_RUN selects another ToolRosella run (generator).
+TOOLROSELLA = RESERVE / "toolrosella" / os.environ.get("WS_TOOLROSELLA_RUN", "toolrosella-20261008T173041Z")
 
 
 def toolrosella_context(domain, condition):

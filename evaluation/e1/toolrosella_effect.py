@@ -11,6 +11,7 @@ Usage: python toolrosella_effect.py <campaign_folder>:<toolrosella_folder> [...]
 
 import csv
 import json
+import os
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -23,7 +24,8 @@ from length_control import holm  # noqa: E402
 from request_level import RESERVE, first_turns  # noqa: E402
 
 METRICS = ("premature_execute", "decision_ok", "qualifier_convention_ok")
-STATUS = json.loads((RESERVE / "toolrosella" / "toolrosella-20261008T173041Z" / "status.json").read_text(encoding="utf-8"))
+RUN = os.environ.get("WS_TOOLROSELLA_RUN", "toolrosella-20261008T173041Z")  # same selector as run_e1.py
+STATUS = json.loads((RESERVE / "toolrosella" / RUN / "status.json").read_text(encoding="utf-8"))
 FAILED = {d for d, s in STATUS["codes"].items() if s["conversion"] != "success"}
 PRIMARY = (("T", "F000"), ("TC", "T"), ("TC", "F010"))
 EXPLORATORY = (("TX", "F000"), ("TCX", "TX"), ("TCX", "F010"))
