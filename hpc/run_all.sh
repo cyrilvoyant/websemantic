@@ -27,6 +27,11 @@ MAX_HOURS="${MAX_HOURS:-48}"; REPLAY_EVERY="${REPLAY_EVERY:-600}"
 LOCK="$BASE/run_all.lock.d"; HEARTBEAT="$BASE/heartbeat"
 RUNS="$BASE/benchmark-reserve/runs/e1"
 export HF_HOME="$BASE/hf-cache"
+# The JupyterLab container has no passwd entry for our uid (1057): getpass.getuser() raises, and torch/triton use it
+# for their cache paths (2026-10-08). getuser() reads these variables first; caches go to the project space.
+export USER="${USER:-cyril}" LOGNAME="${LOGNAME:-cyril}"
+export XDG_CACHE_HOME="$BASE/cache" TORCHINDUCTOR_CACHE_DIR="$BASE/cache/inductor" TRITON_CACHE_DIR="$BASE/cache/triton"        VLLM_CACHE_ROOT="$BASE/cache/vllm"
+mkdir -p "$XDG_CACHE_HOME"
 VLLM_PID=""; GPU_PID=""; CPU_PID=""
 
 python3 -c "import sys; sys.exit(0 if sys.version_info >= (3, 11) else 1)" || {
@@ -187,7 +192,7 @@ gpu_lane() {
   for KEY in $MODELS; do
     model_spec "$KEY" || fail gpu "unknown model key $KEY"
     status gpu server "starting $HF_ID"
-    $SETSID "$GPU_ENV/bin/vllm" serve "$HF_ID" --served-model-name "$SERVED" --max-model-len "$MAXLEN" "${EXTRA[@]}" \
+    $SETSID "$GPU_ENV/bin/vllm" serve "$HF_ID" --served-model-name "$SERVED" --max-model-len "$MAXLEN" --enforce-eager "${EXTRA[@]}" \
       --port 8000 --seed 0 > "$LOGS/vllm-$KEY.log" 2>&1 &
     LANE_VLLM=$!; echo "$LANE_VLLM" > "$LOGS/vllm.pid"
     for _ in $(seq 1 180); do                                  # up to 1 h for download + loading
