@@ -171,7 +171,9 @@ def local(prompt, model):
     """OpenAI-compatible local server (vLLM on the HPC): model given as local:<served-name>."""
     base = os.environ.get("LOCAL_LLM_URL", "http://localhost:8000/v1")
     payload = {"model": model.split(":", 1)[1], "messages": [{"role": "user", "content": prompt}],
-               "temperature": 0, "max_tokens": 4096, "response_format": {"type": "json_object"}}
+               "temperature": 0, "max_tokens": 4096}
+    # No response_format: constrained JSON decoding needs a Triton kernel compiled at first use, and the H200
+    # container has no C compiler (2026-10-08). The instructions ask for JSON; extract_json() reads it.
     req = urllib.request.Request(base + "/chat/completions", data=json.dumps(payload).encode(),
                                  headers={"Content-Type": "application/json"})
     with urllib.request.urlopen(req, timeout=1800) as r:  # parallel clients: a request may queue a long time
@@ -200,6 +202,29 @@ def log_attempt(out_dir, entry):
     """One attempts file per process (parallel clients never share a file); every real network call is one line."""
     with open(out_dir / f"attempts-{socket.gethostname()}-{os.getpid()}.jsonl", "a", encoding="utf-8") as fh:
         fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+
+def extract_json(text):
+    """Strict JSON first; otherwise the content of a ```json fence, then the outermost {...} block.
+    Returns (object, how) with how in strict / fenced / embedded, or (None, None)."""
+    try:
+        obj = json.loads(text)
+        return (obj, "strict") if isinstance(obj, dict) else (None, None)
+    except (json.JSONDecodeError, TypeError):
+        pass
+    import re
+    fence = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text or "", re.DOTALL)
+    candidates = [("fenced", fence.group(1))] if fence else []
+    if text and "{" in text and "}" in text:
+        candidates.append(("embedded", text[text.index("{"): text.rindex("}") + 1]))
+    for how, chunk in candidates:
+        try:
+            obj = json.loads(chunk)
+            if isinstance(obj, dict):
+                return obj, how
+        except json.JSONDecodeError:
+            continue
+    return None, None
 
 
 def request_hash(text):
@@ -288,10 +313,13 @@ def main():
                             text, usage = call(prompt, args.model)
                             record.pop("network_error", None)
                             record.update(raw_text=text, usage=usage)
-                            try:
-                                record["parsed"] = json.loads(text)
-                            except json.JSONDecodeError:
+                            parsed, how = extract_json(text)
+                            if parsed is None:
                                 record["parse_error"] = True
+                            else:
+                                record["parsed"] = parsed
+                                if how != "strict":
+                                    record["json_extraction"] = how  # traced: not a strict JSON answer
                             log_attempt(out_dir, {**stamp, "outcome": "answer"})
                             break
                         except urllib.error.HTTPError as exc:

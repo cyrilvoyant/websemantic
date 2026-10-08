@@ -156,7 +156,7 @@ model_spec() {  # key -> HF id, served name, extra vLLM arguments
           # if YaRN is not applied, vLLM must refuse the long window rather than run unscaled positions.
           # The TLS prompts with the ontology reach about 56k tokens.
           MAXLEN=98304
-          EXTRA=(--quantization fp8 --kv-cache-dtype fp8 --enable-prefix-caching
+          EXTRA=(--quantization fp8 --enable-prefix-caching
                  --hf-overrides '{"rope_scaling":{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768},"rope_parameters":{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768,"rope_theta":1000000.0}}');;
     mistral) HF_ID="mistralai/Mistral-Small-3.2-24B-Instruct-2506"; SERVED="mistral-small-3.2-24b"
           MAXLEN=98304   # native 128k window
@@ -222,6 +222,21 @@ gpu_lane() {
         done
       done
     done
+    # A model whose answers are all errors (e.g. HTTP 500) must not count as finished.
+    VALID=$("$GPU_ENV/bin/python" - "$RUNS/local_${SERVED}__$TAG" <<'PY'
+import glob, json, os, sys
+n = 0
+for f in glob.glob(os.path.join(sys.argv[1], "*.json")):
+    try:
+        p = json.load(open(f)).get("parsed")
+    except Exception:
+        continue
+    n += isinstance(p, dict) and p.get("decision") in ("execute", "clarify", "refuse")
+print(n)
+PY
+)
+    echo "$SERVED: ${VALID:-0} valid answers"
+    [ "${VALID:-0}" -gt 0 ] || not_served="$not_served $KEY(no-valid-answer)"
     stop_vllm
   done
   [ -z "$not_served" ] || fail gpu "models not served:$not_served (see logs/$CAMPAIGN/vllm-<model>.log); others finished"
