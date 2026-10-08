@@ -50,7 +50,7 @@ $global:LASTEXITCODE = 0
 # Server-side replays (e1-numeric-*.csv) stay in $dest\semantic-sim-layer\evaluation\e1 next to the logs.
 $python = Join-Path $LocalRoot "semantic-sim-layer\.venv\Scripts\python.exe"
 $failed = @()
-Get-ChildItem (Join-Path $dest "benchmark-reserve\runs\e1") -Directory | ForEach-Object {
+Get-ChildItem (Join-Path $dest "benchmark-reserve\runs\e1") -Directory | Where-Object { $_.Name -notlike "*-smoke" } | ForEach-Object {   # smoke tests are not scored
     Write-Host "== scoring $($_.Name)"
     & $python (Join-Path $LocalRoot "semantic-sim-layer\evaluation\e1\score_e1.py") $_.Name
     if ($LASTEXITCODE -ne 0) { $script:failed += $_.Name }   # reported at the end; other folders are still scored
