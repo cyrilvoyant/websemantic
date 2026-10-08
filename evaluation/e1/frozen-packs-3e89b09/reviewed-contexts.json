@@ -1,0 +1,46 @@
+{
+  "instructions_sha256": "9f8e8d33b7fce796a4806a3f689dbaa0e583070f311f29153e0e8c3d5ccf53dd",
+  "files": {
+    "tls": {
+      "ontology.ttl": "d28e6d467d6b3e979c821e8858b4e856aa7da1ea59e663ca18c0a92f3dfbe771",
+      "shapes.ttl": "96fd37fb090e5692dff0e3355c7f8e92cde804475349055745f86457246cc410",
+      "LLM-CONTRACT.md": "007d4458212a9073770c2462038f68a2dcfbee948e294f202baf8fe4b4e00dfe",
+      "ontology-compact.ttl": "91beca2ddf3677ed1d28dab7afba9924844e6005102d90bd21e726c1531a0a12",
+      "ontology-lengthmatched.ttl": "c89528a29c6e9ca176c9796a00218a232e36237a43c3ab9144132ad5140d0c29"
+    },
+    "lqlequiv": {
+      "ontology.ttl": "22613599645c6399b5e57e321bdd76e07cacf03dbffe47f6b65b974fbb81a5f8",
+      "shapes.ttl": "96fd37fb090e5692dff0e3355c7f8e92cde804475349055745f86457246cc410",
+      "LLM-CONTRACT.md": "dbff2252aea02033ca6082eb11c176889d5d26cf41bc6d4c7cebc0cfdce89f4e",
+      "ontology-compact.ttl": "5e0070f51c65995daa41cae25e6c60e140a2c6c012ca4cd709803eae29ffad31",
+      "ontology-lengthmatched.ttl": "a849f86fe30bb337d810153f404e5889c5fb2010f1c7f9a63fd9a973e45795ba"
+    },
+    "pyrcel": {
+      "ontology.ttl": "d1bd9837fe3743e53c3e61f9706f1a9ef9b8c2095321491a99b6d2307bd438c8",
+      "shapes.ttl": "96fd37fb090e5692dff0e3355c7f8e92cde804475349055745f86457246cc410",
+      "LLM-CONTRACT.md": "d7ad5537d6d1be129de403c17e657c41059d8518bbebb1a8ba3b183646f9cafd",
+      "ontology-compact.ttl": "9e35969e7b4d5788c9ff360b961e1d42a3adf5e2988c3ae086f65a1c1f2de14b",
+      "ontology-lengthmatched.ttl": "80147902be7b4e4104551548f1d9c9398ce50e650a41ff80e2ae5ac80461a114"
+    }
+  },
+  "contexts": {
+    "tls": {
+      "FROZEN-F010": "aecac2766b8a2b6bbfe50a945a4f7e8b2ba6f10b8646ae8bd3700857b0f5e68d",
+      "FROZEN-F110": "e9267dafcb354752149c71cc9d7525f939731ed0a243891af879ece61bb1b412",
+      "L2": "bfba1518164197467cfa3170b5e8d0a778e66df271c889da4d6d645381521a7f",
+      "L3": "49a9c879ae1e146c463b403416110d06887828f47570bf7aa05893aa37ccd8be"
+    },
+    "lqlequiv": {
+      "FROZEN-F010": "331c43d8ee985e5a91297547f39fedf2b8eeb1cd969a34e0afb869cd3f732e73",
+      "FROZEN-F110": "358c7e67d3c6f843a5d919c0495e86a562613758b2bc5d27d3df0b65ef8c930b",
+      "L2": "5c9fe072c532d2e1fb8f97b0e7f5f08a2d7edfc9c34c607e6ae34f47eec455ef",
+      "L3": "43633b7b6cc7acb3c731860975c27f6da1f6f3d02541b3a4b3e621e38604b3b0"
+    },
+    "pyrcel": {
+      "FROZEN-F010": "62c639f42c2a274173a508cb41477f8b8d0759e321c1c82beb6478c4d7105725",
+      "FROZEN-F110": "286f0806457add2c9e0b61be587dd90522e270e95e9632b52f79db1ff0ae9579",
+      "L2": "c231a9749006e883f8a4dc3ad53e8f9b786ced6355708ce1c44c61285e152b74",
+      "L3": "5ec45fae57187d49d22afe4b0b19f15d67a94bfcb9b68c4c3deda8b4ae3bff12"
+    }
+  }
+}

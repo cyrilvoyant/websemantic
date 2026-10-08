@@ -1,13 +1,16 @@
-# Preregistration — length control for the ontology factor (8 October 2026)
+# Preregistration — reduced and competing semantic contexts (8 October 2026)
 
-Written before any answer for L2 or L3 is collected. Proposed by Codex (trilog, 8 October), implemented by Claude,
-to be validated by Codex before launch.
+Written before collection of L2/L3. Implemented by Claude, reviewed by Codex.
+The 8 October review narrows the interpretation without changing frozen contexts,
+conditions, corpus, model settings or historical answers. This is the operational
+L2/L3 protocol; `e1/ONTOLOGY-LENGTH-PREREG.md` describes a separate future experiment.
 
 ## Question
 
 In the factorial campaign, adding the complete ontology package (O) to the contract (C) lowered correct decisions and
 raised premature execution for TLS, whose O package is long (about 120k characters). Is the effect due to the
-**semantic content** of the ontology, or to the **length and format** of the added material?
+semantic context? This experiment compares whole context packages. It cannot
+isolate token length, formatting, semantic relevance or attention competition.
 
 ## Conditions (all with the frozen campaign packs, commit 3e89b09, same instructions hash 9f8e8d33b7fc)
 
@@ -18,7 +21,10 @@ raised premature execution for TLS, whose O package is long (about 120k characte
 | L2 | native documentation + the software's own semantic content only (ontology-compact.ttl) + contract | **new** |
 | L3 | native documentation + off-topic RDF of the same length and format as the full O package + contract | **new** |
 
-Construction: `evaluation/e1/build_length_controls.py`, deterministic; files in `evaluation/e1/frozen-packs-3e89b09/`.
+Construction: `evaluation/e1/build_length_controls.py`; frozen files in `evaluation/e1/frozen-packs-3e89b09/`.
+`reviewed-contexts.json` records full SHA-256 hashes. The collector verifies all
+reviewed files, instructions and constructed contexts before any provider call.
+The builder verifies existing reviewed artifacts instead of overwriting them.
 The frozen F010 and F110 contexts were rebuilt from these files and reproduce the campaign hashes exactly
 (tls aecac2766b8a / e9267dafcb35, lqlequiv 331c43d8ee98 / 358c7e67d3c6, pyrcel 62c639f42c2a / 286f0806457a).
 
@@ -41,12 +47,28 @@ Paired Wilcoxon signed-rank tests at request level, three software pooled, per m
 2. **L3 vs F110** — is full O different from same-length off-topic RDF?
 3. **L2 vs F010** — does the software's own compact content help or harm?
 
-Per-software results are reported descriptively (small samples).
+Correct the six primary premature-execution tests (three contrasts, two models)
+with Holm. Other endpoints and per-software results are descriptive. Report
+request counts, paired differences and improved/unchanged/worsened counts.
+Related scenario families remain potentially dependent. Repeated outputs are
+not independent observations. Reused F010/F110 add a collection-batch limitation.
 
 ## Interpretation rules (fixed now)
 
-- L3 worse than F010 and close to F110: the degradation is mainly due to length/format, not to ontological content.
-- F110 worse than L3: the full ontological content itself is harmful as a prompt.
-- L2 not worse than F010 while F110 is worse: a compact, relevant subset is usable; the size of the full package is
-  the problem.
-- No conclusion is drawn from a single software or a single model; null results are reported as such.
+- L3 worse than F010: competing RDF context can impair the measured task under this presentation.
+- F110 different from L3: the two packages differ; this does not identify an ontology-only effect.
+- L2 better than F110: the reduced package performs better for this benchmark; size and content still covary.
+- A nonsignificant difference does not demonstrate equivalence. No equivalence margin is registered here.
+- Character matching is not token matching. Other-domain RDF includes shared vocabulary and may distract;
+  L3 is not neutral padding. Its different heading also forms part of the intervention.
+- Null results are reported. No general claim about ontology usefulness or pure length effects is permitted.
+
+## Launch and scope
+
+GO for this contextual robustness experiment once local checks pass. Claude runs
+`MODE=full CONDS_OVERRIDE=L2,L3` with a new campaign tag and the same pinned H200
+models/settings. Keep every attempt, failure and response; do not replace the
+historical campaign. Archive tokenizer/model revisions and token usage when
+available, but do not silently truncate. Code review is not evidence that the
+H200 environment or generation has succeeded. This protocol does not authorize
+the separate 1296-response token-matched experiment.

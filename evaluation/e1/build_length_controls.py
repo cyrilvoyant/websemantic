@@ -11,10 +11,12 @@ From the packs frozen at 3e89b09 (evaluation/e1/frozen-packs-3e89b09, the campai
 Deterministic; the sizes are printed and recorded in length-controls.json.
 """
 
+import hashlib
 import json
 from pathlib import Path
 
 import rdflib
+from rdflib.compare import to_canonical_graph
 from rdflib.namespace import RDF
 
 HERE = Path(__file__).resolve().parent
@@ -26,12 +28,16 @@ KEEP = (WS.ParameterDefinition, WS.QualifierMapping, WS.ClarificationPolicy, WS.
 DOMAINS = ("tls", "lqlequiv", "pyrcel")
 
 
-def closure(g, node, out):
+def closure(g, node, out, visited=None):
     """Copy the triples of node, following blank nodes (bounds)."""
+    visited = set() if visited is None else visited
+    if node in visited:
+        return
+    visited.add(node)
     for p, o in g.predicate_objects(node):
         out.add((node, p, o))
         if isinstance(o, rdflib.BNode):
-            closure(g, o, out)
+            closure(g, o, out, visited)
 
 
 def compact(domain):
@@ -43,7 +49,9 @@ def compact(domain):
     for t in KEEP:
         for s in g.subjects(RDF.type, t):
             closure(g, s, out)
-    return out.serialize(format="turtle")
+    # Stable blank-node identifiers and statement order; N-Triples is valid Turtle.
+    return "\n".join(sorted(" ".join(term.n3() for term in row) + " ."
+                            for row in to_canonical_graph(out))) + "\n"
 
 
 def statements(text):
@@ -79,6 +87,15 @@ def length_matched(domain, target):
 
 
 def main():
+    reviewed = FROZEN / "reviewed-contexts.json"
+    if reviewed.exists():
+        for domain, files in json.loads(reviewed.read_text(encoding="utf-8"))["files"].items():
+            for name, expected in files.items():
+                data = (FROZEN / domain / name).read_bytes().replace(b"\r\n", b"\n")
+                if hashlib.sha256(data).hexdigest() != expected:
+                    raise ValueError(f"Reviewed artifact changed: {domain}/{name}")
+        print("Reviewed artifacts verified; no regeneration after registration.")
+        return
     record = {}
     for d in DOMAINS:
         full = sum(len((FROZEN / d / f).read_text(encoding="utf-8")) for f in ("ontology.ttl", "shapes.ttl"))

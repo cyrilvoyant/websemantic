@@ -1,5 +1,10 @@
 # Ontology content and context length: preregistration
 
+Future experiment, not the L2/L3 launch. The operational contextual robustness
+protocol is `../PREREG-length-control.md`. This token-matched experiment remains
+inactive until its request-specific extraction and tokenizer matching are implemented
+and verified. The two designs must never be pooled or described as one intervention.
+
 Status: preregistered 8 October 2026, before generation of any response for these
 conditions. Execution belongs to Claude on the H200; this file does not launch a
 campaign. Existing E1 responses are development evidence and are not reused.

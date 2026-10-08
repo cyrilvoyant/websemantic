@@ -190,6 +190,8 @@ gpu_lane() {
   trap stop_vllm EXIT
   trap 'stop_vllm; exit 143' TERM INT
   local not_served=""
+  "$GPU_ENV/bin/python" "$HERE/evaluation/e1/run_e1.py" --conditions "$CONDS" --check-contexts \
+    > "$LOGS/context-preflight.json" || fail gpu "context preflight failed before model loading"
   for KEY in $MODELS; do
     model_spec "$KEY" || fail gpu "unknown model key $KEY"
     status gpu server "starting $HF_ID"

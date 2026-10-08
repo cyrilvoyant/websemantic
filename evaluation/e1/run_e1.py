@@ -132,6 +132,15 @@ def length_context(domain, condition):
     Same layout as F110 (native documentation, O block, contract): L2 = own semantic content only,
     L3 = off-topic RDF of the same length as the full O package. FROZEN-F010/F110 rebuild the campaign contexts."""
     pack = FROZEN_PACKS / domain
+    if condition not in ("L2", "L3", "FROZEN-F010", "FROZEN-F110"):
+        raise ValueError("Unknown frozen context condition")
+    manifest = json.loads((FROZEN_PACKS / "reviewed-contexts.json").read_text(encoding="utf-8"))
+    if hashlib.sha256(INSTRUCTIONS.encode()).hexdigest() != manifest["instructions_sha256"]:
+        raise ValueError("Frozen instructions changed; review before collection")
+    for name, expected in manifest["files"][domain].items():
+        data = (pack / name).read_bytes().replace(b"\r\n", b"\n")
+        if hashlib.sha256(data).hexdigest() != expected:
+            raise ValueError(f"Frozen source changed: {domain}/{name}")
     blocks = ["## Native documentation\n" + native_doc(domain)]
     if condition in ("FROZEN-F110",):
         for name in ("ontology.ttl", "shapes.ttl"):
@@ -141,7 +150,10 @@ def length_context(domain, condition):
     elif condition == "L3":
         blocks.append("## Additional RDF vocabulary\n" + (pack / "ontology-lengthmatched.ttl").read_text(encoding="utf-8"))
     blocks.append("## Semantic pack: LLM-CONTRACT.md\n" + (pack / "LLM-CONTRACT.md").read_text(encoding="utf-8"))
-    return "\n\n".join(blocks)
+    result = "\n\n".join(blocks)
+    if hashlib.sha256(result.encode()).hexdigest() != manifest["contexts"][domain][condition]:
+        raise ValueError("Frozen context changed (including native documentation); review before collection")
+    return result
 
 
 def context(domain, condition):
@@ -280,15 +292,21 @@ def main():
     ap.add_argument("--pause", type=float, default=4.0)
     ap.add_argument("--corpus", default="pilot", help="pilot or qualifiers")
     ap.add_argument("--tag", default="", help="campaign tag: answers go to runs/e1/<model>__<tag>")
+    ap.add_argument("--check-contexts", action="store_true", help="Verify and hash contexts without credentials or provider calls")
     args = ap.parse_args()
+    domains, conds = args.domains.split(","), args.conditions.split(",")
+    # Verify contexts before loading credentials or creating campaign output.
+    contexts = {(d, c): context(d, c) for d in domains for c in conds}
+    if args.check_contexts:
+        print(json.dumps({f"{d}|{c}": {"sha256": hashlib.sha256(t.encode()).hexdigest(), "chars": len(t)}
+                          for (d, c), t in contexts.items()}, indent=2))
+        return
     load_key()
     folder = args.model.replace(":", "_").replace("/", "_") + (f"__{args.tag}" if args.tag else "")
     out_dir = RESERVE / "runs" / "e1" / folder  # one folder per model and campaign tag; scorers take the folder name
     out_dir.mkdir(parents=True, exist_ok=True)
     instr_hash = hashlib.sha256(INSTRUCTIONS.encode()).hexdigest()[:12]
-    domains, conds = args.domains.split(","), args.conditions.split(",")
     # Contexts are frozen at start: every answer of this run uses exactly these texts.
-    contexts = {(d, c): context(d, c) for d in domains for c in conds}
     manifest = {f"{d}|{c}": {"context_sha256_12": hashlib.sha256(t.encode()).hexdigest()[:12], "chars": len(t)}
                 for (d, c), t in contexts.items()}
     corpora = {d: (RESERVE / d / f"{args.corpus}.jsonl").read_text(encoding="utf-8") for d in domains}

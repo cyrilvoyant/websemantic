@@ -2,10 +2,36 @@
 
 import hashlib
 import json
+import subprocess
+import sys
+from pathlib import Path
 
 import pytest
 
 from evaluation.e3.bench import numeric_score, prepare, score, source_category
+
+
+def test_cli_prepare_then_score_retains_missing_execution(tmp_path, case):
+    script = Path(__file__).resolve().parents[1] / "evaluation/e3/bench.py"
+    origin = tmp_path / "origin"
+    origin.mkdir()
+    artifact(origin, "README.md", "synthetic baseline")
+    artifact(origin, "CITATION.cff", "synthetic citation")
+    config = {"cases": [case], "candidates": [{"id": "A", "root": str(origin),
+              "scientific_files": ["README.md"], "fair_files": ["CITATION.cff"]}]}
+    config_path = tmp_path / "registration.json"
+    config_path.write_text(json.dumps(config), encoding="utf-8")
+    subprocess.run([sys.executable, str(script), "prepare", str(config_path), str(tmp_path / "frozen")], check=True)
+    obs = record(tmp_path, case)
+    obs["reported_outputs"] = case["reference_outputs"]
+    case_path, obs_path, result_path = (tmp_path / n for n in ("case.json", "observation.json", "score.json"))
+    case_path.write_text(json.dumps(case), encoding="utf-8")
+    obs_path.write_text(json.dumps(obs), encoding="utf-8")
+    subprocess.run([sys.executable, str(script), "score", str(obs_path), str(case_path),
+                    str(tmp_path), str(result_path)], check=True)
+    result = json.loads(result_path.read_text())
+    assert result["numerical"][0]["rmsd"] == 0
+    assert not result["archived_bundle_and_numeric_match"]
 
 
 def artifact(root, name, text="synthetic fixture", kind=None):
