@@ -1,10 +1,10 @@
 unit,symbol,iri,source,quantity_kind_iri,accepted_exact_conversions
-local:KiloW-HR-PER-M-PER-YR,kWh/(m·an),https://github.com/cyrilvoyant/websemantic/ns#KiloW-HR-PER-M-PER-YR,local definition,http://qudt.org/vocab/quantitykind/Energy,"not in QUDT: annualised energy per metre of tunnel, all tubes"
-local:MegaW-HR-PER-YR,MWh/an,https://github.com/cyrilvoyant/websemantic/ns#MegaW-HR-PER-YR,local definition,http://qudt.org/vocab/quantitykind/Energy,not in QUDT: period energy extrapolated to one year (x 365/n_days)
+local:KiloW-HR-PER-M-PER-YR,kWh/(m·an),https://w3id.org/websemantic/ns#KiloW-HR-PER-M-PER-YR,local definition,http://qudt.org/vocab/quantitykind/Energy,"not in QUDT: annualised energy per metre of tunnel, all tubes"
+local:MegaW-HR-PER-YR,MWh/an,https://w3id.org/websemantic/ns#MegaW-HR-PER-YR,local definition,http://qudt.org/vocab/quantitykind/Energy,not in QUDT: period energy extrapolated to one year (x 365/n_days)
 unit:DAY,d,http://qudt.org/vocab/unit/DAY,QUDT,http://qudt.org/vocab/quantitykind/Time,week x7
 unit:HR,h,http://qudt.org/vocab/unit/HR,QUDT,http://qudt.org/vocab/quantitykind/Time,7 h 30 -> 7.5; min /60
 unit:KiloW,kW,http://qudt.org/vocab/unit/KiloW,QUDT,http://qudt.org/vocab/quantitykind/Power,W x0.001; MW x1000
-unit:KiloW per km per tube,kW/(km·tube),https://github.com/cyrilvoyant/websemantic/ns#KiloW-PER-KiloM-PER-TUBE,local definition,http://qudt.org/vocab/quantitykind/Power,not in QUDT: power per km of one tube; 1 kW/km = 1 W/m
+unit:KiloW per km per tube,kW/(km·tube),https://w3id.org/websemantic/ns#KiloW-PER-KiloM-PER-TUBE,local definition,http://qudt.org/vocab/quantitykind/Power,not in QUDT: power per km of one tube; 1 kW/km = 1 W/m
 unit:KiloW-HR,kWh,http://qudt.org/vocab/unit/KiloW-HR,QUDT,http://qudt.org/vocab/quantitykind/Energy,MWh x1000
 unit:M,m,http://qudt.org/vocab/unit/M,QUDT,http://qudt.org/vocab/quantitykind/Length,km x1000; cm x0.01
 unit:MIN,min,http://qudt.org/vocab/unit/MIN,QUDT,http://qudt.org/vocab/quantitykind/Time,h x60; 'pas horaire' -> 60

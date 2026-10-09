@@ -1,4 +1,4 @@
-@prefix ws:    <https://github.com/cyrilvoyant/websemantic/ns#> .
+@prefix ws:    <https://w3id.org/websemantic/ns#> .
 @prefix owl:   <http://www.w3.org/2002/07/owl#> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
@@ -18,22 +18,22 @@
 # never by new core classes. Alignments use rdfs:subClassOf / rdfs:seeAlso only:
 # no owl:equivalentClass is asserted towards external vocabularies.
 
-<https://github.com/cyrilvoyant/websemantic/ns/core> a owl:Ontology ;
+<https://w3id.org/websemantic/ns/core> a owl:Ontology ;
     dcterms:title "WebSemantic core ontology"@en ;
     dcterms:description "Common vocabulary linking user requests, software contracts, accepted assumptions, executions and qualified simulation outputs."@en ;
-    owl:versionInfo "0.2.0" ;
-    owl:versionIRI <https://github.com/cyrilvoyant/websemantic/ns/core/0.2.0> ;
-    owl:priorVersion <https://github.com/cyrilvoyant/websemantic/ns/core/0.1.0> ;
+    owl:versionInfo "0.2.1" ;
+    owl:versionIRI <https://w3id.org/websemantic/ns/core/0.2.1> ;
+    owl:priorVersion <https://w3id.org/websemantic/ns/core/0.2.0> ;
     dcterms:created "2026-10-06"^^xsd:date ;
     dcterms:issued "2026-10-08"^^xsd:date ;
-    dcterms:modified "2026-10-08"^^xsd:date ;
+    dcterms:modified "2026-10-09"^^xsd:date ;
     dcterms:creator <https://orcid.org/0000-0003-0242-7377> ;
     dcterms:publisher <https://github.com/cyrilvoyant/websemantic> ;
     dcterms:source <https://github.com/cyrilvoyant/websemantic> ;
     dcterms:license <https://polyformproject.org/licenses/noncommercial/1.0.0> ;
     dcterms:bibliographicCitation "Voyant, C. (2026). websemantic, version 0.2.0. Zenodo. https://doi.org/10.5281/zenodo.23238902" ;
     vann:preferredNamespacePrefix "ws" ;
-    vann:preferredNamespaceUri "https://github.com/cyrilvoyant/websemantic/ns#" ;
+    vann:preferredNamespaceUri "https://w3id.org/websemantic/ns#" ;
     bibo:status "draft" ;
     bibo:doi "10.5281/zenodo.23238902" ;
     dcterms:identifier <https://doi.org/10.5281/zenodo.23238902> ;
@@ -548,7 +548,7 @@ ws:term rdfs:comment "Links a qualifier mapping to the qualitative term of the s
 
 
 # ---- domain extension ----
-@prefix ws:   <https://github.com/cyrilvoyant/websemantic/ns#> .
+@prefix ws:   <https://w3id.org/websemantic/ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .

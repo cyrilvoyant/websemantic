@@ -24,7 +24,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 QUDT = "http://qudt.org/vocab/unit/"
 QK = "http://qudt.org/vocab/quantitykind/"
-WS = "https://github.com/cyrilvoyant/websemantic/ns#"
+WS = "https://w3id.org/websemantic/ns#"
 DOMAINS = {"tls": "tunnel-load-simulator", "lqlequiv": "LQL-Equiv-web", "pyrcel": "pyrcel"}
 EXT_TTL = {"tls": "tls-vocabulary.ttl", "lqlequiv": "lqlequiv.ttl", "pyrcel": "pyrcel.ttl"}
 

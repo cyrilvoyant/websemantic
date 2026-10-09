@@ -2,6 +2,8 @@
 
 Préparer une simulation en phrases, examiner les hypothèses et obtenir des résultats avec leurs unités et leur provenance. Trois profils : TLS, LQL-Equiv (un cursus fictif) et pyrcel (un mode d’aérosol, ascendance constante).
 
+DOI : [10.5281/zenodo.23238902](https://doi.org/10.5281/zenodo.23238902) · ontologie : [w3id.org/websemantic/ns](https://w3id.org/websemantic/ns)
+
 ## Avec un agent Python
 
 Lisez [les règles de réutilisation](llm.md), puis [le point d’entrée Python](agent/README.md). Il indique les fichiers, leurs empreintes et la commande commune aux trois modèles : `python agent/run.py tls|lql|pyrcel scenario.json` (choisir un modèle). Ce parcours utilise les fichiers sources, sans Git ni clé Gemini.

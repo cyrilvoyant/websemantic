@@ -51,7 +51,7 @@
     {
       "path": "src/websemantic/semantics.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/semantics.py",
-      "sha256_lf": "305a9ebfa48fccebca4fc547982e7cd5c36edfb14b6b02f91a89cbca545165de"
+      "sha256_lf": "2917521d77a9799cf99476ce8348e79cdee45fbb8864b00df3cf69ad6faec425"
     },
     {
       "path": "src/websemantic/comparison.py",
@@ -71,22 +71,22 @@
     {
       "path": "ontology/tls-contract.json",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/tls-contract.json",
-      "sha256_lf": "aa5ce2fd401e0b6f233d93abc4740470baf49f1ebe88564afa3b66d996cfc672"
+      "sha256_lf": "a7fdf9dcf6968479348447024c1b144273f5949751f4dc8be9a7f31278876dfb"
     },
     {
       "path": "ontology/core.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/core.ttl",
-      "sha256_lf": "d3b390c0d34cdee8675e2854320e2469e7fb7bf8686eaeead206e328f79d5b44"
+      "sha256_lf": "b9544b7659ba7a123989561c90b213d9144c2a593fbe14fe80cbf1b94f241d50"
     },
     {
       "path": "ontology/tls-vocabulary.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/tls-vocabulary.ttl",
-      "sha256_lf": "0ad801abe02c3beabecd4319505329caa80041d1020953b4cea430f4cb0521df"
+      "sha256_lf": "8cd836ee589b994ae077c2d7a657cc45e02dcd8d48c676e8acc64bf7c383573c"
     },
     {
       "path": "ontology/shapes.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/shapes.ttl",
-      "sha256_lf": "96fd37fb090e5692dff0e3355c7f8e92cde804475349055745f86457246cc410"
+      "sha256_lf": "e5cf638a10b2ffa5f8e06c5f1b84ac78f47fc013b2340df3aaab57d9a39aa111"
     },
     {
       "path": "ontology/competency-questions.md",
@@ -96,7 +96,7 @@
     {
       "path": "ontology/README.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/README.md",
-      "sha256_lf": "b296b600aac4afce5549e88b32670c1cb920616ee461fb79e39e770a160df25b"
+      "sha256_lf": "a16e7bbb1a6bd232a37bd8d015d93207ae22f179c906fbd98329f18837685a68"
     },
     {
       "path": "ontology/tls-scenario.schema.json",

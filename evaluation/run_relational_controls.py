@@ -13,7 +13,7 @@ from rdflib import BNode, Graph, Literal, Namespace
 from rdflib.namespace import RDF
 
 ROOT = Path(__file__).resolve().parents[1]
-WS = Namespace("https://github.com/cyrilvoyant/websemantic/ns#")
+WS = Namespace("https://w3id.org/websemantic/ns#")
 SH = Namespace("http://www.w3.org/ns/shacl#")
 
 

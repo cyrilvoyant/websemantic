@@ -21,7 +21,7 @@ from rdflib.namespace import RDF
 
 HERE = Path(__file__).resolve().parent
 FROZEN = HERE / "frozen-packs-3e89b09"
-WS = rdflib.Namespace("https://github.com/cyrilvoyant/websemantic/ns#")
+WS = rdflib.Namespace("https://w3id.org/websemantic/ns#")
 SKOS = rdflib.Namespace("http://www.w3.org/2004/02/skos/core#")
 KEEP = (WS.ParameterDefinition, WS.QualifierMapping, WS.ClarificationPolicy, WS.OutputVariable, WS.QualitativeTerm,
         WS.TaskProfile, WS.Contract, WS.ValidityLimit, WS.Intent, SKOS.ConceptScheme, SKOS.Concept)

@@ -1,4 +1,4 @@
-@prefix ws:    <https://github.com/cyrilvoyant/websemantic/ns#> .
+@prefix ws:    <https://w3id.org/websemantic/ns#> .
 @prefix owl:   <http://www.w3.org/2002/07/owl#> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
@@ -18,22 +18,22 @@
 # never by new core classes. Alignments use rdfs:subClassOf / rdfs:seeAlso only:
 # no owl:equivalentClass is asserted towards external vocabularies.
 
-<https://github.com/cyrilvoyant/websemantic/ns/core> a owl:Ontology ;
+<https://w3id.org/websemantic/ns/core> a owl:Ontology ;
     dcterms:title "WebSemantic core ontology"@en ;
     dcterms:description "Common vocabulary linking user requests, software contracts, accepted assumptions, executions and qualified simulation outputs."@en ;
-    owl:versionInfo "0.2.0" ;
-    owl:versionIRI <https://github.com/cyrilvoyant/websemantic/ns/core/0.2.0> ;
-    owl:priorVersion <https://github.com/cyrilvoyant/websemantic/ns/core/0.1.0> ;
+    owl:versionInfo "0.2.1" ;
+    owl:versionIRI <https://w3id.org/websemantic/ns/core/0.2.1> ;
+    owl:priorVersion <https://w3id.org/websemantic/ns/core/0.2.0> ;
     dcterms:created "2026-10-06"^^xsd:date ;
     dcterms:issued "2026-10-08"^^xsd:date ;
-    dcterms:modified "2026-10-08"^^xsd:date ;
+    dcterms:modified "2026-10-09"^^xsd:date ;
     dcterms:creator <https://orcid.org/0000-0003-0242-7377> ;
     dcterms:publisher <https://github.com/cyrilvoyant/websemantic> ;
     dcterms:source <https://github.com/cyrilvoyant/websemantic> ;
     dcterms:license <https://polyformproject.org/licenses/noncommercial/1.0.0> ;
     dcterms:bibliographicCitation "Voyant, C. (2026). websemantic, version 0.2.0. Zenodo. https://doi.org/10.5281/zenodo.23238902" ;
     vann:preferredNamespacePrefix "ws" ;
-    vann:preferredNamespaceUri "https://github.com/cyrilvoyant/websemantic/ns#" ;
+    vann:preferredNamespaceUri "https://w3id.org/websemantic/ns#" ;
     bibo:status "draft" ;
     bibo:doi "10.5281/zenodo.23238902" ;
     dcterms:identifier <https://doi.org/10.5281/zenodo.23238902> ;
@@ -552,7 +552,7 @@ ws:term rdfs:comment "Links a qualifier mapping to the qualitative term of the s
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
-@prefix ws: <https://github.com/cyrilvoyant/websemantic/ns#> .
+@prefix ws: <https://w3id.org/websemantic/ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 ws:ComparisonActivity a rdfs:Class ;
@@ -668,11 +668,11 @@ ws:revision a rdf:Property ;
 ws:task a rdf:Property ;
     rdfs:comment "Tâche déclarée du scénario."@fr .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/accident_probability_per_day> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/accident_probability_per_day> a skos:Concept ;
     skos:altLabel "probabilité d’accident"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Probabilité journalière de tirer un événement synthétique d’accident ; TLS tire ensuite son début et sa durée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.accident_probability_per_day" ;
     skos:prefLabel "Probabilité d'accident"@fr ;
     skos:scopeNote "Ce n’est pas une fréquence d’accident par véhicule ni une statistique directement déduite de BAAC."@fr ;
@@ -694,11 +694,11 @@ ws:task a rdf:Property ;
         "unit:NUM" ;
     ws:unitSymbol "1" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/accident_sensitivity> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/accident_sensitivity> a skos:Concept ;
     skos:altLabel "sensibilité aux accidents"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Coefficient de surcroît de ventilation lorsqu’un accident est actif ; il s’ajoute au coefficient de pollution dans le même facteur."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.accident_sensitivity" ;
     skos:prefLabel "Sensibilité accidents"@fr ;
     skos:scopeNote "Ce paramètre ne représente ni la gravité ni le coût énergétique complet d’un accident réel."@fr ;
@@ -717,11 +717,11 @@ ws:task a rdf:Property ;
         "unit:NUM" ;
     ws:unitSymbol "1" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/altitude_m> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/altitude_m> a skos:Concept ;
     skos:altLabel "altitude du tunnel"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Altitude utilisée dans le facteur de ventilation : 1 + max(altitude_m − 500, 0)/6000."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.altitude_m" ;
     skos:prefLabel "Altitude"@fr ;
     skos:scopeNote "Le référentiel altimétrique n’est pas déclaré par le modèle ; l’altitude de la commune ne fixe pas celle du tunnel."@fr ;
@@ -740,15 +740,15 @@ ws:task a rdf:Property ;
         "mètres" ;
     ws:unitSymbol "m" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/annual_energy> a ws:Intent ;
-    skos:related <https://github.com/cyrilvoyant/websemantic/ns#tls/annualized_mwh> ;
-    ws:requiresIndicator <https://github.com/cyrilvoyant/websemantic/ns#tls/annualized_mwh> .
+<https://w3id.org/websemantic/ns#tls/annual_energy> a ws:Intent ;
+    skos:related <https://w3id.org/websemantic/ns#tls/annualized_mwh> ;
+    ws:requiresIndicator <https://w3id.org/websemantic/ns#tls/annualized_mwh> .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/aux_kw_per_km_tube> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/aux_kw_per_km_tube> a skos:Concept ;
     skos:altLabel "charge des auxiliaires"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Charge de référence des auxiliaires en kW/(km·tube), multipliée par la longueur, les tubes et le facteur de profondeur."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.aux_kw_per_km_tube" ;
     skos:prefLabel "Auxiliaires"@fr ;
     skos:scopeNote "Ne pas confondre cette charge linéique avec une énergie ; un bruit propre aux auxiliaires est ajouté par TLS."@fr ;
@@ -766,11 +766,11 @@ ws:task a rdf:Property ;
         "kW/km/tube" ;
     ws:unitSymbol "kW/(km·tube)" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/base_fixed_kw> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/base_fixed_kw> a skos:Concept ;
     skos:altLabel "charge fixe"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Puissance fixe ajoutée une seule fois à la demande totale du tunnel, avant le bruit multiplicatif global."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.base_fixed_kw" ;
     skos:prefLabel "Charge fixe"@fr ;
     skos:scopeNote "Cette puissance concerne l’ensemble du tunnel, pas chaque tube."@fr ;
@@ -788,98 +788,98 @@ ws:task a rdf:Property ;
         "kw" ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/comparison> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/comparison> a skos:Concept ;
     skos:definition "Deux exécutions indépendantes après validation complète. CSV réunis avec une colonne scenario valant scenario_1 ou scenario_2 ; aucune moyenne entre scénarios. Conserver les sorties et manifestes individuels. Écarts entre médianes ; pourcentage relatif au scénario 2, indéfini si référence nulle. Graines communes, sans garantie de tirages identiques après modification de configuration."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Comparaison de deux scénarios"@fr ;
-    ws:controlledParameter <https://github.com/cyrilvoyant/websemantic/ns#tls/base_seed>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/freq_minutes>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/n_days>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/n_runs>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/start_date> ;
+    ws:controlledParameter <https://w3id.org/websemantic/ns#tls/base_seed>,
+        <https://w3id.org/websemantic/ns#tls/freq_minutes>,
+        <https://w3id.org/websemantic/ns#tls/n_days>,
+        <https://w3id.org/websemantic/ns#tls/n_runs>,
+        <https://w3id.org/websemantic/ns#tls/start_date> ;
     ws:scenarioCount 2 .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/energy_demand> a ws:Intent ;
-    skos:related <https://github.com/cyrilvoyant/websemantic/ns#tls/total_mwh> ;
-    ws:requiresIndicator <https://github.com/cyrilvoyant/websemantic/ns#tls/total_mwh> .
+<https://w3id.org/websemantic/ns#tls/energy_demand> a ws:Intent ;
+    skos:related <https://w3id.org/websemantic/ns#tls/total_mwh> ;
+    ws:requiresIndicator <https://w3id.org/websemantic/ns#tls/total_mwh> .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-1> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/equation-1> a skos:Concept ;
     skos:definition "R est le profil de pointes et de nuit ; Q98 est sa référence déterministe au 98e percentile, C le contexte, S la saison, W le jour de semaine et D_j un tirage journalier normal de moyenne 1 et écart-type 0,06. Aucun comptage de véhicules."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Trafic"@fr ;
     ws:expression "T(t) = clip((R(t)/Q98) × C × S × W × traffic_level × D_j, 0, 2)" ;
     ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
     ws:unitSymbol "sans unité" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-2> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/equation-2> a skos:Concept ;
     skos:definition "h, c et w sont en heures ; A est sans unité. R = 0,16 + 0,06 cos(2π(h-3)/24) + G(h;c_m,w,1) + G(h;c_s,1,15w,1,1), plus G(h;18,7;2,5;0,25) en contexte urbain. w est un écart-type temporel."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Pointes"@fr ;
     ws:expression "G(h;c,w,A) = A × exp(-0,5 × ((h-c)/w)^2)" ;
     ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
     ws:unitSymbol "sans unité" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-3> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/equation-3> a skos:Concept ;
     skos:definition "Altitude et profondeur en m ; pente saisie en %, donc 2 pour 2 %. Le plafond de profondeur concerne le facteur, pas la longueur ni la validité géologique."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Facteurs géométriques"@fr ;
     ws:expression "F_alt = 1 + max(altitude_m-500,0)/6000 ; F_pente = 1 + abs(gradient_percent)/20 ; F_profondeur = 1 + min(max_depth_m,800)/6000" ;
     ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
     ws:unitSymbol "sans unité" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-4> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/equation-4> a skos:Concept ;
     skos:definition "L = length_m/1000 en km. k_l en kW/(km·voie), f_min et c_l sans unité dépendent de la catégorie. J(t) est le profil synthétique de lumière du jour, sans éphéméride locale ; même une catégorie fixed est modulée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Éclairage"@fr ;
     ws:expression "P_lumière(t) = k_l × L × N_tubes × N_voies × min(f_min + (1-f_min)(1-J(t)) + c_l T(t), 1)" ;
     ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-5> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/equation-5> a skos:Concept ;
     skos:definition "k_v est en kW/(km·tube). I_p et I_a sont des indicateurs 0/1 d’événements synthétiques. Les deux coefficients s’ajoutent si les deux événements sont actifs ; ce n’est pas un modèle de sécurité."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Ventilation"@fr ;
     ws:expression "P_vent(t) = k_v × L × N_tubes × (0,15 + traffic_sensitivity × T(t)) × F_alt × F_pente × (1 + pollution_sensitivity × I_p(t) + accident_sensitivity × I_a(t))" ;
     ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-6> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/equation-6> a skos:Concept ;
     skos:definition "Z(t) suit une loi normale de moyenne 1 et d’écart-type 0,025 ; ce tirage reste actif même si noise_sigma vaut zéro."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Auxiliaires"@fr ;
     ws:expression "P_aux(t) = aux_kw_per_km_tube × L × N_tubes × F_profondeur × Z(t)" ;
     ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-7> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/equation-7> a skos:Concept ;
     skos:definition "ε suit une loi normale de moyenne zéro et d’écart-type noise_sigma. La graine fixe rend les trajectoires reproductibles, sans supprimer les tirages."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Puissance totale"@fr ;
     ws:expression "P(t) = max((base_fixed_kw + P_lumière(t) + P_vent(t) + P_aux(t)) × (1 + ε(t)), 0)" ;
     ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-8> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/equation-8> a skos:Concept ;
     skos:definition "L’énergie journalière somme les pas d’une journée. La puissance quotidienne est la moyenne des puissances. E_ann est une extrapolation de la période simulée ; aucune mesure annuelle terrain."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Énergie et annualisation"@fr ;
     ws:expression "E_pas = P(t) × freq_minutes/60 ; E_MWh = somme(E_pas)/1000 ; E_ann = E_MWh × 365/n_days" ;
     ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
     ws:unitSymbol "kWh ; MWh ; MWh/an" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/equation-9> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/equation-9> a skos:Concept ;
     skos:definition "p est la probabilité journalière déclarée, pas un taux par véhicule. Pollution : début uniforme de 7 à 18 h, durée de 2 à 8 h. Accident : début de 6,5 à 20 h, durée de 0,5 à 3 h. Un événement peut déborder sur le lendemain."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Événements"@fr ;
     ws:expression "B_j ~ Bernoulli(p) ; I(t) = 1 pendant l’événement si B_j = 1" ;
     ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
     ws:unitSymbol "probabilité sans unité ; durée en h" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/evening_peak_hour> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/evening_peak_hour> a skos:Concept ;
     skos:altLabel "pointe du soir"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Heure du centre du pic gaussien du soir, comprise entre 0 inclus et 24 exclu."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.evening_peak_hour" ;
     skos:prefLabel "Pointe du soir"@fr ;
     skos:scopeNote "Heure du calendrier simulé ; aucun fuseau horaire ni changement d’heure n’est modélisé."@fr ;
@@ -899,11 +899,11 @@ ws:task a rdf:Property ;
         "hours" ;
     ws:unitSymbol "h du jour" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/gradient_percent> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/gradient_percent> a skos:Concept ;
     skos:altLabel "pente du tunnel"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Pente en pourcentage, utilisée dans le facteur de ventilation 1 + abs(gradient_percent)/20."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.gradient_percent" ;
     skos:prefLabel "Pente"@fr ;
     skos:scopeNote "Une pente de 2 % se saisit 2, pas 0,02 ; l’adaptateur courant demande une valeur non négative."@fr ;
@@ -921,15 +921,15 @@ ws:task a rdf:Property ;
         "pourcentage" ;
     ws:unitSymbol "%" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/length_efficiency> a ws:Intent ;
-    skos:related <https://github.com/cyrilvoyant/websemantic/ns#tls/specific_kwh_m_year> ;
-    ws:requiresIndicator <https://github.com/cyrilvoyant/websemantic/ns#tls/specific_kwh_m_year> .
+<https://w3id.org/websemantic/ns#tls/length_efficiency> a ws:Intent ;
+    skos:related <https://w3id.org/websemantic/ns#tls/specific_kwh_m_year> ;
+    ws:requiresIndicator <https://w3id.org/websemantic/ns#tls/specific_kwh_m_year> .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/length_m> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/length_m> a skos:Concept ;
     skos:altLabel "longueur du tunnel"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Longueur du tunnel commune aux tubes ; convertie en kilomètres pour les charges proportionnelles à la longueur."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.length_m" ;
     skos:prefLabel "Longueur"@fr ;
     skos:scopeNote "Ne pas multiplier la longueur par le nombre de tubes ; ce facteur est appliqué séparément."@fr ;
@@ -950,11 +950,11 @@ ws:task a rdf:Property ;
         "mètres" ;
     ws:unitSymbol "m" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/lighting_type> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/lighting_type> a skos:Concept ;
     skos:altLabel "type d’éclairage"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Catégorie déterminant la puissance spécifique installée, le couplage au trafic et la fraction minimale d’éclairage."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.lighting_type" ;
     skos:prefLabel "Éclairage"@fr ;
     skos:scopeNote "Catégories sans ordre universel : utiliser uniquement les catégories déclarées et leurs synonymes non ambigus. « Ancien », « moderne », « fort » ou « faible » seuls demandent une précision ; l’âge ne détermine pas une technologie ni ses performances."@fr,
@@ -982,11 +982,11 @@ ws:task a rdf:Property ;
         "unit:UNITLESS" ;
     ws:unitSymbol "catégorie" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/max_depth_m> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/max_depth_m> a skos:Concept ;
     skos:altLabel "profondeur maximale"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Profondeur maximale utilisée pour les auxiliaires : facteur 1 + min(max_depth_m, 800)/6000."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.max_depth_m" ;
     skos:prefLabel "Couverture maximale"@fr ;
     skos:scopeNote "Le plafonnement de l’effet à 800 m n’est pas une limite géométrique de validité physique."@fr ;
@@ -1005,11 +1005,11 @@ ws:task a rdf:Property ;
         "mètres" ;
     ws:unitSymbol "m" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/morning_peak_hour> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/morning_peak_hour> a skos:Concept ;
     skos:altLabel "pointe du matin"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Heure du centre du pic gaussien du matin, comprise entre 0 inclus et 24 exclu."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.morning_peak_hour" ;
     skos:prefLabel "Pointe du matin"@fr ;
     skos:scopeNote "Heure du calendrier simulé ; aucun fuseau horaire ni changement d’heure n’est modélisé."@fr ;
@@ -1029,11 +1029,11 @@ ws:task a rdf:Property ;
         "hours" ;
     ws:unitSymbol "h du jour" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/n_lanes_per_tube> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/n_lanes_per_tube> a skos:Concept ;
     skos:altLabel "nombre de voies par tube"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Nombre de voies dans chaque tube ; l’éclairage est dimensionné sur n_tubes × n_lanes_per_tube."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.n_lanes_per_tube" ;
     skos:prefLabel "Voies par tube"@fr ;
     skos:scopeNote "Ne pas fournir le nombre total de voies à la place du nombre par tube."@fr ;
@@ -1059,11 +1059,11 @@ ws:task a rdf:Property ;
         "voies" ;
     ws:unitSymbol "nombre" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/n_tubes> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/n_tubes> a skos:Concept ;
     skos:altLabel "nombre de tubes"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Nombre de tubes ; multiplie les charges de ventilation et d’auxiliaires et contribue au nombre total de voies."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.n_tubes" ;
     skos:prefLabel "Tubes"@fr ;
     skos:scopeNote "Un tube est distinct d’une voie de circulation."@fr ;
@@ -1089,11 +1089,11 @@ ws:task a rdf:Property ;
         "voies" ;
     ws:unitSymbol "nombre" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/noise_sigma> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/noise_sigma> a skos:Concept ;
     skos:altLabel "bruit relatif"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Écart-type du bruit gaussien relatif appliqué à la puissance totale ; la puissance résultante est ramenée au minimum à zéro."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.noise_sigma" ;
     skos:prefLabel "Bruit multiplicatif"@fr ;
     skos:scopeNote "D’autres tirages restent actifs même si noise_sigma=0 : trafic quotidien, auxiliaires et événements."@fr ;
@@ -1114,15 +1114,15 @@ ws:task a rdf:Property ;
         "unit:NUM" ;
     ws:unitSymbol "1" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/peak_demand> a ws:Intent ;
-    skos:related <https://github.com/cyrilvoyant/websemantic/ns#tls/peak_kw> ;
-    ws:requiresIndicator <https://github.com/cyrilvoyant/websemantic/ns#tls/peak_kw> .
+<https://w3id.org/websemantic/ns#tls/peak_demand> a ws:Intent ;
+    skos:related <https://w3id.org/websemantic/ns#tls/peak_kw> ;
+    ws:requiresIndicator <https://w3id.org/websemantic/ns#tls/peak_kw> .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/peak_width_h> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/peak_width_h> a skos:Concept ;
     skos:altLabel "largeur des pointes"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Écart-type temporel du pic gaussien du matin en heures ; TLS utilise 1,15 fois cette valeur pour le soir."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.peak_width_h" ;
     skos:prefLabel "Largeur des pics"@fr ;
     skos:scopeNote "Ce n’est pas la durée totale de la pointe ni sa largeur à mi-hauteur."@fr ;
@@ -1142,11 +1142,11 @@ ws:task a rdf:Property ;
         "hours" ;
     ws:unitSymbol "h" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/pollution_probability_per_day> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/pollution_probability_per_day> a skos:Concept ;
     skos:altLabel "probabilité de pollution"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Probabilité journalière de tirer un événement synthétique de pollution ; TLS tire ensuite son début et sa durée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.pollution_probability_per_day" ;
     skos:prefLabel "Probabilité de pollution"@fr ;
     skos:scopeNote "Une valeur de 0,05 signifie une probabilité de 5 % par jour, pas un taux de pollution ni une concentration."@fr ;
@@ -1168,11 +1168,11 @@ ws:task a rdf:Property ;
         "unit:NUM" ;
     ws:unitSymbol "1" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/pollution_sensitivity> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/pollution_sensitivity> a skos:Concept ;
     skos:altLabel "sensibilité à la pollution"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Coefficient de surcroît de ventilation lorsqu’un événement de pollution est actif : ajout à 1 + pollution_sensitivity × indicateur."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.pollution_sensitivity" ;
     skos:prefLabel "Sensibilité pollution"@fr ;
     skos:scopeNote "Quand les deux événements sont actifs, leurs coefficients s’ajoutent ; aucune dispersion atmosphérique n’est simulée."@fr ;
@@ -1191,11 +1191,11 @@ ws:task a rdf:Property ;
         "unit:NUM" ;
     ws:unitSymbol "1" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/traffic_level> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/traffic_level> a skos:Concept ;
     skos:altLabel "niveau de trafic"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Multiplicateur du profil synthétique de trafic normalisé ; l’indice final est borné entre 0 et 2 dans TLS."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.traffic_level" ;
     skos:prefLabel "Trafic relatif"@fr ;
     skos:scopeNote "Ce paramètre n’est ni un débit en véhicules/heure ni un trafic journalier observé."@fr ;
@@ -1214,11 +1214,11 @@ ws:task a rdf:Property ;
         "unit:NUM" ;
     ws:unitSymbol "1" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/traffic_sensitivity> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/traffic_sensitivity> a skos:Concept ;
     skos:altLabel "sensibilité au trafic"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Coefficient du trafic dans la charge de ventilation : facteur 0,15 + traffic_sensitivity × traffic_index."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.traffic_sensitivity" ;
     skos:prefLabel "Sensibilité au trafic"@fr ;
     skos:scopeNote "Coefficient de modèle ; ce n’est pas une élasticité mesurée de consommation."@fr ;
@@ -1237,11 +1237,11 @@ ws:task a rdf:Property ;
         "unit:NUM" ;
     ws:unitSymbol "1" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/tunnel_context> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/tunnel_context> a skos:Concept ;
     skos:altLabel "contexte du tunnel"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Catégorie appliquant un multiplicateur au profil de trafic ; urban ajoute également une composante de pointe en soirée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.tunnel_context" ;
     skos:prefLabel "Contexte"@fr ;
     skos:scopeNote "Catégories sans ordre universel : utiliser uniquement les catégories déclarées et leurs synonymes non ambigus. « Ancien », « moderne », « fort » ou « faible » seuls demandent une précision ; l’âge ne détermine pas une technologie ni ses performances."@fr,
@@ -1268,11 +1268,11 @@ ws:task a rdf:Property ;
         "unit:UNITLESS" ;
     ws:unitSymbol "catégorie" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/ventilation_type> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/ventilation_type> a skos:Concept ;
     skos:altLabel "type de ventilation"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/inputs> ;
     skos:definition "Catégorie déterminant la charge de ventilation par kilomètre et par tube, modulée par trafic, altitude, pente et événements."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "inputs.ventilation_type" ;
     skos:prefLabel "Ventilation"@fr ;
     skos:scopeNote "Catégories sans ordre universel : utiliser uniquement les catégories déclarées et leurs synonymes non ambigus. « Ancien », « moderne », « fort » ou « faible » seuls demandent une précision ; l’âge ne détermine pas une technologie ni ses performances."@fr,
@@ -1311,24 +1311,24 @@ ws:value a rdf:Property ;
     rdfs:domain ws:Parameter ;
     rdfs:range rdfs:Literal .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/accident_event> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/accident_event> a skos:Concept ;
     skos:prefLabel "accident_event" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/auxiliary_kw> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/auxiliary_kw> a skos:Concept ;
     skos:prefLabel "auxiliary_kw" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/day_type> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/day_type> a skos:Concept ;
     skos:prefLabel "day_type" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/dayofweek> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/dayofweek> a skos:Concept ;
     skos:prefLabel "dayofweek" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/freq_minutes> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/freq_minutes> a skos:Concept ;
     skos:altLabel "pas interne"@fr,
         "pas temporel"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/experiment> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/experiment> ;
     skos:definition "Durée constante du pas interne ; l’énergie du pas vaut puissance × freq_minutes/60."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "experiment.freq_minutes" ;
     skos:prefLabel "Pas de calcul"@fr ;
     skos:scopeNote "Pas admis : 5, 10, 15, 30 ou 60 min. Une sortie quotidienne est une agrégation, pas un calcul à minuit."@fr ;
@@ -1347,26 +1347,26 @@ ws:value a rdf:Property ;
         "minutes" ;
     ws:unitSymbol "min" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/lighting_kw> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/lighting_kw> a skos:Concept ;
     skos:prefLabel "lighting_kw" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/load_factor> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/load_factor> a skos:Concept ;
     skos:prefLabel "load_factor" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/mean> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/mean> a skos:Concept ;
     skos:prefLabel "mean" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/median> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/median> a skos:Concept ;
     skos:prefLabel "median" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/n_accident_events> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/n_accident_events> a skos:Concept ;
     skos:prefLabel "n_accident_events" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/n_days> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/n_days> a skos:Concept ;
     skos:altLabel "durée de simulation"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/experiment> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/experiment> ;
     skos:definition "Nombre de jours entiers simulés à partir de start_date."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "experiment.n_days" ;
     skos:prefLabel "Durée"@fr ;
     skos:scopeNote "L’annualisation utilise 365/n_days ; 365 jours ne couvrent pas une année civile bissextile complète."@fr ;
@@ -1387,14 +1387,14 @@ ws:value a rdf:Property ;
         "jours" ;
     ws:unitSymbol "jours" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/n_pollution_events> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/n_pollution_events> a skos:Concept ;
     skos:prefLabel "n_pollution_events" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/n_runs> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/n_runs> a skos:Concept ;
     skos:altLabel "nombre de réalisations"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/experiment> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/experiment> ;
     skos:definition "Nombre de réalisations Monte Carlo indépendantes ; chaque réalisation utilise base_seed + son indice."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "experiment.n_runs" ;
     skos:prefLabel "Réalisations"@fr ;
     skos:scopeNote "Augmenter ce nombre décrit mieux la variabilité du modèle, sans ajouter une validation terrain."@fr ;
@@ -1419,304 +1419,304 @@ ws:value a rdf:Property ;
         "voies" ;
     ws:unitSymbol "nombre" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/daily/energy_kwh> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/daily> ;
+<https://w3id.org/websemantic/ns#tls/outputs/daily/energy_kwh> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/daily> ;
     skos:definition "Somme des énergies des pas natifs de la journée, réalisation 0."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/energy_kwh> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/energy_kwh> ;
     ws:quantity "energy" ;
     ws:unitSymbol "kWh" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/daily/mean_kw> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/daily> ;
+<https://w3id.org/websemantic/ns#tls/outputs/daily/mean_kw> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/daily> ;
     skos:definition "Moyenne des puissances des pas natifs de la journée, réalisation 0."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/mean_kw> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/mean_kw> ;
     ws:quantity "power" ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/daily/timestamp> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/daily> ;
+<https://w3id.org/websemantic/ns#tls/outputs/daily/timestamp> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/daily> ;
     skos:definition "Horodatage sans fuseau horaire déclaré ; aucune localisation déduite."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/timestamp> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/timestamp> ;
     ws:quantity "time" ;
     ws:unitSymbol "ISO 8601" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/envelope/mean> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/envelope> ;
+<https://w3id.org/websemantic/ns#tls/outputs/envelope/mean> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/envelope> ;
     skos:definition "Puissance électrique calculée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/mean> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/mean> ;
     ws:quantity "power" ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/envelope/median> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/envelope> ;
+<https://w3id.org/websemantic/ns#tls/outputs/envelope/median> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/envelope> ;
     skos:definition "Puissance électrique calculée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/median> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/median> ;
     ws:quantity "power" ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/envelope/p10> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/envelope> ;
+<https://w3id.org/websemantic/ns#tls/outputs/envelope/p10> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/envelope> ;
     skos:definition "Puissance électrique calculée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/p10> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/p10> ;
     ws:quantity "power" ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/envelope/p90> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/envelope> ;
+<https://w3id.org/websemantic/ns#tls/outputs/envelope/p90> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/envelope> ;
     skos:definition "Puissance électrique calculée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/p90> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/p90> ;
     ws:quantity "power" ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/envelope/timestamp> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/envelope> ;
+<https://w3id.org/websemantic/ns#tls/outputs/envelope/timestamp> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/envelope> ;
     skos:definition "Horodatage sans fuseau horaire déclaré ; aucune localisation déduite."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/timestamp> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/timestamp> ;
     ws:quantity "time" ;
     ws:unitSymbol "ISO 8601" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/annualized_mwh> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis> ;
+<https://w3id.org/websemantic/ns#tls/outputs/kpis/annualized_mwh> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Extrapolation : total_mwh × 365 / n_days ; pas une année observée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/annualized_mwh> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/annualized_mwh> ;
     ws:quantity "annualized_energy" ;
     ws:unitSymbol "MWh/an" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/base_seed> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis> ;
+<https://w3id.org/websemantic/ns#tls/outputs/kpis/base_seed> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Graine de base fixe de l’expérience ; 42 par défaut, modifiable explicitement."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/base_seed> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/base_seed> ;
     ws:quantity "identifier" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/load_factor> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis> ;
+<https://w3id.org/websemantic/ns#tls/outputs/kpis/load_factor> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "mean_kw / peak_kw par réalisation ; sans dimension, 0,6 équivaut à 60 %."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/load_factor> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/load_factor> ;
     ws:quantity "power_ratio" ;
     ws:unitSymbol "1" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/mean_kw> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis> ;
+<https://w3id.org/websemantic/ns#tls/outputs/kpis/mean_kw> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Puissance électrique calculée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/mean_kw> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/mean_kw> ;
     ws:quantity "power" ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/n_accident_events> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis> ;
+<https://w3id.org/websemantic/ns#tls/outputs/kpis/n_accident_events> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Nombre de transitions 0 vers 1 dans la série accident_event ; un événement actif au premier pas n'est pas compté."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/n_accident_events> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/n_accident_events> ;
     ws:quantity "transition_count" ;
     ws:unitSymbol "1" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/n_pollution_events> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis> ;
+<https://w3id.org/websemantic/ns#tls/outputs/kpis/n_pollution_events> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Nombre de transitions 0 vers 1 dans la série pollution_event ; un événement actif au premier pas n'est pas compté."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/n_pollution_events> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/n_pollution_events> ;
     ws:quantity "transition_count" ;
     ws:unitSymbol "1" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/peak_kw> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis> ;
+<https://w3id.org/websemantic/ns#tls/outputs/kpis/peak_kw> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Puissance électrique calculée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/peak_kw> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/peak_kw> ;
     ws:quantity "power" ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/run> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis> ;
+<https://w3id.org/websemantic/ns#tls/outputs/kpis/run> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Identifiant de réalisation Monte Carlo, à partir de 0."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/run> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/run> ;
     ws:quantity "identifier" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/seed> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis> ;
+<https://w3id.org/websemantic/ns#tls/outputs/kpis/seed> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Graine pseudo-aléatoire : base_seed + run."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/seed> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/seed> ;
     ws:quantity "identifier" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/specific_kwh_m_year> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis> ;
+<https://w3id.org/websemantic/ns#tls/outputs/kpis/specific_kwh_m_year> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "annualized_mwh × 1000 / length_m ; ensemble des tubes, par mètre de longueur du tunnel, pas par mètre-tube."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/specific_kwh_m_year> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/specific_kwh_m_year> ;
     ws:quantity "length_normalized_annualized_energy" ;
     ws:unitSymbol "kWh/(m·an)" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/total_mwh> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis> ;
+<https://w3id.org/websemantic/ns#tls/outputs/kpis/total_mwh> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Énergie de toute la période : somme des energy_kwh / 1000."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/total_mwh> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/total_mwh> ;
     ws:quantity "energy" ;
     ws:unitSymbol "MWh" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/accident_event> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative> ;
+<https://w3id.org/websemantic/ns#tls/outputs/representative/accident_event> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Indicateur binaire d'accident simulé."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/accident_event> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/accident_event> ;
     ws:quantity "event_flag" ;
     ws:unitSymbol "1" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/auxiliary_kw> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative> ;
+<https://w3id.org/websemantic/ns#tls/outputs/representative/auxiliary_kw> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Puissance électrique calculée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/auxiliary_kw> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/auxiliary_kw> ;
     ws:quantity "power" ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/day_type> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative> ;
+<https://w3id.org/websemantic/ns#tls/outputs/representative/day_type> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Jour de semaine ou week-end du calendrier simulé."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/day_type> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/day_type> ;
     ws:quantity "category" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/dayofweek> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative> ;
+<https://w3id.org/websemantic/ns#tls/outputs/representative/dayofweek> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Indice : lundi 0, dimanche 6."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/dayofweek> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/dayofweek> ;
     ws:quantity "weekday_index" ;
     ws:unitSymbol "1" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/energy_kwh> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative> ;
+<https://w3id.org/websemantic/ns#tls/outputs/representative/energy_kwh> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Énergie du pas : power_kw × freq_minutes / 60."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/energy_kwh> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/energy_kwh> ;
     ws:quantity "energy" ;
     ws:unitSymbol "kWh" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/hour_int> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative> ;
+<https://w3id.org/websemantic/ns#tls/outputs/representative/hour_int> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Heure du jour, de 0 à 23 ; pas une durée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/hour_int> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/hour_int> ;
     ws:quantity "hour_of_day" ;
     ws:unitSymbol "h" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/lighting_kw> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative> ;
+<https://w3id.org/websemantic/ns#tls/outputs/representative/lighting_kw> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Puissance électrique calculée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/lighting_kw> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/lighting_kw> ;
     ws:quantity "power" ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/pollution_event> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative> ;
+<https://w3id.org/websemantic/ns#tls/outputs/representative/pollution_event> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Indicateur binaire d'événement de pollution simulé."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/pollution_event> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/pollution_event> ;
     ws:quantity "event_flag" ;
     ws:unitSymbol "1" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/power_kw> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative> ;
+<https://w3id.org/websemantic/ns#tls/outputs/representative/power_kw> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Puissance électrique calculée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/power_kw> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/power_kw> ;
     ws:quantity "power" ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/season> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative> ;
+<https://w3id.org/websemantic/ns#tls/outputs/representative/season> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Saison du calendrier simulé ; ne prouve pas une couverture annuelle."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/season> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/season> ;
     ws:quantity "category" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/timestamp> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative> ;
+<https://w3id.org/websemantic/ns#tls/outputs/representative/timestamp> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Horodatage sans fuseau horaire déclaré ; aucune localisation déduite."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/timestamp> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/timestamp> ;
     ws:quantity "time" ;
     ws:unitSymbol "ISO 8601" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/traffic_index> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative> ;
+<https://w3id.org/websemantic/ns#tls/outputs/representative/traffic_index> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Indice relatif de trafic ; pas un nombre de véhicules par jour."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/traffic_index> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/traffic_index> ;
     ws:quantity "relative_traffic_index" ;
     ws:unitSymbol "1" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/ventilation_kw> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative> ;
+<https://w3id.org/websemantic/ns#tls/outputs/representative/ventilation_kw> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Puissance électrique calculée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/ventilation_kw> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/ventilation_kw> ;
     ws:quantity "power" ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/season_profiles/hour_int> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/season_profiles> ;
+<https://w3id.org/websemantic/ns#tls/outputs/season_profiles/hour_int> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/season_profiles> ;
     skos:definition "Heure du jour, de 0 à 23 ; pas une durée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/hour_int> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/hour_int> ;
     ws:quantity "hour_of_day" ;
     ws:unitSymbol "h" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/season_profiles/power_kw> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/season_profiles> ;
+<https://w3id.org/websemantic/ns#tls/outputs/season_profiles/power_kw> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/season_profiles> ;
     skos:definition "Puissance électrique calculée."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/power_kw> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/power_kw> ;
     ws:quantity "power" ;
     ws:unitSymbol "kW" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/season_profiles/run> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/season_profiles> ;
+<https://w3id.org/websemantic/ns#tls/outputs/season_profiles/run> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/season_profiles> ;
     skos:definition "Identifiant de réalisation Monte Carlo, à partir de 0."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/run> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/run> ;
     ws:quantity "identifier" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/season_profiles/season> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/season_profiles> ;
+<https://w3id.org/websemantic/ns#tls/outputs/season_profiles/season> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/outputs/season_profiles> ;
     skos:definition "Saison du calendrier simulé ; ne prouve pas une couverture annuelle."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://github.com/cyrilvoyant/websemantic/ns#tls/season> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    ws:concept <https://w3id.org/websemantic/ns#tls/season> ;
     ws:quantity "category" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/p10> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/p10> a skos:Concept ;
     skos:prefLabel "p10" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/p90> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/p90> a skos:Concept ;
     skos:prefLabel "p90" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/pollution_event> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/pollution_event> a skos:Concept ;
     skos:prefLabel "pollution_event" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/seed> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/seed> a skos:Concept ;
     skos:prefLabel "seed" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/start_date> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/start_date> a skos:Concept ;
     skos:altLabel "date de début"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/experiment> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/experiment> ;
     skos:definition "Date de début au format YYYY-MM-DD ; détermine le calendrier, les jours de semaine et les saisons du modèle."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "experiment.start_date" ;
     skos:prefLabel "Début"@fr ;
     skos:scopeNote "Demander une date ou une référence temporelle explicite. « Tôt », « tard » et « début d’année » sans année ne déterminent pas une date. Ne pas choisir silencieusement la date du jour. Le défaut est une proposition acceptée seulement sur accord."@fr,
@@ -1739,18 +1739,18 @@ ws:value a rdf:Property ;
         "unit:UNITLESS" ;
     ws:unitSymbol "date" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/traffic_index> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/traffic_index> a skos:Concept ;
     skos:prefLabel "traffic_index" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/ventilation_kw> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/ventilation_kw> a skos:Concept ;
     skos:prefLabel "ventilation_kw" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/base_seed> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/base_seed> a skos:Concept ;
     skos:altLabel "graine aléatoire"@fr,
         "seed"@fr ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/experiment> ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/experiment> ;
     skos:definition "Identifiant initial du générateur pseudo-aléatoire ; chaque réalisation utilise base_seed + run."@fr ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:notation "experiment.base_seed" ;
     skos:prefLabel "base_seed",
         "Graine"@fr ;
@@ -1781,120 +1781,120 @@ ws:value a rdf:Property ;
         "unit:UNITLESS" ;
     ws:unitSymbol "identifiant" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/energy_kwh> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/energy_kwh> a skos:Concept ;
     skos:prefLabel "energy_kwh" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/hour_int> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/hour_int> a skos:Concept ;
     skos:prefLabel "hour_int" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/mean_kw> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/mean_kw> a skos:Concept ;
     skos:prefLabel "mean_kw" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/power_kw> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/power_kw> a skos:Concept ;
     skos:prefLabel "power_kw" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/run> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/run> a skos:Concept ;
     skos:prefLabel "run" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/season> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/season> a skos:Concept ;
     skos:prefLabel "season" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/annualized_mwh> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/annualized_mwh> a skos:Concept ;
     skos:prefLabel "annualized_mwh" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/daily> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/outputs> ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+<https://w3id.org/websemantic/ns#tls/outputs/daily> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/outputs> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "daily" ;
     ws:aggregation "Agrégation journalière de la réalisation 0 : somme de l'énergie et moyenne de la puissance ; pas une médiane Monte Carlo. Les dates suivent le calendrier sans fuseau déclaré."@fr ;
-    ws:hasColumn <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/daily/energy_kwh>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/daily/mean_kw>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/daily/timestamp> .
+    ws:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/daily/energy_kwh>,
+        <https://w3id.org/websemantic/ns#tls/outputs/daily/mean_kw>,
+        <https://w3id.org/websemantic/ns#tls/outputs/daily/timestamp> .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/peak_kw> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/peak_kw> a skos:Concept ;
     skos:prefLabel "peak_kw" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/specific_kwh_m_year> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/specific_kwh_m_year> a skos:Concept ;
     skos:prefLabel "specific_kwh_m_year" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/timestamp> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/timestamp> a skos:Concept ;
     skos:prefLabel "timestamp" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/total_mwh> a skos:Concept ;
+<https://w3id.org/websemantic/ns#tls/total_mwh> a skos:Concept ;
     skos:prefLabel "total_mwh" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/season_profiles> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/outputs> ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+<https://w3id.org/websemantic/ns#tls/outputs/season_profiles> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/outputs> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "season_profiles" ;
     ws:aggregation "Puissance moyenne par saison et heure du jour, dans chaque réalisation, uniquement sur les jours simulés."@fr ;
-    ws:hasColumn <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/season_profiles/hour_int>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/season_profiles/power_kw>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/season_profiles/run>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/season_profiles/season> .
+    ws:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/season_profiles/hour_int>,
+        <https://w3id.org/websemantic/ns#tls/outputs/season_profiles/power_kw>,
+        <https://w3id.org/websemantic/ns#tls/outputs/season_profiles/run>,
+        <https://w3id.org/websemantic/ns#tls/outputs/season_profiles/season> .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/envelope> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/outputs> ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+<https://w3id.org/websemantic/ns#tls/outputs/envelope> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/outputs> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "envelope" ;
     ws:aggregation "Puissances moyennées par heure dans chaque réalisation, puis statistiques entre réalisations. p10/p90 sont des quantiles empiriques, pas un intervalle de confiance."@fr ;
-    ws:hasColumn <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/envelope/mean>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/envelope/median>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/envelope/p10>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/envelope/p90>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/envelope/timestamp> .
+    ws:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/envelope/mean>,
+        <https://w3id.org/websemantic/ns#tls/outputs/envelope/median>,
+        <https://w3id.org/websemantic/ns#tls/outputs/envelope/p10>,
+        <https://w3id.org/websemantic/ns#tls/outputs/envelope/p90>,
+        <https://w3id.org/websemantic/ns#tls/outputs/envelope/timestamp> .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/group/experiment> a skos:Concept ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+<https://w3id.org/websemantic/ns#tls/group/experiment> a skos:Concept ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "experiment" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/group/outputs> a skos:Concept ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+<https://w3id.org/websemantic/ns#tls/group/outputs> a skos:Concept ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "outputs" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/outputs> ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+<https://w3id.org/websemantic/ns#tls/outputs/kpis> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/outputs> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "kpis" ;
     ws:aggregation "Une ligne par réalisation sur toute la période simulée."@fr ;
-    ws:hasColumn <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/annualized_mwh>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/base_seed>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/load_factor>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/mean_kw>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/n_accident_events>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/n_pollution_events>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/peak_kw>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/run>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/seed>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/specific_kwh_m_year>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/kpis/total_mwh> .
+    ws:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/kpis/annualized_mwh>,
+        <https://w3id.org/websemantic/ns#tls/outputs/kpis/base_seed>,
+        <https://w3id.org/websemantic/ns#tls/outputs/kpis/load_factor>,
+        <https://w3id.org/websemantic/ns#tls/outputs/kpis/mean_kw>,
+        <https://w3id.org/websemantic/ns#tls/outputs/kpis/n_accident_events>,
+        <https://w3id.org/websemantic/ns#tls/outputs/kpis/n_pollution_events>,
+        <https://w3id.org/websemantic/ns#tls/outputs/kpis/peak_kw>,
+        <https://w3id.org/websemantic/ns#tls/outputs/kpis/run>,
+        <https://w3id.org/websemantic/ns#tls/outputs/kpis/seed>,
+        <https://w3id.org/websemantic/ns#tls/outputs/kpis/specific_kwh_m_year>,
+        <https://w3id.org/websemantic/ns#tls/outputs/kpis/total_mwh> .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative> a skos:Concept ;
-    skos:broader <https://github.com/cyrilvoyant/websemantic/ns#tls/group/outputs> ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+<https://w3id.org/websemantic/ns#tls/outputs/representative> a skos:Concept ;
+    skos:broader <https://w3id.org/websemantic/ns#tls/group/outputs> ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "representative" ;
     ws:aggregation "Réalisation 0 au pas natif ; exemple de trajectoire, pas la médiane."@fr ;
-    ws:hasColumn <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/accident_event>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/auxiliary_kw>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/day_type>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/dayofweek>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/energy_kwh>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/hour_int>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/lighting_kw>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/pollution_event>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/power_kw>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/season>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/timestamp>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/traffic_index>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/outputs/representative/ventilation_kw> .
+    ws:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/representative/accident_event>,
+        <https://w3id.org/websemantic/ns#tls/outputs/representative/auxiliary_kw>,
+        <https://w3id.org/websemantic/ns#tls/outputs/representative/day_type>,
+        <https://w3id.org/websemantic/ns#tls/outputs/representative/dayofweek>,
+        <https://w3id.org/websemantic/ns#tls/outputs/representative/energy_kwh>,
+        <https://w3id.org/websemantic/ns#tls/outputs/representative/hour_int>,
+        <https://w3id.org/websemantic/ns#tls/outputs/representative/lighting_kw>,
+        <https://w3id.org/websemantic/ns#tls/outputs/representative/pollution_event>,
+        <https://w3id.org/websemantic/ns#tls/outputs/representative/power_kw>,
+        <https://w3id.org/websemantic/ns#tls/outputs/representative/season>,
+        <https://w3id.org/websemantic/ns#tls/outputs/representative/timestamp>,
+        <https://w3id.org/websemantic/ns#tls/outputs/representative/traffic_index>,
+        <https://w3id.org/websemantic/ns#tls/outputs/representative/ventilation_kw> .
 
-<https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs> a skos:Concept ;
-    skos:inScheme <https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> ;
+<https://w3id.org/websemantic/ns#tls/group/inputs> a skos:Concept ;
+    skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "inputs" .
 
-<https://github.com/cyrilvoyant/websemantic/ns#vocabulary/c21cfff2027903a8> a skos:ConceptScheme ;
-    skos:hasTopConcept <https://github.com/cyrilvoyant/websemantic/ns#tls/group/experiment>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/group/inputs>,
-        <https://github.com/cyrilvoyant/websemantic/ns#tls/group/outputs> ;
+<https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> a skos:ConceptScheme ;
+    skos:hasTopConcept <https://w3id.org/websemantic/ns#tls/group/experiment>,
+        <https://w3id.org/websemantic/ns#tls/group/inputs>,
+        <https://w3id.org/websemantic/ns#tls/group/outputs> ;
     skos:prefLabel "Tunnel Load Simulator" .
 

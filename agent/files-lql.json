@@ -60,7 +60,7 @@
     {
       "path": "src/websemantic/semantics.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/semantics.py",
-      "sha256_lf": "305a9ebfa48fccebca4fc547982e7cd5c36edfb14b6b02f91a89cbca545165de"
+      "sha256_lf": "2917521d77a9799cf99476ce8348e79cdee45fbb8864b00df3cf69ad6faec425"
     },
     {
       "path": "descriptors/lqlequiv/descriptor.yaml",
@@ -80,17 +80,17 @@
     {
       "path": "ontology/core.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/core.ttl",
-      "sha256_lf": "d3b390c0d34cdee8675e2854320e2469e7fb7bf8686eaeead206e328f79d5b44"
+      "sha256_lf": "b9544b7659ba7a123989561c90b213d9144c2a593fbe14fe80cbf1b94f241d50"
     },
     {
       "path": "ontology/lqlequiv.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/lqlequiv.ttl",
-      "sha256_lf": "d96e0e52074a17830d0b5131668fc69f6b1e3fd1545b6ea6b7a2275b35b818d5"
+      "sha256_lf": "0567b14a2f63843559080d4bf2d8767f6f2626c4e27745e4ce2c4bfd8ca22c39"
     },
     {
       "path": "ontology/shapes.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/shapes.ttl",
-      "sha256_lf": "96fd37fb090e5692dff0e3355c7f8e92cde804475349055745f86457246cc410"
+      "sha256_lf": "e5cf638a10b2ffa5f8e06c5f1b84ac78f47fc013b2340df3aaab57d9a39aa111"
     },
     {
       "path": "ontology/competency-questions.md",
@@ -100,7 +100,7 @@
     {
       "path": "ontology/README.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/README.md",
-      "sha256_lf": "b296b600aac4afce5549e88b32670c1cb920616ee461fb79e39e770a160df25b"
+      "sha256_lf": "a16e7bbb1a6bd232a37bd8d015d93207ae22f179c906fbd98329f18837685a68"
     },
     {
       "path": "llm.md",

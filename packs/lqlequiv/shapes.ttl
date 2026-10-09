@@ -1,4 +1,4 @@
-@prefix ws:   <https://github.com/cyrilvoyant/websemantic/ns#> .
+@prefix ws:   <https://w3id.org/websemantic/ns#> .
 @prefix sh:   <http://www.w3.org/ns/shacl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
@@ -13,7 +13,7 @@
 # checked per ws:groupInstance, never across instances.
 
 ws:PrefixDecl a owl:Ontology ;
-    sh:declare [ sh:prefix "ws" ; sh:namespace "https://github.com/cyrilvoyant/websemantic/ns#"^^xsd:anyURI ] .
+    sh:declare [ sh:prefix "ws" ; sh:namespace "https://w3id.org/websemantic/ns#"^^xsd:anyURI ] .
 
 ws:ParameterRecordShape a sh:NodeShape ;
     sh:targetClass ws:Parameter ;

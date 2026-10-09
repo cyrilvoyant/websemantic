@@ -9,7 +9,7 @@ from rdflib.namespace import RDF
 pyshacl = pytest.importorskip("pyshacl")
 
 ROOT = Path(__file__).resolve().parents[1]
-WS = Namespace("https://github.com/cyrilvoyant/websemantic/ns#")
+WS = Namespace("https://w3id.org/websemantic/ns#")
 
 
 def ontology():

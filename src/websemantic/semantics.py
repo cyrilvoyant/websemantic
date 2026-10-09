@@ -7,7 +7,7 @@ from hashlib import sha256
 from rdflib import Graph, Literal, Namespace, URIRef
 from rdflib.namespace import RDF, RDFS, SKOS
 
-WS = Namespace("https://github.com/cyrilvoyant/websemantic/ns#")
+WS = Namespace("https://w3id.org/websemantic/ns#")
 PROV = Namespace("http://www.w3.org/ns/prov#")
 def concept(descriptor, name):
     """Keep model concepts distinct when graphs from several simulators are merged."""

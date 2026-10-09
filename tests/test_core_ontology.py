@@ -6,9 +6,9 @@ from rdflib import Graph, Literal, Namespace
 from rdflib.namespace import OWL, RDF
 
 ROOT = Path(__file__).resolve().parents[1]
-WS = Namespace("https://github.com/cyrilvoyant/websemantic/ns#")
+WS = Namespace("https://w3id.org/websemantic/ns#")
 PREFIX = """
-PREFIX ws: <https://github.com/cyrilvoyant/websemantic/ns#>
+PREFIX ws: <https://w3id.org/websemantic/ns#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 """
