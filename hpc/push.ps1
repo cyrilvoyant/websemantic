@@ -10,10 +10,20 @@ $python = Join-Path $LocalRoot "semantic-sim-layer\.venv\Scripts\python.exe"
 $localSha = (Get-Content "$Archive.sha256" -Raw).Trim()
 
 # Campaign state: exactly one token, ABSENT / IDLE / ACTIVE; anything else (SSH failure included) stops the push.
-$state = ssh $Remote "cd $ws 2>/dev/null || { echo ABSENT; exit 0; }; if [ -f heartbeat ] && [ `$(( `$(date +%s) - `$(stat -c %Y heartbeat) )) -lt 300 ]; then echo ACTIVE; else echo IDLE; fi"
-Check "Campaign state query"
-$state = "$state".Trim()
-if ($state -eq "ACTIVE") { throw "A campaign is running on the server (heartbeat < 5 min): push refused." }
+$query = "cd $ws 2>/dev/null || { echo ABSENT; exit 0; }; if [ -f heartbeat ] && [ `$(( `$(date +%s) - `$(stat -c %Y heartbeat) )) -lt 300 ]; then echo ACTIVE; else echo IDLE; fi"
+# What keeps a campaign active: status files, heartbeat age and the campaign processes (read-only).
+$diag = "cd $ws; echo heartbeat age: `$(( `$(date +%s) - `$(stat -c %Y heartbeat) )) s; cat status-*.json; echo; ps -u `$(id -u) -o pid,etime,cmd | grep -E 'run_all|numeric_e1|run_e1|vllm' | grep -v grep | cut -c1-150"
+$state = "$(ssh $Remote $query)".Trim(); Check "Campaign state query"
+# A finished campaign keeps the heartbeat fresh while its CPU lane runs the final replay: wait instead of failing.
+$deadline = (Get-Date).AddMinutes(30)
+while ($state -eq "ACTIVE" -and (Get-Date) -lt $deadline) {
+    Write-Host "Campaign still active on the server; state:"
+    ssh $Remote $diag
+    Write-Host "Waiting 60 s (up to 30 min) before checking again; Ctrl+C to stop."
+    Start-Sleep -Seconds 60
+    $state = "$(ssh $Remote $query)".Trim(); Check "Campaign state query"
+}
+if ($state -eq "ACTIVE") { ssh $Remote $diag; throw "A campaign is still running after 30 min (see processes above): push refused." }
 if ($state -notin @("ABSENT", "IDLE")) { throw "Unexpected campaign state '$state': push refused." }
 
 ssh $Remote "mkdir -p $dir"; Check "Remote mkdir"
