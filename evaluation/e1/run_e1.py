@@ -180,7 +180,29 @@ def toolrosella_context(domain, condition):
     return "\n\n".join(blocks)
 
 
+def generic_policy():
+    """Generic clarification policy (condition G, evaluation/PREREG-generic-policy.md): the 'Rules' section of the
+    frozen contract, without its pointers to code-specific tables, units and scope, and without the JSON rule already
+    in the instructions. Identical for the three codes; derived from the frozen file, never edited by hand."""
+    text = (FROZEN_PACKS / "tls" / "LLM-CONTRACT.md").read_text(encoding="utf-8")
+    rules = text[text.index("## Rules"):text.index("\n## ", text.index("## Rules") + 1)]
+    for a, b in (("**Qualitative words have a meaning only through the tables below**, parameter by parameter. A word absent "
+                  "from the tables, or listed under *clarify*, has no numerical meaning: ask.",
+                  "**Qualitative words have no numerical meaning** unless the documentation declares one for that parameter: "
+                  "propose it and ask for acceptance; otherwise ask."),
+                 ("use the canonical unit listed", "use the unit expected by the software"),
+                 ("**Out of scope → refuse** (see each software).",
+                  "**Out of scope → refuse**: measurements, certifications or forecasts of reality are not simulations.")):
+        if a not in rules:
+            raise ValueError("Frozen contract rules changed; review condition G")
+        rules = rules.replace(a, b)
+    keep = [ln for ln in rules.splitlines() if not ln.startswith(("7.", "Execution is done"))]
+    return "\n".join(keep).replace("## Rules", "## Clarification policy (generic)").strip()
+
+
 def context(domain, condition):
+    if condition == "G":  # documentation + generic clarification policy, no code-specific content
+        return "## Native documentation\n" + native_doc(domain) + "\n\n" + generic_policy()
     if condition in ("L2", "L3", "FROZEN-F010", "FROZEN-F110"):
         return length_context(domain, condition)
     if condition in ("T", "TC", "TX", "TCX"):
