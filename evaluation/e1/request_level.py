@@ -78,7 +78,7 @@ def analyse(folder, turns):
                             "with": round(sum(w_means) / len(w_means), 4),
                             "difference": round(sum(diffs) / len(diffs), 4),
                             "improved": sum(x > 1e-12 for x in diffs), "worsened": sum(x < -1e-12 for x in diffs),
-                            "wilcoxon_p": round(float(p), 6)})
+                            "wilcoxon_p": float(p)})  # full precision; rounded only for display
     return out
 
 

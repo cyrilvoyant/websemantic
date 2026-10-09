@@ -61,7 +61,7 @@ def main(folders):
                     continue
                 n, mean, up, down, p = effect(grouped, metric, keep, worst)
                 rows.append({"model": model, "metric": metric, "check": name, "requests": n,
-                             "difference": round(mean, 4), "higher": up, "lower": down, "wilcoxon_p": round(p, 6)})
+                             "difference": round(mean, 4), "higher": up, "lower": down, "wilcoxon_p": p})
     with (HERE / "e1-sensitivity.csv").open("w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=list(rows[0]))
         w.writeheader()

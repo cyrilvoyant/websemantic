@@ -56,9 +56,9 @@ def main(folders):
                                  "without": round(sum(wo_m) / len(wo_m), 4), "with": round(sum(w_m) / len(w_m), 4),
                                  "difference": round(sum(diffs) / len(diffs), 4),
                                  "higher": sum(x > 1e-12 for x in diffs), "lower": sum(x < -1e-12 for x in diffs),
-                                 "wilcoxon_p": round(float(wilcoxon(nz).pvalue), 6) if nz else 1.0})
+                                 "wilcoxon_p": float(wilcoxon(nz).pvalue) if nz else 1.0})
     for r, p in zip(rows, holm([r["wilcoxon_p"] for r in rows])):
-        r["holm_p"] = round(p, 6)
+        r["holm_p"] = p  # full precision
     with (HERE / "e1-hallucination.csv").open("w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=list(rows[0]))
         w.writeheader()

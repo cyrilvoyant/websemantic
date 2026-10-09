@@ -58,10 +58,10 @@ def main(folders):
                 rows.append({"model": model, "metric": m, "group": name, "requests": len(d),
                              "mean_difference": round(sum(d) / len(d), 4), "higher": sum(x > 1e-12 for x in d),
                              "lower": sum(x < -1e-12 for x in d),
-                             "wilcoxon_p": round(float(wilcoxon(nz).pvalue), 6) if nz else 1.0})
+                             "wilcoxon_p": float(wilcoxon(nz).pvalue) if nz else 1.0})
     primary = [r for r in rows if r["metric"] == "premature_execute" and r["group"] == "all"]
     for r, p in zip(primary, holm([r["wilcoxon_p"] for r in primary])):
-        r["holm_p"] = round(p, 6)
+        r["holm_p"] = p  # full precision
     with (HERE / "e1-heldout.csv").open("w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=["model", "metric", "group", "requests", "mean_difference", "higher", "lower",
                                            "wilcoxon_p", "holm_p"])
