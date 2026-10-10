@@ -2,7 +2,7 @@
 
 Serves webapp/ on http://localhost:8000 and the relay on http://localhost:8787 (open
 http://localhost:8000/?relay=http://localhost:8787). Same prompt as relay/worker.js; the Mistral key is read from the
-local .env (a Codestral key works with MISTRAL_MODEL=codestral-latest).
+local .env; default model codestral-latest, as in the relay (included in the free Mistral plan).
 Usage: python tools/dev_relay.py
 """
 
@@ -45,7 +45,7 @@ class Relay(BaseHTTPRequestHandler):
                   f"CURRENT SCENARIO:\n{json.dumps(body.get('state') or {}, ensure_ascii=False)}\n"
                   f"REPLY LANGUAGE for message and questions: {'French' if body.get('lang') == 'fr' else 'English'}\n"
                   f"NEW MESSAGE:\n{body['message']}")
-        host = "codestral.mistral.ai" if MODEL.startswith("codestral") else "api.mistral.ai"
+        host = "api.mistral.ai"  # same endpoint and model as relay/worker.js
         payload = {"model": MODEL, "temperature": 0, "response_format": {"type": "json_object"},
                    "messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": prompt}]}
         req = urllib.request.Request(f"https://{host}/v1/chat/completions", data=json.dumps(payload).encode(),

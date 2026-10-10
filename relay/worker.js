@@ -115,7 +115,7 @@ export default {
       const r = await fetchWithTimeout("https://api.mistral.ai/v1/chat/completions", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": "Bearer " + env.MISTRAL_API_KEY },
-        body: JSON.stringify({ model: env.MISTRAL_MODEL || "mistral-small-latest", temperature: 0, max_tokens: 700,
+        body: JSON.stringify({ model: env.MISTRAL_MODEL || "codestral-latest", temperature: 0, max_tokens: 700,
                                response_format: { type: "json_object" },
                                messages: [{ role: "system", content: SYSTEM }, { role: "user", content: prompt }] }),
       }, TIMEOUT_MS);
