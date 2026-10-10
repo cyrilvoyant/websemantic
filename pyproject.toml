@@ -4,12 +4,19 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "websemantic"
-version = "0.0.1"
+version = "0.2.5"
 description = "Software-agnostic semantic layer from intent to qualified simulated data (research prototype)"
-readme = "README.md"
+readme = "docs/pypi.md"
 requires-python = ">=3.10"
 license = "PolyForm-Noncommercial-1.0.0"
-authors = [{ name = "WebSemantic contributors" }]
+authors = [{ name = "Cyril Voyant" }]
+keywords = ["semantic web", "scientific software", "large language models", "ontology", "SHACL", "provenance", "FAIR"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering",
+]
 dependencies = [
   "pydantic>=2.6",
   "pyyaml>=6.0",
@@ -17,6 +24,13 @@ dependencies = [
   "pyshacl>=0.26",
   "packaging>=24",
 ]
+
+[project.urls]
+Homepage = "https://www.cyrilvoyant.com"
+Repository = "https://github.com/cyrilvoyant/websemantic"
+Documentation = "https://github.com/cyrilvoyant/websemantic#readme"
+Ontology = "https://w3id.org/websemantic/ns"
+DOI = "https://doi.org/10.5281/zenodo.23238902"
 
 [project.optional-dependencies]
 tls = ["numpy>=1.24", "pandas>=2.0"]
