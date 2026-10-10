@@ -2,7 +2,7 @@
 
 Préparer une simulation en phrases, examiner les hypothèses et obtenir des résultats avec leurs unités et leur provenance. Trois profils : TLS, LQL-Equiv (un cursus fictif) et pyrcel (un mode d’aérosol, ascendance constante).
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23238902.svg)](https://doi.org/10.5281/zenodo.23238902) · ontologie : [w3id.org/websemantic/ns](https://w3id.org/websemantic/ns) · [Contribuer](CONTRIBUTING.md) · [Sécurité](SECURITY.md)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23238902.svg)](https://doi.org/10.5281/zenodo.23238902) [![PyPI](https://img.shields.io/pypi/v/websemantic.svg)](https://pypi.org/project/websemantic/) · ontologie : [w3id.org/websemantic/ns](https://w3id.org/websemantic/ns) · [Contribuer](CONTRIBUTING.md) · [Sécurité](SECURITY.md)
 
 ## Avec un agent Python
 
