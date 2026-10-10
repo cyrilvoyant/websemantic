@@ -12,4 +12,4 @@ full use requires a clone with its submodules.
 - Repository and documentation: https://github.com/cyrilvoyant/websemantic
 - Ontology (persistent namespace): https://w3id.org/websemantic/ns
 - Concept DOI (all versions): https://doi.org/10.5281/zenodo.23238902
-- Licence: PolyForm Noncommercial 1.0.0
+- Licence: MIT

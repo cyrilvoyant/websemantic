@@ -35,4 +35,4 @@ to their own repositories. Evaluation cases and raw model answers stay private u
 
 ## Licence
 
-Contributions are accepted under the licence of the repository (PolyForm Noncommercial 1.0.0).
+Contributions are accepted under the licence of the repository (MIT).

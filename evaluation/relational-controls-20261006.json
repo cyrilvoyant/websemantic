@@ -1182,7 +1182,7 @@
     }
   ],
   "files_sha256": {
-    "ontology\\core.ttl": "5de2f59470a0ca46ad430ad677c8b4d75276aa445cb976c1c897e849bb3bd99e",
+    "ontology\\core.ttl": "276c61017ce4be8f24ddb8a298649e7aa28085ed8341630900a5614fc6f164c7",
     "ontology\\lqlequiv.ttl": "d49bea092096be302dc007b2a7d79840aaea8d2c7c6c10361f129cafac072225",
     "ontology\\pyrcel.ttl": "59888a3d94f72f908707e1e582ddbaa432587488a400f15b6f6b202906c36c84",
     "ontology\\shapes.ttl": "e764d35916aa106c28b592b9ef20589236b4d4537ba74fbaa8bcdbf0efae27ba",

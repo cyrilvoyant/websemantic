@@ -76,7 +76,7 @@
     {
       "path": "ontology/core.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/core.ttl",
-      "sha256_lf": "852a24ca1b3fe483258e2249b0a0449c582d7b5fa87cae5513db87ad1209dc4c"
+      "sha256_lf": "90b08a3526bb0910d93a41ea1aa2b1bf85e1ae5eacec30b138381f389d74d681"
     },
     {
       "path": "ontology/tls-vocabulary.ttl",
@@ -96,7 +96,7 @@
     {
       "path": "ontology/README.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/README.md",
-      "sha256_lf": "21ee15bfe87a17d7962ade6701bbb5b7beffe126c9f98bccb34ff901caccdec0"
+      "sha256_lf": "d07dee433093dce65f0b085e65dd97548da4e4df34688e97db7a067a15c4733c"
     },
     {
       "path": "ontology/tls-scenario.schema.json",
@@ -136,7 +136,7 @@
     {
       "path": "LICENSE",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/LICENSE",
-      "sha256_lf": "45ee8c16c0bcb29337d6549cd074f07ea18577e9840140333318e4a593d7317b"
+      "sha256_lf": "b1d95432b07a3cb5003481f51b58de143199a601dd57b8e68b576f900ea0b07c"
     },
     {
       "path": "external/tunnel-load-simulator/src/tunnel_load_simulator/simulator.py",

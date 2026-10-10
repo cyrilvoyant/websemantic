@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "websemantic"
-version = "0.2.5"
+version = "0.2.6"
 description = "Software-agnostic semantic layer from intent to qualified simulated data (research prototype)"
 readme = "docs/pypi.md"
 requires-python = ">=3.10"
-license = "PolyForm-Noncommercial-1.0.0"
+license = "MIT"
 authors = [{ name = "Cyril Voyant" }]
 keywords = ["semantic web", "scientific software", "large language models", "ontology", "SHACL", "provenance", "FAIR"]
 classifiers = [

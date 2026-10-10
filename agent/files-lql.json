@@ -50,7 +50,7 @@
     {
       "path": "pyproject.toml",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/pyproject.toml",
-      "sha256_lf": "7a911f7008fa786c50f4950d1369c9f01c652d80b6c2a0794965691841b80c48"
+      "sha256_lf": "5221c76a0cf243c507c7a68c6c6bc12cbd68ea48853e5aaacff99944cc38ccd6"
     },
     {
       "path": "src/websemantic/adapters/lql.py",
@@ -80,7 +80,7 @@
     {
       "path": "ontology/core.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/core.ttl",
-      "sha256_lf": "852a24ca1b3fe483258e2249b0a0449c582d7b5fa87cae5513db87ad1209dc4c"
+      "sha256_lf": "90b08a3526bb0910d93a41ea1aa2b1bf85e1ae5eacec30b138381f389d74d681"
     },
     {
       "path": "ontology/lqlequiv.ttl",
@@ -100,7 +100,7 @@
     {
       "path": "ontology/README.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/README.md",
-      "sha256_lf": "21ee15bfe87a17d7962ade6701bbb5b7beffe126c9f98bccb34ff901caccdec0"
+      "sha256_lf": "d07dee433093dce65f0b085e65dd97548da4e4df34688e97db7a067a15c4733c"
     },
     {
       "path": "llm.md",
@@ -115,7 +115,7 @@
     {
       "path": "LICENSE",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/LICENSE",
-      "sha256_lf": "45ee8c16c0bcb29337d6549cd074f07ea18577e9840140333318e4a593d7317b"
+      "sha256_lf": "b1d95432b07a3cb5003481f51b58de143199a601dd57b8e68b576f900ea0b07c"
     },
     {
       "path": "external/LQL-Equiv-web/LICENSE",

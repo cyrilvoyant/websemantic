@@ -3,9 +3,9 @@
   "@type": "SoftwareSourceCode",
   "name": "websemantic",
   "description": "Software-agnostic semantic layer: one descriptor per scientific software compiled into an LLM contract, an ontology with SHACL shapes and FAIR metadata; unchanged backends (TLS, LQL-Equiv, pyrcel) at pinned revisions.",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "dateCreated": "2026-10-03",
-  "license": "https://spdx.org/licenses/PolyForm-Noncommercial-1.0.0.html",
+  "license": "https://spdx.org/licenses/MIT",
   "codeRepository": "https://github.com/cyrilvoyant/websemantic",
   "developmentStatus": "https://www.repostatus.org/#wip",
   "programmingLanguage": {

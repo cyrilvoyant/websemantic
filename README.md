@@ -62,4 +62,4 @@ Les définitions sont maintenues dans le [descripteur](descriptors/tls/descripto
 
 ## Licence
 
-[PolyForm Noncommercial 1.0.0](LICENSE). Les composants conservent leurs licences ; les révisions déjà publiées sous MIT conservent leurs permissions. Le dépôt public ne contient aucune clé. Les archives privées de validation restent privées.
+[MIT](LICENSE), depuis la version 0.2.6 ; les versions 0.2.0 à 0.2.5 restent sous PolyForm Noncommercial 1.0.0. Les composants conservent leurs licences (TLS et LQL-Equiv : MIT ; pyrcel : BSD-3-Clause). Le dépôt public ne contient aucune clé. Les archives privées de validation restent privées.
