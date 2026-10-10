@@ -114,7 +114,7 @@ def test_two_readings_for_one_other_field_use_neither(calls):
 
 def test_reading_context_lists_the_library_categories():
     lql = json.loads((ROOT / "webapp" / "llm" / "lql.json").read_text(encoding="utf-8"))
-    cats = {p["field"]: p["categories"] for p in lql["params"]}
+    cats = {p["field"]: p.get("categories") or [] for p in lql["params"]}
     assert "Rectum" in cats["organ"] and "Prostate" in cats["tumour_site"] and "Prostate" not in cats["organ"]
 
 

@@ -544,6 +544,9 @@ def apply_value(model, state, v, message, lang):
                             return e["relative" if RELATIVE.search(fold(evidence)) else "number"].format(label(name, lang))
                 if not unit and spec.get("unit") and stated_unit(evidence, spec):
                     unit = spec["unit"]  # the model left out a unit that the visitor's words state ("3 Gy")
+                elif unit and spec.get("unit") and unit != spec["unit"] and fold(unit) in {
+                        fold(a) for a in spec.get("unit_aliases") or [] if a}:
+                    unit = spec["unit"]  # a declared name of the canonical unit ("Gy" for unit:GRAY)
                 value, unit, conv = normalize(value, unit, evidence, spec)
                 if not said(evidence, message):
                     return e["value"].format(label(name, lang))

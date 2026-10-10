@@ -78,12 +78,14 @@ def reading_context():
         desc = yaml.safe_load((ROOT / "descriptors" / folder / "descriptor.yaml").read_text(encoding="utf-8"))
         names = library_names(desc) if code == "lql" else {}
         semantic = ontology_names() if code == "lql" else {}
-        params = [{"field": n, "type": s.get("type"), "unit": s.get("unit"),
-                   "unit_names": [str(a) for a in s.get("unit_aliases") or [] if a and not str(a).isdigit()] or None,
-                   "default": s.get("default"), "label": s.get("label"), "definition": s.get("definition"),
-                   "categories": s.get("categories") or names.get(n),
-                   "category_names": semantic.get(n) or None,  # French and common names, from the ontology
-                   "declared_levels": declared_levels(s) or None}
+        # Only what the contract does not already state (units, bounds, defaults, meanings and conventions are in it):
+        # labels and unit names, and for LQL the library's lists with their names and groups from the ontology.
+        params = [{k: v for k, v in {
+                       "field": n, "type": s.get("type"), "unit": s.get("unit"), "label": s.get("label"),
+                       "unit_names": [str(a) for a in s.get("unit_aliases") or [] if a and not str(a).isdigit()
+                                      and str(a) not in ("sans unité", "sans unite", "unit:UNITLESS", "none")] or None,
+                       "categories": s.get("categories") or names.get(n),
+                       "category_names": semantic.get(n) or None}.items() if v}
                   for g in ("inputs", "experiment") for n, s in (desc.get(g) or {}).items()]
         if code == "lql":  # anatomical groups of organs, from the ontology (for "all organs at risk")
             from websemantic.lql_workbench import anatomy
