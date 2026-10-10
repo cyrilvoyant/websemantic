@@ -141,6 +141,176 @@
    }
   }
  },
+ "checks_first_turn": {
+  "F000": {
+   "python_gate": {
+    "decision": "clarify",
+    "issues": [
+     {
+      "field": "inputs.courses",
+      "code": "unknown_field",
+      "message": "Field is not declared in the descriptor."
+     },
+     {
+      "field": "inputs.tumour",
+      "code": "unknown_field",
+      "message": "Field is not declared in the descriptor."
+     },
+     {
+      "field": "inputs.tumour_site",
+      "code": "missing",
+      "message": "An explicit value or accepted assumption is required."
+     },
+     {
+      "field": "inputs.dose_per_fraction",
+      "code": "missing",
+      "message": "An explicit value or accepted assumption is required."
+     },
+     {
+      "field": "inputs.n_fractions",
+      "code": "missing",
+      "message": "An explicit value or accepted assumption is required."
+     },
+     {
+      "field": "inputs.gap_days",
+      "code": "missing",
+      "message": "An explicit value or accepted assumption is required."
+     },
+     {
+      "field": "inputs.reference_dose",
+      "code": "unaccepted_assumption",
+      "message": "Assumptions need a source and explicit acceptance."
+     },
+     {
+      "field": "inputs.reference_dose",
+      "code": "unit",
+      "message": "Use the canonical descriptor unit; no conversion is performed."
+     },
+     {
+      "field": "inputs.bifractionated",
+      "code": "unaccepted_assumption",
+      "message": "Assumptions need a source and explicit acceptance."
+     },
+     {
+      "field": "inputs.bifractionated",
+      "code": "type",
+      "message": "Invalid value for descriptor type 'category'."
+     },
+     {
+      "field": "experiment.scenario_scope",
+      "code": "missing",
+      "message": "An explicit value or accepted assumption is required."
+     }
+    ]
+   },
+   "shacl": {
+    "status": "valid",
+    "messages": "",
+    "mapped": 7,
+    "unmapped": []
+   }
+  },
+  "F010": {
+   "python_gate": {
+    "decision": "clarify",
+    "issues": [
+     {
+      "field": "inputs.dose_per_fraction",
+      "code": "unsupported_origin",
+      "message": "Origin is unsupported by this initial gate."
+     },
+     {
+      "field": "inputs.dose_per_fraction",
+      "code": "unit",
+      "message": "Use the canonical descriptor unit; no conversion is performed."
+     },
+     {
+      "field": "inputs.n_fractions",
+      "code": "unaccepted_assumption",
+      "message": "Assumptions need a source and explicit acceptance."
+     },
+     {
+      "field": "inputs.n_fractions",
+      "code": "unit",
+      "message": "Use the canonical descriptor unit; no conversion is performed."
+     },
+     {
+      "field": "inputs.gap_days",
+      "code": "unit",
+      "message": "Use the canonical descriptor unit; no conversion is performed."
+     },
+     {
+      "field": "inputs.reference_dose",
+      "code": "unaccepted_assumption",
+      "message": "Assumptions need a source and explicit acceptance."
+     },
+     {
+      "field": "inputs.reference_dose",
+      "code": "unit",
+      "message": "Use the canonical descriptor unit; no conversion is performed."
+     },
+     {
+      "field": "inputs.bifractionated",
+      "code": "unaccepted_assumption",
+      "message": "Assumptions need a source and explicit acceptance."
+     },
+     {
+      "field": "experiment.scenario_scope",
+      "code": "unaccepted_assumption",
+      "message": "Assumptions need a source and explicit acceptance."
+     }
+    ]
+   },
+   "shacl": {
+    "status": "valid",
+    "messages": "",
+    "mapped": 7,
+    "unmapped": [
+     "scenario_scope"
+    ]
+   }
+  }
+ },
+ "follow_up_specified": {
+  "values": [
+   {
+    "field": "organ",
+    "value": "Rectum"
+   },
+   {
+    "field": "tumour_site",
+    "value": "Prostate"
+   },
+   {
+    "field": "courses",
+    "value": [
+     {
+      "dose_per_fraction": 2.0,
+      "n_fractions": 10,
+      "gap_days": 0.0,
+      "total_dose": 20.0
+     },
+     {
+      "dose_per_fraction": 2.9,
+      "n_fractions": 20,
+      "gap_days": 14.0,
+      "total_dose": 58.0
+     }
+    ]
+   },
+   {
+    "field": "reference_dose",
+    "value": 2.0
+   }
+  ],
+  "shacl": {
+   "status": "valid",
+   "messages": "",
+   "mapped": 11,
+   "unmapped": []
+  },
+  "note": "Specified by the authors (fictitious); four weeks after resumption."
+ },
  "calculation": [
   {
    "organ": "Rectum",
