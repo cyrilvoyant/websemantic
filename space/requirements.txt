@@ -1,0 +1,11 @@
+gradio[mcp]==5.38.0
+plotly==6.2.0
+pandas==2.3.3
+numpy==2.5.3
+PyYAML==6.0.3
+rdflib==7.6.0
+pyshacl==0.40.1
+pydantic==2.11.10
+packaging==26.3
+requests==2.34.2
+faster-whisper==1.1.1
