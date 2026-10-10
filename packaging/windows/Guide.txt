@@ -62,7 +62,7 @@ J’accepte les hypothèses proposées pour les deux scénarios, lance le calcul
 
 Résultats : deux consommations, écart et pourcentage relatif au scénario 2. Les CSV réunis portent scenario ; les sous-dossiers gardent les calculs individuels. Calendrier, pas, réalisations et graine sont communs. L’écart concerne les configurations complètes.
 
-EXEMPLE 4 — AVEC UN AGENT PYTHON (ou chat style GPT ou Claude)
+EXEMPLE 4 — AVEC UN AGENT PYTHON (ou assistant conversationnel)
 
 Ouvrez votre service habituel avec navigation et exécution Python, puis collez :
 

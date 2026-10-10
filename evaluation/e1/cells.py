@@ -1,6 +1,6 @@
 """Cell means of the 2^3 design and the simple contrast documentation alone -> documentation + contract (F000 -> F010).
 
-Codex synthesis of the external reviews (9 October 2026): the marginal effect of C (Eq. 1) averages over O and P; the
+Synthesis of the external reviews (9 October 2026): the marginal effect of C (Eq. 1) averages over O and P; the
 practical question "what does adding the contract to the documentation change?" is the simple contrast F010 - F000.
 Same unit as request_level.py (unique first-turn request, complete blocks, repetitions averaged), Wilcoxon signed-rank
 (zero differences discarded), Holm over the 36 simple contrasts (3 models x 3 metrics x 4 groupings). Descriptive

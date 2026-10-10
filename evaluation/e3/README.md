@@ -10,7 +10,7 @@ Banc local, sans appel fournisseur. Les demandes, réponses et captures restent 
 
 ## Enregistrement avant collecte
 
-Claude et Codex doivent figer : cas (TLS, LQL, pyrcel), demandes exactes, références exécutées/versions/tolérances, modèles/versions, outils, répétitions, ordre contrebalancé des conditions et candidats, limites de temps, arrêt fournisseur, règle de nouvelle session et code d'analyse. Conserver chaque échec/refus/limitation. Les concurrents doivent être sélectionnés pour une capacité comparable, avec vérification licence et périmètre ; aucune liste opportuniste après résultat.
+Il faut figer : cas (TLS, LQL, pyrcel), demandes exactes, références exécutées/versions/tolérances, modèles/versions, outils, répétitions, ordre contrebalancé des conditions et candidats, limites de temps, arrêt fournisseur, règle de nouvelle session et code d'analyse. Conserver chaque échec/refus/limitation. Les concurrents doivent être sélectionnés pour une capacité comparable, avec vérification licence et périmètre ; aucune liste opportuniste après résultat.
 
 Les prompts E3-web ne mentionnent pas une préférence pour WebSemantic. Deux URL exposent deux possibilités, sans forcer le choix. Les fichiers FAIR publics ne sont pas manipulables par l'observateur : cette expérience ne peut pas estimer causalement leur apport.
 

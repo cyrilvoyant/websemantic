@@ -6,7 +6,7 @@ Objectif : mesurer la familiarité observable avec le logiciel avant accès à s
 
 Un nouveau contexte par question, sans historique fourni, web, fichiers, connecteur GitHub ni outil de récupération. Tracer modèle/service/version déclarée, date et outils effectivement désactivés. Si le service ne permet pas de vérifier ces restrictions, classer la condition « non contrôlée ». Aucun extrait, réponse de référence ou correction n’est fourni. Les essais principaux utilisent ensuite d’autres sessions neuves ; ce contrôle ne devient pas leur préambule.
 
-Les réponses de Codex dans la conversation de développement ne sont pas un essai aveugle : le dépôt a déjà été consulté. Tester dans des sessions indépendantes seulement. Distinguer information présente dans le prompt, mémoire fournie par le service et connaissance préalable supposée.
+Les réponses obtenues dans la conversation de développement ne sont pas un essai aveugle : le dépôt a déjà été consulté. Tester dans des sessions indépendantes seulement. Distinguer information présente dans le prompt, mémoire fournie par le service et connaissance préalable supposée.
 
 ## Questions et lecture
 

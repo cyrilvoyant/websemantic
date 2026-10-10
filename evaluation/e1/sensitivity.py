@@ -1,4 +1,4 @@
-"""Sensitivity of the pooled contract effect (Codex review, 8 October 2026).
+"""Sensitivity of the pooled contract effect (internal review, 8 October 2026).
 
 Same unit and test as request_level.py (unique first-turn request, four conditions with C against four without,
 Wilcoxon signed-rank). Three checks, per model:

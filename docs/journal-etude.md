@@ -22,4 +22,4 @@ Contrôle accepté : sessions neuves sans accès aux sources, assertions évalu�
 
 ## Choix du candidat après tests
 
-Deux installations isolées et deux calculs répétés réussis : ecape-parcel-py et pyrcel. Codex rejoint la recommandation de pyrcel 2.0.0 pour intégration. JAX CPU Windows fonctionnel dans cet essai ; fichiers, versions et limites dans evaluation/candidates. Pas de validation du pack ni d’activation du menu à ce stade.
+Deux installations isolées et deux calculs répétés réussis : ecape-parcel-py et pyrcel. La recommandation de pyrcel 2.0.0 pour intégration est confirmée. JAX CPU Windows fonctionnel dans cet essai ; fichiers, versions et limites dans evaluation/candidates. Pas de validation du pack ni d’activation du menu à ce stade.

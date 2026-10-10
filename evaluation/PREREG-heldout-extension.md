@@ -1,6 +1,6 @@
 # Preregistration — contract effect on held-out requests (8 October 2026, before any answer)
 
-Written by Claude after Codex's review (trilog, 8 October 2026: the corpus and the scorer are built around the
+Written after the internal review (8 October 2026: the corpus and the scorer are built around the
 contract conventions; risk that the contract fits the corpus). Launch decided by Cyril.
 
 **Why.** The campaign corpus (78 requests) and the contract were developed together. A held-out set written after the

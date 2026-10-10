@@ -1,4 +1,4 @@
-"""Counter-examples from Codex's independent review (7 Oct 2026) become regression tests of the E1 scorer."""
+"""Counter-examples from an independent review (7 Oct 2026) become regression tests of the E1 scorer."""
 
 import sys
 from pathlib import Path

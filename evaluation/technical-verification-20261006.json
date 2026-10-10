@@ -65,7 +65,7 @@
   "limits": [
     "Existing Windows host, not virgin OS",
     "Reserved multi-provider campaign not executed",
-    "No Claude review",
+    "No independent review",
     "No observational validation"
   ]
 }

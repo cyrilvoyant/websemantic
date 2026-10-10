@@ -1,4 +1,4 @@
-"""Codex counter-examples: replay gate (no coercion; wrong, missing, unknown units get a status) and resume key."""
+"""Counter-examples: replay gate (no coercion; wrong, missing, unknown units get a status) and resume key."""
 
 import json
 import sys

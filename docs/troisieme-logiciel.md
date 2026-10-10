@@ -2,7 +2,7 @@
 
 ## Choix après essais
 
-**pyrcel 2.0.0 retenu pour intégration**, en accord avec la recommandation de Claude et après les premiers essais réels Codex. Les deux candidats ont exécuté un cas synthétique reproductible sous Windows ; preuves et limites dans [evaluation/candidates](../evaluation/candidates/README.md). Cela ne valide pas encore la distribution. ecape-parcel-py reste une alternative. Les audits ci-dessous décrivent la phase précédente.
+**pyrcel 2.0.0 retenu pour intégration**, après les premiers essais réels. Les deux candidats ont exécuté un cas synthétique reproductible sous Windows ; preuves et limites dans [evaluation/candidates](../evaluation/candidates/README.md). Cela ne valide pas encore la distribution. ecape-parcel-py reste une alternative. Les audits ci-dessous décrivent la phase précédente.
 
 ## Demande du 6 octobre 2026
 
@@ -26,6 +26,6 @@ Source : https://github.com/darothen/pyrcel ; licence BSD-3-Clause, fichier LICE
 
 ## Coordination et distribution
 
-Codex prend l’audit technique et les adaptateurs ; Claude est invité via le tri-log à évaluer le périmètre et les questions de compétence du candidat. LQL-Equiv-web reste le second logiciel ; le troisième n’est pas encore arrêté. Les dépôts TLS/LQL et du candidat restent intacts. Les contrats, adaptateurs et notices tierces sont maintenus dans WebSemantic. Le package final inclut les deux nouveaux logiciels, leurs références versionnées et les exemples du guide après tests ; aucune intégration complète n’est revendiquée maintenant.
+L’audit technique et les adaptateurs sont menés avec l’évaluation du périmètre et des questions de compétence du candidat. LQL-Equiv-web reste le second logiciel ; le troisième n’est pas encore arrêté. Les dépôts TLS/LQL et du candidat restent intacts. Les contrats, adaptateurs et notices tierces sont maintenus dans WebSemantic. Le package final inclut les deux nouveaux logiciels, leurs références versionnées et les exemples du guide après tests ; aucune intégration complète n’est revendiquée maintenant.
 
 Mise à jour GitHub après chaque changement validé, en ne committant ni secrets ni les travaux concurrents d’un autre collaborateur. État et prochaine porte sont publiés dans le journal.

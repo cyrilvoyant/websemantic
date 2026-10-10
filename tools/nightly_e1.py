@@ -75,7 +75,7 @@ def main():
         stamp = datetime.now(ZoneInfo("Europe/Paris")).isoformat(timespec="seconds")
         print(stamp, message, flush=True)
         with log_path.open("a", encoding="utf-8") as f:
-            f.write("\n\n## " + stamp + " — Codex : campagne locale nocturne\n\n" + message + "\n")
+            f.write("\n\n## " + stamp + " — campagne locale nocturne\n\n" + message + "\n")
 
     def progress(step, **extra):
         state.update(step=step, updated_utc=datetime.now(timezone.utc).isoformat(), **extra)

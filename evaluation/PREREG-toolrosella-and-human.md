@@ -1,7 +1,7 @@
 # Preregistration — ToolRosella baseline and blind human evaluation (8 October 2026)
 
-Written before any ToolRosella output is used and before any human annotation. Implemented by Claude, to be reviewed
-by Codex; launch decided by Cyril.
+Written before any ToolRosella output is used and before any human annotation. Implemented, to be reviewed
+independently; launch decided by Cyril.
 
 ## A. ToolRosella baseline (real code)
 

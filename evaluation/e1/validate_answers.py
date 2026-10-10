@@ -1,4 +1,4 @@
-"""Scalar and relational SHACL checks on the scenarios actually returned by the models (Codex synthesis, 9 October 2026).
+"""Scalar and relational SHACL checks on the scenarios actually returned by the models (review synthesis, 9 October 2026).
 
 Only answers that decide to execute are checked, for LQL-Equiv and pyrcel (the codes whose parameters are mapped to
 ontology concepts). Each value is mapped to its concept through the frozen variables.csv; nothing is completed: a

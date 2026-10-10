@@ -1,7 +1,7 @@
 # Preregistration — generic clarification policy (9 October 2026, before any answer)
 
-Requested by Cyril after the external reviews and Codex's synthesis: isolate what the code-specific content of the
-contract adds beyond a generic instruction to ask before calculating. Written by Claude; to be checked by Codex.
+Requested by Cyril after the external reviews and their synthesis: isolate what the code-specific content of the
+contract adds beyond a generic instruction to ask before calculating. To be checked independently.
 
 **Condition G.** Native documentation + the generic clarification policy: the six "Rules" of the frozen contract
 (identical for the three codes), without their pointers to code-specific tables, units and scope, and without the JSON

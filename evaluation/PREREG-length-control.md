@@ -1,6 +1,6 @@
 # Preregistration — reduced and competing semantic contexts (8 October 2026)
 
-Written before collection of L2/L3. Implemented by Claude, reviewed by Codex.
+Written before collection of L2/L3. Implemented and independently reviewed.
 The 8 October review narrows the interpretation without changing frozen contexts,
 conditions, corpus, model settings or historical answers. This is the operational
 L2/L3 protocol; `e1/ONTOLOGY-LENGTH-PREREG.md` describes a separate future experiment.
@@ -65,7 +65,7 @@ not independent observations. Reused F010/F110 add a collection-batch limitation
 
 ## Launch and scope
 
-GO for this contextual robustness experiment once local checks pass. Claude runs
+GO for this contextual robustness experiment once local checks pass. The operator runs
 `MODE=full CONDS_OVERRIDE=L2,L3` with a new campaign tag and the same pinned H200
 models/settings. Keep every attempt, failure and response; do not replace the
 historical campaign. Archive tokenizer/model revisions and token usage when

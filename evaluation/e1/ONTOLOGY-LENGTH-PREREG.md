@@ -6,7 +6,7 @@ inactive until its request-specific extraction and tokenizer matching are implem
 and verified. The two designs must never be pooled or described as one intervention.
 
 Status: preregistered 8 October 2026, before generation of any response for these
-conditions. Execution belongs to Claude on the H200; this file does not launch a
+conditions. Execution takes place on the H200; this file does not launch a
 campaign. Existing E1 responses are development evidence and are not reused.
 
 ## Question and estimand
@@ -99,7 +99,7 @@ outputs as independent observations. No endpoint or contrast selected after outc
 
 ## Launch gate
 
-Claude records the final frozen source/corpus/scorer/tokenizer hashes, verifies
+The operator records the final frozen source/corpus/scorer/tokenizer hashes, verifies
 subset dependencies and all length checks, and writes GO in the tri-log before
 generation. This gate verifies the implementation of the approved experiment; it
 is not a new request for user permission. Deviations are dated before acquisition

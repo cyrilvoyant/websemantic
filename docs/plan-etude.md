@@ -1,6 +1,6 @@
 # WebSemantic — plan de travail et d’évaluation
 
-Version du 6 octobre 2026. Répartition et orientations validées par Codex et Claude via le tri-log. Contrat scientifique, sémantique et ontologie constituent le cœur du papier ; l’évaluation mesure leur apport. Aucun résultat comparatif n’est encore acquis. Taille finale et budget fixés après le pilote.
+Version du 6 octobre 2026. Répartition et orientations validées. Contrat scientifique, sémantique et ontologie constituent le cœur du papier ; l’évaluation mesure leur apport. Aucun résultat comparatif n’est encore acquis. Taille finale et budget fixés après le pilote.
 
 **Orientation validée après premiers essais : pyrcel 2.0.0 remplace pvlib pour le troisième domaine.** Voir [décision et preuves](troisieme-logiciel.md). Les paragraphes pvlib ci-dessous décrivent la proposition antérieure ; profils, métriques et textes seront harmonisés pendant l’intégration. LQL-Equiv-web reste le deuxième logiciel.
 
@@ -20,19 +20,19 @@ Les 100 scénarios sont proposés **par logiciel**, soit 300 cas indépendants, 
 - LQL local est épinglé à dfc9a338205b8864b8e3470c4ae245b019e88844 : la branche main publique correspond à cette révision, vérifiée le 6 octobre 2026 par git ls-remote. Vérifier les conventions à cette révision avant intégration. Ne pas confondre une correction du backend et un effet du contrat.
 - Le RDF/SKOS et la provenance existent pour TLS. Une véritable démonstration de l’effet des relations doit encore être construite : un graphe plus volumineux ne prouve pas une meilleure interprétation.
 
-## 3. Répartition proposée entre Codex et Claude
+## 3. Répartition proposée
 
 | Lot | Responsable proposé | Relecture | Livrable et validation |
 |---|---|---|---|
-| Intégration, packaging, CI, scripts d’évaluation | Codex | Claude | Exécutions réelles, tests de non-régression et fichiers vérifiables |
-| Ontologie commune et questions de compétence | Claude | Codex + Cyril | Relations justifiées par des tâches et règles exécutables |
-| Contrats TLS/LQL/pvlib | Codex pour l’API ; Claude pour les définitions | Cyril pour le sens scientifique | Tableau API–concept–unité–origine–sortie, sans incohérence |
-| Références de calcul | Codex | Claude, indépendamment | Valeurs contrôlées et contrôles analytiques/métamorphiques |
-| Corpus et grille d’annotation des phrases | Claude | Codex + Cyril | Références avant les réponses candidates ; corpus réservé |
-| Statistiques et ablations | Codex | Claude | Analyse appariée, échecs inclus, intervalles par scénario |
-| Manuscrit et guide | Codex première réduction ; Claude critique | Cyril décide | Texte court, résultats documentés, pas de revendications gratuites |
+| Intégration, packaging, CI, scripts d’évaluation | Développement | Sémantique et évaluation | Exécutions réelles, tests de non-régression et fichiers vérifiables |
+| Ontologie commune et questions de compétence | Sémantique et évaluation | Développement + Cyril | Relations justifiées par des tâches et règles exécutables |
+| Contrats TLS/LQL/pvlib | Développement pour l’API ; sémantique pour les définitions | Cyril pour le sens scientifique | Tableau API–concept–unité–origine–sortie, sans incohérence |
+| Références de calcul | Développement | Sémantique et évaluation, indépendamment | Valeurs contrôlées et contrôles analytiques/métamorphiques |
+| Corpus et grille d’annotation des phrases | Sémantique et évaluation | Développement + Cyril | Références avant les réponses candidates ; corpus réservé |
+| Statistiques et ablations | Développement | Sémantique et évaluation | Analyse appariée, échecs inclus, intervalles par scénario |
+| Manuscrit et guide | Première réduction ; relecture critique | Cyril décide | Texte court, résultats documentés, pas de revendications gratuites |
 
-Cette répartition est validée par les deux collaborateurs. Elle exprime des responsabilités, pas une supériorité démontrée d’un modèle. Claude intervient via le tri-log externe ; aucune réponse de Claude n’est supposée ni fabriquée. Chaque entrée comporte demande, fichiers/version lus, modifications proposées, preuves, points en désaccord et prochaine action. Le second lecteur vérifie le livrable avant clôture. Les références privées ne sont pas publiées dans les dépôts consultés par les candidats.
+Cette répartition exprime des responsabilités. Chaque entrée du journal de suivi comporte demande, fichiers/version lus, modifications proposées, preuves, points en désaccord et prochaine action. Le second lecteur vérifie le livrable avant clôture. Les références privées ne sont pas publiées dans les dépôts consultés par les candidats.
 
 ## 4. Ordre d’exécution et portes de validation
 

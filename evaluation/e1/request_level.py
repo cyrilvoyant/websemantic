@@ -3,8 +3,8 @@
 Unit of analysis: the unique first-turn request (identical first turns merged), restricted to complete blocks
 (8 conditions x 3 repetitions, one instruction version). For each unit, factor and metric: mean over the four
 conditions with the factor minus mean over the four without (repetitions averaged). The paired differences are tested
-with the Wilcoxon signed-rank test (zero differences discarded, Wilcoxon's method). Same unit definition as Codex's
-work/review-20261008/paired_factorial.py, so the proportions can be cross-checked.
+with the Wilcoxon signed-rank test (zero differences discarded, Wilcoxon's method). Same unit definition as the independent
+re-analysis (work/review-20261008/paired_factorial.py), so the proportions can be cross-checked.
 Output: e1-request-level.csv and figure e1-request-level.{pdf,png} (private).
 """
 
