@@ -61,10 +61,8 @@ T = {
     "en": {
         "codes": {"tls": "Road tunnel energy", "lql": "Radiotherapy dose"},
         "tagline": "ask before you compute",
-        "intro": "Describe a case in your own words, by text or voice. The code asks for what is missing, proposes its "
-                 "declared conventions for vague words, and computes only what you accepted.",
-        "note": "Real calculations with pinned, unchanged codes; scenarios are fictitious by design: do not enter personal "
-                "or patient data. Messages are interpreted by Mistral's API.",
+        "intro": "Describe your case. The code asks for what is missing and computes only what you accept.",
+        "note": "Fictitious scenarios only, no personal data · messages read by Mistral",
         "placeholder": "Describe your case… e.g. a long tunnel with a lot of traffic",
         "try": "Examples", "example_btn": "Example without language model", "reset_btn": "New conversation",
         "files": "Download outputs and provenance",
@@ -118,10 +116,8 @@ T = {
     "fr": {
         "codes": {"tls": "Énergie d'un tunnel", "lql": "Dose en radiothérapie"},
         "tagline": "demander avant de calculer",
-        "intro": "Décrivez un cas avec vos mots, à l'écrit ou à la voix. Le code demande ce qui manque, propose ses "
-                 "conventions déclarées pour les mots vagues, et ne calcule que ce que vous avez accepté.",
-        "note": "Calculs réels avec des codes figés et non modifiés ; les scénarios sont fictifs : ne saisissez aucune "
-                "donnée personnelle ni de patient. Les messages sont interprétés par l'API de Mistral.",
+        "intro": "Décrivez votre cas. Le code demande ce qui manque et ne calcule que ce que vous acceptez.",
+        "note": "Scénarios fictifs, aucune donnée personnelle · messages lus par Mistral",
         "placeholder": "Décrivez votre cas… par ex. un tunnel long avec beaucoup de trafic",
         "try": "Exemples", "example_btn": "Exemple sans modèle de langage", "reset_btn": "Nouvelle conversation",
         "files": "Télécharger les sorties et la provenance",
@@ -618,19 +614,22 @@ LOGO_B64 = base64.b64encode(LOGO.read_bytes()).decode() if LOGO.exists() else ""
 
 def header(lang):
     t = T[lang]
-    return f"""<div class='ws-head'><div><h1>WebSemantic <span>{t['tagline']}</span></h1><p>{t['intro']}</p>
-<p class='ws-links'><a href='{REPO}'>GitHub</a> · <a href='https://doi.org/10.5281/zenodo.23238902'>DOI</a> ·
-<a href='https://pypi.org/project/websemantic/'>PyPI</a> · <a href='https://w3id.org/websemantic/ns'>ontology</a> · MIT ·
-{t['note']}</p></div></div>"""
+    return f"<div class='ws-head'><h1>WebSemantic <span>{t['tagline']}</span></h1><p>{t['intro']}</p></div>"
+
+
+def footer(lang):
+    return (f"<p class='ws-links'>{T[lang]['note']} · <a href='{REPO}'>GitHub</a> · "
+            "<a href='https://doi.org/10.5281/zenodo.23238902'>DOI</a> · "
+            "<a href='https://pypi.org/project/websemantic/'>PyPI</a> · MIT</p>")
 
 
 CSS = """
 .gradio-container{max-width:1380px !important}
-.ws-head{margin:4px 0 10px;border-bottom:1px solid #e5e7eb;padding-bottom:10px}
+.ws-head{margin:2px 0 8px;border-bottom:1px solid #e5e7eb;padding-bottom:8px}
 .ws-head h1{margin:0;font-size:24px;font-weight:600;color:#1f2a37;letter-spacing:-.01em}
 .ws-head h1 span{font-weight:400;color:#6b7280;font-size:17px;margin-left:8px}
 .ws-head p{margin:4px 0;max-width:1050px;font-size:14px;color:#374151}
-.ws-links,.ws-links a{color:#6b7280 !important;font-size:12.5px}
+.ws-links,.ws-links a{color:#9ca3af !important;font-size:12px;text-align:center;margin-top:6px}
 .ws-decision{border-left:3px solid;padding:4px 10px;font-size:14px;color:#1f2a37}
 .ws-code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;text-transform:uppercase;
   letter-spacing:.05em;color:#6b7280;margin-right:6px}
@@ -705,6 +704,7 @@ adding the contract reduced premature execution from 26 to 6 %, 17 to 1 % and 52
 Source [{REPO}]({REPO}) (release {TAG}) · [DOI](https://doi.org/10.5281/zenodo.23238902) ·
 [w3id ontology](https://w3id.org/websemantic/ns) · FOOPS! 1.0 · howfairis 5/5 · OpenSSF best practices: passing.""")
 
+    foot = gr.HTML(footer("en"))
     panels = [decision, variables, kpis, fig1, fig2, analysis, files]
 
     def reset(m, lg):
@@ -712,9 +712,9 @@ Source [{REPO}]({REPO}) (release {TAG}) · [DOI](https://doi.org/10.5281/zenodo.
         return ([], fresh(m, lg), "", pd.DataFrame(), "", None, None, "", None,
                 gr.Dataset(samples=[[e] for e in t["examples"][m]], label=t["try"]), header(lg),
                 gr.Radio(choices=[(t["codes"][c], c) for c in CODES], value=m), gr.Textbox(placeholder=t["placeholder"]),
-                gr.Button(t["example_btn"]), gr.Button(t["reset_btn"]), gr.File(label=t["files"]))
+                gr.Button(t["example_btn"]), gr.Button(t["reset_btn"]), gr.File(label=t["files"]), footer(lg))
 
-    resets = [chat, state, *panels, examples, head, model, text, b_example, b_reset, files]
+    resets = [chat, state, *panels, examples, head, model, text, b_example, b_reset, files, foot]
 
     def from_voice(path, history, st, m, lg):
         said = transcribe(path)
