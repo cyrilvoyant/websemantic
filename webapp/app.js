@@ -1,6 +1,6 @@
 // WebSemantic web app: chat on the left, qualified results on the right. Python runs in a background worker.
 "use strict";
-const APP_VERSION = "0.3.6";  // also in index.html (cache busting) and the footer
+const APP_VERSION = "0.3.7";  // also in index.html (cache busting) and the footer
 
 const params = new URLSearchParams(location.search);
 const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
@@ -13,7 +13,7 @@ const T = {
     intro: "Describe your case. The code asks for what is missing and computes only what you accept.",
     codes: { tls: "Road tunnel energy", lql: "Radiotherapy dose" },
     placeholder: { tls: "Describe your case… e.g. a long tunnel with a lot of traffic", lql: "Describe your case… e.g. 20 sessions of 3 Gy, prostate, rectum as organ at risk" },
-    allCases: "All cases", details: "Technical details (versions, checks, options)", varsNote: "To work in the original application, open it and enter these values:", openApp: { lql: "Open the original LQL-Equiv", tls: "Open the original TLS (code and app)" }, examples: "Examples", more: "Other examples ↻", tags: { refuse: "refusal example", ask: "the code will ask" }, exampleBtn: "Example without language model", resetBtn: "New conversation",
+    allCases: "All cases", details: "Technical details (versions, checks, options)", varsNote: "To work in the original application, open it and enter these values:", openApp: { lql: "Open the original LQL-Equiv", tls: "Open the original TLS (code and app)" }, traceBtn: "Download the trace", examples: "Examples", more: "Other examples ↻", tags: { refuse: "refusal example", ask: "the code will ask" }, exampleBtn: "Example without language model", resetBtn: "New conversation",
     tabs: { results: "Results", about: "About" },
     loading: "Loading the scientific codes in your browser (about 15 s on the first visit)…",
     timeout: "The calculation took too long in this browser; nothing is shown.",
@@ -39,7 +39,7 @@ const T = {
     intro: "Décrivez votre cas. Le code demande ce qui manque et ne calcule que ce que vous acceptez.",
     codes: { tls: "Énergie d'un tunnel", lql: "Dose en radiothérapie" },
     placeholder: { tls: "Décrivez votre cas… par ex. un tunnel long avec beaucoup de trafic", lql: "Décrivez votre cas… par ex. 20 séances de 3 Gy, prostate, rectum comme organe à risque" },
-    allCases: "Tous les cas", details: "Détails techniques (versions, vérifications, options)", varsNote: "Pour travailler dans l'application d'origine, ouvrez-la et saisissez ces valeurs :", openApp: { lql: "Ouvrir LQL-Equiv (application d'origine)", tls: "Ouvrir TLS d'origine (code et application)" }, examples: "Exemples", more: "Autres exemples ↻", tags: { refuse: "exemple de refus", ask: "le code demandera" }, exampleBtn: "Exemple sans modèle de langage", resetBtn: "Nouvelle conversation",
+    allCases: "Tous les cas", details: "Détails techniques (versions, vérifications, options)", varsNote: "Pour travailler dans l'application d'origine, ouvrez-la et saisissez ces valeurs :", openApp: { lql: "Ouvrir LQL-Equiv (application d'origine)", tls: "Ouvrir TLS d'origine (code et application)" }, traceBtn: "Télécharger la trace", examples: "Exemples", more: "Autres exemples ↻", tags: { refuse: "exemple de refus", ask: "le code demandera" }, exampleBtn: "Exemple sans modèle de langage", resetBtn: "Nouvelle conversation",
     tabs: { results: "Résultats", about: "À propos" },
     loading: "Chargement des codes scientifiques dans votre navigateur (environ 15 s à la première visite)…",
     timeout: "Le calcul a pris trop de temps dans ce navigateur ; rien n'est affiché.",
@@ -64,6 +64,7 @@ const T = {
 
 const $ = (id) => document.getElementById(id);
 let lang = "en", code = "tls", state = null, busy = false, conversation = 0, blobs = [];
+let hashes = null, trace = null;  // fingerprints of what runs here; the visitor's local record of this conversation
 
 // ------------------------------------------------------------ Python worker
 const worker = new Worker("py-worker.js?v=" + APP_VERSION);
@@ -74,7 +75,7 @@ const pyLoaded = new Promise((res, rej) => { readyResolve = res; readyReject = r
 worker.onerror = (e) => { readyReject(String(e.message || e)); status(T[lang].failed + (e.message || e)); };
 worker.onmessage = (e) => {
   const m = e.data;
-  if (m.type === "ready") { pyReady = true; readyResolve(); status(T[lang].ready); return; }
+  if (m.type === "ready") { pyReady = true; hashes = m.hashes || null; readyResolve(); status(T[lang].ready); return; }
   if (m.type === "error") { readyReject(m.error); status(T[lang].failed + m.error); return; }
   const p = pending.get(m.id); if (!p) return; pending.delete(m.id);
   m.error ? p.reject(m.error) : p.resolve(m.result);
@@ -253,7 +254,7 @@ function applyLanguage() {
   $("tagline").textContent = t.tagline; $("intro").textContent = t.intro;
   document.querySelectorAll("#code button").forEach((b) => { b.textContent = t.codes[b.dataset.v]; });
   $("input").placeholder = t.placeholder[code]; $("examples-label").textContent = t.examples;
-  $("example-btn").textContent = t.exampleBtn; $("reset-btn").textContent = t.resetBtn;
+  $("example-btn").textContent = t.exampleBtn; $("reset-btn").textContent = t.resetBtn; $("trace-btn").textContent = t.traceBtn;
   $("tab-results").textContent = t.tabs.results; $("tab-about").textContent = t.tabs.about;
   $("about").innerHTML = t.about; $("mic").title = t.voice;
   $("footer").innerHTML = `${esc(t.foot)} · <a href="https://github.com/cyrilvoyant/websemantic" target="_blank" rel="noopener">GitHub</a> · <a href="https://doi.org/10.5281/zenodo.23238902" target="_blank" rel="noopener">DOI</a> · <a href="https://pypi.org/project/websemantic/" target="_blank" rel="noopener">PyPI</a> · MIT · app ${APP_VERSION}`;
@@ -287,7 +288,7 @@ function renderExamples() {
 }
 
 async function newConversation() {
-  conversation++; busy = false;  // replies of an earlier conversation are ignored
+  conversation++; busy = false; trace = null; $("trace-btn").disabled = true;  // replies of an earlier conversation are ignored
   $("chat").innerHTML = ""; clearResults(); state = null;
   try { state = JSON.parse(await py("api_fresh", code, lang)); } catch (e) { status(T[lang].failed + e); }
 }
@@ -295,6 +296,48 @@ async function newConversation() {
 function showTab(name) {
   document.querySelectorAll(".tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === name));
   for (const id of ["results", "variables", "about"]) $(id).hidden = id !== name;
+}
+
+// ------------------------------------------------------------ trace (kept in the visitor's browser only)
+function record(turn) {
+  if (!trace) trace = {
+    format: "websemantic-trace/1", app_version: APP_VERSION, page: location.origin + location.pathname,
+    started_utc: new Date().toISOString(), code, language: lang, relay: RELAY, sha256_of_what_ran: hashes,
+    notice: "Local record of this conversation, made in the visitor's browser; nothing is stored on a server. " +
+            "Fictitious scenarios for research and teaching; not a medical device; the practitioner decides.",
+    turns: [] };
+  trace.turns.push({ time_utc: new Date().toISOString(), ...turn });
+  $("trace-btn").disabled = false;
+}
+function changes(before, after) {
+  const out = [], pick = (r) => r ? { value: r.value, origin: r.origin, accepted: !!r.accepted } : null;
+  for (const g of ["inputs", "experiment"]) {
+    const names = new Set([...Object.keys((before && before[g]) || {}), ...Object.keys((after && after[g]) || {})]);
+    for (const n of names) {
+      const b = pick(before && before[g] && before[g][n]), a = pick(after && after[g] && after[g][n]);
+      if (JSON.stringify(b) !== JSON.stringify(a)) out.push({ parameter: n, before: b, after: a });
+    }
+  }
+  const ob = (before && before.organs) || [], oa = (after && after.organs) || [];
+  if (JSON.stringify(ob) !== JSON.stringify(oa)) out.push({ parameter: "organs", before: ob, after: oa });
+  return out;
+}
+function outcome(r) {
+  if (!r) return null;
+  let manifest = null;
+  try { manifest = r.files && r.files["manifest.json"] ? JSON.parse(r.files["manifest.json"]) : null; } catch (_) { manifest = null; }
+  let results = null;  // LQL workbench: every native value with its provenance (software, options, sha256)
+  try { results = r.files && r.files["results.json"] ? JSON.parse(r.files["results.json"]) : null; } catch (_) { results = null; }
+  return { kind: r.kind, answer: r.headline || null, key_figures: r.kpis, key_figure_labels: r.kpi_labels || null,
+           table: r.table || null, qualification: r.qualification || null, manifest, results, files: Object.keys(r.files || {}) };
+}
+function downloadTrace() {
+  if (!trace) return;
+  const stamp = new Date().toISOString().replace(/[-:]/g, "").slice(0, 13);
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(trace, null, 2)], { type: "application/json" }));
+  a.download = `websemantic-trace-${stamp}.json`; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 }
 
 // ------------------------------------------------------------ conversation
@@ -307,8 +350,9 @@ async function send(message) {
   const wait = say("bot wait", pyReady ? T[l].thinking : T[l].loading);
   try {
     if (!state) state = JSON.parse(await py("api_fresh", m, l));
-    let parsed = "";
-    if (JSON.parse(await py("api_needs_reading", message))) {  // a pure "yes" needs no language model
+    let parsed = "", model = null;
+    const reads = JSON.parse(await py("api_needs_reading", message));
+    if (reads) {  // a pure "yes" needs no language model
       const summary = JSON.parse(await py("api_summary", JSON.stringify(state)));
       try {
         const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 30000);
@@ -316,13 +360,17 @@ async function send(message) {
                                           body: JSON.stringify({ code: m, lang: l, message, state: summary }) });
         clearTimeout(timer);
         const data = resp.ok ? await resp.json() : null;
-        if (data && data.parsed && typeof data.parsed === "object") parsed = JSON.stringify(data.parsed);
+        if (data && data.parsed && typeof data.parsed === "object") { parsed = JSON.stringify(data.parsed); model = data.model || null; }
       } catch (_) { parsed = ""; }
     }
     if (mine !== conversation) return;  // the visitor reset or switched meanwhile
     wait.textContent = T[l].computing;
+    const before = state;
     const out = JSON.parse(await py("api_turn", m, l, JSON.stringify(state), message, parsed));
     if (mine !== conversation) return;
+    record({ message, read_by_language_model: reads, language_model: model, reading: parsed ? JSON.parse(parsed) : null,
+             decision: out.decision, reply: out.reply, changes: changes(before, out.state),
+             unresolved: out.state.unresolved || [], result: outcome(out.results) });
     wait.remove(); render(out);
   } catch (e) {
     if (mine === conversation) { wait.remove(); say("bot", T[l].failed + e); }
@@ -334,7 +382,15 @@ async function example() {
   conversation++; const mine = conversation, m = code, l = lang;
   busy = true; $("chat").innerHTML = ""; clearResults();
   const wait = say("bot wait", pyReady ? T[l].computing : T[l].loading);
-  try { const out = JSON.parse(await py("api_example", m, l)); if (mine === conversation) { wait.remove(); render(out); } }
+  try {
+    const out = JSON.parse(await py("api_example", m, l));
+    if (mine === conversation) {
+      record({ message: T[l].exampleBtn, read_by_language_model: false, language_model: null, reading: null,
+               decision: out.decision, reply: out.reply, changes: changes(null, out.state), unresolved: [],
+               result: outcome(out.results) });
+      wait.remove(); render(out);
+    }
+  }
   catch (e) { if (mine === conversation) { wait.remove(); say("bot", T[l].failed + e); } }
   finally { if (mine === conversation) busy = false; }
 }
@@ -362,6 +418,7 @@ $("input").onkeydown = (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preven
 $("example-btn").onclick = example;
 $("more-examples").onclick = () => { exampleOffset += 3; renderExamples(); };
 $("reset-btn").onclick = newConversation;
+$("trace-btn").onclick = downloadTrace;
 document.querySelectorAll(".tabs button").forEach((b) => { b.onclick = () => showTab(b.dataset.tab); });
 for (const [id, setter] of [["lang", (v) => { lang = v; }], ["code", (v) => { code = v; }]]) {
   document.querySelectorAll(`#${id} button`).forEach((b) => {
