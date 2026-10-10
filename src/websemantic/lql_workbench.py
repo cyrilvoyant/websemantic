@@ -164,3 +164,37 @@ def names(workspace):
         if kind:
             out[kind][str(label)] = sorted(str(a) for a in graph.objects(concept, SKOS.altLabel))
     return {k: dict(sorted(v.items())) for k, v in out.items()}
+
+
+def sequence(workspace, descriptor, tumour, organs, courses, reference_dose=2.0):
+    """Successive courses (each with the interruption before it) for each organ at risk: the contribution of each
+    course and the cumulated EQD2, TCP and NTCP, as LQL-Equiv computes a several-course prescription."""
+    if len(courses) < 2 or not organs:
+        raise ValueError("At least two courses and one organ at risk are required.")
+    for course in courses:
+        course.check()
+    module = _backend(workspace, descriptor)
+    library = module.load_library()
+    target = library.tumour_site(tumour)
+    prescription = module.Prescription(courses=tuple(module.Course(c.dose, c.sessions, c.gap_days) for c in courses),
+                                       reference_dose=reference_dose)
+    rows = []
+    for name in organs:
+        r = module.compute(library.organ(name), target, prescription, options=module.Options())
+        oar_ok = r.oar_total_valid and not any(c.oar_saturated for c in r.courses)
+        tumour_ok = r.tumour_total_valid and not any(c.tumour_saturated for c in r.courses)
+        row = {"organ": name, "physical_dose_gy": sum(c.dose * c.sessions for c in courses),
+               "eqd_tumour_total": r.eqd_tumour_total if tumour_ok else None,
+               "tcp_percent": r.tcp_percent if tumour_ok else None,
+               "eqd_oar_total": r.eqd_oar_total if oar_ok else None, "ntcp_percent": r.ntcp_percent if oar_ok else None,
+               "courses": [{"eqd_tumour": c.eqd_tumour if tumour_ok else None, "eqd_oar": c.eqd_oar if oar_ok else None,
+                            "overall_days": c.overall_days_tumour} for c in r.courses],
+               "flags": {"oar_total_valid": r.oar_total_valid, "tumour_total_valid": r.tumour_total_valid,
+                         "saturated": any(c.oar_saturated or c.tumour_saturated for c in r.courses)}}
+        values = [row["eqd_tumour_total"], row["tcp_percent"], row["eqd_oar_total"], row["ntcp_percent"]] + \
+                 [v for c in row["courses"] for v in (c["eqd_tumour"], c["eqd_oar"])]
+        if any(isinstance(v, float) and not math.isfinite(v) for v in values):
+            raise ValueError("Non-finite LQL-Equiv output: result refused.")
+        rows.append(row)
+    return {"tumour": tumour, "organs": list(organs), "courses": [asdict(c) for c in courses],
+            "reference_dose": reference_dose, "rows": rows, **_provenance(module, descriptor)}

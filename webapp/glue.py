@@ -60,6 +60,15 @@ T = {
         "noted": "Noted from your words: {}.",
         "unchanged": "No value was changed by this message.",
         "gap_short": "{} days break",
+        "ask_choose": "Two schedules: should I compute them **one after the other** (successive courses) or **compare** them as alternatives?",
+        "unparsed": "I did not recognise “{}” as a schedule: please write it as, for example, 20 × 3.5 Gy.",
+        "plan_sequence": "Successive courses: **{}**; cumulated effect for the tumour and the organs at risk {}.",
+        "after_gap": "after {} days", "then": ", then ",
+        "answer_sequence": "Answer: {chain} → cumulated EQD2 **{eqt} Gy for the tumour** (TCP {tcp} %). Organs at risk: {organs}.",
+        "col_course": "course {}: {} (EQD2, Gy)", "col_total": "total",
+        "chart_sequence": "EQD2 of each course and in total (Gy)",
+        "k_courses": "courses", "k_physical": "total physical dose (Gy)",
+        "explain_sequence": "How to read: each column is one course, in order, with the interruption before it; the cells give its EQD2 contribution (it may be negative after a long interruption, because the model counts repopulation) and the last column the cumulated EQD2, TCP and NTCP computed by LQL-Equiv for the whole prescription.",
         "plan_minimum": "Same tumour effect as **{}** for several numbers of sessions, and the EQD2 it gives to the organs at risk {}.",
         "answer_minimum": "Answer: for the same tumour effect as {ref}, the organs at risk are least exposed with **{n} sessions of {d} Gy** (most exposed organ: {w} % of its EQD2 with {ref}). Best number of sessions for each organ: {per}.",
         "chart_minimum": "Organs' EQD2 with the tumour-equivalent dose, relative to the reference schedule (%), by number of sessions",
@@ -154,6 +163,15 @@ T = {
         "noted": "Noté d'après vos mots : {}.",
         "unchanged": "Ce message n'a changé aucune valeur.",
         "gap_short": "arrêt de {} jours",
+        "ask_choose": "Deux schémas : faut-il les calculer **l'un après l'autre** (cures successives) ou les **comparer** comme alternatives ?",
+        "unparsed": "Je n'ai pas reconnu « {} » comme un schéma : écrivez-le par exemple 20 × 3,5 Gy.",
+        "plan_sequence": "Cures successives : **{}** ; effet cumulé pour la tumeur et les organes à risque {}.",
+        "after_gap": "après {} jours", "then": ", puis ",
+        "answer_sequence": "Réponse : {chain} → EQD2 cumulée **{eqt} Gy pour la tumeur** (TCP {tcp} %). Organes à risque : {organs}.",
+        "col_course": "cure {} : {} (EQD2, Gy)", "col_total": "total",
+        "chart_sequence": "EQD2 de chaque cure et au total (Gy)",
+        "k_courses": "cures", "k_physical": "dose physique totale (Gy)",
+        "explain_sequence": "Comment lire : chaque colonne est une cure, dans l'ordre, avec l'arrêt qui la précède ; les cases donnent sa contribution en EQD2 (elle peut être négative après un long arrêt, car le modèle compte la repopulation) et la dernière colonne l'EQD2 cumulée, le TCP et le NTCP calculés par LQL-Equiv pour toute la prescription.",
         "plan_minimum": "Même effet tumoral que **{}** pour plusieurs nombres de séances, et l'EQD2 qui en résulte pour les organes à risque {}.",
         "answer_minimum": "Réponse : pour le même effet tumoral que {ref}, les organes à risque sont le moins exposés avec **{n} séances de {d} Gy** (organe le plus exposé : {w} % de son EQD2 avec {ref}). Meilleur nombre de séances pour chaque organe : {per}.",
         "chart_minimum": "EQD2 des organes avec la dose tumorale équivalente, par rapport au schéma de référence (%), selon le nombre de séances",
@@ -251,6 +269,7 @@ LABELS = {  # name: (English, French, unit shown)
     "dose_per_fraction": ("dose per session", "dose par séance", "Gy"), "n_fractions": ("number of sessions", "nombre de séances", ""),
     "gap_days": ("treatment gap", "interruption", "days"), "reference_dose": ("reference dose", "dose de référence", "Gy"),
     "bifractionated": ("two sessions a day", "deux séances par jour", ""), "scenario_scope": ("scope", "cadre", ""),
+    "schedule": ("schedule", "schéma", ""),
 }
 SHORT = {  # short words that name a field in a partial consent ("yes, only the length"); full labels also count
     "length_m": ("length", "longueur"), "traffic_level": ("traffic", "trafic"), "n_tubes": ("tube",),
@@ -767,7 +786,7 @@ def names_in(message):
 _WORDS = {**{fold(k): v for k, v in NUMBER_WORDS.items()}, **ENGLISH_WORDS}
 NUM = r"(\d+|" + "|".join(re.escape(w) for w in sorted(_WORDS, key=len, reverse=True)) + r")"
 SESS = r"(?:seances?|sessions?|fractions?)"
-SCHED = re.compile(r"(\d+)\s*(?:x|×|\*)\s*(\d+(?:[.,]\d+)?)\s*gy\b|" + NUM + r"\s*" + SESS
+SCHED = re.compile(r"(\d+)\s*(?:x|×|\*)\s*(\d+(?:[.,]\d+)?)(?:\s*gy)?\b|" + NUM + r"\s*" + SESS
                    + r"\s*(?:de|of|a|at)\s*(\d+(?:[.,]\d+)?)\s*gy\b")
 GAP = re.compile(r"(?:interruption|arret|pause|gap|break|coupure)\s*(?:de|of)?\s*" + NUM + r"\s*(jours?|days?|semaines?|weeks?)"
                  r"|" + NUM + r"[- ]?(jours?|days?|semaines?|weeks?)\s*(?:d'?\s*)?(?:de\s*)?(?:gap|break|interruption|pause|arret)")
@@ -789,6 +808,9 @@ SAME_NUMBER = re.compile(r"\b(meme nombre|same number|garder le nombre|keep the 
 TARGET = re.compile(r"\b(?:en|in|sur|over)\s*" + NUM + r"\s*" + SESS)
 BARE = re.compile(r"^\s*" + NUM + r"\s*" + SESS + r"?\s*[.!]?\s*$")
 MONTHS = re.compile(NUM + r"\s*(?:mois|months?)\b")
+SEQUENCE = re.compile(r"\b(puis|ensuite|suivie?s? de|then|followed by|runs?|cures?|cursus|series|courses?|boost)\b")
+COMPARE = re.compile(r"\b(compar\w*|versus|vs|plutot que|rather than|ou bien|either)\b")
+FRAGMENT = re.compile(r"\b\d+\s*[a-wyz]\s*\d+(?:[.,]\d+)?(?:\s*gy)?\b")
 
 
 def as_int(token):
@@ -804,7 +826,7 @@ def schedules_in(message):
         n, d = (m.group(1), m.group(2)) if m.group(1) else (m.group(3), m.group(4))
         clause = text[m.end():found[i + 1].start() if i + 1 < len(found) else len(text)]
         out.append({"sessions": as_int(n), "dose": float(d.replace(",", ".")), "gap_days": gap_in(clause) or 0.0,
-                    "said": exact(m.group(0), message) or m.group(0)})
+                    "said": exact(m.group(0), message) or m.group(0), "start": m.start()})
     return out
 
 
@@ -865,12 +887,34 @@ def lql_reading(state, values, message, lang, errors):
         L["mode"] = "minimum"
     elif INTERRUPT.search(text) and RESUMING.search(text):
         L["mode"] = "resume"
-    elif len(scheds) >= 2:
-        L["mode"] = "compare"
+    elif len(scheds) >= 2:  # one after the other, or alternatives? asked when the words do not say
+        L["mode"] = "compare" if COMPARE.search(text) else "sequence" if SEQUENCE.search(text) else "choose"
+    if awaiting == "choose" and L.get("mode") == "choose":
+        one_after = SEQUENCE.search(text) or re.search(r"enchain|successi|apres l.autre|one after|in turn", text)
+        L["mode"] = "compare" if COMPARE.search(text) else "sequence" if one_after else "choose"
     if scheds:
         L["schedules"] = scheds
     gap = gap_in(message)
-    if L["mode"] in ("compare", "resume", "maximum", "minimum") and scheds:  # the parser, not the model, reads the schedules
+    if len(scheds) >= 2:
+        L["prefix_gap"] = gap_in(text[:scheds[0]["start"]])
+    if L["mode"] == "sequence" and len(L.get("schedules") or []) >= 2:  # the break written between two courses
+        listed = L["schedules"]                                          # comes before the next course
+        courses = [dict(sc, gap_days=0.0) for sc in listed]
+        for i in range(len(listed) - 1):
+            courses[i + 1]["gap_days"] = listed[i]["gap_days"]
+        if L.get("prefix_gap") and len(courses) == 2 and not courses[1]["gap_days"]:
+            courses[1]["gap_days"] = L["prefix_gap"]
+        L["courses"] = courses
+    fragments = [f for f in FRAGMENT.findall(text) if not SCHED.fullmatch(f)]
+    unresolved = set(state.get("unresolved") or [])
+    if fragments:  # "20c3.5": a schedule written in a way that is not recognised; never guessed
+        L["unparsed"] = exact(fragments[0], message) or fragments[0]
+        unresolved.add("schedule")
+    elif not short_answer:
+        L.pop("unparsed", None)
+        unresolved.discard("schedule")
+    state["unresolved"] = sorted(unresolved)
+    if L["mode"] in ("compare", "resume", "maximum", "minimum", "sequence", "choose") and scheds:  # the parser, not the model, reads the schedules
         values = [v for v in values if v.get("field") not in ("dose_per_fraction", "n_fractions", "gap_days")]
         first = scheds[0]
         for name, value in (("dose_per_fraction", first["dose"]), ("n_fractions", first["sessions"])):
@@ -940,6 +984,8 @@ def lql_reading(state, values, message, lang, errors):
 def lql_after(state, old, message, lang, parts):
     """After the values are applied: organs list, "all organs" from the ontology, consistency with the tumour site."""
     t, L = T[lang], state["lql"]
+    if L.get("unparsed"):
+        parts.append(t["unparsed"].format(L["unparsed"]))
     organ_now = state["inputs"].get("organ")
     if organ_now and organ_now != old["inputs"].get("organ") and organ_now.get("kind") != "group":
         state["organs"] = [organ_now["value"]] + [o for o in L.pop("extra_organs", []) if o != organ_now["value"]]
@@ -988,6 +1034,10 @@ def lql_missing(state, lang):
             return "done", t["ask_done"]
     if mode == "maximum" and "target" not in L:
         return "target", t["ask_target"]
+    if L.get("unparsed"):
+        return "unparsed", t["unparsed"].format(L["unparsed"])
+    if mode == "choose":
+        return "choose", t["ask_choose"]
     return None, None
 
 
@@ -1008,7 +1058,20 @@ def lql_plan(state, lang):
     if mode == "minimum":
         ref = L.get("schedules", [planned])[0]
         return t["plan_minimum"].format(schedule_label(ref, lang), organs)
+    if mode == "sequence":
+        return t["plan_sequence"].format(course_chain(L["courses"], lang), organs)
     return ""
+
+
+def course_chain(courses, lang):
+    t = T[lang]
+    parts = []
+    for i, c in enumerate(courses):
+        text = f"{c['sessions']} × {localise(format(c['dose'], 'g'), lang)} Gy"
+        if i and c.get("gap_days"):
+            text = t["after_gap"].format(localise(format(c["gap_days"], "g"), lang)) + " " + text
+        parts.append(text)
+    return t["then"].join(parts)
 
 
 def lql_compute(state, lang):
@@ -1066,6 +1129,29 @@ def lql_compute(state, lang):
                  "line": {"value": last["maximum_dose"], "label": t["line_max"]}, "zoom": True}
         kpis = [(g(d, ".2f"), t["k_dose_resume"].format(n)), (g(last["maximum_dose"], ".2f"), t["k_max_dose"]),
                 (g(abs(unc["tumour_difference_percent"] or 0)), t["k_loss"]), (g(r["planned"]["tumour_eqd2"]), t["k_planned_eqd2"])]
+        payload = r
+    elif mode == "sequence":
+        courses = [wb.Schedule(float(c["dose"]), int(c["sessions"]), float(c["gap_days"])) for c in L["courses"]]
+        r = wb.sequence(WS, DESC["lql"], site, organs, courses, ref_dose)
+        rows = r["rows"]
+        first = rows[0]
+        chain = course_chain(L["courses"], lang)
+        headline = t["answer_sequence"].format(
+            chain=chain, eqt=g(first["eqd_tumour_total"]), tcp=g(first["tcp_percent"], ".0f"),
+            organs="; ".join(f"{x['organ']} {g(x['eqd_oar_total'])} Gy (NTCP {g(x['ntcp_percent'], '.0f')} %)" for x in rows))
+        labels = [t["col_course"].format(i + 1, f"{c['sessions']} × {localise(format(c['dose'], 'g'), lang)} Gy")
+                  for i, c in enumerate(L["courses"])]
+        head = [t["col_tissue"]] + labels + [t["col_total"]]
+        table = [[f"{site} ({t['target']})"] + [g(c["eqd_tumour"]) for c in first["courses"]]
+                 + [f"{g(first['eqd_tumour_total'])} Gy · TCP {g(first['tcp_percent'], '.0f')} %"]]
+        table += [[x["organ"]] + [g(c["eqd_oar"]) for c in x["courses"]]
+                  + [f"{g(x['eqd_oar_total'])} Gy · NTCP {g(x['ntcp_percent'], '.0f')} %"] for x in rows]
+        chart = {"categories": [t["target"]] + [x["organ"] for x in rows], "unit": "Gy", "title": t["chart_sequence"],
+                 "series": [{"name": labels[i], "values": [first["courses"][i]["eqd_tumour"]]
+                             + [x["courses"][i]["eqd_oar"] for x in rows]} for i in range(len(courses))]
+                 + [{"name": t["col_total"], "values": [first["eqd_tumour_total"]] + [x["eqd_oar_total"] for x in rows]}]}
+        kpis = [(g(first["eqd_tumour_total"]), t["k_eqd_target"]), (g(first["tcp_percent"], ".0f"), "TCP (%)"),
+                (str(len(courses)), t["k_courses"]), (g(first["physical_dose_gy"]), t["k_physical"])]
         payload = r
     elif mode == "minimum":
         ref_s = L.get("schedules", [None])[0]

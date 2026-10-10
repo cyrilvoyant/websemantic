@@ -193,13 +193,14 @@
    "kind": "run",
    "expect": {
     "tumour_site": "Prostate",
-    "organ": "Bladder",
-    "dose_per_fraction": 2,
-    "n_fractions": 39,
-    "gap_days": 10
+    "mode": "sequence",
+    "organs": [
+     "Rectum",
+     "Bladder"
+    ]
    },
-   "en": "Prostate tumour, bladder as organ at risk, 39 sessions of 2 Gy with a 10-day break.",
-   "fr": "Tumeur de la prostate, vessie comme organe à risque, 39 séances de 2 Gy avec une interruption de 10 jours."
+   "en": "Prostate, rectum and bladder: two courses, 20 × 3 Gy, then a 15-day break, then 5 × 2 Gy.",
+   "fr": "Prostate, rectum et vessie : deux cures, 20 × 3 Gy, puis 15 jours d'arrêt, puis 5 × 2 Gy."
   },
   {
    "kind": "run",

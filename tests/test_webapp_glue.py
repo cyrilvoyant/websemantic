@@ -526,3 +526,42 @@ def test_the_ontology_names_catch_an_organ_the_model_missed():
                           {"field": "n_fractions", "value": 20, "origin": "provided", "evidence": "20 séances"})
     assert state["inputs"]["tumour_site"]["value"] == "Prostate" and state["inputs"]["organ"]["value"] == "Bladder"
     assert state["inputs"]["organ"]["evidence"] == "vessie"
+
+
+# ------------------------------------------------------------ successive courses ("2 runs"), Cyril's online test
+
+
+def test_two_runs_with_a_break_are_cumulated():
+    msg = "2 runs avec 15 jours d'arrêt : 20 × 3,5 Gy puis 1 × 1,8 Gy, prostate, rectum et vessie"
+    out, state = lql_case(msg, SITE, RECTUM, {"field": "organ", "value": "Bladder", "origin": "provided", "evidence": "vessie"})
+    L = state["lql"]
+    assert L["mode"] == "sequence" and [c["gap_days"] for c in L["courses"]] == [0.0, 15.0]
+    out, state = yes(state)
+    r = out["results"]
+    assert out["decision"] == "execute" and "EQD2 cumulée" in out["reply"] and r["table"]["head"][-1] == "total"
+
+
+def test_three_courses_and_the_breaks_between_them():
+    msg = "prostate, rectum : 20 × 3 Gy, puis 10 jours d'arrêt, puis 5 × 2 Gy, puis 7 jours d'arrêt, puis 2 × 4 Gy"
+    out, state = lql_case(msg, SITE, RECTUM)
+    assert [c["gap_days"] for c in state["lql"]["courses"]] == [0.0, 10.0, 7.0]
+    out, state = yes(state)
+    assert out["decision"] == "execute" and len(out["results"]["table"]["head"]) == 5
+
+
+def test_an_unrecognised_schedule_is_asked_not_guessed():
+    out, state = lql_case("20c3.5 puis 1×1.8Gy, prostate, rectum", SITE, RECTUM)
+    assert "20c3.5" in out["reply"] and state["unresolved"] == ["schedule"]
+    out, state = yes(state)
+    assert out["decision"] == "clarify" and "schéma" in out["reply"] and not out.get("results")
+    out, state = turn("lql", state, "20 × 3,5 Gy puis 1 × 1,8 Gy", reading(LQL_TASK))
+    assert state["unresolved"] == [] and state["lql"]["mode"] == "sequence"
+
+
+def test_two_schedules_without_a_word_ask_whether_to_chain_or_compare():
+    out, state = lql_case("20 × 3 Gy et 39 × 2 Gy, prostate, rectum", SITE, RECTUM)
+    assert state["lql"]["mode"] == "choose"
+    out, state = yes(state)
+    assert "l'un après l'autre" in out["reply"]
+    out, state = turn("lql", state, "l'un après l'autre", reading(LQL_TASK))
+    assert state["lql"]["mode"] == "sequence" and len(state["lql"]["courses"]) == 2

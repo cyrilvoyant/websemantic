@@ -29,7 +29,8 @@ a{color:var(--navy)}
 button{cursor:pointer}
 .primary,.icon{border:1px solid var(--navy);background:var(--navy);color:#fff;border-radius:8px;padding:0 15px;font-size:16px}
 .primary:hover{background:#18304f}
-.icon{background:#fff;color:var(--orange);border-color:var(--line)}
+.icon{background:#fff;color:var(--navy);border-color:var(--line);display:inline-flex;align-items:center;justify-content:center}
+.icon svg{display:block}
 .icon.rec{background:var(--orange);color:#fff;border-color:var(--orange)}
 .examples{margin-top:12px;color:var(--mid);font-size:12.5px}
 .examples .row{display:flex;justify-content:space-between;align-items:center}
@@ -92,9 +93,11 @@ details summary{cursor:pointer;color:var(--navy);font-weight:500;margin-bottom:4
   .grid{grid-template-columns:1fr;gap:16px;padding:4px 12px 10px}
   .head,.switches{padding-left:12px;padding-right:12px}
   .head .mark{width:34px;height:34px}
-  .head{flex-wrap:wrap}
-  .head .affiliation{order:3;margin:4px 0 0 46px}
-  .head .affiliation img{height:28px}
+  /* phone: logo and title on one line, the Mines Paris - PSL / O.I.E. block mark on its own line below */
+  .head{flex-wrap:wrap;align-items:flex-start;row-gap:8px}
+  .head > div{flex:1 1 0;min-width:0}
+  .head .affiliation{order:3;flex-basis:100%;margin:0}
+  .head .affiliation img{height:30px}
   .head h1{font-size:20px}
   .head h1 span{display:block;margin:0;font-size:14px}
   /* one scroll only on a phone: the conversation grows with the page instead of capturing the finger */

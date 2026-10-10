@@ -1,6 +1,6 @@
 // WebSemantic web app: chat on the left, qualified results on the right. Python runs in a background worker.
 "use strict";
-const APP_VERSION = "0.3.5";  // also in index.html (cache busting) and the footer
+const APP_VERSION = "0.3.6";  // also in index.html (cache busting) and the footer
 
 const params = new URLSearchParams(location.search);
 const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
