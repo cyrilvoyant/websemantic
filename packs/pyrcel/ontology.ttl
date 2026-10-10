@@ -21,9 +21,9 @@
 <https://w3id.org/websemantic/ns> a owl:Ontology ;
     dcterms:title "WebSemantic core ontology"@en ;
     dcterms:description "Common vocabulary linking user requests, software contracts, accepted assumptions, executions and qualified simulation outputs."@en ;
-    owl:versionInfo "0.2.3" ;
-    owl:versionIRI <https://w3id.org/websemantic/ns/core/0.2.3> ;
-    owl:priorVersion <https://w3id.org/websemantic/ns/core/0.2.2> ;
+    owl:versionInfo "0.2.4" ;
+    owl:versionIRI <https://w3id.org/websemantic/ns/core/0.2.4> ;
+    owl:priorVersion <https://w3id.org/websemantic/ns/core/0.2.3> ;
     dcterms:created "2026-10-06"^^xsd:date ;
     dcterms:issued "2026-10-08"^^xsd:date ;
     dcterms:modified "2026-10-10"^^xsd:date ;
@@ -31,7 +31,7 @@
     dcterms:publisher <https://github.com/cyrilvoyant/websemantic> ;
     dcterms:source <https://github.com/cyrilvoyant/websemantic> ;
     dcterms:license <https://polyformproject.org/licenses/noncommercial/1.0.0> ;
-    dcterms:bibliographicCitation "Voyant, C. (2026). websemantic, version 0.2.0. Zenodo. https://doi.org/10.5281/zenodo.23238902" ;
+    dcterms:bibliographicCitation "Voyant, C. (2026). websemantic (all versions). Zenodo. https://doi.org/10.5281/zenodo.23238902" ;
     vann:preferredNamespacePrefix "wsem" ;
     vann:preferredNamespaceUri "https://w3id.org/websemantic/ns#" ;
     bibo:status "draft" ;

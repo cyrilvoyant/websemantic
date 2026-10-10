@@ -80,7 +80,7 @@
     {
       "path": "ontology/core.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/core.ttl",
-      "sha256_lf": "2999ec7bb90f8986282cea65e31222256f6566da98fbdf3f27e5f3d080207a78"
+      "sha256_lf": "852a24ca1b3fe483258e2249b0a0449c582d7b5fa87cae5513db87ad1209dc4c"
     },
     {
       "path": "ontology/lqlequiv.ttl",
@@ -100,7 +100,7 @@
     {
       "path": "ontology/README.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/README.md",
-      "sha256_lf": "854dd89cf5f41ed6e936fabcdc305f4bcdcb884d0d809b2291b8b41e0a50e66c"
+      "sha256_lf": "21ee15bfe87a17d7962ade6701bbb5b7beffe126c9f98bccb34ff901caccdec0"
     },
     {
       "path": "llm.md",

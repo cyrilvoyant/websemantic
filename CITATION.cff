@@ -13,7 +13,7 @@ repository-code: https://github.com/cyrilvoyant/websemantic
 doi: 10.5281/zenodo.23238902
 url: https://doi.org/10.5281/zenodo.23238902
 license: PolyForm-Noncommercial-1.0.0
-version: 0.2.3
+version: 0.2.4
 date-released: '2026-10-10'
 identifiers:
 - type: doi
