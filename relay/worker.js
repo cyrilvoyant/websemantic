@@ -22,7 +22,8 @@ a number, never add an assumption. The contract is the only authority.
 - When a parameter lists its categories, its value is one of them, spelled exactly; a word found in another
   parameter's categories belongs to that parameter. Give each parameter at most one value.
 - If the request is outside the supported tasks (real measured data, certification, a decision for a named patient),
-  set task to "unsupported".
+  set task to "unsupported". A request in the code's domain with a vague or missing value is supported: set the
+  supported task, return the values that are stated and ask about the rest in questions.
 Reply with one JSON object only:
 {"task": "<one supported task or unsupported>",
  "values": [{"field": "<exact parameter name>", "value": <number or category>, "unit": "<unit or null>",
