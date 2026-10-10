@@ -4,7 +4,8 @@
 [agent/README.md](agent/README.md). Use the source index for that software and verify its hashes. The descriptor
 defines supported tasks, canonical units, categories, bounds, and the authority of defaults and qualitative
 conventions. Git and an API key are unnecessary; Python and the declared dependencies must be available. State
-unavailable tools before promising a calculation.
+unavailable tools before promising a calculation. `pip install websemantic` installs the Python layer only; the
+simulators, descriptors and ontology come from this repository (source index or clone with submodules).
 
 Extract explicit values first and convert units exactly. Propose missing defaults and declared qualitative
 conventions with their source, and ask for acceptance before any calculation. A proposal is not an accepted input.

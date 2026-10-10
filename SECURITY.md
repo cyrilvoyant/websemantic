@@ -1,7 +1,8 @@
 # Security policy
 
-WebSemantic is a research prototype. It validates and runs simulation scenarios locally; it does not store user data
-and needs no server.
+WebSemantic is a research prototype. It validates and runs simulation scenarios on the user's machine and runs no
+server of its own. Scenarios, parameters and results are written to local folders; the only outgoing requests are
+the optional calls to the language-model API that the user configures.
 
 ## Reporting a vulnerability
 
