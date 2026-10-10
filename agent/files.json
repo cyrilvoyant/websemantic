@@ -51,12 +51,12 @@
     {
       "path": "src/websemantic/semantics.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/semantics.py",
-      "sha256_lf": "2917521d77a9799cf99476ce8348e79cdee45fbb8864b00df3cf69ad6faec425"
+      "sha256_lf": "f415f90b650b80ad1baf51dda91df37a4d3e48012c5a25d59cbe92a7cf9128a9"
     },
     {
       "path": "src/websemantic/comparison.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/comparison.py",
-      "sha256_lf": "3ad6b602ec1ff395f951468b37350ef4b438791b5ca94d9094bf3066aa023552"
+      "sha256_lf": "1841e8bb1e5058ea095f5955c3312ae5cd080ba295bacc431e693581c9bb75fd"
     },
     {
       "path": "src/websemantic/registry.py",
@@ -76,27 +76,27 @@
     {
       "path": "ontology/core.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/core.ttl",
-      "sha256_lf": "b9544b7659ba7a123989561c90b213d9144c2a593fbe14fe80cbf1b94f241d50"
+      "sha256_lf": "152b50667c85b3c7ccfa874790088f92bc7f22933b535784ab0642829d7749d8"
     },
     {
       "path": "ontology/tls-vocabulary.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/tls-vocabulary.ttl",
-      "sha256_lf": "8cd836ee589b994ae077c2d7a657cc45e02dcd8d48c676e8acc64bf7c383573c"
+      "sha256_lf": "7b5cbd0a2a6aa650081ed2bfdb267222e6fc8b585808be21c34c5056853da242"
     },
     {
       "path": "ontology/shapes.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/shapes.ttl",
-      "sha256_lf": "e5cf638a10b2ffa5f8e06c5f1b84ac78f47fc013b2340df3aaab57d9a39aa111"
+      "sha256_lf": "e764d35916aa106c28b592b9ef20589236b4d4537ba74fbaa8bcdbf0efae27ba"
     },
     {
       "path": "ontology/competency-questions.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/competency-questions.md",
-      "sha256_lf": "e0ffbd34eeb4d1777392c79bc18c37259a7b7a4eeb1da0205b11f2bc6b6a03ec"
+      "sha256_lf": "876416d150207943a1ea96427514af599442a4da550ac376a1230f74b9de35e7"
     },
     {
       "path": "ontology/README.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/README.md",
-      "sha256_lf": "a16e7bbb1a6bd232a37bd8d015d93207ae22f179c906fbd98329f18837685a68"
+      "sha256_lf": "df53c43582cf14f2859b03ebf36e6859936fe101ef2298a938efe7fda5fd3176"
     },
     {
       "path": "ontology/tls-scenario.schema.json",

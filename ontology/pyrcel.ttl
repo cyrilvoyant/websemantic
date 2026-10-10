@@ -1,4 +1,4 @@
-@prefix ws:   <https://w3id.org/websemantic/ns#> .
+@prefix wsem:   <https://w3id.org/websemantic/ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix unit: <http://qudt.org/vocab/unit/> .
@@ -7,99 +7,99 @@
 # pyrcel extension: instances of the common core only (no new classes).
 # Source: docs/pyrcel-contract-definitions.md (draft, scientific review pending).
 
-ws:TaskParcelActivation
-    ws:requiresParameter ws:PYR_V, ws:PYR_T0, ws:PYR_P0, ws:PYR_S0,
-                         ws:PYR_N, ws:PYR_mu, ws:PYR_sigma, ws:PYR_kappa ;
-    ws:producesOutput ws:PYR_S, ws:PYR_Smax, ws:PYR_Nd .
+wsem:TaskParcelActivation
+    wsem:requiresParameter wsem:PYR_V, wsem:PYR_T0, wsem:PYR_P0, wsem:PYR_S0,
+                         wsem:PYR_N, wsem:PYR_mu, wsem:PYR_sigma, wsem:PYR_kappa ;
+    wsem:producesOutput wsem:PYR_S, wsem:PYR_Smax, wsem:PYR_Nd .
 
-ws:PyrcelContract ws:declaresParameter ws:PYR_V, ws:PYR_T0, ws:PYR_P0, ws:PYR_S0, ws:PYR_RH,
-        ws:PYR_N, ws:PYR_mu, ws:PYR_sigma, ws:PYR_kappa ;
-    ws:declaresOutput ws:PYR_S, ws:PYR_Smax, ws:PYR_Nd, ws:PYR_T .
+wsem:PyrcelContract wsem:declaresParameter wsem:PYR_V, wsem:PYR_T0, wsem:PYR_P0, wsem:PYR_S0, wsem:PYR_RH,
+        wsem:PYR_N, wsem:PYR_mu, wsem:PYR_sigma, wsem:PYR_kappa ;
+    wsem:declaresOutput wsem:PYR_S, wsem:PYR_Smax, wsem:PYR_Nd, wsem:PYR_T .
 
-ws:PYR_V a ws:ParameterDefinition ;
-    skos:prefLabel "Vitesse ascendante"@fr ; ws:apiVariable "ParcelModel(V=)" ; ws:fieldPath "V" ;
-    ws:quantityKind qk:Velocity ; ws:canonicalUnit unit:M-PER-SEC ;
-    ws:hasBound [ a ws:Bound ; ws:boundKind "min_exclusive" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityPolicy ] .
+wsem:PYR_V a wsem:ParameterDefinition ;
+    skos:prefLabel "Vitesse ascendante"@fr ; wsem:apiVariable "ParcelModel(V=)" ; wsem:fieldPath "V" ;
+    wsem:quantityKind qk:Velocity ; wsem:canonicalUnit unit:M-PER-SEC ;
+    wsem:hasBound [ a wsem:Bound ; wsem:boundKind "min_exclusive" ; wsem:boundValue 0.0 ; wsem:authority wsem:AuthorityPolicy ] .
 
-ws:PYR_T0 a ws:ParameterDefinition ;
-    skos:prefLabel "Température initiale"@fr ; ws:apiVariable "ParcelModel(T0=)" ; ws:fieldPath "T0" ;
-    ws:quantityKind qk:ThermodynamicTemperature ; ws:canonicalUnit unit:K .
+wsem:PYR_T0 a wsem:ParameterDefinition ;
+    skos:prefLabel "Température initiale"@fr ; wsem:apiVariable "ParcelModel(T0=)" ; wsem:fieldPath "T0" ;
+    wsem:quantityKind qk:ThermodynamicTemperature ; wsem:canonicalUnit unit:K .
 
-ws:PYR_P0 a ws:ParameterDefinition ;
-    skos:prefLabel "Pression initiale"@fr ; ws:apiVariable "ParcelModel(P0=)" ; ws:fieldPath "P0" ;
-    ws:quantityKind qk:Pressure ; ws:canonicalUnit unit:PA .
+wsem:PYR_P0 a wsem:ParameterDefinition ;
+    skos:prefLabel "Pression initiale"@fr ; wsem:apiVariable "ParcelModel(P0=)" ; wsem:fieldPath "P0" ;
+    wsem:quantityKind qk:Pressure ; wsem:canonicalUnit unit:PA .
 
-ws:PYR_S0 a ws:ParameterDefinition ;
-    skos:prefLabel "Sursaturation initiale"@fr ; ws:apiVariable "ParcelModel(S0=)" ; ws:fieldPath "S0" ;
-    ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:UNITLESS ;
-    ws:hasBound [ a ws:Bound ; ws:boundKind "min_exclusive" ; ws:boundValue -1.0 ; ws:authority ws:AuthorityPolicy ] ,
-                [ a ws:Bound ; ws:boundKind "max" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityPolicy ] .
+wsem:PYR_S0 a wsem:ParameterDefinition ;
+    skos:prefLabel "Sursaturation initiale"@fr ; wsem:apiVariable "ParcelModel(S0=)" ; wsem:fieldPath "S0" ;
+    wsem:quantityKind qk:Dimensionless ; wsem:canonicalUnit unit:UNITLESS ;
+    wsem:hasBound [ a wsem:Bound ; wsem:boundKind "min_exclusive" ; wsem:boundValue -1.0 ; wsem:authority wsem:AuthorityPolicy ] ,
+                [ a wsem:Bound ; wsem:boundKind "max" ; wsem:boundValue 0.0 ; wsem:authority wsem:AuthorityPolicy ] .
 
-ws:PYR_RH a ws:ParameterDefinition ;
-    skos:prefLabel "Humidité relative initiale"@fr ; ws:fieldPath "RH (user expression)" ;
-    ws:quantityKind qk:Dimensionless ;
-    ws:convertibleTo ws:PYR_S0 ;
-    ws:derivationRule "S0 = RH_percent/100 - 1 = RH_fraction - 1; RH and S0 both given and inconsistent is a conflict" .
+wsem:PYR_RH a wsem:ParameterDefinition ;
+    skos:prefLabel "Humidité relative initiale"@fr ; wsem:fieldPath "RH (user expression)" ;
+    wsem:quantityKind qk:Dimensionless ;
+    wsem:convertibleTo wsem:PYR_S0 ;
+    wsem:derivationRule "S0 = RH_percent/100 - 1 = RH_fraction - 1; RH and S0 both given and inconsistent is a conflict" .
 
-ws:PYR_N a ws:ParameterDefinition ;
-    skos:prefLabel "Concentration en nombre du mode"@fr ; ws:apiVariable "Lognorm(N=)" ; ws:fieldPath "aerosols[k].N" ;
-    ws:quantityKind qk:NumberDensity ; ws:canonicalUnit unit:PER-CentiM3 ;
-    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; ws:requiresInstance true .
+wsem:PYR_N a wsem:ParameterDefinition ;
+    skos:prefLabel "Concentration en nombre du mode"@fr ; wsem:apiVariable "Lognorm(N=)" ; wsem:fieldPath "aerosols[k].N" ;
+    wsem:quantityKind qk:NumberDensity ; wsem:canonicalUnit unit:PER-CentiM3 ;
+    wsem:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; wsem:requiresInstance true .
 
-ws:PYR_mu a ws:ParameterDefinition ;
-    skos:prefLabel "Rayon sec médian"@fr ; ws:apiVariable "Lognorm(mu=)" ; ws:fieldPath "aerosols[k].mu" ;
-    ws:quantityKind qk:Length ; ws:canonicalUnit unit:MicroM ;
-    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; ws:requiresInstance true .
+wsem:PYR_mu a wsem:ParameterDefinition ;
+    skos:prefLabel "Rayon sec médian"@fr ; wsem:apiVariable "Lognorm(mu=)" ; wsem:fieldPath "aerosols[k].mu" ;
+    wsem:quantityKind qk:Length ; wsem:canonicalUnit unit:MicroM ;
+    wsem:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; wsem:requiresInstance true .
 
-ws:PYR_sigma a ws:ParameterDefinition ;
-    skos:prefLabel "Écart-type géométrique"@fr ; ws:apiVariable "Lognorm(sigma=)" ; ws:fieldPath "aerosols[k].sigma" ;
-    ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:UNITLESS ;
-    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; ws:requiresInstance true .
+wsem:PYR_sigma a wsem:ParameterDefinition ;
+    skos:prefLabel "Écart-type géométrique"@fr ; wsem:apiVariable "Lognorm(sigma=)" ; wsem:fieldPath "aerosols[k].sigma" ;
+    wsem:quantityKind qk:Dimensionless ; wsem:canonicalUnit unit:UNITLESS ;
+    wsem:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; wsem:requiresInstance true .
 
-ws:PYR_kappa a ws:ParameterDefinition ;
-    skos:prefLabel "Hygroscopicité κ"@fr ; ws:apiVariable "AerosolSpecies(kappa=)" ; ws:fieldPath "aerosols[k].kappa" ;
-    ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:UNITLESS ;
-    ws:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; ws:requiresInstance true .
+wsem:PYR_kappa a wsem:ParameterDefinition ;
+    skos:prefLabel "Hygroscopicité κ"@fr ; wsem:apiVariable "AerosolSpecies(kappa=)" ; wsem:fieldPath "aerosols[k].kappa" ;
+    wsem:quantityKind qk:Dimensionless ; wsem:canonicalUnit unit:UNITLESS ;
+    wsem:partOfGroup "aerosol mode (N, mu, sigma, kappa all required)" ; wsem:requiresInstance true .
 
-ws:PYR_T a ws:OutputVariable ;
-    skos:prefLabel "Température de la parcelle"@fr ; ws:apiVariable "to_pandas() T" ;
-    ws:canonicalUnit unit:K ; ws:aggregation ws:AggNativeStep ; ws:additive false ;
-    ws:temporalSupport "nominal output_dt; terminal sample may be irregular" ; ws:dataOrigin ws:SyntheticSimulation .
+wsem:PYR_T a wsem:OutputVariable ;
+    skos:prefLabel "Température de la parcelle"@fr ; wsem:apiVariable "to_pandas() T" ;
+    wsem:canonicalUnit unit:K ; wsem:aggregation wsem:AggNativeStep ; wsem:additive false ;
+    wsem:temporalSupport "nominal output_dt; terminal sample may be irregular" ; wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:PYR_S a ws:OutputVariable ;
-    skos:prefLabel "Sursaturation"@fr ; ws:apiVariable "to_pandas() S" ;
-    ws:canonicalUnit unit:UNITLESS ; ws:aggregation ws:AggNativeStep ; ws:additive false ;
-    ws:temporalSupport "nominal output_dt; terminal sample may be irregular" ; ws:dataOrigin ws:SyntheticSimulation .
+wsem:PYR_S a wsem:OutputVariable ;
+    skos:prefLabel "Sursaturation"@fr ; wsem:apiVariable "to_pandas() S" ;
+    wsem:canonicalUnit unit:UNITLESS ; wsem:aggregation wsem:AggNativeStep ; wsem:additive false ;
+    wsem:temporalSupport "nominal output_dt; terminal sample may be irregular" ; wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:PYR_Smax a ws:OutputVariable ;
-    skos:prefLabel "Sursaturation maximale"@fr ; ws:apiVariable "summary['S_max']" ;
-    ws:canonicalUnit unit:UNITLESS ; ws:aggregation ws:AggMax ; ws:additive false ;
+wsem:PYR_Smax a wsem:OutputVariable ;
+    skos:prefLabel "Sursaturation maximale"@fr ; wsem:apiVariable "summary['S_max']" ;
+    wsem:canonicalUnit unit:UNITLESS ; wsem:aggregation wsem:AggMax ; wsem:additive false ;
     skos:note "From the peak locator; may differ from the maximum of the sampled S column."@en ;
-    ws:dataOrigin ws:SyntheticSimulation .
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:PYR_Nd a ws:OutputVariable ;
-    skos:prefLabel "Gouttelettes activées"@fr ; ws:apiVariable "ModelOutput.Nd" ;
-    ws:quantityKind qk:NumberDensity ; ws:canonicalUnit unit:PER-M3 ;
+wsem:PYR_Nd a wsem:OutputVariable ;
+    skos:prefLabel "Gouttelettes activées"@fr ; wsem:apiVariable "ModelOutput.Nd" ;
+    wsem:quantityKind qk:NumberDensity ; wsem:canonicalUnit unit:PER-M3 ;
     skos:note "Returned in m^-3, while input N is in cm^-3."@en ;
-    ws:temporalSupport "end of run" ; ws:dataOrigin ws:SyntheticSimulation .
+    wsem:temporalSupport "end of run" ; wsem:dataOrigin wsem:SyntheticSimulation .
 
 # Qualitative expressions: clarification until sourced conventions exist.
-ws:PYR_updraft_words a ws:ClarificationPolicy ;
-    skos:altLabel "faible ascendance"@fr, "ascendance modérée"@fr, "forte ascendance"@fr ; ws:appliesTo ws:PYR_V .
-ws:PYR_air_mass_words a ws:ClarificationPolicy ;
-    skos:altLabel "air pur"@fr, "air marin"@fr, "air pollué"@fr, "air continental"@fr ; ws:appliesTo ws:PYR_N .
-ws:PYR_near_saturation a ws:ClarificationPolicy ;
-    skos:altLabel "air presque saturé"@fr ; ws:appliesTo ws:PYR_S0 .
+wsem:PYR_updraft_words a wsem:ClarificationPolicy ;
+    skos:altLabel "faible ascendance"@fr, "ascendance modérée"@fr, "forte ascendance"@fr ; wsem:appliesTo wsem:PYR_V .
+wsem:PYR_air_mass_words a wsem:ClarificationPolicy ;
+    skos:altLabel "air pur"@fr, "air marin"@fr, "air pollué"@fr, "air continental"@fr ; wsem:appliesTo wsem:PYR_N .
+wsem:PYR_near_saturation a wsem:ClarificationPolicy ;
+    skos:altLabel "air presque saturé"@fr ; wsem:appliesTo wsem:PYR_S0 .
 
 # Derived outputs reported by the pyrcel descriptor (exact conversions of native outputs).
-ws:PyrcelContract ws:declaresOutput ws:PYR_Smax_percent, ws:PYR_Nd_cm3 .
+wsem:PyrcelContract wsem:declaresOutput wsem:PYR_Smax_percent, wsem:PYR_Nd_cm3 .
 
-ws:PYR_Smax_percent a ws:OutputVariable ;
-    skos:prefLabel "Sursaturation maximale (%)"@fr ; ws:canonicalUnit unit:PERCENT ;
-    ws:derivedFromOutput ws:PYR_Smax ; ws:derivationRule "S_max x 100" ; ws:aggregation ws:AggMax ; ws:additive false ;
-    ws:dataOrigin ws:SyntheticSimulation .
+wsem:PYR_Smax_percent a wsem:OutputVariable ;
+    skos:prefLabel "Sursaturation maximale (%)"@fr ; wsem:canonicalUnit unit:PERCENT ;
+    wsem:derivedFromOutput wsem:PYR_Smax ; wsem:derivationRule "S_max x 100" ; wsem:aggregation wsem:AggMax ; wsem:additive false ;
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:PYR_Nd_cm3 a ws:OutputVariable ;
-    skos:prefLabel "Gouttelettes activées (cm⁻³)"@fr ; ws:quantityKind qk:NumberDensity ; ws:canonicalUnit unit:PER-CentiM3 ;
-    ws:derivedFromOutput ws:PYR_Nd ; ws:derivationRule "Nd / 1e6 (m^-3 -> cm^-3)" ; ws:temporalSupport "end of run" ;
-    ws:dataOrigin ws:SyntheticSimulation .
+wsem:PYR_Nd_cm3 a wsem:OutputVariable ;
+    skos:prefLabel "Gouttelettes activées (cm⁻³)"@fr ; wsem:quantityKind qk:NumberDensity ; wsem:canonicalUnit unit:PER-CentiM3 ;
+    wsem:derivedFromOutput wsem:PYR_Nd ; wsem:derivationRule "Nd / 1e6 (m^-3 -> cm^-3)" ; wsem:temporalSupport "end of run" ;
+    wsem:dataOrigin wsem:SyntheticSimulation .

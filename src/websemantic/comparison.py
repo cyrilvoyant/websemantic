@@ -150,7 +150,7 @@ def run(sessions, descriptor, workspace, output_root):
             raise ValueError('Les contrats de sortie des deux scénarios ne correspondent pas.')
         qualification = deepcopy(manifests[IDS[0]]['output_qualification'])
         graph = Graph()
-        graph.bind('ws', WS)
+        graph.bind('wsem', WS)
         graph.bind('prov', PROV)
         activity = URIRef(target.resolve().as_uri() + '#comparison')
         graph.add((activity, RDF.type, PROV.Activity))

@@ -29,7 +29,7 @@ def definitions(descriptor):
 
 def vocabulary(descriptor, qualification=None):
     graph = Graph()
-    graph.bind("ws", WS)
+    graph.bind("wsem", WS)
     graph.bind("skos", SKOS)
     graph.bind("prov", PROV)
     for cls in ("Parameter", "Scenario", "SimulationOutput", "Hypothesis", "UserValue", "Intent", "OperationalSetting"):

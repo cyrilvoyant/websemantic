@@ -1,4 +1,4 @@
-@prefix ws:    <https://w3id.org/websemantic/ns#> .
+@prefix wsem:    <https://w3id.org/websemantic/ns#> .
 @prefix owl:   <http://www.w3.org/2002/07/owl#> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
@@ -21,20 +21,22 @@
 <https://w3id.org/websemantic/ns/core> a owl:Ontology ;
     dcterms:title "WebSemantic core ontology"@en ;
     dcterms:description "Common vocabulary linking user requests, software contracts, accepted assumptions, executions and qualified simulation outputs."@en ;
-    owl:versionInfo "0.2.1" ;
-    owl:versionIRI <https://w3id.org/websemantic/ns/core/0.2.1> ;
-    owl:priorVersion <https://w3id.org/websemantic/ns/core/0.2.0> ;
+    owl:versionInfo "0.2.2" ;
+    owl:versionIRI <https://w3id.org/websemantic/ns/core/0.2.2> ;
+    owl:priorVersion <https://w3id.org/websemantic/ns/core/0.2.1> ;
     dcterms:created "2026-10-06"^^xsd:date ;
     dcterms:issued "2026-10-08"^^xsd:date ;
-    dcterms:modified "2026-10-09"^^xsd:date ;
+    dcterms:modified "2026-10-10"^^xsd:date ;
     dcterms:creator <https://orcid.org/0000-0003-0242-7377> ;
     dcterms:publisher <https://github.com/cyrilvoyant/websemantic> ;
     dcterms:source <https://github.com/cyrilvoyant/websemantic> ;
     dcterms:license <https://polyformproject.org/licenses/noncommercial/1.0.0> ;
     dcterms:bibliographicCitation "Voyant, C. (2026). websemantic, version 0.2.0. Zenodo. https://doi.org/10.5281/zenodo.23238902" ;
-    vann:preferredNamespacePrefix "ws" ;
+    vann:preferredNamespacePrefix "wsem" ;
     vann:preferredNamespaceUri "https://w3id.org/websemantic/ns#" ;
     bibo:status "draft" ;
+    schema:logo <https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/docs/logo.png> ;
+    schema:includedInDataCatalog <https://zenodo.org> ;
     bibo:doi "10.5281/zenodo.23238902" ;
     dcterms:identifier <https://doi.org/10.5281/zenodo.23238902> ;
     rdfs:seeAlso <https://doi.org/10.1038/s41597-022-01710-x> .
@@ -45,62 +47,62 @@
 # 1. Software and contracts
 ########################################################################
 
-ws:Software a owl:Class ;
+wsem:Software a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:seeAlso schema:SoftwareSourceCode ;
     rdfs:label "Software"@en, "Logiciel"@fr ;
     rdfs:comment "Scientific software used unmodified, identified by repository, pinned revision and concept DOI."@en .
 
-ws:Contract a owl:Class ;
+wsem:Contract a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:label "Contract"@en, "Contrat"@fr ;
     rdfs:comment "Published, machine-readable description of how a software may be configured for declared tasks and how its outputs must be read."@en .
 
-ws:TaskProfile a owl:Class ;
+wsem:TaskProfile a owl:Class ;
     rdfs:label "Task profile"@en, "Profil de tâche"@fr ;
     rdfs:comment "A bounded use of the software that the contract supports or explicitly excludes."@en .
 
-ws:ParameterDefinition a owl:Class ;
+wsem:ParameterDefinition a owl:Class ;
     rdfs:subClassOf skos:Concept ;
     rdfs:label "Parameter definition"@en, "Définition de paramètre"@fr ;
     rdfs:comment "Concept-level description of an input: meaning, quantity kind, canonical unit, bounds, API variable."@en .
 
-ws:OutputVariable a owl:Class ;
+wsem:OutputVariable a owl:Class ;
     rdfs:subClassOf skos:Concept ;
     rdfs:label "Output variable"@en, "Variable de sortie"@fr ;
     rdfs:comment "Concept-level description of a computed column: quantity kind, unit, aggregation, temporal support."@en .
 
-ws:Bound a owl:Class ;
+wsem:Bound a owl:Class ;
     rdfs:label "Bound"@en, "Borne"@fr ;
     rdfs:comment "Numerical limit with its authority. A user-interface slider limit is not a physical constraint."@en .
 
-ws:BoundAuthority a owl:Class ;
+wsem:BoundAuthority a owl:Class ;
     rdfs:label "Bound authority"@en .
 
-ws:ValidityLimit a owl:Class ;
+wsem:ValidityLimit a owl:Class ;
     rdfs:label "Validity limit"@en, "Limite de validité"@fr ;
     rdfs:comment "Declared condition outside which results must not be used (e.g. no calibration, no clinical decision)."@en .
 
-ws:Aggregation a owl:Class ;
+wsem:Aggregation a owl:Class ;
     rdfs:label "Aggregation"@en, "Agrégation"@fr .
 
-ws:DataOrigin a owl:Class ;
+wsem:DataOrigin a owl:Class ;
     rdfs:label "Data origin"@en, "Origine des données"@fr .
 
 ########################################################################
 # 2. Qualitative semantics (beaucoup, peu, faible, très élevé, ...)
 ########################################################################
 
-ws:QualitativeTerm a owl:Class ;
+wsem:QualitativeTerm a owl:Class ;
     rdfs:subClassOf skos:Concept ;
     rdfs:label "Qualitative term"@en, "Terme qualitatif"@fr ;
     rdfs:comment "Word or phrase expressing an ordinal level. It has no numerical meaning by itself."@en .
 
-ws:QualifierMapping a owl:Class ;
+wsem:QualifierMapping a owl:Class ;
     rdfs:label "Qualifier mapping"@en, "Convention qualitative"@fr ;
     rdfs:comment "Parameter-specific convention turning a qualitative term into a proposed value. Always a proposal requiring acceptance."@en .
 
-ws:ClarificationPolicy a owl:Class ;
+wsem:ClarificationPolicy a owl:Class ;
     rdfs:label "Clarification policy"@en ;
     rdfs:comment "Rule stating that a term or request has no mapping for a parameter and must trigger a question."@en .
 
@@ -108,83 +110,83 @@ ws:ClarificationPolicy a owl:Class ;
 # 3. Requests, scenarios and value records
 ########################################################################
 
-ws:Request a owl:Class ;
+wsem:Request a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:label "Request"@en, "Demande"@fr .
 
-ws:Evidence a owl:Class ;
+wsem:Evidence a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:label "Evidence"@en, "Preuve"@fr ;
     rdfs:comment "Exact text span of a request supporting a value. Its presence does not prove semantic correctness."@en .
 
-ws:Scenario a owl:Class ;
+wsem:Scenario a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:label "Scenario"@en, "Scénario"@fr .
 
-ws:Experiment a owl:Class ;
+wsem:Experiment a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:label "Experiment settings"@en, "Réglages d'expérience"@fr ;
     rdfs:comment "Time grid, horizon, realisations and seed; distinct from physical inputs."@en .
 
-ws:Parameter a owl:Class ;
+wsem:Parameter a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:label "Parameter record"@en, "Enregistrement de paramètre"@fr ;
     rdfs:comment "Value of one parameter in one scenario, with unit, origin, evidence and acceptance state."@en .
 
-ws:UserValue a owl:Class ;
-    rdfs:subClassOf ws:Parameter ;
+wsem:UserValue a owl:Class ;
+    rdfs:subClassOf wsem:Parameter ;
     rdfs:label "User-provided value"@en .
 
-ws:Hypothesis a owl:Class ;
-    rdfs:subClassOf ws:Parameter ;
+wsem:Hypothesis a owl:Class ;
+    rdfs:subClassOf wsem:Parameter ;
     rdfs:label "Proposed assumption"@en, "Hypothèse proposée"@fr ;
     rdfs:comment "Default, qualitative convention or sourced proposal. Not executable until accepted."@en .
 
-ws:OperationalSetting a owl:Class ;
-    rdfs:subClassOf ws:Parameter ;
+wsem:OperationalSetting a owl:Class ;
+    rdfs:subClassOf wsem:Parameter ;
     rdfs:label "Operational setting"@en ;
     rdfs:comment "Technical choice authorised by declared policy (e.g. fixed seed)."@en .
 
-ws:UnknownValue a owl:Class ;
-    rdfs:subClassOf ws:Parameter ;
+wsem:UnknownValue a owl:Class ;
+    rdfs:subClassOf wsem:Parameter ;
     rdfs:label "Unknown value"@en, "Valeur inconnue"@fr .
 
 [] a owl:AllDisjointClasses ;
-    owl:members ( ws:UserValue ws:Hypothesis ws:OperationalSetting ws:UnknownValue ) .
+    owl:members ( wsem:UserValue wsem:Hypothesis wsem:OperationalSetting wsem:UnknownValue ) .
 
 ########################################################################
 # 4. Activities (PROV-O)
 ########################################################################
 
-ws:Interpretation a owl:Class ;
+wsem:Interpretation a owl:Class ;
     rdfs:subClassOf prov:Activity ;
     rdfs:label "Interpretation"@en ;
     rdfs:comment "Extraction of candidate values from a request, by a language model or a rule."@en .
 
-ws:Normalisation a owl:Class ;
+wsem:Normalisation a owl:Class ;
     rdfs:subClassOf prov:Activity ;
     rdfs:label "Deterministic normalisation"@en ;
     rdfs:comment "Exact unit or number conversion (2 km -> 2000 m). Not a domain inference."@en .
 
-ws:Acceptance a owl:Class ;
+wsem:Acceptance a owl:Class ;
     rdfs:subClassOf prov:Activity ;
     rdfs:label "Acceptance"@en, "Accord"@fr ;
     rdfs:comment "Explicit user decision making a hypothesis executable."@en .
 
-ws:Validation a owl:Class ;
+wsem:Validation a owl:Class ;
     rdfs:subClassOf prov:Activity ;
     rdfs:label "Validation gate"@en .
 
-ws:Execution a owl:Class ;
+wsem:Execution a owl:Class ;
     rdfs:subClassOf prov:Activity ;
     rdfs:label "Execution"@en, "Exécution"@fr .
 
-ws:SimulationOutput a owl:Class ;
+wsem:SimulationOutput a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:seeAlso schema:Dataset ;
     rdfs:label "Simulation output"@en, "Sortie de simulation"@fr .
 
-ws:Qualification a owl:Class ;
+wsem:Qualification a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:label "Output qualification"@en, "Qualification des sorties"@fr ;
     rdfs:comment "Machine-readable statement of units, aggregation, scope, data origin, uncertainty coverage and admitted uses."@en .
@@ -193,182 +195,182 @@ ws:Qualification a owl:Class ;
 # 5. Object properties
 ########################################################################
 
-ws:hasContract a owl:ObjectProperty ; rdfs:domain ws:Software ; rdfs:range ws:Contract .
-ws:supportsTask a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:TaskProfile .
-ws:excludesTask a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:TaskProfile .
-ws:declaresParameter a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:ParameterDefinition .
-ws:declaresOutput a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:OutputVariable .
-ws:declaresValidityLimit a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:ValidityLimit .
+wsem:hasContract a owl:ObjectProperty ; rdfs:domain wsem:Software ; rdfs:range wsem:Contract .
+wsem:supportsTask a owl:ObjectProperty ; rdfs:domain wsem:Contract ; rdfs:range wsem:TaskProfile .
+wsem:excludesTask a owl:ObjectProperty ; rdfs:domain wsem:Contract ; rdfs:range wsem:TaskProfile .
+wsem:declaresParameter a owl:ObjectProperty ; rdfs:domain wsem:Contract ; rdfs:range wsem:ParameterDefinition .
+wsem:declaresOutput a owl:ObjectProperty ; rdfs:domain wsem:Contract ; rdfs:range wsem:OutputVariable .
+wsem:declaresValidityLimit a owl:ObjectProperty ; rdfs:domain wsem:Contract ; rdfs:range wsem:ValidityLimit .
 
-ws:requiresParameter a owl:ObjectProperty ;
-    rdfs:domain ws:TaskProfile ; rdfs:range ws:ParameterDefinition ;
+wsem:requiresParameter a owl:ObjectProperty ;
+    rdfs:domain wsem:TaskProfile ; rdfs:range wsem:ParameterDefinition ;
     rdfs:comment "Parameter that must be provided or accepted for the task."@en .
-ws:producesOutput a owl:ObjectProperty ; rdfs:domain ws:TaskProfile ; rdfs:range ws:OutputVariable .
+wsem:producesOutput a owl:ObjectProperty ; rdfs:domain wsem:TaskProfile ; rdfs:range wsem:OutputVariable .
 
-ws:quantityKind a owl:ObjectProperty ;
+wsem:quantityKind a owl:ObjectProperty ;
     rdfs:range qudt:QuantityKind ;
     rdfs:comment "QUDT quantity kind of a parameter or output."@en .
-ws:canonicalUnit a owl:ObjectProperty ;
+wsem:canonicalUnit a owl:ObjectProperty ;
     rdfs:range qudt:Unit ;
     rdfs:comment "QUDT unit in which values are stored and validated."@en .
-ws:hasBound a owl:ObjectProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:Bound .
-ws:authority a owl:ObjectProperty ; rdfs:domain ws:Bound ; rdfs:range ws:BoundAuthority .
-ws:aggregation a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:Aggregation .
-ws:dataOrigin a owl:ObjectProperty ; rdfs:range ws:DataOrigin .
+wsem:hasBound a owl:ObjectProperty ; rdfs:domain wsem:ParameterDefinition ; rdfs:range wsem:Bound .
+wsem:authority a owl:ObjectProperty ; rdfs:domain wsem:Bound ; rdfs:range wsem:BoundAuthority .
+wsem:aggregation a owl:ObjectProperty ; rdfs:domain wsem:OutputVariable ; rdfs:range wsem:Aggregation .
+wsem:dataOrigin a owl:ObjectProperty ; rdfs:range wsem:DataOrigin .
 
-ws:term a owl:ObjectProperty ; rdfs:domain ws:QualifierMapping ; rdfs:range ws:QualitativeTerm .
-ws:appliesTo a owl:ObjectProperty ;
-    rdfs:domain [ owl:unionOf ( ws:QualifierMapping ws:ClarificationPolicy ) ] ;
-    rdfs:range ws:ParameterDefinition .
+wsem:term a owl:ObjectProperty ; rdfs:domain wsem:QualifierMapping ; rdfs:range wsem:QualitativeTerm .
+wsem:appliesTo a owl:ObjectProperty ;
+    rdfs:domain [ owl:unionOf ( wsem:QualifierMapping wsem:ClarificationPolicy ) ] ;
+    rdfs:range wsem:ParameterDefinition .
 
-ws:concept a owl:ObjectProperty ; rdfs:domain ws:Parameter ; rdfs:range ws:ParameterDefinition .
-ws:hasParameter a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:Parameter .
-ws:hasExperiment a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:Experiment .
-ws:forTask a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:TaskProfile .
-ws:supportedBy a owl:ObjectProperty ; rdfs:domain ws:UserValue ; rdfs:range ws:Evidence .
-ws:fromRequest a owl:ObjectProperty ; rdfs:domain ws:Evidence ; rdfs:range ws:Request .
-ws:followsConvention a owl:ObjectProperty ; rdfs:domain ws:Hypothesis ; rdfs:range ws:QualifierMapping .
-ws:acceptedBy a owl:ObjectProperty ; rdfs:domain ws:Hypothesis ; rdfs:range ws:Acceptance .
-ws:qualifiedBy a owl:ObjectProperty ; rdfs:domain ws:SimulationOutput ; rdfs:range ws:Qualification .
+wsem:concept a owl:ObjectProperty ; rdfs:domain wsem:Parameter ; rdfs:range wsem:ParameterDefinition .
+wsem:hasParameter a owl:ObjectProperty ; rdfs:domain wsem:Scenario ; rdfs:range wsem:Parameter .
+wsem:hasExperiment a owl:ObjectProperty ; rdfs:domain wsem:Scenario ; rdfs:range wsem:Experiment .
+wsem:forTask a owl:ObjectProperty ; rdfs:domain wsem:Scenario ; rdfs:range wsem:TaskProfile .
+wsem:supportedBy a owl:ObjectProperty ; rdfs:domain wsem:UserValue ; rdfs:range wsem:Evidence .
+wsem:fromRequest a owl:ObjectProperty ; rdfs:domain wsem:Evidence ; rdfs:range wsem:Request .
+wsem:followsConvention a owl:ObjectProperty ; rdfs:domain wsem:Hypothesis ; rdfs:range wsem:QualifierMapping .
+wsem:acceptedBy a owl:ObjectProperty ; rdfs:domain wsem:Hypothesis ; rdfs:range wsem:Acceptance .
+wsem:qualifiedBy a owl:ObjectProperty ; rdfs:domain wsem:SimulationOutput ; rdfs:range wsem:Qualification .
 
 ########################################################################
 # 6. Datatype properties
 ########################################################################
 
-ws:apiVariable a owl:DatatypeProperty ; rdfs:range xsd:string ;
+wsem:apiVariable a owl:DatatypeProperty ; rdfs:range xsd:string ;
     rdfs:comment "Exact backend identifier (e.g. TunnelConfig.length_m)."@en .
-ws:fieldPath a owl:DatatypeProperty ; rdfs:range xsd:string .
-ws:repository a owl:DatatypeProperty ; rdfs:range xsd:anyURI .
-ws:pinnedRevision a owl:DatatypeProperty ; rdfs:range xsd:string .
-ws:conceptDOI a owl:DatatypeProperty ; rdfs:range xsd:string .
-ws:boundValue a owl:DatatypeProperty ; rdfs:domain ws:Bound .
-ws:boundKind a owl:DatatypeProperty ; rdfs:domain ws:Bound ; rdfs:range xsd:string ;
+wsem:fieldPath a owl:DatatypeProperty ; rdfs:range xsd:string .
+wsem:repository a owl:DatatypeProperty ; rdfs:range xsd:anyURI .
+wsem:pinnedRevision a owl:DatatypeProperty ; rdfs:range xsd:string .
+wsem:conceptDOI a owl:DatatypeProperty ; rdfs:range xsd:string .
+wsem:boundValue a owl:DatatypeProperty ; rdfs:domain wsem:Bound .
+wsem:boundKind a owl:DatatypeProperty ; rdfs:domain wsem:Bound ; rdfs:range xsd:string ;
     rdfs:comment "min, max, min_exclusive or max_exclusive."@en .
-ws:proposedValue a owl:DatatypeProperty ; rdfs:domain ws:QualifierMapping .
-ws:requiresAcceptance a owl:DatatypeProperty ; rdfs:domain ws:QualifierMapping ; rdfs:range xsd:boolean .
-ws:sourceNote a owl:DatatypeProperty ; rdfs:range xsd:string .
-ws:value a owl:DatatypeProperty ; rdfs:domain ws:Parameter .
-ws:accepted a owl:DatatypeProperty ; rdfs:domain ws:Parameter ; rdfs:range xsd:boolean .
-ws:evidenceText a owl:DatatypeProperty ; rdfs:domain ws:Evidence ; rdfs:range xsd:string .
-ws:temporalSupport a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:string ;
+wsem:proposedValue a owl:DatatypeProperty ; rdfs:domain wsem:QualifierMapping .
+wsem:requiresAcceptance a owl:DatatypeProperty ; rdfs:domain wsem:QualifierMapping ; rdfs:range xsd:boolean .
+wsem:sourceNote a owl:DatatypeProperty ; rdfs:range xsd:string .
+wsem:value a owl:DatatypeProperty ; rdfs:domain wsem:Parameter .
+wsem:accepted a owl:DatatypeProperty ; rdfs:domain wsem:Parameter ; rdfs:range xsd:boolean .
+wsem:evidenceText a owl:DatatypeProperty ; rdfs:domain wsem:Evidence ; rdfs:range xsd:string .
+wsem:temporalSupport a owl:DatatypeProperty ; rdfs:domain wsem:OutputVariable ; rdfs:range xsd:string ;
     rdfs:comment "native step, daily, hourly envelope, whole period, per course..."@en .
-ws:additive a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:boolean ;
+wsem:additive a owl:DatatypeProperty ; rdfs:domain wsem:OutputVariable ; rdfs:range xsd:boolean ;
     rdfs:comment "True if values may be summed over time steps (energy), false otherwise (power, ratios, doses per course)."@en .
 
 # Relational properties used by the domain extensions (condition B3).
-ws:derivedFrom a owl:ObjectProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:ParameterDefinition ;
+wsem:derivedFrom a owl:ObjectProperty ; rdfs:domain wsem:ParameterDefinition ; rdfs:range wsem:ParameterDefinition ;
     rdfs:comment "The quantity is computed from others; an inconsistent stated value is a conflict."@en .
-ws:convertibleTo a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:ParameterDefinition ;
-    rdfs:comment "Two expressions of one physical state related by the stated ws:derivationRule (e.g. S0 = RH_fraction - 1). Not a numerical equality and not a unit change alone."@en .
-ws:dependsOnReference a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:ParameterDefinition ;
+wsem:convertibleTo a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:domain wsem:ParameterDefinition ; rdfs:range wsem:ParameterDefinition ;
+    rdfs:comment "Two expressions of one physical state related by the stated wsem:derivationRule (e.g. S0 = RH_fraction - 1). Not a numerical equality and not a unit change alone."@en .
+wsem:dependsOnReference a owl:ObjectProperty ; rdfs:domain wsem:OutputVariable ; rdfs:range wsem:ParameterDefinition ;
     rdfs:comment "Output meaningful only with the stated reference parameter."@en .
-ws:invalidates a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:OutputVariable ;
+wsem:invalidates a owl:ObjectProperty ; rdfs:domain wsem:OutputVariable ; rdfs:range wsem:OutputVariable ;
     rdfs:comment "Direction: boolean backend flag -> output. When the flag (subject) is true, the object output must not be reported as a result."@en .
-ws:derivationRule a owl:DatatypeProperty ; rdfs:range xsd:string .
-ws:derivedFromOutput a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:OutputVariable ;
+wsem:derivationRule a owl:DatatypeProperty ; rdfs:range xsd:string .
+wsem:derivedFromOutput a owl:ObjectProperty ; rdfs:domain wsem:OutputVariable ; rdfs:range wsem:OutputVariable ;
     rdfs:comment "Output obtained from another output by an exact conversion (unit change, x100...)."@en .
-ws:codeDefault a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ;
+wsem:codeDefault a owl:DatatypeProperty ; rdfs:domain wsem:ParameterDefinition ;
     rdfs:comment "Default set by the backend code; stated, never treated as user data."@en .
-ws:validityFlag a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:string .
-ws:groupInstance a owl:DatatypeProperty ; rdfs:domain ws:Parameter ; rdfs:range xsd:string ;
+wsem:validityFlag a owl:DatatypeProperty ; rdfs:domain wsem:OutputVariable ; rdfs:range xsd:string .
+wsem:groupInstance a owl:DatatypeProperty ; rdfs:domain wsem:Parameter ; rdfs:range xsd:string ;
     rdfs:comment "Identifier of the course, aerosol mode or other repeated group a record belongs to; checks never mix instances."@en .
-ws:requiresInstance a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range xsd:boolean ;
-    rdfs:comment "Records of this parameter must carry ws:groupInstance (repeated course, aerosol mode...)."@en .
-ws:partOfGroup a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range xsd:string ;
+wsem:requiresInstance a owl:DatatypeProperty ; rdfs:domain wsem:ParameterDefinition ; rdfs:range xsd:boolean ;
+    rdfs:comment "Records of this parameter must carry wsem:groupInstance (repeated course, aerosol mode...)."@en .
+wsem:partOfGroup a owl:DatatypeProperty ; rdfs:domain wsem:ParameterDefinition ; rdfs:range xsd:string ;
     rdfs:comment "Parameters that must be supplied together."@en .
 
 ########################################################################
 # 7. Controlled individuals
 ########################################################################
 
-ws:AuthorityCode a ws:BoundAuthority ; rdfs:label "enforced by backend code"@en .
-ws:AuthorityUI a ws:BoundAuthority ; rdfs:label "user-interface limit, not physical"@en .
-ws:AuthorityPolicy a ws:BoundAuthority ; rdfs:label "experimental policy of the study"@en .
-ws:AuthorityDomain a ws:BoundAuthority ; rdfs:label "domain literature or expert"@en .
+wsem:AuthorityCode a wsem:BoundAuthority ; rdfs:label "enforced by backend code"@en .
+wsem:AuthorityUI a wsem:BoundAuthority ; rdfs:label "user-interface limit, not physical"@en .
+wsem:AuthorityPolicy a wsem:BoundAuthority ; rdfs:label "experimental policy of the study"@en .
+wsem:AuthorityDomain a wsem:BoundAuthority ; rdfs:label "domain literature or expert"@en .
 
-ws:SyntheticSimulation a ws:DataOrigin ; rdfs:label "synthetic simulation"@en .
-ws:Measured a ws:DataOrigin ; rdfs:label "measured"@en .
-ws:Assumed a ws:DataOrigin ; rdfs:label "assumed"@en .
+wsem:SyntheticSimulation a wsem:DataOrigin ; rdfs:label "synthetic simulation"@en .
+wsem:Measured a wsem:DataOrigin ; rdfs:label "measured"@en .
+wsem:Assumed a wsem:DataOrigin ; rdfs:label "assumed"@en .
 
-ws:AggNativeStep a ws:Aggregation ; rdfs:label "value at native time step"@en .
-ws:AggSum a ws:Aggregation ; rdfs:label "sum over steps"@en .
-ws:AggMean a ws:Aggregation ; rdfs:label "mean over steps"@en .
-ws:AggMax a ws:Aggregation ; rdfs:label "maximum over steps"@en .
-ws:AggQuantileAcrossRuns a ws:Aggregation ; rdfs:label "empirical quantile across realisations, not a confidence interval"@en .
-ws:AggExtrapolation a ws:Aggregation ; rdfs:label "linear extrapolation (e.g. 365/n_days), not an observed year"@en .
-ws:AggPerCourse a ws:Aggregation ; rdfs:label "per treatment course"@en .
+wsem:AggNativeStep a wsem:Aggregation ; rdfs:label "value at native time step"@en .
+wsem:AggSum a wsem:Aggregation ; rdfs:label "sum over steps"@en .
+wsem:AggMean a wsem:Aggregation ; rdfs:label "mean over steps"@en .
+wsem:AggMax a wsem:Aggregation ; rdfs:label "maximum over steps"@en .
+wsem:AggQuantileAcrossRuns a wsem:Aggregation ; rdfs:label "empirical quantile across realisations, not a confidence interval"@en .
+wsem:AggExtrapolation a wsem:Aggregation ; rdfs:label "linear extrapolation (e.g. 365/n_days), not an observed year"@en .
+wsem:AggPerCourse a wsem:Aggregation ; rdfs:label "per treatment course"@en .
 
 # Ordinal qualitative scale shared by all software. Values are given only by
-# parameter-specific ws:QualifierMapping instances in each contract.
-ws:QualitativeScale a skos:ConceptScheme ; skos:prefLabel "Échelle qualitative commune"@fr, "Shared qualitative scale"@en .
-ws:LevelVeryLow  a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "très faible"@fr, "very low"@en ; skos:altLabel "très peu"@fr ; ws:rank 1 .
-ws:LevelLow      a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "faible"@fr, "low"@en ; skos:altLabel "peu"@fr, "court"@fr ; ws:rank 2 .
-ws:LevelTypical  a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "courant"@fr, "typical"@en ; skos:altLabel "moyen"@fr, "normal"@fr ; ws:rank 3 .
-ws:LevelHigh     a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "élevé"@fr, "high"@en ; skos:altLabel "beaucoup"@fr, "fort"@fr, "long"@fr ; ws:rank 4 .
-ws:LevelVeryHigh a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "très élevé"@fr, "very high"@en ; skos:altLabel "énormément"@fr, "très fort"@fr ; ws:rank 5 .
+# parameter-specific wsem:QualifierMapping instances in each contract.
+wsem:QualitativeScale a skos:ConceptScheme ; skos:prefLabel "Échelle qualitative commune"@fr, "Shared qualitative scale"@en .
+wsem:LevelVeryLow  a wsem:QualitativeTerm ; skos:inScheme wsem:QualitativeScale ; skos:prefLabel "très faible"@fr, "very low"@en ; skos:altLabel "très peu"@fr ; wsem:rank 1 .
+wsem:LevelLow      a wsem:QualitativeTerm ; skos:inScheme wsem:QualitativeScale ; skos:prefLabel "faible"@fr, "low"@en ; skos:altLabel "peu"@fr, "court"@fr ; wsem:rank 2 .
+wsem:LevelTypical  a wsem:QualitativeTerm ; skos:inScheme wsem:QualitativeScale ; skos:prefLabel "courant"@fr, "typical"@en ; skos:altLabel "moyen"@fr, "normal"@fr ; wsem:rank 3 .
+wsem:LevelHigh     a wsem:QualitativeTerm ; skos:inScheme wsem:QualitativeScale ; skos:prefLabel "élevé"@fr, "high"@en ; skos:altLabel "beaucoup"@fr, "fort"@fr, "long"@fr ; wsem:rank 4 .
+wsem:LevelVeryHigh a wsem:QualitativeTerm ; skos:inScheme wsem:QualitativeScale ; skos:prefLabel "très élevé"@fr, "very high"@en ; skos:altLabel "énormément"@fr, "très fort"@fr ; wsem:rank 5 .
 
-ws:rank a owl:DatatypeProperty ; rdfs:domain ws:QualitativeTerm ; rdfs:range xsd:integer .
+wsem:rank a owl:DatatypeProperty ; rdfs:domain wsem:QualitativeTerm ; rdfs:range xsd:integer .
 
 ########################################################################
 # 8. Software instances (identity and task profiles only; full parameter
 #    definitions are exported from each descriptor)
 ########################################################################
 
-ws:TLS a ws:Software ;
+wsem:TLS a wsem:Software ;
     rdfs:label "Tunnel Load Simulator" ;
-    ws:repository "https://github.com/cyrilvoyant/tunnel-load-simulator"^^xsd:anyURI ;
-    ws:pinnedRevision "748e053e129669cf3e896d381e3c0ac01c763edd" ;
-    ws:conceptDOI "10.5281/zenodo.20080042" ;
-    ws:hasContract ws:TLSContract .
+    wsem:repository "https://github.com/cyrilvoyant/tunnel-load-simulator"^^xsd:anyURI ;
+    wsem:pinnedRevision "748e053e129669cf3e896d381e3c0ac01c763edd" ;
+    wsem:conceptDOI "10.5281/zenodo.20080042" ;
+    wsem:hasContract wsem:TLSContract .
 
-ws:TLSContract a ws:Contract ;
-    ws:supportsTask ws:TaskTunnelDemand ;
-    ws:excludesTask ws:TaskTunnelCertification ;
-    ws:declaresValidityLimit ws:LimitNoCalibration .
+wsem:TLSContract a wsem:Contract ;
+    wsem:supportsTask wsem:TaskTunnelDemand ;
+    wsem:excludesTask wsem:TaskTunnelCertification ;
+    wsem:declaresValidityLimit wsem:LimitNoCalibration .
 
-ws:TaskTunnelDemand a ws:TaskProfile ;
+wsem:TaskTunnelDemand a wsem:TaskProfile ;
     rdfs:label "Estimate electricity demand of a road tunnel under stated assumptions"@en .
-ws:TaskTunnelCertification a ws:TaskProfile ;
+wsem:TaskTunnelCertification a wsem:TaskProfile ;
     rdfs:label "Certify design values or predict consumption of a real tunnel"@en .
-ws:LimitNoCalibration a ws:ValidityLimit ;
+wsem:LimitNoCalibration a wsem:ValidityLimit ;
     rdfs:label "Synthetic first-order model, not calibrated against measured tunnels"@en .
 
-ws:LQLEquiv a ws:Software ;
+wsem:LQLEquiv a wsem:Software ;
     rdfs:label "LQL-Equiv" ;
-    ws:repository "https://github.com/cyrilvoyant/LQL-Equiv-web"^^xsd:anyURI ;
-    ws:pinnedRevision "dfc9a338205b8864b8e3470c4ae245b019e88844" ;
-    ws:conceptDOI "10.5281/zenodo.21948623" ;
-    ws:hasContract ws:LQLContract .
+    wsem:repository "https://github.com/cyrilvoyant/LQL-Equiv-web"^^xsd:anyURI ;
+    wsem:pinnedRevision "dfc9a338205b8864b8e3470c4ae245b019e88844" ;
+    wsem:conceptDOI "10.5281/zenodo.21948623" ;
+    wsem:hasContract wsem:LQLContract .
 
-ws:LQLContract a ws:Contract ;
-    ws:supportsTask ws:TaskFractionationEquivalence ;
-    ws:excludesTask ws:TaskPatientDecision ;
-    ws:declaresValidityLimit ws:LimitNotMedicalDevice .
+wsem:LQLContract a wsem:Contract ;
+    wsem:supportsTask wsem:TaskFractionationEquivalence ;
+    wsem:excludesTask wsem:TaskPatientDecision ;
+    wsem:declaresValidityLimit wsem:LimitNotMedicalDevice .
 
-ws:TaskFractionationEquivalence a ws:TaskProfile ;
+wsem:TaskFractionationEquivalence a wsem:TaskProfile ;
     rdfs:label "Compare fractionation schedules (BED, EQD2, NTCP, TCP) for research and education"@en .
-ws:TaskPatientDecision a ws:TaskProfile ;
+wsem:TaskPatientDecision a wsem:TaskProfile ;
     rdfs:label "Prescribe, modify or validate treatment for an individual patient"@en .
-ws:LimitNotMedicalDevice a ws:ValidityLimit ;
+wsem:LimitNotMedicalDevice a wsem:ValidityLimit ;
     rdfs:label "Research and education software; not a medical device"@en .
 
-ws:Pyrcel a ws:Software ;
+wsem:Pyrcel a wsem:Software ;
     rdfs:label "pyrcel" ;
-    ws:repository "https://github.com/darothen/pyrcel"^^xsd:anyURI ;
-    ws:pinnedRevision "977e9094644ec4a17d658d657094651928591c89" ;
+    wsem:repository "https://github.com/darothen/pyrcel"^^xsd:anyURI ;
+    wsem:pinnedRevision "977e9094644ec4a17d658d657094651928591c89" ;
     rdfs:comment "Version 2.0.0, BSD-3-Clause, used unmodified."@en ;
-    ws:hasContract ws:PyrcelContract .
+    wsem:hasContract wsem:PyrcelContract .
 
-ws:PyrcelContract a ws:Contract ;
-    ws:supportsTask ws:TaskParcelActivation ;
-    ws:excludesTask ws:TaskWeatherForecast ;
-    ws:declaresValidityLimit ws:LimitAdiabaticParcel .
+wsem:PyrcelContract a wsem:Contract ;
+    wsem:supportsTask wsem:TaskParcelActivation ;
+    wsem:excludesTask wsem:TaskWeatherForecast ;
+    wsem:declaresValidityLimit wsem:LimitAdiabaticParcel .
 
-ws:TaskParcelActivation a ws:TaskProfile ;
+wsem:TaskParcelActivation a wsem:TaskProfile ;
     rdfs:label "Simulate adiabatic parcel ascent and aerosol activation for a stated updraft, initial state and aerosol population"@en .
-ws:TaskWeatherForecast a ws:TaskProfile ;
+wsem:TaskWeatherForecast a wsem:TaskProfile ;
     rdfs:label "Forecast clouds or precipitation for a real place and time"@en .
-ws:LimitAdiabaticParcel a ws:ValidityLimit ;
+wsem:LimitAdiabaticParcel a wsem:ValidityLimit ;
     rdfs:label "Zero-dimensional adiabatic parcel; not a weather forecast or a cloud-resolving simulation"@en .
 
 ########################################################################
@@ -376,179 +378,179 @@ ws:LimitAdiabaticParcel a ws:ValidityLimit ;
 #    from docs/qualificatifs.md. Full tables are exported from descriptors.
 ########################################################################
 
-ws:TLS_traffic_level a ws:ParameterDefinition ;
+wsem:TLS_traffic_level a wsem:ParameterDefinition ;
     skos:prefLabel "Trafic relatif"@fr, "Relative traffic"@en ;
-    ws:apiVariable "TunnelConfig.traffic_level" ;
-    ws:fieldPath "inputs.traffic_level" ;
-    ws:quantityKind qk:Dimensionless ;
-    ws:canonicalUnit unit:UNITLESS ;
+    wsem:apiVariable "TunnelConfig.traffic_level" ;
+    wsem:fieldPath "inputs.traffic_level" ;
+    wsem:quantityKind qk:Dimensionless ;
+    wsem:canonicalUnit unit:UNITLESS ;
     skos:definition "Multiplier of the reference traffic profile; not vehicles per day."@en .
 
-ws:TLSContract ws:declaresParameter ws:TLS_traffic_level .
+wsem:TLSContract wsem:declaresParameter wsem:TLS_traffic_level .
 
-ws:TLS_traffic_low a ws:QualifierMapping ;
-    ws:term ws:LevelLow ; ws:appliesTo ws:TLS_traffic_level ;
-    ws:proposedValue 0.3 ; ws:requiresAcceptance true ;
-    ws:sourceNote "Study convention, not a traffic count." .
-ws:TLS_traffic_typical a ws:QualifierMapping ;
-    ws:term ws:LevelTypical ; ws:appliesTo ws:TLS_traffic_level ;
-    ws:proposedValue 1.0 ; ws:requiresAcceptance true ;
-    ws:sourceNote "Reference level of the backend profile." .
-ws:TLS_traffic_high a ws:QualifierMapping ;
-    ws:term ws:LevelHigh ; ws:appliesTo ws:TLS_traffic_level ;
-    ws:proposedValue 1.5 ; ws:requiresAcceptance true ;
-    ws:sourceNote "Study convention, not a traffic count." .
-ws:TLS_traffic_veryhigh a ws:QualifierMapping ;
-    ws:term ws:LevelVeryHigh ; ws:appliesTo ws:TLS_traffic_level ;
-    ws:proposedValue 2.0 ; ws:requiresAcceptance true ;
-    ws:sourceNote "Study convention, not a traffic count." .
+wsem:TLS_traffic_low a wsem:QualifierMapping ;
+    wsem:term wsem:LevelLow ; wsem:appliesTo wsem:TLS_traffic_level ;
+    wsem:proposedValue 0.3 ; wsem:requiresAcceptance true ;
+    wsem:sourceNote "Study convention, not a traffic count." .
+wsem:TLS_traffic_typical a wsem:QualifierMapping ;
+    wsem:term wsem:LevelTypical ; wsem:appliesTo wsem:TLS_traffic_level ;
+    wsem:proposedValue 1.0 ; wsem:requiresAcceptance true ;
+    wsem:sourceNote "Reference level of the backend profile." .
+wsem:TLS_traffic_high a wsem:QualifierMapping ;
+    wsem:term wsem:LevelHigh ; wsem:appliesTo wsem:TLS_traffic_level ;
+    wsem:proposedValue 1.5 ; wsem:requiresAcceptance true ;
+    wsem:sourceNote "Study convention, not a traffic count." .
+wsem:TLS_traffic_veryhigh a wsem:QualifierMapping ;
+    wsem:term wsem:LevelVeryHigh ; wsem:appliesTo wsem:TLS_traffic_level ;
+    wsem:proposedValue 2.0 ; wsem:requiresAcceptance true ;
+    wsem:sourceNote "Study convention, not a traffic count." .
 
-ws:TLS_lighting_type a ws:ParameterDefinition ;
+wsem:TLS_lighting_type a wsem:ParameterDefinition ;
     skos:prefLabel "Éclairage"@fr ;
-    ws:apiVariable "TunnelConfig.lighting_type" ;
-    ws:fieldPath "inputs.lighting_type" ;
+    wsem:apiVariable "TunnelConfig.lighting_type" ;
+    wsem:fieldPath "inputs.lighting_type" ;
     skos:definition "Lighting technology and control; not an illuminance."@en .
 
-ws:TLS_lighting_intensity_policy a ws:ClarificationPolicy ;
-    ws:appliesTo ws:TLS_lighting_type ;
+wsem:TLS_lighting_intensity_policy a wsem:ClarificationPolicy ;
+    wsem:appliesTo wsem:TLS_lighting_type ;
     rdfs:comment "Intensity words (fortement / faiblement éclairé) have no mapping: TLS has no illuminance parameter. Ask the user."@en .
 
-ws:TLS_specific_energy a ws:OutputVariable ;
+wsem:TLS_specific_energy a wsem:OutputVariable ;
     skos:prefLabel "Énergie spécifique annualisée"@fr ;
-    ws:apiVariable "kpis.specific_kwh_m_year" ;
-    ws:quantityKind qk:Energy ;
-    ws:aggregation ws:AggExtrapolation ;
-    ws:additive false ;
-    ws:temporalSupport "whole period, extrapolated by 365/n_days, per metre of tunnel (all tubes)" ;
-    ws:dataOrigin ws:SyntheticSimulation .
+    wsem:apiVariable "kpis.specific_kwh_m_year" ;
+    wsem:quantityKind qk:Energy ;
+    wsem:aggregation wsem:AggExtrapolation ;
+    wsem:additive false ;
+    wsem:temporalSupport "whole period, extrapolated by 365/n_days, per metre of tunnel (all tubes)" ;
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:TLS_power a ws:OutputVariable ;
+wsem:TLS_power a wsem:OutputVariable ;
     skos:prefLabel "Puissance électrique"@fr ;
-    ws:apiVariable "representative.power_kw" ;
-    ws:quantityKind qk:Power ;
-    ws:canonicalUnit unit:KiloW ;
-    ws:aggregation ws:AggNativeStep ;
-    ws:additive false ;
-    ws:temporalSupport "native step" ;
-    ws:dataOrigin ws:SyntheticSimulation .
+    wsem:apiVariable "representative.power_kw" ;
+    wsem:quantityKind qk:Power ;
+    wsem:canonicalUnit unit:KiloW ;
+    wsem:aggregation wsem:AggNativeStep ;
+    wsem:additive false ;
+    wsem:temporalSupport "native step" ;
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:TLS_energy_step a ws:OutputVariable ;
+wsem:TLS_energy_step a wsem:OutputVariable ;
     skos:prefLabel "Énergie du pas"@fr ;
-    ws:apiVariable "representative.energy_kwh" ;
-    ws:quantityKind qk:Energy ;
-    ws:canonicalUnit unit:KiloW-HR ;
-    ws:aggregation ws:AggNativeStep ;
-    ws:additive true ;
-    ws:temporalSupport "native step" ;
-    ws:dataOrigin ws:SyntheticSimulation .
+    wsem:apiVariable "representative.energy_kwh" ;
+    wsem:quantityKind qk:Energy ;
+    wsem:canonicalUnit unit:KiloW-HR ;
+    wsem:aggregation wsem:AggNativeStep ;
+    wsem:additive true ;
+    wsem:temporalSupport "native step" ;
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
 # Human-readable labels derived from the term names (FOOPS VOC3); definitions are only given where written.
-ws:accepted rdfs:label "accepted"@en .
-ws:acceptedBy rdfs:label "accepted by"@en .
-ws:additive rdfs:label "additive"@en .
-ws:aggregation rdfs:label "aggregation"@en .
-ws:apiVariable rdfs:label "api variable"@en .
-ws:appliesTo rdfs:label "applies to"@en .
-ws:authority rdfs:label "authority"@en .
-ws:boundKind rdfs:label "bound kind"@en .
-ws:boundValue rdfs:label "bound value"@en .
-ws:canonicalUnit rdfs:label "canonical unit"@en .
-ws:codeDefault rdfs:label "code default"@en .
-ws:concept rdfs:label "concept"@en .
-ws:conceptDOI rdfs:label "concept doi"@en .
-ws:convertibleTo rdfs:label "convertible to"@en .
-ws:dataOrigin rdfs:label "data origin"@en .
-ws:declaresOutput rdfs:label "declares output"@en .
-ws:declaresParameter rdfs:label "declares parameter"@en .
-ws:declaresValidityLimit rdfs:label "declares validity limit"@en .
-ws:dependsOnReference rdfs:label "depends on reference"@en .
-ws:derivationRule rdfs:label "derivation rule"@en .
-ws:derivedFrom rdfs:label "derived from"@en .
-ws:derivedFromOutput rdfs:label "derived from output"@en .
-ws:evidenceText rdfs:label "evidence text"@en .
-ws:excludesTask rdfs:label "excludes task"@en .
-ws:fieldPath rdfs:label "field path"@en .
-ws:followsConvention rdfs:label "follows convention"@en .
-ws:forTask rdfs:label "for task"@en .
-ws:fromRequest rdfs:label "from request"@en .
-ws:groupInstance rdfs:label "group instance"@en .
-ws:hasBound rdfs:label "has bound"@en .
-ws:hasContract rdfs:label "has contract"@en .
-ws:hasExperiment rdfs:label "has experiment"@en .
-ws:hasParameter rdfs:label "has parameter"@en .
-ws:invalidates rdfs:label "invalidates"@en .
-ws:partOfGroup rdfs:label "part of group"@en .
-ws:pinnedRevision rdfs:label "pinned revision"@en .
-ws:producesOutput rdfs:label "produces output"@en .
-ws:proposedValue rdfs:label "proposed value"@en .
-ws:qualifiedBy rdfs:label "qualified by"@en .
-ws:quantityKind rdfs:label "quantity kind"@en .
-ws:rank rdfs:label "rank"@en .
-ws:repository rdfs:label "repository"@en .
-ws:requiresAcceptance rdfs:label "requires acceptance"@en .
-ws:requiresInstance rdfs:label "requires instance"@en .
-ws:requiresParameter rdfs:label "requires parameter"@en .
-ws:sourceNote rdfs:label "source note"@en .
-ws:supportedBy rdfs:label "supported by"@en .
-ws:supportsTask rdfs:label "supports task"@en .
-ws:temporalSupport rdfs:label "temporal support"@en .
-ws:term rdfs:label "term"@en .
-ws:validityFlag rdfs:label "validity flag"@en .
-ws:value rdfs:label "value"@en .
+wsem:accepted rdfs:label "accepted"@en .
+wsem:acceptedBy rdfs:label "accepted by"@en .
+wsem:additive rdfs:label "additive"@en .
+wsem:aggregation rdfs:label "aggregation"@en .
+wsem:apiVariable rdfs:label "api variable"@en .
+wsem:appliesTo rdfs:label "applies to"@en .
+wsem:authority rdfs:label "authority"@en .
+wsem:boundKind rdfs:label "bound kind"@en .
+wsem:boundValue rdfs:label "bound value"@en .
+wsem:canonicalUnit rdfs:label "canonical unit"@en .
+wsem:codeDefault rdfs:label "code default"@en .
+wsem:concept rdfs:label "concept"@en .
+wsem:conceptDOI rdfs:label "concept doi"@en .
+wsem:convertibleTo rdfs:label "convertible to"@en .
+wsem:dataOrigin rdfs:label "data origin"@en .
+wsem:declaresOutput rdfs:label "declares output"@en .
+wsem:declaresParameter rdfs:label "declares parameter"@en .
+wsem:declaresValidityLimit rdfs:label "declares validity limit"@en .
+wsem:dependsOnReference rdfs:label "depends on reference"@en .
+wsem:derivationRule rdfs:label "derivation rule"@en .
+wsem:derivedFrom rdfs:label "derived from"@en .
+wsem:derivedFromOutput rdfs:label "derived from output"@en .
+wsem:evidenceText rdfs:label "evidence text"@en .
+wsem:excludesTask rdfs:label "excludes task"@en .
+wsem:fieldPath rdfs:label "field path"@en .
+wsem:followsConvention rdfs:label "follows convention"@en .
+wsem:forTask rdfs:label "for task"@en .
+wsem:fromRequest rdfs:label "from request"@en .
+wsem:groupInstance rdfs:label "group instance"@en .
+wsem:hasBound rdfs:label "has bound"@en .
+wsem:hasContract rdfs:label "has contract"@en .
+wsem:hasExperiment rdfs:label "has experiment"@en .
+wsem:hasParameter rdfs:label "has parameter"@en .
+wsem:invalidates rdfs:label "invalidates"@en .
+wsem:partOfGroup rdfs:label "part of group"@en .
+wsem:pinnedRevision rdfs:label "pinned revision"@en .
+wsem:producesOutput rdfs:label "produces output"@en .
+wsem:proposedValue rdfs:label "proposed value"@en .
+wsem:qualifiedBy rdfs:label "qualified by"@en .
+wsem:quantityKind rdfs:label "quantity kind"@en .
+wsem:rank rdfs:label "rank"@en .
+wsem:repository rdfs:label "repository"@en .
+wsem:requiresAcceptance rdfs:label "requires acceptance"@en .
+wsem:requiresInstance rdfs:label "requires instance"@en .
+wsem:requiresParameter rdfs:label "requires parameter"@en .
+wsem:sourceNote rdfs:label "source note"@en .
+wsem:supportedBy rdfs:label "supported by"@en .
+wsem:supportsTask rdfs:label "supports task"@en .
+wsem:temporalSupport rdfs:label "temporal support"@en .
+wsem:term rdfs:label "term"@en .
+wsem:validityFlag rdfs:label "validity flag"@en .
+wsem:value rdfs:label "value"@en .
 
 ########################################################################
 # Definitions of the remaining core terms (FOOPS VOC4), written from their use in descriptors, scenarios and shapes.
 ########################################################################
-ws:Aggregation rdfs:comment "How an output value summarises its native values: per step, per course, sum, mean, median across realisations or maximum. Fixes which values can be added or compared."@en .
-ws:BoundAuthority rdfs:comment "Origin of a bound: the backend code itself, a profile policy of the contract, or a scientific source. A code bound cannot be relaxed by the contract."@en .
-ws:DataOrigin rdfs:comment "Nature of the data behind a value or output, e.g. synthetic simulation, user statement or measurement. Simulated outputs are never presented as measurements."@en .
-ws:Execution rdfs:comment "Controlled run of a pinned backend on a validated scenario, producing simulation outputs and a manifest."@en .
-ws:Request rdfs:comment "Natural-language request of a user, kept verbatim as the source of the evidence spans that support provided values."@en .
-ws:Scenario rdfs:comment "Machine-readable configuration built from a request: task, parameters with origin and acceptance, and experiment settings. Only a validated scenario is executed."@en .
-ws:SimulationOutput rdfs:comment "Result produced by an execution (series, indicators, flags), linked to its scenario, software revision and qualification."@en .
-ws:UnknownValue rdfs:comment "Parameter whose value is neither given, derived, nor accepted; it blocks execution and leads to a clarification."@en .
-ws:UserValue rdfs:comment "Parameter value stated in the request, or an exact unit conversion of a stated value, supported by evidence from the request."@en .
-ws:Validation rdfs:comment "Activity checking a scenario against the contract before execution: types, units, bounds, complete groups, acceptance and relational shapes."@en .
-ws:accepted rdfs:comment "True when the user explicitly accepted a proposed default or convention; an unaccepted proposal cannot be executed."@en .
-ws:boundValue rdfs:comment "Numerical limit of a bound, in the canonical unit of the parameter."@en .
-ws:conceptDOI rdfs:comment "DOI that resolves to all versions of an archived software or dataset (Zenodo concept DOI)."@en .
-ws:derivationRule rdfs:comment "Documented rule linking a quantity to others (e.g. total dose = dose per fraction x fractions). Documentary; executed checks are the SHACL shapes and the Python gate."@en .
-ws:evidenceText rdfs:comment "Exact span of the request that supports a value; quoted, never paraphrased."@en .
-ws:fieldPath rdfs:comment "Path of the field in the published scenario JSON (e.g. inputs.length_m, courses[k].dose_per_fraction)."@en .
-ws:pinnedRevision rdfs:comment "Exact source revision (commit or tag) of the backend used for execution."@en .
-ws:proposedValue rdfs:comment "Numerical value that a qualitative convention proposes for a parameter, in its canonical unit, pending acceptance."@en .
-ws:rank rdfs:comment "Position of a qualitative term on the shared ordinal scale (1 very low to 5 very high); carries no number by itself."@en .
-ws:repository rdfs:comment "URL of the original source repository of a software."@en .
-ws:requiresAcceptance rdfs:comment "True when a convention may only be proposed and must be accepted by the user before execution."@en .
-ws:sourceNote rdfs:comment "Short statement of the source or rationale of a convention, default or bound."@en .
-ws:validityFlag rdfs:comment "Name of the backend flag that marks an output as invalid or saturated (e.g. Result.oar_total_valid); flagged values are not reported as valid results."@en .
-ws:value rdfs:comment "Value of a parameter in a scenario, expressed in the canonical unit of its definition."@en .
-ws:acceptedBy rdfs:comment "Links a hypothesis to the explicit acceptance that allows its use in execution."@en .
-ws:aggregation rdfs:comment "Links an output variable to the aggregation that defines it."@en .
-ws:appliesTo rdfs:comment "Links a qualifier mapping or clarification policy to the parameter it concerns."@en .
-ws:authority rdfs:comment "Links a bound to its authority (code, profile policy or source)."@en .
-ws:concept rdfs:comment "Links a parameter value in a scenario to the parameter definition that gives its meaning, unit and bounds."@en .
-ws:dataOrigin rdfs:comment "Links a value or output to the nature of its data (simulated, stated, measured)."@en .
-ws:declaresOutput rdfs:comment "Links a contract to an output variable it publishes with quantity, unit and aggregation."@en .
-ws:declaresParameter rdfs:comment "Links a contract to a parameter definition it publishes."@en .
-ws:declaresValidityLimit rdfs:comment "Links a contract to a declared limit of validity or use (e.g. not a medical device)."@en .
-ws:excludesTask rdfs:comment "Links a contract to a task profile it explicitly refuses (e.g. patient treatment decision)."@en .
-ws:followsConvention rdfs:comment "Links a hypothesis to the qualitative convention it applies."@en .
-ws:forTask rdfs:comment "Links a scenario to the supported task profile it instantiates."@en .
-ws:fromRequest rdfs:comment "Links evidence to the request it is quoted from."@en .
-ws:hasBound rdfs:comment "Links a parameter definition to one of its bounds."@en .
-ws:hasContract rdfs:comment "Links a software to its semantic contract."@en .
-ws:hasExperiment rdfs:comment "Links a scenario to its experiment settings (period, step, realisations, seed or solver settings)."@en .
-ws:hasParameter rdfs:comment "Links a scenario to one of its parameter values."@en .
-ws:producesOutput rdfs:comment "Links a task profile to an output variable it produces."@en .
-ws:qualifiedBy rdfs:comment "Links a simulation output to its qualification (quantity, unit, support, origin, limits)."@en .
-ws:supportedBy rdfs:comment "Links a user value to the request evidence that supports it."@en .
-ws:supportsTask rdfs:comment "Links a contract to a task profile it supports."@en .
-ws:term rdfs:comment "Links a qualifier mapping to the qualitative term of the shared scale that it interprets."@en .
+wsem:Aggregation rdfs:comment "How an output value summarises its native values: per step, per course, sum, mean, median across realisations or maximum. Fixes which values can be added or compared."@en .
+wsem:BoundAuthority rdfs:comment "Origin of a bound: the backend code itself, a profile policy of the contract, or a scientific source. A code bound cannot be relaxed by the contract."@en .
+wsem:DataOrigin rdfs:comment "Nature of the data behind a value or output, e.g. synthetic simulation, user statement or measurement. Simulated outputs are never presented as measurements."@en .
+wsem:Execution rdfs:comment "Controlled run of a pinned backend on a validated scenario, producing simulation outputs and a manifest."@en .
+wsem:Request rdfs:comment "Natural-language request of a user, kept verbatim as the source of the evidence spans that support provided values."@en .
+wsem:Scenario rdfs:comment "Machine-readable configuration built from a request: task, parameters with origin and acceptance, and experiment settings. Only a validated scenario is executed."@en .
+wsem:SimulationOutput rdfs:comment "Result produced by an execution (series, indicators, flags), linked to its scenario, software revision and qualification."@en .
+wsem:UnknownValue rdfs:comment "Parameter whose value is neither given, derived, nor accepted; it blocks execution and leads to a clarification."@en .
+wsem:UserValue rdfs:comment "Parameter value stated in the request, or an exact unit conversion of a stated value, supported by evidence from the request."@en .
+wsem:Validation rdfs:comment "Activity checking a scenario against the contract before execution: types, units, bounds, complete groups, acceptance and relational shapes."@en .
+wsem:accepted rdfs:comment "True when the user explicitly accepted a proposed default or convention; an unaccepted proposal cannot be executed."@en .
+wsem:boundValue rdfs:comment "Numerical limit of a bound, in the canonical unit of the parameter."@en .
+wsem:conceptDOI rdfs:comment "DOI that resolves to all versions of an archived software or dataset (Zenodo concept DOI)."@en .
+wsem:derivationRule rdfs:comment "Documented rule linking a quantity to others (e.g. total dose = dose per fraction x fractions). Documentary; executed checks are the SHACL shapes and the Python gate."@en .
+wsem:evidenceText rdfs:comment "Exact span of the request that supports a value; quoted, never paraphrased."@en .
+wsem:fieldPath rdfs:comment "Path of the field in the published scenario JSON (e.g. inputs.length_m, courses[k].dose_per_fraction)."@en .
+wsem:pinnedRevision rdfs:comment "Exact source revision (commit or tag) of the backend used for execution."@en .
+wsem:proposedValue rdfs:comment "Numerical value that a qualitative convention proposes for a parameter, in its canonical unit, pending acceptance."@en .
+wsem:rank rdfs:comment "Position of a qualitative term on the shared ordinal scale (1 very low to 5 very high); carries no number by itself."@en .
+wsem:repository rdfs:comment "URL of the original source repository of a software."@en .
+wsem:requiresAcceptance rdfs:comment "True when a convention may only be proposed and must be accepted by the user before execution."@en .
+wsem:sourceNote rdfs:comment "Short statement of the source or rationale of a convention, default or bound."@en .
+wsem:validityFlag rdfs:comment "Name of the backend flag that marks an output as invalid or saturated (e.g. Result.oar_total_valid); flagged values are not reported as valid results."@en .
+wsem:value rdfs:comment "Value of a parameter in a scenario, expressed in the canonical unit of its definition."@en .
+wsem:acceptedBy rdfs:comment "Links a hypothesis to the explicit acceptance that allows its use in execution."@en .
+wsem:aggregation rdfs:comment "Links an output variable to the aggregation that defines it."@en .
+wsem:appliesTo rdfs:comment "Links a qualifier mapping or clarification policy to the parameter it concerns."@en .
+wsem:authority rdfs:comment "Links a bound to its authority (code, profile policy or source)."@en .
+wsem:concept rdfs:comment "Links a parameter value in a scenario to the parameter definition that gives its meaning, unit and bounds."@en .
+wsem:dataOrigin rdfs:comment "Links a value or output to the nature of its data (simulated, stated, measured)."@en .
+wsem:declaresOutput rdfs:comment "Links a contract to an output variable it publishes with quantity, unit and aggregation."@en .
+wsem:declaresParameter rdfs:comment "Links a contract to a parameter definition it publishes."@en .
+wsem:declaresValidityLimit rdfs:comment "Links a contract to a declared limit of validity or use (e.g. not a medical device)."@en .
+wsem:excludesTask rdfs:comment "Links a contract to a task profile it explicitly refuses (e.g. patient treatment decision)."@en .
+wsem:followsConvention rdfs:comment "Links a hypothesis to the qualitative convention it applies."@en .
+wsem:forTask rdfs:comment "Links a scenario to the supported task profile it instantiates."@en .
+wsem:fromRequest rdfs:comment "Links evidence to the request it is quoted from."@en .
+wsem:hasBound rdfs:comment "Links a parameter definition to one of its bounds."@en .
+wsem:hasContract rdfs:comment "Links a software to its semantic contract."@en .
+wsem:hasExperiment rdfs:comment "Links a scenario to its experiment settings (period, step, realisations, seed or solver settings)."@en .
+wsem:hasParameter rdfs:comment "Links a scenario to one of its parameter values."@en .
+wsem:producesOutput rdfs:comment "Links a task profile to an output variable it produces."@en .
+wsem:qualifiedBy rdfs:comment "Links a simulation output to its qualification (quantity, unit, support, origin, limits)."@en .
+wsem:supportedBy rdfs:comment "Links a user value to the request evidence that supports it."@en .
+wsem:supportsTask rdfs:comment "Links a contract to a task profile it supports."@en .
+wsem:term rdfs:comment "Links a qualifier mapping to the qualitative term of the shared scale that it interprets."@en .
 
 
 # ---- domain extension ----
-@prefix ws:   <https://w3id.org/websemantic/ns#> .
+@prefix wsem:   <https://w3id.org/websemantic/ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
@@ -558,232 +560,232 @@ ws:term rdfs:comment "Links a qualifier mapping to the qualitative term of the s
 # LQL-Equiv extension: instances of the common core only (no new classes).
 # Source: docs/lql-contract-definitions.md (draft, scientific review pending).
 
-ws:TaskFractionationEquivalence
-    ws:requiresParameter ws:LQL_organ, ws:LQL_tumour_site, ws:LQL_dose_per_fraction,
-                         ws:LQL_n_fractions, ws:LQL_reference_dose ;
-    ws:producesOutput ws:LQL_bed_oar, ws:LQL_eqd_oar, ws:LQL_eqd_oar_total, ws:LQL_ntcp ;
+wsem:TaskFractionationEquivalence
+    wsem:requiresParameter wsem:LQL_organ, wsem:LQL_tumour_site, wsem:LQL_dose_per_fraction,
+                         wsem:LQL_n_fractions, wsem:LQL_reference_dose ;
+    wsem:producesOutput wsem:LQL_bed_oar, wsem:LQL_eqd_oar, wsem:LQL_eqd_oar_total, wsem:LQL_ntcp ;
     skos:note "BED, EQD and probabilities are compared one quantity at a time; never concatenated."@en .
 
-ws:LQLContract ws:declaresParameter ws:LQL_organ, ws:LQL_tumour_site, ws:LQL_dose_per_fraction,
-        ws:LQL_n_fractions, ws:LQL_gap_days, ws:LQL_reference_dose, ws:LQL_bifractionated, ws:LQL_total_dose ;
-    ws:declaresOutput ws:LQL_bed_oar, ws:LQL_eqd_oar, ws:LQL_eqd_oar_total, ws:LQL_eqd_tumour, ws:LQL_eqd_tumour_total,
-        ws:LQL_ntcp, ws:LQL_oar_saturated, ws:LQL_tumour_saturated, ws:LQL_saturated .
+wsem:LQLContract wsem:declaresParameter wsem:LQL_organ, wsem:LQL_tumour_site, wsem:LQL_dose_per_fraction,
+        wsem:LQL_n_fractions, wsem:LQL_gap_days, wsem:LQL_reference_dose, wsem:LQL_bifractionated, wsem:LQL_total_dose ;
+    wsem:declaresOutput wsem:LQL_bed_oar, wsem:LQL_eqd_oar, wsem:LQL_eqd_oar_total, wsem:LQL_eqd_tumour, wsem:LQL_eqd_tumour_total,
+        wsem:LQL_ntcp, wsem:LQL_oar_saturated, wsem:LQL_tumour_saturated, wsem:LQL_saturated .
 
-ws:LQL_organ a ws:ParameterDefinition ;
-    skos:prefLabel "Organe à risque"@fr ; ws:apiVariable "compute(organ, ...) positional 1" ; ws:fieldPath "organ" ;
+wsem:LQL_organ a wsem:ParameterDefinition ;
+    skos:prefLabel "Organe à risque"@fr ; wsem:apiVariable "compute(organ, ...) positional 1" ; wsem:fieldPath "organ" ;
     skos:definition "Organ at risk from the shipped library (34 entries); never chosen silently."@en .
 
-ws:LQL_tumour_site a ws:ParameterDefinition ;
-    skos:prefLabel "Site tumoral"@fr ; ws:apiVariable "compute(..., tumour, ...) positional 2" ; ws:fieldPath "tumour_site" ;
+wsem:LQL_tumour_site a wsem:ParameterDefinition ;
+    skos:prefLabel "Site tumoral"@fr ; wsem:apiVariable "compute(..., tumour, ...) positional 2" ; wsem:fieldPath "tumour_site" ;
     skos:definition "Tumour site from the shipped library (20 entries)."@en .
 
-ws:LQL_dose_per_fraction a ws:ParameterDefinition ; ws:requiresInstance true ;
-    skos:prefLabel "Dose par fraction"@fr ; ws:apiVariable "Course.dose_per_fraction" ; ws:fieldPath "courses[k].dose_per_fraction" ;
-    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ;
-    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] .
+wsem:LQL_dose_per_fraction a wsem:ParameterDefinition ; wsem:requiresInstance true ;
+    skos:prefLabel "Dose par fraction"@fr ; wsem:apiVariable "Course.dose_per_fraction" ; wsem:fieldPath "courses[k].dose_per_fraction" ;
+    wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ;
+    wsem:hasBound [ a wsem:Bound ; wsem:boundKind "min" ; wsem:boundValue 0.0 ; wsem:authority wsem:AuthorityCode ] .
 
-ws:LQL_n_fractions a ws:ParameterDefinition ; ws:requiresInstance true ;
-    skos:prefLabel "Nombre de fractions"@fr ; ws:apiVariable "Course.n_fractions" ; ws:fieldPath "courses[k].n_fractions" ;
-    ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:NUM ;
-    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] ,
-                [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 1 ; ws:authority ws:AuthorityPolicy ;
+wsem:LQL_n_fractions a wsem:ParameterDefinition ; wsem:requiresInstance true ;
+    skos:prefLabel "Nombre de fractions"@fr ; wsem:apiVariable "Course.n_fractions" ; wsem:fieldPath "courses[k].n_fractions" ;
+    wsem:quantityKind qk:Dimensionless ; wsem:canonicalUnit unit:NUM ;
+    wsem:hasBound [ a wsem:Bound ; wsem:boundKind "min" ; wsem:boundValue 0.0 ; wsem:authority wsem:AuthorityCode ] ,
+                [ a wsem:Bound ; wsem:boundKind "min" ; wsem:boundValue 1 ; wsem:authority wsem:AuthorityPolicy ;
                   rdfs:comment "Integer >= 1 for physical schedules (profile policy); the API accepts floats."@en ] .
 
-ws:LQL_gap_days a ws:ParameterDefinition ; ws:requiresInstance true ;
-    skos:prefLabel "Interruption"@fr ; ws:apiVariable "Course.gap_days" ; ws:fieldPath "courses[k].gap_days" ;
-    ws:quantityKind qk:Time ; ws:canonicalUnit unit:DAY ;
-    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] .
+wsem:LQL_gap_days a wsem:ParameterDefinition ; wsem:requiresInstance true ;
+    skos:prefLabel "Interruption"@fr ; wsem:apiVariable "Course.gap_days" ; wsem:fieldPath "courses[k].gap_days" ;
+    wsem:quantityKind qk:Time ; wsem:canonicalUnit unit:DAY ;
+    wsem:hasBound [ a wsem:Bound ; wsem:boundKind "min" ; wsem:boundValue 0.0 ; wsem:authority wsem:AuthorityCode ] .
 
-ws:LQL_reference_dose a ws:ParameterDefinition ;
-    skos:prefLabel "Dose de référence par fraction"@fr ; ws:apiVariable "Prescription.reference_dose" ; ws:fieldPath "reference_dose" ;
-    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:codeDefault 2.0 ;
+wsem:LQL_reference_dose a wsem:ParameterDefinition ;
+    skos:prefLabel "Dose de référence par fraction"@fr ; wsem:apiVariable "Prescription.reference_dose" ; wsem:fieldPath "reference_dose" ;
+    wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ; wsem:codeDefault 2.0 ;
     skos:definition "Defines the EQD reference fractionation; always stated in answers."@en ;
-    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] ,
-                [ a ws:Bound ; ws:boundKind "min_exclusive" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityPolicy ;
+    wsem:hasBound [ a wsem:Bound ; wsem:boundKind "min" ; wsem:boundValue 0.0 ; wsem:authority wsem:AuthorityCode ] ,
+                [ a wsem:Bound ; wsem:boundKind "min_exclusive" ; wsem:boundValue 0.0 ; wsem:authority wsem:AuthorityPolicy ;
                   rdfs:comment "0 is constructible but does not guarantee a computable EQD."@en ] .
 
-ws:LQL_bifractionated a ws:ParameterDefinition ;
-    skos:prefLabel "Deux fractions par jour"@fr ; ws:apiVariable "Prescription.bifractionated" ; ws:fieldPath "bifractionated" ;
-    ws:codeDefault false .
+wsem:LQL_bifractionated a wsem:ParameterDefinition ;
+    skos:prefLabel "Deux fractions par jour"@fr ; wsem:apiVariable "Prescription.bifractionated" ; wsem:fieldPath "bifractionated" ;
+    wsem:codeDefault false .
 
-ws:LQL_total_dose a ws:ParameterDefinition ; ws:requiresInstance true ;
-    skos:prefLabel "Dose totale"@fr ; ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ;
-    ws:derivedFrom ws:LQL_dose_per_fraction, ws:LQL_n_fractions ;
-    ws:derivationRule "total_dose = dose_per_fraction * n_fractions; a stated total that disagrees is a conflict" .
+wsem:LQL_total_dose a wsem:ParameterDefinition ; wsem:requiresInstance true ;
+    skos:prefLabel "Dose totale"@fr ; wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ;
+    wsem:derivedFrom wsem:LQL_dose_per_fraction, wsem:LQL_n_fractions ;
+    wsem:derivationRule "total_dose = dose_per_fraction * n_fractions; a stated total that disagrees is a conflict" .
 
-ws:LQL_bed_oar a ws:OutputVariable ;
-    skos:prefLabel "BED organe"@fr ; ws:apiVariable "CourseResult.bed_oar" ;
-    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
-    ws:additive true ; ws:dataOrigin ws:SyntheticSimulation .
+wsem:LQL_bed_oar a wsem:OutputVariable ;
+    skos:prefLabel "BED organe"@fr ; wsem:apiVariable "CourseResult.bed_oar" ;
+    wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ; wsem:aggregation wsem:AggPerCourse ;
+    wsem:additive true ; wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:LQL_eqd_oar a ws:OutputVariable ;
-    skos:prefLabel "EQD organe"@fr ; ws:apiVariable "CourseResult.eqd_oar" ;
-    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
-    ws:dependsOnReference ws:LQL_reference_dose ; ws:dataOrigin ws:SyntheticSimulation .
+wsem:LQL_eqd_oar a wsem:OutputVariable ;
+    skos:prefLabel "EQD organe"@fr ; wsem:apiVariable "CourseResult.eqd_oar" ;
+    wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ; wsem:aggregation wsem:AggPerCourse ;
+    wsem:dependsOnReference wsem:LQL_reference_dose ; wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:LQL_eqd_oar_total a ws:OutputVariable ;
-    skos:prefLabel "EQD organe cumulée"@fr ; ws:apiVariable "Result.eqd_oar_total" ;
-    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggSum ;
-    ws:dependsOnReference ws:LQL_reference_dose ; ws:validityFlag "Result.oar_total_valid" ;
-    ws:dataOrigin ws:SyntheticSimulation .
+wsem:LQL_eqd_oar_total a wsem:OutputVariable ;
+    skos:prefLabel "EQD organe cumulée"@fr ; wsem:apiVariable "Result.eqd_oar_total" ;
+    wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ; wsem:aggregation wsem:AggSum ;
+    wsem:dependsOnReference wsem:LQL_reference_dose ; wsem:validityFlag "Result.oar_total_valid" ;
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:LQL_ntcp a ws:OutputVariable ;
-    skos:prefLabel "NTCP"@fr ; ws:apiVariable "Result.ntcp_percent" ; ws:canonicalUnit unit:PERCENT ;
+wsem:LQL_ntcp a wsem:OutputVariable ;
+    skos:prefLabel "NTCP"@fr ; wsem:apiVariable "Result.ntcp_percent" ; wsem:canonicalUnit unit:PERCENT ;
     skos:definition "Model estimate for research and education, not a patient-specific probability."@en ;
-    ws:dataOrigin ws:SyntheticSimulation .
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:LQL_eqd_tumour a ws:OutputVariable ;
-    skos:prefLabel "EQD tumeur"@fr ; ws:apiVariable "CourseResult.eqd_tumour" ;
-    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
-    ws:dependsOnReference ws:LQL_reference_dose ; ws:dataOrigin ws:SyntheticSimulation .
+wsem:LQL_eqd_tumour a wsem:OutputVariable ;
+    skos:prefLabel "EQD tumeur"@fr ; wsem:apiVariable "CourseResult.eqd_tumour" ;
+    wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ; wsem:aggregation wsem:AggPerCourse ;
+    wsem:dependsOnReference wsem:LQL_reference_dose ; wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:LQL_eqd_tumour_total a ws:OutputVariable ;
-    skos:prefLabel "EQD tumeur cumulée"@fr ; ws:apiVariable "Result.eqd_tumour_total" ;
-    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggSum ;
-    ws:dependsOnReference ws:LQL_reference_dose ; ws:validityFlag "Result.tumour_total_valid" ;
-    ws:dataOrigin ws:SyntheticSimulation .
+wsem:LQL_eqd_tumour_total a wsem:OutputVariable ;
+    skos:prefLabel "EQD tumeur cumulée"@fr ; wsem:apiVariable "Result.eqd_tumour_total" ;
+    wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ; wsem:aggregation wsem:AggSum ;
+    wsem:dependsOnReference wsem:LQL_reference_dose ; wsem:validityFlag "Result.tumour_total_valid" ;
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
 # Per-course backend flags invalidate the matching per-course output only.
-ws:LQL_oar_saturated a ws:OutputVariable ;
-    skos:prefLabel "Saturation EQD organe (cours)"@fr ; ws:apiVariable "CourseResult.oar_saturated" ;
-    ws:invalidates ws:LQL_eqd_oar .
+wsem:LQL_oar_saturated a wsem:OutputVariable ;
+    skos:prefLabel "Saturation EQD organe (cours)"@fr ; wsem:apiVariable "CourseResult.oar_saturated" ;
+    wsem:invalidates wsem:LQL_eqd_oar .
 
-ws:LQL_tumour_saturated a ws:OutputVariable ;
-    skos:prefLabel "Saturation EQD tumeur (cours)"@fr ; ws:apiVariable "CourseResult.tumour_saturated" ;
-    ws:invalidates ws:LQL_eqd_tumour .
+wsem:LQL_tumour_saturated a wsem:OutputVariable ;
+    skos:prefLabel "Saturation EQD tumeur (cours)"@fr ; wsem:apiVariable "CourseResult.tumour_saturated" ;
+    wsem:invalidates wsem:LQL_eqd_tumour .
 
 # Global summary flag: true if any course flag is true. It signals a problem but
 # does not by itself identify which output is invalid, so it invalidates nothing directly.
-ws:LQL_saturated a ws:OutputVariable ;
-    skos:prefLabel "Saturation (résumé global)"@fr ; ws:apiVariable "Result.saturated" ;
+wsem:LQL_saturated a wsem:OutputVariable ;
+    skos:prefLabel "Saturation (résumé global)"@fr ; wsem:apiVariable "Result.saturated" ;
     rdfs:comment "Any-course summary of CourseResult.oar_saturated / tumour_saturated; read the per-course flags."@en .
 
 # Qualitative expressions
-ws:LQL_conventional a ws:QualifierMapping ;
-    ws:term ws:LevelTypical ; skos:altLabel "fractionnement conventionnel"@fr, "classique"@fr ;
-    ws:appliesTo ws:LQL_dose_per_fraction ; ws:proposedValue 2.0 ; ws:requiresAcceptance true ;
-    ws:sourceNote "Conventional fractionation, 2 Gy per fraction; proposal to accept." .
+wsem:LQL_conventional a wsem:QualifierMapping ;
+    wsem:term wsem:LevelTypical ; skos:altLabel "fractionnement conventionnel"@fr, "classique"@fr ;
+    wsem:appliesTo wsem:LQL_dose_per_fraction ; wsem:proposedValue 2.0 ; wsem:requiresAcceptance true ;
+    wsem:sourceNote "Conventional fractionation, 2 Gy per fraction; proposal to accept." .
 
-ws:LQL_hypo_moderate a ws:ClarificationPolicy ;
-    skos:altLabel "hypofractionnement modéré"@fr ; ws:appliesTo ws:LQL_dose_per_fraction ;
+wsem:LQL_hypo_moderate a wsem:ClarificationPolicy ;
+    skos:altLabel "hypofractionnement modéré"@fr ; wsem:appliesTo wsem:LQL_dose_per_fraction ;
     rdfs:comment "No numerical convention before sourced review: the user states the dose per fraction."@en .
 
-ws:LQL_hypo_extreme a ws:ClarificationPolicy ;
-    skos:altLabel "hypofractionnement extrême"@fr, "stéréotaxique"@fr ; ws:appliesTo ws:LQL_dose_per_fraction .
+wsem:LQL_hypo_extreme a wsem:ClarificationPolicy ;
+    skos:altLabel "hypofractionnement extrême"@fr, "stéréotaxique"@fr ; wsem:appliesTo wsem:LQL_dose_per_fraction .
 
-ws:LQL_hyperfractionation a ws:ClarificationPolicy ;
-    skos:altLabel "hyperfractionnement"@fr ; ws:appliesTo ws:LQL_bifractionated ;
+wsem:LQL_hyperfractionation a wsem:ClarificationPolicy ;
+    skos:altLabel "hyperfractionnement"@fr ; wsem:appliesTo wsem:LQL_bifractionated ;
     rdfs:comment "The word alone does not fix two sessions a day."@en .
 
 # Outputs and flags exposed by the single-course profile of the LQL descriptor (aligned on its ontology_concept names).
-ws:LQLContract ws:declaresOutput ws:LQL_bed_tumour, ws:LQL_tcp_percent, ws:LQL_cancer_risk,
-        ws:LQL_overall_days_oar, ws:LQL_overall_days_tumour, ws:LQL_oar_total_valid, ws:LQL_tumour_total_valid .
+wsem:LQLContract wsem:declaresOutput wsem:LQL_bed_tumour, wsem:LQL_tcp_percent, wsem:LQL_cancer_risk,
+        wsem:LQL_overall_days_oar, wsem:LQL_overall_days_tumour, wsem:LQL_oar_total_valid, wsem:LQL_tumour_total_valid .
 
-ws:LQL_bed_tumour a ws:OutputVariable ;
-    skos:prefLabel "BED tumeur"@fr ; ws:apiVariable "CourseResult.bed_tumour" ;
-    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
-    ws:dataOrigin ws:SyntheticSimulation .
+wsem:LQL_bed_tumour a wsem:OutputVariable ;
+    skos:prefLabel "BED tumeur"@fr ; wsem:apiVariable "CourseResult.bed_tumour" ;
+    wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ; wsem:aggregation wsem:AggPerCourse ;
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:LQL_tcp_percent a ws:OutputVariable ;
-    skos:prefLabel "TCP"@fr ; ws:apiVariable "Result.tcp_percent" ; ws:canonicalUnit unit:PERCENT ;
+wsem:LQL_tcp_percent a wsem:OutputVariable ;
+    skos:prefLabel "TCP"@fr ; wsem:apiVariable "Result.tcp_percent" ; wsem:canonicalUnit unit:PERCENT ;
     skos:definition "Model estimate for research and education; sigmoid stated by Options.tcp_model."@en ;
-    ws:dataOrigin ws:SyntheticSimulation .
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:LQL_cancer_risk a ws:OutputVariable ;
-    skos:prefLabel "Indice de risque de cancer radio-induit"@fr ; ws:apiVariable "Result.cancer_risk" ;
+wsem:LQL_cancer_risk a wsem:OutputVariable ;
+    skos:prefLabel "Indice de risque de cancer radio-induit"@fr ; wsem:apiVariable "Result.cancer_risk" ;
     skos:definition "Native model index from tabulated coefficients; not a clinical percentage; None when the tissue has no coefficients."@en ;
-    ws:dataOrigin ws:SyntheticSimulation .
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:LQL_overall_days_oar a ws:OutputVariable ;
-    skos:prefLabel "Durée calendaire (organe)"@fr ; ws:apiVariable "CourseResult.overall_days_oar" ;
-    ws:quantityKind qk:Time ; ws:canonicalUnit unit:DAY ; ws:aggregation ws:AggPerCourse .
+wsem:LQL_overall_days_oar a wsem:OutputVariable ;
+    skos:prefLabel "Durée calendaire (organe)"@fr ; wsem:apiVariable "CourseResult.overall_days_oar" ;
+    wsem:quantityKind qk:Time ; wsem:canonicalUnit unit:DAY ; wsem:aggregation wsem:AggPerCourse .
 
-ws:LQL_overall_days_tumour a ws:OutputVariable ;
-    skos:prefLabel "Durée calendaire (tumeur)"@fr ; ws:apiVariable "CourseResult.overall_days_tumour" ;
-    ws:quantityKind qk:Time ; ws:canonicalUnit unit:DAY ; ws:aggregation ws:AggPerCourse .
+wsem:LQL_overall_days_tumour a wsem:OutputVariable ;
+    skos:prefLabel "Durée calendaire (tumeur)"@fr ; wsem:apiVariable "CourseResult.overall_days_tumour" ;
+    wsem:quantityKind qk:Time ; wsem:canonicalUnit unit:DAY ; wsem:aggregation wsem:AggPerCourse .
 
 # Validity flags: true means valid (inverse polarity of the saturation flags).
-ws:LQL_oar_total_valid a ws:OutputVariable ;
-    skos:prefLabel "Validité du total organe"@fr ; ws:apiVariable "Result.oar_total_valid" ;
+wsem:LQL_oar_total_valid a wsem:OutputVariable ;
+    skos:prefLabel "Validité du total organe"@fr ; wsem:apiVariable "Result.oar_total_valid" ;
     rdfs:comment "True when the cumulative organ EQD is defined; when false, LQL_eqd_oar_total must not be reported."@en .
 
-ws:LQL_tumour_total_valid a ws:OutputVariable ;
-    skos:prefLabel "Validité du total tumeur"@fr ; ws:apiVariable "Result.tumour_total_valid" ;
+wsem:LQL_tumour_total_valid a wsem:OutputVariable ;
+    skos:prefLabel "Validité du total tumeur"@fr ; wsem:apiVariable "Result.tumour_total_valid" ;
     rdfs:comment "True when the cumulative tumour EQD is defined; when false, LQL_eqd_tumour_total must not be reported."@en .
 
 # --- Schedule comparison and anatomical groups (descriptor: comparison_task, anatomical_groups).
 # Groups are SKOS collections over the exact library names; membership never selects the organ at risk.
-ws:TaskScheduleComparison a ws:TaskProfile ;
+wsem:TaskScheduleComparison a wsem:TaskProfile ;
     rdfs:label "Compare fictitious schedules for one target, a list of targets or an anatomical group"@en ;
-    ws:requiresParameter ws:LQL_organ, ws:LQL_tumour_site, ws:LQL_dose_per_fraction, ws:LQL_n_fractions, ws:LQL_reference_dose ;
-    ws:producesOutput ws:LQL_tcp_percent, ws:LQL_ntcp, ws:LQL_eqd_tumour_total, ws:LQL_eqd_oar_total, ws:LQL_bed_tumour ;
-    ws:derivationRule "A schedule is better for a target only if it dominates: TCP >= and NTCP <= with at least one strict inequality; otherwise trade-off. Never a clinical recommendation." ;
+    wsem:requiresParameter wsem:LQL_organ, wsem:LQL_tumour_site, wsem:LQL_dose_per_fraction, wsem:LQL_n_fractions, wsem:LQL_reference_dose ;
+    wsem:producesOutput wsem:LQL_tcp_percent, wsem:LQL_ntcp, wsem:LQL_eqd_tumour_total, wsem:LQL_eqd_oar_total, wsem:LQL_bed_tumour ;
+    wsem:derivationRule "A schedule is better for a target only if it dominates: TCP >= and NTCP <= with at least one strict inequality; otherwise trade-off. Never a clinical recommendation." ;
     skos:note "Same organ at risk and same reference dose for all schedules; one result row per target and schedule."@en .
 
-ws:LQLContract ws:supportsTask ws:TaskScheduleComparison .
+wsem:LQLContract wsem:supportsTask wsem:TaskScheduleComparison .
 
-ws:LQL_qualitative_policy a ws:ClarificationPolicy ;
-    ws:appliesTo ws:LQL_dose_per_fraction, ws:LQL_n_fractions ;
+wsem:LQL_qualitative_policy a wsem:ClarificationPolicy ;
+    wsem:appliesTo wsem:LQL_dose_per_fraction, wsem:LQL_n_fractions ;
     rdfs:comment "Any qualitative dose, session or fractionation wording is asked, never converted (except the conventional 2 Gy proposal)."@en .
 
-ws:LQL_AnatomyScheme a skos:ConceptScheme ; skos:prefLabel "Groupes anatomiques LQL-Equiv"@fr .
+wsem:LQL_AnatomyScheme a skos:ConceptScheme ; skos:prefLabel "Groupes anatomiques LQL-Equiv"@fr .
 
-ws:LQL_group_thoracic a skos:Collection ; skos:prefLabel "Thorax (cibles et organes thoraciques)"@fr ; skos:altLabel "thoracique"@fr, "thorax"@fr, "cibles thoraciques"@fr, "volumes cibles thoraciques"@fr ;
-    skos:member ws:LQL_site_Lung, ws:LQL_site_Oesophagus, ws:LQL_site_Breast_carcinoma, ws:LQL_organ_Heart, ws:LQL_organ_Lung, ws:LQL_organ_Oesophagus, ws:LQL_organ_Spinal_cord, ws:LQL_organ_Brachial_plexus, ws:LQL_organ_Rib_cage .
-ws:LQL_site_Lung a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Lung" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Oesophagus a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oesophagus" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Breast_carcinoma a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Breast carcinoma" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_organ_Heart a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Heart" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Lung a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Lung" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Oesophagus a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oesophagus" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Spinal_cord a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Spinal cord" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Brachial_plexus a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Brachial plexus" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Rib_cage a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Rib cage" ; skos:note "organ value of LQL_organ" .
-ws:LQL_group_head_and_neck a skos:Collection ; skos:prefLabel "Tête et cou (ORL)"@fr ; skos:altLabel "ORL"@fr, "tête et cou"@fr, "cervico-facial"@fr ;
-    skos:member ws:LQL_site_Tonsil, ws:LQL_site_Vocal_cord, ws:LQL_site_Larynx, ws:LQL_site_Oral_mucosa, ws:LQL_site_Nasopharynx, ws:LQL_site_Oropharynx, ws:LQL_organ_Temporomandibular_joint, ws:LQL_organ_Oral_cavity_oropharynx, ws:LQL_organ_Larynx_supraglottis, ws:LQL_organ_Oral_mucosa, ws:LQL_organ_Parotid, ws:LQL_organ_Middle_external_ear, ws:LQL_organ_Thyroid .
-ws:LQL_site_Tonsil a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Tonsil" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Vocal_cord a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Vocal cord" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Larynx a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Larynx" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Oral_mucosa a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oral mucosa" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Nasopharynx a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Nasopharynx" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Oropharynx a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oropharynx" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_organ_Temporomandibular_joint a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Temporomandibular joint" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Oral_cavity_oropharynx a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oral cavity / oropharynx" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Larynx_supraglottis a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Larynx / supraglottis" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Oral_mucosa a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oral mucosa" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Parotid a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Parotid" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Middle_external_ear a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Middle / external ear" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Thyroid a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Thyroid" ; skos:note "organ value of LQL_organ" .
-ws:LQL_group_central_nervous_system a skos:Collection ; skos:prefLabel "Système nerveux central"@fr ; skos:altLabel "cérébral"@fr, "encéphale"@fr, "SNC"@fr, "neuro"@fr ;
-    skos:member ws:LQL_site_Glioblastoma_LQ_L, ws:LQL_site_Medulloblastoma_LQ_L, ws:LQL_organ_Brain, ws:LQL_organ_Brainstem, ws:LQL_organ_Optic_chiasm, ws:LQL_organ_Optic_nerve, ws:LQL_organ_Eye, ws:LQL_organ_Retina, ws:LQL_organ_Spinal_cord .
-ws:LQL_site_Glioblastoma_LQ_L a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Glioblastoma (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Medulloblastoma_LQ_L a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Medulloblastoma (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_organ_Brain a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Brain" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Brainstem a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Brainstem" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Optic_chiasm a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Optic chiasm" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Optic_nerve a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Optic nerve" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Eye a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Eye" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Retina a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Retina" ; skos:note "organ value of LQL_organ" .
-ws:LQL_group_pelvis a skos:Collection ; skos:prefLabel "Pelvis"@fr ; skos:altLabel "pelvien"@fr, "pelvis"@fr, "petit bassin"@fr ;
-    skos:member ws:LQL_site_Prostate, ws:LQL_site_Rectum, ws:LQL_site_Cervix_LQ_L, ws:LQL_organ_Rectum, ws:LQL_organ_Bladder, ws:LQL_organ_Femoral_head, ws:LQL_organ_Testis, ws:LQL_organ_Small_bowel, ws:LQL_organ_Colon, ws:LQL_organ_Cauda_equina .
-ws:LQL_site_Prostate a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Prostate" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Rectum a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Rectum" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Cervix_LQ_L a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Cervix (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_organ_Rectum a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Rectum" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Bladder a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Bladder" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Femoral_head a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Femoral head" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Testis a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Testis" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Small_bowel a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Small bowel" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Colon a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Colon" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Cauda_equina a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Cauda equina" ; skos:note "organ value of LQL_organ" .
-ws:LQL_group_abdomen a skos:Collection ; skos:prefLabel "Abdomen"@fr ; skos:altLabel "abdominal"@fr, "abdomen"@fr ;
-    skos:member ws:LQL_organ_Stomach, ws:LQL_organ_Liver, ws:LQL_organ_Kidney, ws:LQL_organ_Small_bowel, ws:LQL_organ_Colon .
-ws:LQL_organ_Stomach a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Stomach" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Liver a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Liver" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Kidney a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Kidney" ; skos:note "organ value of LQL_organ" .
-ws:LQL_group_skin a skos:Collection ; skos:prefLabel "Peau"@fr ; skos:altLabel "cutané"@fr, "peau"@fr ;
-    skos:member ws:LQL_site_Skin_carcinoma, ws:LQL_site_Skin_melanoma_LQ_L, ws:LQL_organ_Skin_acute, ws:LQL_organ_Skin_late .
-ws:LQL_site_Skin_carcinoma a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Skin carcinoma" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Skin_melanoma_LQ_L a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Skin melanoma (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_organ_Skin_acute a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Skin (acute)" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Skin_late a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Skin (late)" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_group_thoracic a skos:Collection ; skos:prefLabel "Thorax (cibles et organes thoraciques)"@fr ; skos:altLabel "thoracique"@fr, "thorax"@fr, "cibles thoraciques"@fr, "volumes cibles thoraciques"@fr ;
+    skos:member wsem:LQL_site_Lung, wsem:LQL_site_Oesophagus, wsem:LQL_site_Breast_carcinoma, wsem:LQL_organ_Heart, wsem:LQL_organ_Lung, wsem:LQL_organ_Oesophagus, wsem:LQL_organ_Spinal_cord, wsem:LQL_organ_Brachial_plexus, wsem:LQL_organ_Rib_cage .
+wsem:LQL_site_Lung a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Lung" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Oesophagus a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Oesophagus" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Breast_carcinoma a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Breast carcinoma" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_organ_Heart a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Heart" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Lung a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Lung" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Oesophagus a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Oesophagus" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Spinal_cord a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Spinal cord" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Brachial_plexus a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Brachial plexus" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Rib_cage a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Rib cage" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_group_head_and_neck a skos:Collection ; skos:prefLabel "Tête et cou (ORL)"@fr ; skos:altLabel "ORL"@fr, "tête et cou"@fr, "cervico-facial"@fr ;
+    skos:member wsem:LQL_site_Tonsil, wsem:LQL_site_Vocal_cord, wsem:LQL_site_Larynx, wsem:LQL_site_Oral_mucosa, wsem:LQL_site_Nasopharynx, wsem:LQL_site_Oropharynx, wsem:LQL_organ_Temporomandibular_joint, wsem:LQL_organ_Oral_cavity_oropharynx, wsem:LQL_organ_Larynx_supraglottis, wsem:LQL_organ_Oral_mucosa, wsem:LQL_organ_Parotid, wsem:LQL_organ_Middle_external_ear, wsem:LQL_organ_Thyroid .
+wsem:LQL_site_Tonsil a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Tonsil" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Vocal_cord a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Vocal cord" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Larynx a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Larynx" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Oral_mucosa a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Oral mucosa" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Nasopharynx a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Nasopharynx" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Oropharynx a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Oropharynx" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_organ_Temporomandibular_joint a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Temporomandibular joint" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Oral_cavity_oropharynx a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Oral cavity / oropharynx" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Larynx_supraglottis a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Larynx / supraglottis" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Oral_mucosa a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Oral mucosa" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Parotid a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Parotid" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Middle_external_ear a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Middle / external ear" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Thyroid a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Thyroid" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_group_central_nervous_system a skos:Collection ; skos:prefLabel "Système nerveux central"@fr ; skos:altLabel "cérébral"@fr, "encéphale"@fr, "SNC"@fr, "neuro"@fr ;
+    skos:member wsem:LQL_site_Glioblastoma_LQ_L, wsem:LQL_site_Medulloblastoma_LQ_L, wsem:LQL_organ_Brain, wsem:LQL_organ_Brainstem, wsem:LQL_organ_Optic_chiasm, wsem:LQL_organ_Optic_nerve, wsem:LQL_organ_Eye, wsem:LQL_organ_Retina, wsem:LQL_organ_Spinal_cord .
+wsem:LQL_site_Glioblastoma_LQ_L a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Glioblastoma (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Medulloblastoma_LQ_L a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Medulloblastoma (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_organ_Brain a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Brain" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Brainstem a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Brainstem" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Optic_chiasm a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Optic chiasm" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Optic_nerve a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Optic nerve" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Eye a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Eye" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Retina a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Retina" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_group_pelvis a skos:Collection ; skos:prefLabel "Pelvis"@fr ; skos:altLabel "pelvien"@fr, "pelvis"@fr, "petit bassin"@fr ;
+    skos:member wsem:LQL_site_Prostate, wsem:LQL_site_Rectum, wsem:LQL_site_Cervix_LQ_L, wsem:LQL_organ_Rectum, wsem:LQL_organ_Bladder, wsem:LQL_organ_Femoral_head, wsem:LQL_organ_Testis, wsem:LQL_organ_Small_bowel, wsem:LQL_organ_Colon, wsem:LQL_organ_Cauda_equina .
+wsem:LQL_site_Prostate a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Prostate" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Rectum a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Rectum" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Cervix_LQ_L a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Cervix (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_organ_Rectum a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Rectum" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Bladder a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Bladder" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Femoral_head a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Femoral head" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Testis a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Testis" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Small_bowel a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Small bowel" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Colon a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Colon" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Cauda_equina a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Cauda equina" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_group_abdomen a skos:Collection ; skos:prefLabel "Abdomen"@fr ; skos:altLabel "abdominal"@fr, "abdomen"@fr ;
+    skos:member wsem:LQL_organ_Stomach, wsem:LQL_organ_Liver, wsem:LQL_organ_Kidney, wsem:LQL_organ_Small_bowel, wsem:LQL_organ_Colon .
+wsem:LQL_organ_Stomach a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Stomach" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Liver a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Liver" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Kidney a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Kidney" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_group_skin a skos:Collection ; skos:prefLabel "Peau"@fr ; skos:altLabel "cutané"@fr, "peau"@fr ;
+    skos:member wsem:LQL_site_Skin_carcinoma, wsem:LQL_site_Skin_melanoma_LQ_L, wsem:LQL_organ_Skin_acute, wsem:LQL_organ_Skin_late .
+wsem:LQL_site_Skin_carcinoma a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Skin carcinoma" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Skin_melanoma_LQ_L a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Skin melanoma (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_organ_Skin_acute a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Skin (acute)" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Skin_late a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Skin (late)" ; skos:note "organ value of LQL_organ" .

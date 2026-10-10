@@ -122,7 +122,7 @@ def test_missing_group_instance_is_rejected_for_repeated_parameters():
     shapes = Graph().parse(ROOT / "ontology" / "shapes.ttl", format="turtle")
     conforms, report, _ = pyshacl.validate(g + ontology(), shacl_graph=shapes, advanced=True, inference="none")
     texts = [str(o) for o in report.objects(None, Namespace("http://www.w3.org/ns/shacl#").resultMessage)]
-    assert not conforms and any("lacks ws:groupInstance" in m for m in texts)
+    assert not conforms and any("lacks wsem:groupInstance" in m for m in texts)
 
 
 def test_unknown_concept_and_duplicate_value_are_rejected():

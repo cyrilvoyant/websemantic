@@ -1,4 +1,4 @@
-@prefix ws:   <https://w3id.org/websemantic/ns#> .
+@prefix wsem:   <https://w3id.org/websemantic/ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
@@ -8,232 +8,232 @@
 # LQL-Equiv extension: instances of the common core only (no new classes).
 # Source: docs/lql-contract-definitions.md (draft, scientific review pending).
 
-ws:TaskFractionationEquivalence
-    ws:requiresParameter ws:LQL_organ, ws:LQL_tumour_site, ws:LQL_dose_per_fraction,
-                         ws:LQL_n_fractions, ws:LQL_reference_dose ;
-    ws:producesOutput ws:LQL_bed_oar, ws:LQL_eqd_oar, ws:LQL_eqd_oar_total, ws:LQL_ntcp ;
+wsem:TaskFractionationEquivalence
+    wsem:requiresParameter wsem:LQL_organ, wsem:LQL_tumour_site, wsem:LQL_dose_per_fraction,
+                         wsem:LQL_n_fractions, wsem:LQL_reference_dose ;
+    wsem:producesOutput wsem:LQL_bed_oar, wsem:LQL_eqd_oar, wsem:LQL_eqd_oar_total, wsem:LQL_ntcp ;
     skos:note "BED, EQD and probabilities are compared one quantity at a time; never concatenated."@en .
 
-ws:LQLContract ws:declaresParameter ws:LQL_organ, ws:LQL_tumour_site, ws:LQL_dose_per_fraction,
-        ws:LQL_n_fractions, ws:LQL_gap_days, ws:LQL_reference_dose, ws:LQL_bifractionated, ws:LQL_total_dose ;
-    ws:declaresOutput ws:LQL_bed_oar, ws:LQL_eqd_oar, ws:LQL_eqd_oar_total, ws:LQL_eqd_tumour, ws:LQL_eqd_tumour_total,
-        ws:LQL_ntcp, ws:LQL_oar_saturated, ws:LQL_tumour_saturated, ws:LQL_saturated .
+wsem:LQLContract wsem:declaresParameter wsem:LQL_organ, wsem:LQL_tumour_site, wsem:LQL_dose_per_fraction,
+        wsem:LQL_n_fractions, wsem:LQL_gap_days, wsem:LQL_reference_dose, wsem:LQL_bifractionated, wsem:LQL_total_dose ;
+    wsem:declaresOutput wsem:LQL_bed_oar, wsem:LQL_eqd_oar, wsem:LQL_eqd_oar_total, wsem:LQL_eqd_tumour, wsem:LQL_eqd_tumour_total,
+        wsem:LQL_ntcp, wsem:LQL_oar_saturated, wsem:LQL_tumour_saturated, wsem:LQL_saturated .
 
-ws:LQL_organ a ws:ParameterDefinition ;
-    skos:prefLabel "Organe à risque"@fr ; ws:apiVariable "compute(organ, ...) positional 1" ; ws:fieldPath "organ" ;
+wsem:LQL_organ a wsem:ParameterDefinition ;
+    skos:prefLabel "Organe à risque"@fr ; wsem:apiVariable "compute(organ, ...) positional 1" ; wsem:fieldPath "organ" ;
     skos:definition "Organ at risk from the shipped library (34 entries); never chosen silently."@en .
 
-ws:LQL_tumour_site a ws:ParameterDefinition ;
-    skos:prefLabel "Site tumoral"@fr ; ws:apiVariable "compute(..., tumour, ...) positional 2" ; ws:fieldPath "tumour_site" ;
+wsem:LQL_tumour_site a wsem:ParameterDefinition ;
+    skos:prefLabel "Site tumoral"@fr ; wsem:apiVariable "compute(..., tumour, ...) positional 2" ; wsem:fieldPath "tumour_site" ;
     skos:definition "Tumour site from the shipped library (20 entries)."@en .
 
-ws:LQL_dose_per_fraction a ws:ParameterDefinition ; ws:requiresInstance true ;
-    skos:prefLabel "Dose par fraction"@fr ; ws:apiVariable "Course.dose_per_fraction" ; ws:fieldPath "courses[k].dose_per_fraction" ;
-    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ;
-    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] .
+wsem:LQL_dose_per_fraction a wsem:ParameterDefinition ; wsem:requiresInstance true ;
+    skos:prefLabel "Dose par fraction"@fr ; wsem:apiVariable "Course.dose_per_fraction" ; wsem:fieldPath "courses[k].dose_per_fraction" ;
+    wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ;
+    wsem:hasBound [ a wsem:Bound ; wsem:boundKind "min" ; wsem:boundValue 0.0 ; wsem:authority wsem:AuthorityCode ] .
 
-ws:LQL_n_fractions a ws:ParameterDefinition ; ws:requiresInstance true ;
-    skos:prefLabel "Nombre de fractions"@fr ; ws:apiVariable "Course.n_fractions" ; ws:fieldPath "courses[k].n_fractions" ;
-    ws:quantityKind qk:Dimensionless ; ws:canonicalUnit unit:NUM ;
-    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] ,
-                [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 1 ; ws:authority ws:AuthorityPolicy ;
+wsem:LQL_n_fractions a wsem:ParameterDefinition ; wsem:requiresInstance true ;
+    skos:prefLabel "Nombre de fractions"@fr ; wsem:apiVariable "Course.n_fractions" ; wsem:fieldPath "courses[k].n_fractions" ;
+    wsem:quantityKind qk:Dimensionless ; wsem:canonicalUnit unit:NUM ;
+    wsem:hasBound [ a wsem:Bound ; wsem:boundKind "min" ; wsem:boundValue 0.0 ; wsem:authority wsem:AuthorityCode ] ,
+                [ a wsem:Bound ; wsem:boundKind "min" ; wsem:boundValue 1 ; wsem:authority wsem:AuthorityPolicy ;
                   rdfs:comment "Integer >= 1 for physical schedules (profile policy); the API accepts floats."@en ] .
 
-ws:LQL_gap_days a ws:ParameterDefinition ; ws:requiresInstance true ;
-    skos:prefLabel "Interruption"@fr ; ws:apiVariable "Course.gap_days" ; ws:fieldPath "courses[k].gap_days" ;
-    ws:quantityKind qk:Time ; ws:canonicalUnit unit:DAY ;
-    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] .
+wsem:LQL_gap_days a wsem:ParameterDefinition ; wsem:requiresInstance true ;
+    skos:prefLabel "Interruption"@fr ; wsem:apiVariable "Course.gap_days" ; wsem:fieldPath "courses[k].gap_days" ;
+    wsem:quantityKind qk:Time ; wsem:canonicalUnit unit:DAY ;
+    wsem:hasBound [ a wsem:Bound ; wsem:boundKind "min" ; wsem:boundValue 0.0 ; wsem:authority wsem:AuthorityCode ] .
 
-ws:LQL_reference_dose a ws:ParameterDefinition ;
-    skos:prefLabel "Dose de référence par fraction"@fr ; ws:apiVariable "Prescription.reference_dose" ; ws:fieldPath "reference_dose" ;
-    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:codeDefault 2.0 ;
+wsem:LQL_reference_dose a wsem:ParameterDefinition ;
+    skos:prefLabel "Dose de référence par fraction"@fr ; wsem:apiVariable "Prescription.reference_dose" ; wsem:fieldPath "reference_dose" ;
+    wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ; wsem:codeDefault 2.0 ;
     skos:definition "Defines the EQD reference fractionation; always stated in answers."@en ;
-    ws:hasBound [ a ws:Bound ; ws:boundKind "min" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityCode ] ,
-                [ a ws:Bound ; ws:boundKind "min_exclusive" ; ws:boundValue 0.0 ; ws:authority ws:AuthorityPolicy ;
+    wsem:hasBound [ a wsem:Bound ; wsem:boundKind "min" ; wsem:boundValue 0.0 ; wsem:authority wsem:AuthorityCode ] ,
+                [ a wsem:Bound ; wsem:boundKind "min_exclusive" ; wsem:boundValue 0.0 ; wsem:authority wsem:AuthorityPolicy ;
                   rdfs:comment "0 is constructible but does not guarantee a computable EQD."@en ] .
 
-ws:LQL_bifractionated a ws:ParameterDefinition ;
-    skos:prefLabel "Deux fractions par jour"@fr ; ws:apiVariable "Prescription.bifractionated" ; ws:fieldPath "bifractionated" ;
-    ws:codeDefault false .
+wsem:LQL_bifractionated a wsem:ParameterDefinition ;
+    skos:prefLabel "Deux fractions par jour"@fr ; wsem:apiVariable "Prescription.bifractionated" ; wsem:fieldPath "bifractionated" ;
+    wsem:codeDefault false .
 
-ws:LQL_total_dose a ws:ParameterDefinition ; ws:requiresInstance true ;
-    skos:prefLabel "Dose totale"@fr ; ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ;
-    ws:derivedFrom ws:LQL_dose_per_fraction, ws:LQL_n_fractions ;
-    ws:derivationRule "total_dose = dose_per_fraction * n_fractions; a stated total that disagrees is a conflict" .
+wsem:LQL_total_dose a wsem:ParameterDefinition ; wsem:requiresInstance true ;
+    skos:prefLabel "Dose totale"@fr ; wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ;
+    wsem:derivedFrom wsem:LQL_dose_per_fraction, wsem:LQL_n_fractions ;
+    wsem:derivationRule "total_dose = dose_per_fraction * n_fractions; a stated total that disagrees is a conflict" .
 
-ws:LQL_bed_oar a ws:OutputVariable ;
-    skos:prefLabel "BED organe"@fr ; ws:apiVariable "CourseResult.bed_oar" ;
-    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
-    ws:additive true ; ws:dataOrigin ws:SyntheticSimulation .
+wsem:LQL_bed_oar a wsem:OutputVariable ;
+    skos:prefLabel "BED organe"@fr ; wsem:apiVariable "CourseResult.bed_oar" ;
+    wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ; wsem:aggregation wsem:AggPerCourse ;
+    wsem:additive true ; wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:LQL_eqd_oar a ws:OutputVariable ;
-    skos:prefLabel "EQD organe"@fr ; ws:apiVariable "CourseResult.eqd_oar" ;
-    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
-    ws:dependsOnReference ws:LQL_reference_dose ; ws:dataOrigin ws:SyntheticSimulation .
+wsem:LQL_eqd_oar a wsem:OutputVariable ;
+    skos:prefLabel "EQD organe"@fr ; wsem:apiVariable "CourseResult.eqd_oar" ;
+    wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ; wsem:aggregation wsem:AggPerCourse ;
+    wsem:dependsOnReference wsem:LQL_reference_dose ; wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:LQL_eqd_oar_total a ws:OutputVariable ;
-    skos:prefLabel "EQD organe cumulée"@fr ; ws:apiVariable "Result.eqd_oar_total" ;
-    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggSum ;
-    ws:dependsOnReference ws:LQL_reference_dose ; ws:validityFlag "Result.oar_total_valid" ;
-    ws:dataOrigin ws:SyntheticSimulation .
+wsem:LQL_eqd_oar_total a wsem:OutputVariable ;
+    skos:prefLabel "EQD organe cumulée"@fr ; wsem:apiVariable "Result.eqd_oar_total" ;
+    wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ; wsem:aggregation wsem:AggSum ;
+    wsem:dependsOnReference wsem:LQL_reference_dose ; wsem:validityFlag "Result.oar_total_valid" ;
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:LQL_ntcp a ws:OutputVariable ;
-    skos:prefLabel "NTCP"@fr ; ws:apiVariable "Result.ntcp_percent" ; ws:canonicalUnit unit:PERCENT ;
+wsem:LQL_ntcp a wsem:OutputVariable ;
+    skos:prefLabel "NTCP"@fr ; wsem:apiVariable "Result.ntcp_percent" ; wsem:canonicalUnit unit:PERCENT ;
     skos:definition "Model estimate for research and education, not a patient-specific probability."@en ;
-    ws:dataOrigin ws:SyntheticSimulation .
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:LQL_eqd_tumour a ws:OutputVariable ;
-    skos:prefLabel "EQD tumeur"@fr ; ws:apiVariable "CourseResult.eqd_tumour" ;
-    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
-    ws:dependsOnReference ws:LQL_reference_dose ; ws:dataOrigin ws:SyntheticSimulation .
+wsem:LQL_eqd_tumour a wsem:OutputVariable ;
+    skos:prefLabel "EQD tumeur"@fr ; wsem:apiVariable "CourseResult.eqd_tumour" ;
+    wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ; wsem:aggregation wsem:AggPerCourse ;
+    wsem:dependsOnReference wsem:LQL_reference_dose ; wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:LQL_eqd_tumour_total a ws:OutputVariable ;
-    skos:prefLabel "EQD tumeur cumulée"@fr ; ws:apiVariable "Result.eqd_tumour_total" ;
-    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggSum ;
-    ws:dependsOnReference ws:LQL_reference_dose ; ws:validityFlag "Result.tumour_total_valid" ;
-    ws:dataOrigin ws:SyntheticSimulation .
+wsem:LQL_eqd_tumour_total a wsem:OutputVariable ;
+    skos:prefLabel "EQD tumeur cumulée"@fr ; wsem:apiVariable "Result.eqd_tumour_total" ;
+    wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ; wsem:aggregation wsem:AggSum ;
+    wsem:dependsOnReference wsem:LQL_reference_dose ; wsem:validityFlag "Result.tumour_total_valid" ;
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
 # Per-course backend flags invalidate the matching per-course output only.
-ws:LQL_oar_saturated a ws:OutputVariable ;
-    skos:prefLabel "Saturation EQD organe (cours)"@fr ; ws:apiVariable "CourseResult.oar_saturated" ;
-    ws:invalidates ws:LQL_eqd_oar .
+wsem:LQL_oar_saturated a wsem:OutputVariable ;
+    skos:prefLabel "Saturation EQD organe (cours)"@fr ; wsem:apiVariable "CourseResult.oar_saturated" ;
+    wsem:invalidates wsem:LQL_eqd_oar .
 
-ws:LQL_tumour_saturated a ws:OutputVariable ;
-    skos:prefLabel "Saturation EQD tumeur (cours)"@fr ; ws:apiVariable "CourseResult.tumour_saturated" ;
-    ws:invalidates ws:LQL_eqd_tumour .
+wsem:LQL_tumour_saturated a wsem:OutputVariable ;
+    skos:prefLabel "Saturation EQD tumeur (cours)"@fr ; wsem:apiVariable "CourseResult.tumour_saturated" ;
+    wsem:invalidates wsem:LQL_eqd_tumour .
 
 # Global summary flag: true if any course flag is true. It signals a problem but
 # does not by itself identify which output is invalid, so it invalidates nothing directly.
-ws:LQL_saturated a ws:OutputVariable ;
-    skos:prefLabel "Saturation (résumé global)"@fr ; ws:apiVariable "Result.saturated" ;
+wsem:LQL_saturated a wsem:OutputVariable ;
+    skos:prefLabel "Saturation (résumé global)"@fr ; wsem:apiVariable "Result.saturated" ;
     rdfs:comment "Any-course summary of CourseResult.oar_saturated / tumour_saturated; read the per-course flags."@en .
 
 # Qualitative expressions
-ws:LQL_conventional a ws:QualifierMapping ;
-    ws:term ws:LevelTypical ; skos:altLabel "fractionnement conventionnel"@fr, "classique"@fr ;
-    ws:appliesTo ws:LQL_dose_per_fraction ; ws:proposedValue 2.0 ; ws:requiresAcceptance true ;
-    ws:sourceNote "Conventional fractionation, 2 Gy per fraction; proposal to accept." .
+wsem:LQL_conventional a wsem:QualifierMapping ;
+    wsem:term wsem:LevelTypical ; skos:altLabel "fractionnement conventionnel"@fr, "classique"@fr ;
+    wsem:appliesTo wsem:LQL_dose_per_fraction ; wsem:proposedValue 2.0 ; wsem:requiresAcceptance true ;
+    wsem:sourceNote "Conventional fractionation, 2 Gy per fraction; proposal to accept." .
 
-ws:LQL_hypo_moderate a ws:ClarificationPolicy ;
-    skos:altLabel "hypofractionnement modéré"@fr ; ws:appliesTo ws:LQL_dose_per_fraction ;
+wsem:LQL_hypo_moderate a wsem:ClarificationPolicy ;
+    skos:altLabel "hypofractionnement modéré"@fr ; wsem:appliesTo wsem:LQL_dose_per_fraction ;
     rdfs:comment "No numerical convention before sourced review: the user states the dose per fraction."@en .
 
-ws:LQL_hypo_extreme a ws:ClarificationPolicy ;
-    skos:altLabel "hypofractionnement extrême"@fr, "stéréotaxique"@fr ; ws:appliesTo ws:LQL_dose_per_fraction .
+wsem:LQL_hypo_extreme a wsem:ClarificationPolicy ;
+    skos:altLabel "hypofractionnement extrême"@fr, "stéréotaxique"@fr ; wsem:appliesTo wsem:LQL_dose_per_fraction .
 
-ws:LQL_hyperfractionation a ws:ClarificationPolicy ;
-    skos:altLabel "hyperfractionnement"@fr ; ws:appliesTo ws:LQL_bifractionated ;
+wsem:LQL_hyperfractionation a wsem:ClarificationPolicy ;
+    skos:altLabel "hyperfractionnement"@fr ; wsem:appliesTo wsem:LQL_bifractionated ;
     rdfs:comment "The word alone does not fix two sessions a day."@en .
 
 # Outputs and flags exposed by the single-course profile of the LQL descriptor (aligned on its ontology_concept names).
-ws:LQLContract ws:declaresOutput ws:LQL_bed_tumour, ws:LQL_tcp_percent, ws:LQL_cancer_risk,
-        ws:LQL_overall_days_oar, ws:LQL_overall_days_tumour, ws:LQL_oar_total_valid, ws:LQL_tumour_total_valid .
+wsem:LQLContract wsem:declaresOutput wsem:LQL_bed_tumour, wsem:LQL_tcp_percent, wsem:LQL_cancer_risk,
+        wsem:LQL_overall_days_oar, wsem:LQL_overall_days_tumour, wsem:LQL_oar_total_valid, wsem:LQL_tumour_total_valid .
 
-ws:LQL_bed_tumour a ws:OutputVariable ;
-    skos:prefLabel "BED tumeur"@fr ; ws:apiVariable "CourseResult.bed_tumour" ;
-    ws:quantityKind qk:AbsorbedDose ; ws:canonicalUnit unit:GRAY ; ws:aggregation ws:AggPerCourse ;
-    ws:dataOrigin ws:SyntheticSimulation .
+wsem:LQL_bed_tumour a wsem:OutputVariable ;
+    skos:prefLabel "BED tumeur"@fr ; wsem:apiVariable "CourseResult.bed_tumour" ;
+    wsem:quantityKind qk:AbsorbedDose ; wsem:canonicalUnit unit:GRAY ; wsem:aggregation wsem:AggPerCourse ;
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:LQL_tcp_percent a ws:OutputVariable ;
-    skos:prefLabel "TCP"@fr ; ws:apiVariable "Result.tcp_percent" ; ws:canonicalUnit unit:PERCENT ;
+wsem:LQL_tcp_percent a wsem:OutputVariable ;
+    skos:prefLabel "TCP"@fr ; wsem:apiVariable "Result.tcp_percent" ; wsem:canonicalUnit unit:PERCENT ;
     skos:definition "Model estimate for research and education; sigmoid stated by Options.tcp_model."@en ;
-    ws:dataOrigin ws:SyntheticSimulation .
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:LQL_cancer_risk a ws:OutputVariable ;
-    skos:prefLabel "Indice de risque de cancer radio-induit"@fr ; ws:apiVariable "Result.cancer_risk" ;
+wsem:LQL_cancer_risk a wsem:OutputVariable ;
+    skos:prefLabel "Indice de risque de cancer radio-induit"@fr ; wsem:apiVariable "Result.cancer_risk" ;
     skos:definition "Native model index from tabulated coefficients; not a clinical percentage; None when the tissue has no coefficients."@en ;
-    ws:dataOrigin ws:SyntheticSimulation .
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:LQL_overall_days_oar a ws:OutputVariable ;
-    skos:prefLabel "Durée calendaire (organe)"@fr ; ws:apiVariable "CourseResult.overall_days_oar" ;
-    ws:quantityKind qk:Time ; ws:canonicalUnit unit:DAY ; ws:aggregation ws:AggPerCourse .
+wsem:LQL_overall_days_oar a wsem:OutputVariable ;
+    skos:prefLabel "Durée calendaire (organe)"@fr ; wsem:apiVariable "CourseResult.overall_days_oar" ;
+    wsem:quantityKind qk:Time ; wsem:canonicalUnit unit:DAY ; wsem:aggregation wsem:AggPerCourse .
 
-ws:LQL_overall_days_tumour a ws:OutputVariable ;
-    skos:prefLabel "Durée calendaire (tumeur)"@fr ; ws:apiVariable "CourseResult.overall_days_tumour" ;
-    ws:quantityKind qk:Time ; ws:canonicalUnit unit:DAY ; ws:aggregation ws:AggPerCourse .
+wsem:LQL_overall_days_tumour a wsem:OutputVariable ;
+    skos:prefLabel "Durée calendaire (tumeur)"@fr ; wsem:apiVariable "CourseResult.overall_days_tumour" ;
+    wsem:quantityKind qk:Time ; wsem:canonicalUnit unit:DAY ; wsem:aggregation wsem:AggPerCourse .
 
 # Validity flags: true means valid (inverse polarity of the saturation flags).
-ws:LQL_oar_total_valid a ws:OutputVariable ;
-    skos:prefLabel "Validité du total organe"@fr ; ws:apiVariable "Result.oar_total_valid" ;
+wsem:LQL_oar_total_valid a wsem:OutputVariable ;
+    skos:prefLabel "Validité du total organe"@fr ; wsem:apiVariable "Result.oar_total_valid" ;
     rdfs:comment "True when the cumulative organ EQD is defined; when false, LQL_eqd_oar_total must not be reported."@en .
 
-ws:LQL_tumour_total_valid a ws:OutputVariable ;
-    skos:prefLabel "Validité du total tumeur"@fr ; ws:apiVariable "Result.tumour_total_valid" ;
+wsem:LQL_tumour_total_valid a wsem:OutputVariable ;
+    skos:prefLabel "Validité du total tumeur"@fr ; wsem:apiVariable "Result.tumour_total_valid" ;
     rdfs:comment "True when the cumulative tumour EQD is defined; when false, LQL_eqd_tumour_total must not be reported."@en .
 
 # --- Schedule comparison and anatomical groups (descriptor: comparison_task, anatomical_groups).
 # Groups are SKOS collections over the exact library names; membership never selects the organ at risk.
-ws:TaskScheduleComparison a ws:TaskProfile ;
+wsem:TaskScheduleComparison a wsem:TaskProfile ;
     rdfs:label "Compare fictitious schedules for one target, a list of targets or an anatomical group"@en ;
-    ws:requiresParameter ws:LQL_organ, ws:LQL_tumour_site, ws:LQL_dose_per_fraction, ws:LQL_n_fractions, ws:LQL_reference_dose ;
-    ws:producesOutput ws:LQL_tcp_percent, ws:LQL_ntcp, ws:LQL_eqd_tumour_total, ws:LQL_eqd_oar_total, ws:LQL_bed_tumour ;
-    ws:derivationRule "A schedule is better for a target only if it dominates: TCP >= and NTCP <= with at least one strict inequality; otherwise trade-off. Never a clinical recommendation." ;
+    wsem:requiresParameter wsem:LQL_organ, wsem:LQL_tumour_site, wsem:LQL_dose_per_fraction, wsem:LQL_n_fractions, wsem:LQL_reference_dose ;
+    wsem:producesOutput wsem:LQL_tcp_percent, wsem:LQL_ntcp, wsem:LQL_eqd_tumour_total, wsem:LQL_eqd_oar_total, wsem:LQL_bed_tumour ;
+    wsem:derivationRule "A schedule is better for a target only if it dominates: TCP >= and NTCP <= with at least one strict inequality; otherwise trade-off. Never a clinical recommendation." ;
     skos:note "Same organ at risk and same reference dose for all schedules; one result row per target and schedule."@en .
 
-ws:LQLContract ws:supportsTask ws:TaskScheduleComparison .
+wsem:LQLContract wsem:supportsTask wsem:TaskScheduleComparison .
 
-ws:LQL_qualitative_policy a ws:ClarificationPolicy ;
-    ws:appliesTo ws:LQL_dose_per_fraction, ws:LQL_n_fractions ;
+wsem:LQL_qualitative_policy a wsem:ClarificationPolicy ;
+    wsem:appliesTo wsem:LQL_dose_per_fraction, wsem:LQL_n_fractions ;
     rdfs:comment "Any qualitative dose, session or fractionation wording is asked, never converted (except the conventional 2 Gy proposal)."@en .
 
-ws:LQL_AnatomyScheme a skos:ConceptScheme ; skos:prefLabel "Groupes anatomiques LQL-Equiv"@fr .
+wsem:LQL_AnatomyScheme a skos:ConceptScheme ; skos:prefLabel "Groupes anatomiques LQL-Equiv"@fr .
 
-ws:LQL_group_thoracic a skos:Collection ; skos:prefLabel "Thorax (cibles et organes thoraciques)"@fr ; skos:altLabel "thoracique"@fr, "thorax"@fr, "cibles thoraciques"@fr, "volumes cibles thoraciques"@fr ;
-    skos:member ws:LQL_site_Lung, ws:LQL_site_Oesophagus, ws:LQL_site_Breast_carcinoma, ws:LQL_organ_Heart, ws:LQL_organ_Lung, ws:LQL_organ_Oesophagus, ws:LQL_organ_Spinal_cord, ws:LQL_organ_Brachial_plexus, ws:LQL_organ_Rib_cage .
-ws:LQL_site_Lung a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Lung" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Oesophagus a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oesophagus" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Breast_carcinoma a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Breast carcinoma" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_organ_Heart a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Heart" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Lung a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Lung" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Oesophagus a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oesophagus" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Spinal_cord a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Spinal cord" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Brachial_plexus a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Brachial plexus" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Rib_cage a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Rib cage" ; skos:note "organ value of LQL_organ" .
-ws:LQL_group_head_and_neck a skos:Collection ; skos:prefLabel "Tête et cou (ORL)"@fr ; skos:altLabel "ORL"@fr, "tête et cou"@fr, "cervico-facial"@fr ;
-    skos:member ws:LQL_site_Tonsil, ws:LQL_site_Vocal_cord, ws:LQL_site_Larynx, ws:LQL_site_Oral_mucosa, ws:LQL_site_Nasopharynx, ws:LQL_site_Oropharynx, ws:LQL_organ_Temporomandibular_joint, ws:LQL_organ_Oral_cavity_oropharynx, ws:LQL_organ_Larynx_supraglottis, ws:LQL_organ_Oral_mucosa, ws:LQL_organ_Parotid, ws:LQL_organ_Middle_external_ear, ws:LQL_organ_Thyroid .
-ws:LQL_site_Tonsil a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Tonsil" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Vocal_cord a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Vocal cord" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Larynx a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Larynx" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Oral_mucosa a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oral mucosa" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Nasopharynx a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Nasopharynx" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Oropharynx a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oropharynx" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_organ_Temporomandibular_joint a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Temporomandibular joint" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Oral_cavity_oropharynx a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oral cavity / oropharynx" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Larynx_supraglottis a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Larynx / supraglottis" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Oral_mucosa a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Oral mucosa" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Parotid a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Parotid" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Middle_external_ear a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Middle / external ear" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Thyroid a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Thyroid" ; skos:note "organ value of LQL_organ" .
-ws:LQL_group_central_nervous_system a skos:Collection ; skos:prefLabel "Système nerveux central"@fr ; skos:altLabel "cérébral"@fr, "encéphale"@fr, "SNC"@fr, "neuro"@fr ;
-    skos:member ws:LQL_site_Glioblastoma_LQ_L, ws:LQL_site_Medulloblastoma_LQ_L, ws:LQL_organ_Brain, ws:LQL_organ_Brainstem, ws:LQL_organ_Optic_chiasm, ws:LQL_organ_Optic_nerve, ws:LQL_organ_Eye, ws:LQL_organ_Retina, ws:LQL_organ_Spinal_cord .
-ws:LQL_site_Glioblastoma_LQ_L a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Glioblastoma (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Medulloblastoma_LQ_L a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Medulloblastoma (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_organ_Brain a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Brain" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Brainstem a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Brainstem" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Optic_chiasm a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Optic chiasm" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Optic_nerve a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Optic nerve" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Eye a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Eye" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Retina a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Retina" ; skos:note "organ value of LQL_organ" .
-ws:LQL_group_pelvis a skos:Collection ; skos:prefLabel "Pelvis"@fr ; skos:altLabel "pelvien"@fr, "pelvis"@fr, "petit bassin"@fr ;
-    skos:member ws:LQL_site_Prostate, ws:LQL_site_Rectum, ws:LQL_site_Cervix_LQ_L, ws:LQL_organ_Rectum, ws:LQL_organ_Bladder, ws:LQL_organ_Femoral_head, ws:LQL_organ_Testis, ws:LQL_organ_Small_bowel, ws:LQL_organ_Colon, ws:LQL_organ_Cauda_equina .
-ws:LQL_site_Prostate a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Prostate" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Rectum a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Rectum" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Cervix_LQ_L a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Cervix (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_organ_Rectum a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Rectum" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Bladder a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Bladder" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Femoral_head a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Femoral head" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Testis a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Testis" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Small_bowel a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Small bowel" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Colon a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Colon" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Cauda_equina a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Cauda equina" ; skos:note "organ value of LQL_organ" .
-ws:LQL_group_abdomen a skos:Collection ; skos:prefLabel "Abdomen"@fr ; skos:altLabel "abdominal"@fr, "abdomen"@fr ;
-    skos:member ws:LQL_organ_Stomach, ws:LQL_organ_Liver, ws:LQL_organ_Kidney, ws:LQL_organ_Small_bowel, ws:LQL_organ_Colon .
-ws:LQL_organ_Stomach a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Stomach" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Liver a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Liver" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Kidney a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Kidney" ; skos:note "organ value of LQL_organ" .
-ws:LQL_group_skin a skos:Collection ; skos:prefLabel "Peau"@fr ; skos:altLabel "cutané"@fr, "peau"@fr ;
-    skos:member ws:LQL_site_Skin_carcinoma, ws:LQL_site_Skin_melanoma_LQ_L, ws:LQL_organ_Skin_acute, ws:LQL_organ_Skin_late .
-ws:LQL_site_Skin_carcinoma a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Skin carcinoma" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_site_Skin_melanoma_LQ_L a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Skin melanoma (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
-ws:LQL_organ_Skin_acute a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Skin (acute)" ; skos:note "organ value of LQL_organ" .
-ws:LQL_organ_Skin_late a skos:Concept ; skos:inScheme ws:LQL_AnatomyScheme ; skos:prefLabel "Skin (late)" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_group_thoracic a skos:Collection ; skos:prefLabel "Thorax (cibles et organes thoraciques)"@fr ; skos:altLabel "thoracique"@fr, "thorax"@fr, "cibles thoraciques"@fr, "volumes cibles thoraciques"@fr ;
+    skos:member wsem:LQL_site_Lung, wsem:LQL_site_Oesophagus, wsem:LQL_site_Breast_carcinoma, wsem:LQL_organ_Heart, wsem:LQL_organ_Lung, wsem:LQL_organ_Oesophagus, wsem:LQL_organ_Spinal_cord, wsem:LQL_organ_Brachial_plexus, wsem:LQL_organ_Rib_cage .
+wsem:LQL_site_Lung a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Lung" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Oesophagus a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Oesophagus" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Breast_carcinoma a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Breast carcinoma" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_organ_Heart a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Heart" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Lung a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Lung" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Oesophagus a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Oesophagus" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Spinal_cord a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Spinal cord" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Brachial_plexus a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Brachial plexus" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Rib_cage a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Rib cage" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_group_head_and_neck a skos:Collection ; skos:prefLabel "Tête et cou (ORL)"@fr ; skos:altLabel "ORL"@fr, "tête et cou"@fr, "cervico-facial"@fr ;
+    skos:member wsem:LQL_site_Tonsil, wsem:LQL_site_Vocal_cord, wsem:LQL_site_Larynx, wsem:LQL_site_Oral_mucosa, wsem:LQL_site_Nasopharynx, wsem:LQL_site_Oropharynx, wsem:LQL_organ_Temporomandibular_joint, wsem:LQL_organ_Oral_cavity_oropharynx, wsem:LQL_organ_Larynx_supraglottis, wsem:LQL_organ_Oral_mucosa, wsem:LQL_organ_Parotid, wsem:LQL_organ_Middle_external_ear, wsem:LQL_organ_Thyroid .
+wsem:LQL_site_Tonsil a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Tonsil" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Vocal_cord a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Vocal cord" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Larynx a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Larynx" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Oral_mucosa a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Oral mucosa" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Nasopharynx a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Nasopharynx" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Oropharynx a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Oropharynx" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_organ_Temporomandibular_joint a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Temporomandibular joint" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Oral_cavity_oropharynx a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Oral cavity / oropharynx" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Larynx_supraglottis a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Larynx / supraglottis" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Oral_mucosa a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Oral mucosa" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Parotid a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Parotid" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Middle_external_ear a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Middle / external ear" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Thyroid a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Thyroid" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_group_central_nervous_system a skos:Collection ; skos:prefLabel "Système nerveux central"@fr ; skos:altLabel "cérébral"@fr, "encéphale"@fr, "SNC"@fr, "neuro"@fr ;
+    skos:member wsem:LQL_site_Glioblastoma_LQ_L, wsem:LQL_site_Medulloblastoma_LQ_L, wsem:LQL_organ_Brain, wsem:LQL_organ_Brainstem, wsem:LQL_organ_Optic_chiasm, wsem:LQL_organ_Optic_nerve, wsem:LQL_organ_Eye, wsem:LQL_organ_Retina, wsem:LQL_organ_Spinal_cord .
+wsem:LQL_site_Glioblastoma_LQ_L a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Glioblastoma (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Medulloblastoma_LQ_L a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Medulloblastoma (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_organ_Brain a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Brain" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Brainstem a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Brainstem" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Optic_chiasm a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Optic chiasm" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Optic_nerve a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Optic nerve" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Eye a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Eye" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Retina a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Retina" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_group_pelvis a skos:Collection ; skos:prefLabel "Pelvis"@fr ; skos:altLabel "pelvien"@fr, "pelvis"@fr, "petit bassin"@fr ;
+    skos:member wsem:LQL_site_Prostate, wsem:LQL_site_Rectum, wsem:LQL_site_Cervix_LQ_L, wsem:LQL_organ_Rectum, wsem:LQL_organ_Bladder, wsem:LQL_organ_Femoral_head, wsem:LQL_organ_Testis, wsem:LQL_organ_Small_bowel, wsem:LQL_organ_Colon, wsem:LQL_organ_Cauda_equina .
+wsem:LQL_site_Prostate a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Prostate" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Rectum a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Rectum" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Cervix_LQ_L a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Cervix (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_organ_Rectum a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Rectum" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Bladder a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Bladder" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Femoral_head a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Femoral head" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Testis a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Testis" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Small_bowel a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Small bowel" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Colon a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Colon" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Cauda_equina a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Cauda equina" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_group_abdomen a skos:Collection ; skos:prefLabel "Abdomen"@fr ; skos:altLabel "abdominal"@fr, "abdomen"@fr ;
+    skos:member wsem:LQL_organ_Stomach, wsem:LQL_organ_Liver, wsem:LQL_organ_Kidney, wsem:LQL_organ_Small_bowel, wsem:LQL_organ_Colon .
+wsem:LQL_organ_Stomach a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Stomach" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Liver a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Liver" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Kidney a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Kidney" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_group_skin a skos:Collection ; skos:prefLabel "Peau"@fr ; skos:altLabel "cutané"@fr, "peau"@fr ;
+    skos:member wsem:LQL_site_Skin_carcinoma, wsem:LQL_site_Skin_melanoma_LQ_L, wsem:LQL_organ_Skin_acute, wsem:LQL_organ_Skin_late .
+wsem:LQL_site_Skin_carcinoma a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Skin carcinoma" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_site_Skin_melanoma_LQ_L a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Skin melanoma (LQ-L)" ; skos:note "tumour_site value of LQL_tumour_site" .
+wsem:LQL_organ_Skin_acute a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Skin (acute)" ; skos:note "organ value of LQL_organ" .
+wsem:LQL_organ_Skin_late a skos:Concept ; skos:inScheme wsem:LQL_AnatomyScheme ; skos:prefLabel "Skin (late)" ; skos:note "organ value of LQL_organ" .

@@ -1,4 +1,4 @@
-@prefix ws:   <https://w3id.org/websemantic/ns#> .
+@prefix wsem:   <https://w3id.org/websemantic/ns#> .
 @prefix sh:   <http://www.w3.org/ns/shacl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
@@ -6,90 +6,90 @@
 
 # SHACL shapes executed over a scenario graph merged with the ontology.
 # Generic shapes (any domain): numeric type, declared bounds, complete groups;
-# they read ws:hasBound and ws:partOfGroup from the graph.
+# they read wsem:hasBound and wsem:partOfGroup from the graph.
 # Domain-specific shapes: LQL total dose (d x n) and pyrcel RH/S0 conversion;
 # they name their concepts and encode the rule, they do not execute
-# ws:derivationRule strings. Repeated groups (courses, aerosol modes) are
-# checked per ws:groupInstance, never across instances.
+# wsem:derivationRule strings. Repeated groups (courses, aerosol modes) are
+# checked per wsem:groupInstance, never across instances.
 
-ws:PrefixDecl a owl:Ontology ;
-    sh:declare [ sh:prefix "ws" ; sh:namespace "https://w3id.org/websemantic/ns#"^^xsd:anyURI ] .
+wsem:PrefixDecl a owl:Ontology ;
+    sh:declare [ sh:prefix "wsem" ; sh:namespace "https://w3id.org/websemantic/ns#"^^xsd:anyURI ] .
 
-ws:ParameterRecordShape a sh:NodeShape ;
-    sh:targetClass ws:Parameter ;
-    sh:property [ sh:path ws:concept ; sh:minCount 1 ; sh:maxCount 1 ; sh:class ws:ParameterDefinition ;
+wsem:ParameterRecordShape a sh:NodeShape ;
+    sh:targetClass wsem:Parameter ;
+    sh:property [ sh:path wsem:concept ; sh:minCount 1 ; sh:maxCount 1 ; sh:class wsem:ParameterDefinition ;
                   sh:message "Each record refers to exactly one known parameter definition." ] ;
-    sh:property [ sh:path ws:value ; sh:maxCount 1 ;
+    sh:property [ sh:path wsem:value ; sh:maxCount 1 ;
                   sh:message "A record carries at most one value; competing values are conflicts, not duplicates." ] ;
     sh:sparql [
         a sh:SPARQLConstraint ;
-        sh:message "Record of a repeated parameter lacks ws:groupInstance (course or mode identifier)." ;
-        sh:prefixes ws:PrefixDecl ;
+        sh:message "Record of a repeated parameter lacks wsem:groupInstance (course or mode identifier)." ;
+        sh:prefixes wsem:PrefixDecl ;
         sh:select """
             SELECT $this WHERE {
-              $this ws:concept ?c . ?c ws:requiresInstance true .
-              FILTER NOT EXISTS { $this ws:groupInstance ?k }
+              $this wsem:concept ?c . ?c wsem:requiresInstance true .
+              FILTER NOT EXISTS { $this wsem:groupInstance ?k }
             }""" ] ;
     sh:sparql [
         a sh:SPARQLConstraint ;
         sh:message "Numeric value expected for a parameter with a canonical unit." ;
-        sh:prefixes ws:PrefixDecl ;
+        sh:prefixes wsem:PrefixDecl ;
         sh:select """
             SELECT $this ?value WHERE {
-              $this ws:value ?value ; ws:concept ?c . ?c ws:canonicalUnit ?u .
+              $this wsem:value ?value ; wsem:concept ?c . ?c wsem:canonicalUnit ?u .
               FILTER ( !isNumeric(?value) )
             }""" ] ;
     sh:sparql [
         a sh:SPARQLConstraint ;
         sh:message "Value violates a declared bound ({?kind} {?bound})." ;
-        sh:prefixes ws:PrefixDecl ;
+        sh:prefixes wsem:PrefixDecl ;
         sh:select """
             SELECT $this ?value ?kind ?bound WHERE {
-              $this ws:value ?value ; ws:concept ?c .
-              ?c ws:hasBound ?b . ?b ws:boundKind ?kind ; ws:boundValue ?bound .
+              $this wsem:value ?value ; wsem:concept ?c .
+              ?c wsem:hasBound ?b . ?b wsem:boundKind ?kind ; wsem:boundValue ?bound .
               FILTER ( (?kind = "min" && ?value < ?bound) || (?kind = "max" && ?value > ?bound) ||
                        (?kind = "min_exclusive" && ?value <= ?bound) || (?kind = "max_exclusive" && ?value >= ?bound) )
             }""" ] .
 
-ws:DerivedQuantityShape a sh:NodeShape ;
-    sh:targetClass ws:Scenario ;
+wsem:DerivedQuantityShape a sh:NodeShape ;
+    sh:targetClass wsem:Scenario ;
     sh:sparql [
         a sh:SPARQLConstraint ;
         sh:message "Stated total dose of a course disagrees with its dose per fraction x number of fractions (conflict to resolve)." ;
-        sh:prefixes ws:PrefixDecl ;
+        sh:prefixes wsem:PrefixDecl ;
         sh:select """
             SELECT $this WHERE {
-              $this ws:hasParameter ?t, ?d, ?n .
-              ?t ws:concept ws:LQL_total_dose ; ws:value ?tv ; ws:groupInstance ?k .
-              ?d ws:concept ws:LQL_dose_per_fraction ; ws:value ?dv ; ws:groupInstance ?k .
-              ?n ws:concept ws:LQL_n_fractions ; ws:value ?nv ; ws:groupInstance ?k .
+              $this wsem:hasParameter ?t, ?d, ?n .
+              ?t wsem:concept wsem:LQL_total_dose ; wsem:value ?tv ; wsem:groupInstance ?k .
+              ?d wsem:concept wsem:LQL_dose_per_fraction ; wsem:value ?dv ; wsem:groupInstance ?k .
+              ?n wsem:concept wsem:LQL_n_fractions ; wsem:value ?nv ; wsem:groupInstance ?k .
               FILTER ( ABS(?tv - ?dv * ?nv) > 1e-9 )
             }""" ] .
 
-ws:SameQuantityShape a sh:NodeShape ;
-    sh:targetClass ws:Scenario ;
+wsem:SameQuantityShape a sh:NodeShape ;
+    sh:targetClass wsem:Scenario ;
     sh:sparql [
         a sh:SPARQLConstraint ;
         sh:message "Relative humidity and initial supersaturation describe one state and disagree (S0 must equal RH_fraction - 1)." ;
-        sh:prefixes ws:PrefixDecl ;
+        sh:prefixes wsem:PrefixDecl ;
         sh:select """
             SELECT $this WHERE {
-              $this ws:hasParameter ?h, ?s .
-              ?h ws:concept ws:PYR_RH ; ws:value ?rh .
-              ?s ws:concept ws:PYR_S0 ; ws:value ?s0 .
-              ws:PYR_RH ws:convertibleTo ws:PYR_S0 .
+              $this wsem:hasParameter ?h, ?s .
+              ?h wsem:concept wsem:PYR_RH ; wsem:value ?rh .
+              ?s wsem:concept wsem:PYR_S0 ; wsem:value ?s0 .
+              wsem:PYR_RH wsem:convertibleTo wsem:PYR_S0 .
               FILTER ( ABS(?s0 - (?rh - 1.0)) > 1e-9 )
             }""" ] .
 
-ws:CompleteGroupShape a sh:NodeShape ;
-    sh:targetClass ws:Scenario ;
+wsem:CompleteGroupShape a sh:NodeShape ;
+    sh:targetClass wsem:Scenario ;
     sh:sparql [
         a sh:SPARQLConstraint ;
         sh:message "Incomplete parameter group ({?group}, instance {?k}): all members must be supplied together." ;
-        sh:prefixes ws:PrefixDecl ;
+        sh:prefixes wsem:PrefixDecl ;
         sh:select """
             SELECT DISTINCT $this ?group ?k WHERE {
-              $this ws:hasParameter ?r . ?r ws:concept ?c ; ws:groupInstance ?k . ?c ws:partOfGroup ?group .
-              ?m ws:partOfGroup ?group .
-              FILTER NOT EXISTS { $this ws:hasParameter ?r2 . ?r2 ws:concept ?m ; ws:groupInstance ?k }
+              $this wsem:hasParameter ?r . ?r wsem:concept ?c ; wsem:groupInstance ?k . ?c wsem:partOfGroup ?group .
+              ?m wsem:partOfGroup ?group .
+              FILTER NOT EXISTS { $this wsem:hasParameter ?r2 . ?r2 wsem:concept ?m ; wsem:groupInstance ?k }
             }""" ] .

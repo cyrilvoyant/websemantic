@@ -12,7 +12,7 @@ Each question states the expected answer and the mechanism that answers it: **gr
 | CQ6 | Is annualised energy an observed year? | No: aggregation = extrapolation 365/n_days. | graph | tested |
 | CQ7 | Does a daily mean answer a question about instantaneous peak power? | No: temporal support differs (daily vs native step). | graph | to export (daily table) |
 | CQ8 | Does « 2 km » map to `length_m` in m? | 2000 m, deterministic normalisation, not inference. | Python | covered by existing tests |
-| CQ9 | Does a bound come from code, interface or physics? | From `ws:authority` of each bound. | graph | to export from descriptors |
+| CQ9 | Does a bound come from code, interface or physics? | From `wsem:authority` of each bound. | graph | to export from descriptors |
 | CQ10 | Does a city name justify a traffic value? | No: geography yields proposals only, never accepted values. | Python + rules | covered by existing tests |
 | CQ11 | Which reference fractionation defines EQD in LQL? | Declared reference dose per fraction (2 Gy unless stated). | graph | tested (`lqlequiv.ttl`) |
 | CQ12 | Which inputs define a pyrcel run, and in which units? | Updraft V (m/s), initial T0 (K), P0 (Pa), S0 (supersaturation, 1), aerosol modes (N, μ, σ, κ); no default aerosol population. | graph | tested (`pyrcel.ttl`) |

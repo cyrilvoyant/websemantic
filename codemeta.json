@@ -3,7 +3,7 @@
   "@type": "SoftwareSourceCode",
   "name": "websemantic",
   "description": "Software-agnostic semantic layer: one descriptor per scientific software compiled into an LLM contract, an ontology with SHACL shapes and FAIR metadata; unchanged backends (TLS, LQL-Equiv, pyrcel) at pinned revisions.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "dateCreated": "2026-10-03",
   "license": "https://spdx.org/licenses/PolyForm-Noncommercial-1.0.0.html",
   "codeRepository": "https://github.com/cyrilvoyant/websemantic",
@@ -40,7 +40,7 @@
     "https://github.com/cyrilvoyant/LQL-Equiv-web (pinned dfc9a338205b8864b8e3470c4ae245b019e88844)",
     "pvlib==0.16.1"
   ],
-  "dateModified": "2026-10-09",
+  "dateModified": "2026-10-10",
   "identifier": [
     "https://doi.org/10.5281/zenodo.23238902",
     "https://w3id.org/websemantic/ns"

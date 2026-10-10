@@ -1182,10 +1182,10 @@
     }
   ],
   "files_sha256": {
-    "ontology\\core.ttl": "e9a235b0e6bf60da46b2c28f178dce998a927b822fe631966204ea3b41664908",
-    "ontology\\lqlequiv.ttl": "c2ff9dd9e92151eec8a140ab83ad519a311f3fdbd14c62178bdc756700e00a39",
-    "ontology\\pyrcel.ttl": "adddddba08909e3b5445d27e7060f40efea0f979115d0053d245acc1d10a4be1",
-    "ontology\\shapes.ttl": "e5cf638a10b2ffa5f8e06c5f1b84ac78f47fc013b2340df3aaab57d9a39aa111",
-    "ontology\\tls-vocabulary.ttl": "8cd836ee589b994ae077c2d7a657cc45e02dcd8d48c676e8acc64bf7c383573c"
+    "ontology\\core.ttl": "a54071696df3ae3adc717c1e287cd294b10d9f3f2ac4dd77b096d718b96f559e",
+    "ontology\\lqlequiv.ttl": "d49bea092096be302dc007b2a7d79840aaea8d2c7c6c10361f129cafac072225",
+    "ontology\\pyrcel.ttl": "59888a3d94f72f908707e1e582ddbaa432587488a400f15b6f6b202906c36c84",
+    "ontology\\shapes.ttl": "e764d35916aa106c28b592b9ef20589236b4d4537ba74fbaa8bcdbf0efae27ba",
+    "ontology\\tls-vocabulary.ttl": "7b5cbd0a2a6aa650081ed2bfdb267222e6fc8b585808be21c34c5056853da242"
   }
 }

@@ -1,4 +1,4 @@
-@prefix ws:    <https://w3id.org/websemantic/ns#> .
+@prefix wsem:    <https://w3id.org/websemantic/ns#> .
 @prefix owl:   <http://www.w3.org/2002/07/owl#> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
@@ -21,20 +21,22 @@
 <https://w3id.org/websemantic/ns/core> a owl:Ontology ;
     dcterms:title "WebSemantic core ontology"@en ;
     dcterms:description "Common vocabulary linking user requests, software contracts, accepted assumptions, executions and qualified simulation outputs."@en ;
-    owl:versionInfo "0.2.1" ;
-    owl:versionIRI <https://w3id.org/websemantic/ns/core/0.2.1> ;
-    owl:priorVersion <https://w3id.org/websemantic/ns/core/0.2.0> ;
+    owl:versionInfo "0.2.2" ;
+    owl:versionIRI <https://w3id.org/websemantic/ns/core/0.2.2> ;
+    owl:priorVersion <https://w3id.org/websemantic/ns/core/0.2.1> ;
     dcterms:created "2026-10-06"^^xsd:date ;
     dcterms:issued "2026-10-08"^^xsd:date ;
-    dcterms:modified "2026-10-09"^^xsd:date ;
+    dcterms:modified "2026-10-10"^^xsd:date ;
     dcterms:creator <https://orcid.org/0000-0003-0242-7377> ;
     dcterms:publisher <https://github.com/cyrilvoyant/websemantic> ;
     dcterms:source <https://github.com/cyrilvoyant/websemantic> ;
     dcterms:license <https://polyformproject.org/licenses/noncommercial/1.0.0> ;
     dcterms:bibliographicCitation "Voyant, C. (2026). websemantic, version 0.2.0. Zenodo. https://doi.org/10.5281/zenodo.23238902" ;
-    vann:preferredNamespacePrefix "ws" ;
+    vann:preferredNamespacePrefix "wsem" ;
     vann:preferredNamespaceUri "https://w3id.org/websemantic/ns#" ;
     bibo:status "draft" ;
+    schema:logo <https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/docs/logo.png> ;
+    schema:includedInDataCatalog <https://zenodo.org> ;
     bibo:doi "10.5281/zenodo.23238902" ;
     dcterms:identifier <https://doi.org/10.5281/zenodo.23238902> ;
     rdfs:seeAlso <https://doi.org/10.1038/s41597-022-01710-x> .
@@ -45,62 +47,62 @@
 # 1. Software and contracts
 ########################################################################
 
-ws:Software a owl:Class ;
+wsem:Software a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:seeAlso schema:SoftwareSourceCode ;
     rdfs:label "Software"@en, "Logiciel"@fr ;
     rdfs:comment "Scientific software used unmodified, identified by repository, pinned revision and concept DOI."@en .
 
-ws:Contract a owl:Class ;
+wsem:Contract a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:label "Contract"@en, "Contrat"@fr ;
     rdfs:comment "Published, machine-readable description of how a software may be configured for declared tasks and how its outputs must be read."@en .
 
-ws:TaskProfile a owl:Class ;
+wsem:TaskProfile a owl:Class ;
     rdfs:label "Task profile"@en, "Profil de tâche"@fr ;
     rdfs:comment "A bounded use of the software that the contract supports or explicitly excludes."@en .
 
-ws:ParameterDefinition a owl:Class ;
+wsem:ParameterDefinition a owl:Class ;
     rdfs:subClassOf skos:Concept ;
     rdfs:label "Parameter definition"@en, "Définition de paramètre"@fr ;
     rdfs:comment "Concept-level description of an input: meaning, quantity kind, canonical unit, bounds, API variable."@en .
 
-ws:OutputVariable a owl:Class ;
+wsem:OutputVariable a owl:Class ;
     rdfs:subClassOf skos:Concept ;
     rdfs:label "Output variable"@en, "Variable de sortie"@fr ;
     rdfs:comment "Concept-level description of a computed column: quantity kind, unit, aggregation, temporal support."@en .
 
-ws:Bound a owl:Class ;
+wsem:Bound a owl:Class ;
     rdfs:label "Bound"@en, "Borne"@fr ;
     rdfs:comment "Numerical limit with its authority. A user-interface slider limit is not a physical constraint."@en .
 
-ws:BoundAuthority a owl:Class ;
+wsem:BoundAuthority a owl:Class ;
     rdfs:label "Bound authority"@en .
 
-ws:ValidityLimit a owl:Class ;
+wsem:ValidityLimit a owl:Class ;
     rdfs:label "Validity limit"@en, "Limite de validité"@fr ;
     rdfs:comment "Declared condition outside which results must not be used (e.g. no calibration, no clinical decision)."@en .
 
-ws:Aggregation a owl:Class ;
+wsem:Aggregation a owl:Class ;
     rdfs:label "Aggregation"@en, "Agrégation"@fr .
 
-ws:DataOrigin a owl:Class ;
+wsem:DataOrigin a owl:Class ;
     rdfs:label "Data origin"@en, "Origine des données"@fr .
 
 ########################################################################
 # 2. Qualitative semantics (beaucoup, peu, faible, très élevé, ...)
 ########################################################################
 
-ws:QualitativeTerm a owl:Class ;
+wsem:QualitativeTerm a owl:Class ;
     rdfs:subClassOf skos:Concept ;
     rdfs:label "Qualitative term"@en, "Terme qualitatif"@fr ;
     rdfs:comment "Word or phrase expressing an ordinal level. It has no numerical meaning by itself."@en .
 
-ws:QualifierMapping a owl:Class ;
+wsem:QualifierMapping a owl:Class ;
     rdfs:label "Qualifier mapping"@en, "Convention qualitative"@fr ;
     rdfs:comment "Parameter-specific convention turning a qualitative term into a proposed value. Always a proposal requiring acceptance."@en .
 
-ws:ClarificationPolicy a owl:Class ;
+wsem:ClarificationPolicy a owl:Class ;
     rdfs:label "Clarification policy"@en ;
     rdfs:comment "Rule stating that a term or request has no mapping for a parameter and must trigger a question."@en .
 
@@ -108,83 +110,83 @@ ws:ClarificationPolicy a owl:Class ;
 # 3. Requests, scenarios and value records
 ########################################################################
 
-ws:Request a owl:Class ;
+wsem:Request a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:label "Request"@en, "Demande"@fr .
 
-ws:Evidence a owl:Class ;
+wsem:Evidence a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:label "Evidence"@en, "Preuve"@fr ;
     rdfs:comment "Exact text span of a request supporting a value. Its presence does not prove semantic correctness."@en .
 
-ws:Scenario a owl:Class ;
+wsem:Scenario a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:label "Scenario"@en, "Scénario"@fr .
 
-ws:Experiment a owl:Class ;
+wsem:Experiment a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:label "Experiment settings"@en, "Réglages d'expérience"@fr ;
     rdfs:comment "Time grid, horizon, realisations and seed; distinct from physical inputs."@en .
 
-ws:Parameter a owl:Class ;
+wsem:Parameter a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:label "Parameter record"@en, "Enregistrement de paramètre"@fr ;
     rdfs:comment "Value of one parameter in one scenario, with unit, origin, evidence and acceptance state."@en .
 
-ws:UserValue a owl:Class ;
-    rdfs:subClassOf ws:Parameter ;
+wsem:UserValue a owl:Class ;
+    rdfs:subClassOf wsem:Parameter ;
     rdfs:label "User-provided value"@en .
 
-ws:Hypothesis a owl:Class ;
-    rdfs:subClassOf ws:Parameter ;
+wsem:Hypothesis a owl:Class ;
+    rdfs:subClassOf wsem:Parameter ;
     rdfs:label "Proposed assumption"@en, "Hypothèse proposée"@fr ;
     rdfs:comment "Default, qualitative convention or sourced proposal. Not executable until accepted."@en .
 
-ws:OperationalSetting a owl:Class ;
-    rdfs:subClassOf ws:Parameter ;
+wsem:OperationalSetting a owl:Class ;
+    rdfs:subClassOf wsem:Parameter ;
     rdfs:label "Operational setting"@en ;
     rdfs:comment "Technical choice authorised by declared policy (e.g. fixed seed)."@en .
 
-ws:UnknownValue a owl:Class ;
-    rdfs:subClassOf ws:Parameter ;
+wsem:UnknownValue a owl:Class ;
+    rdfs:subClassOf wsem:Parameter ;
     rdfs:label "Unknown value"@en, "Valeur inconnue"@fr .
 
 [] a owl:AllDisjointClasses ;
-    owl:members ( ws:UserValue ws:Hypothesis ws:OperationalSetting ws:UnknownValue ) .
+    owl:members ( wsem:UserValue wsem:Hypothesis wsem:OperationalSetting wsem:UnknownValue ) .
 
 ########################################################################
 # 4. Activities (PROV-O)
 ########################################################################
 
-ws:Interpretation a owl:Class ;
+wsem:Interpretation a owl:Class ;
     rdfs:subClassOf prov:Activity ;
     rdfs:label "Interpretation"@en ;
     rdfs:comment "Extraction of candidate values from a request, by a language model or a rule."@en .
 
-ws:Normalisation a owl:Class ;
+wsem:Normalisation a owl:Class ;
     rdfs:subClassOf prov:Activity ;
     rdfs:label "Deterministic normalisation"@en ;
     rdfs:comment "Exact unit or number conversion (2 km -> 2000 m). Not a domain inference."@en .
 
-ws:Acceptance a owl:Class ;
+wsem:Acceptance a owl:Class ;
     rdfs:subClassOf prov:Activity ;
     rdfs:label "Acceptance"@en, "Accord"@fr ;
     rdfs:comment "Explicit user decision making a hypothesis executable."@en .
 
-ws:Validation a owl:Class ;
+wsem:Validation a owl:Class ;
     rdfs:subClassOf prov:Activity ;
     rdfs:label "Validation gate"@en .
 
-ws:Execution a owl:Class ;
+wsem:Execution a owl:Class ;
     rdfs:subClassOf prov:Activity ;
     rdfs:label "Execution"@en, "Exécution"@fr .
 
-ws:SimulationOutput a owl:Class ;
+wsem:SimulationOutput a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:seeAlso schema:Dataset ;
     rdfs:label "Simulation output"@en, "Sortie de simulation"@fr .
 
-ws:Qualification a owl:Class ;
+wsem:Qualification a owl:Class ;
     rdfs:subClassOf prov:Entity ;
     rdfs:label "Output qualification"@en, "Qualification des sorties"@fr ;
     rdfs:comment "Machine-readable statement of units, aggregation, scope, data origin, uncertainty coverage and admitted uses."@en .
@@ -193,182 +195,182 @@ ws:Qualification a owl:Class ;
 # 5. Object properties
 ########################################################################
 
-ws:hasContract a owl:ObjectProperty ; rdfs:domain ws:Software ; rdfs:range ws:Contract .
-ws:supportsTask a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:TaskProfile .
-ws:excludesTask a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:TaskProfile .
-ws:declaresParameter a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:ParameterDefinition .
-ws:declaresOutput a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:OutputVariable .
-ws:declaresValidityLimit a owl:ObjectProperty ; rdfs:domain ws:Contract ; rdfs:range ws:ValidityLimit .
+wsem:hasContract a owl:ObjectProperty ; rdfs:domain wsem:Software ; rdfs:range wsem:Contract .
+wsem:supportsTask a owl:ObjectProperty ; rdfs:domain wsem:Contract ; rdfs:range wsem:TaskProfile .
+wsem:excludesTask a owl:ObjectProperty ; rdfs:domain wsem:Contract ; rdfs:range wsem:TaskProfile .
+wsem:declaresParameter a owl:ObjectProperty ; rdfs:domain wsem:Contract ; rdfs:range wsem:ParameterDefinition .
+wsem:declaresOutput a owl:ObjectProperty ; rdfs:domain wsem:Contract ; rdfs:range wsem:OutputVariable .
+wsem:declaresValidityLimit a owl:ObjectProperty ; rdfs:domain wsem:Contract ; rdfs:range wsem:ValidityLimit .
 
-ws:requiresParameter a owl:ObjectProperty ;
-    rdfs:domain ws:TaskProfile ; rdfs:range ws:ParameterDefinition ;
+wsem:requiresParameter a owl:ObjectProperty ;
+    rdfs:domain wsem:TaskProfile ; rdfs:range wsem:ParameterDefinition ;
     rdfs:comment "Parameter that must be provided or accepted for the task."@en .
-ws:producesOutput a owl:ObjectProperty ; rdfs:domain ws:TaskProfile ; rdfs:range ws:OutputVariable .
+wsem:producesOutput a owl:ObjectProperty ; rdfs:domain wsem:TaskProfile ; rdfs:range wsem:OutputVariable .
 
-ws:quantityKind a owl:ObjectProperty ;
+wsem:quantityKind a owl:ObjectProperty ;
     rdfs:range qudt:QuantityKind ;
     rdfs:comment "QUDT quantity kind of a parameter or output."@en .
-ws:canonicalUnit a owl:ObjectProperty ;
+wsem:canonicalUnit a owl:ObjectProperty ;
     rdfs:range qudt:Unit ;
     rdfs:comment "QUDT unit in which values are stored and validated."@en .
-ws:hasBound a owl:ObjectProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:Bound .
-ws:authority a owl:ObjectProperty ; rdfs:domain ws:Bound ; rdfs:range ws:BoundAuthority .
-ws:aggregation a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:Aggregation .
-ws:dataOrigin a owl:ObjectProperty ; rdfs:range ws:DataOrigin .
+wsem:hasBound a owl:ObjectProperty ; rdfs:domain wsem:ParameterDefinition ; rdfs:range wsem:Bound .
+wsem:authority a owl:ObjectProperty ; rdfs:domain wsem:Bound ; rdfs:range wsem:BoundAuthority .
+wsem:aggregation a owl:ObjectProperty ; rdfs:domain wsem:OutputVariable ; rdfs:range wsem:Aggregation .
+wsem:dataOrigin a owl:ObjectProperty ; rdfs:range wsem:DataOrigin .
 
-ws:term a owl:ObjectProperty ; rdfs:domain ws:QualifierMapping ; rdfs:range ws:QualitativeTerm .
-ws:appliesTo a owl:ObjectProperty ;
-    rdfs:domain [ owl:unionOf ( ws:QualifierMapping ws:ClarificationPolicy ) ] ;
-    rdfs:range ws:ParameterDefinition .
+wsem:term a owl:ObjectProperty ; rdfs:domain wsem:QualifierMapping ; rdfs:range wsem:QualitativeTerm .
+wsem:appliesTo a owl:ObjectProperty ;
+    rdfs:domain [ owl:unionOf ( wsem:QualifierMapping wsem:ClarificationPolicy ) ] ;
+    rdfs:range wsem:ParameterDefinition .
 
-ws:concept a owl:ObjectProperty ; rdfs:domain ws:Parameter ; rdfs:range ws:ParameterDefinition .
-ws:hasParameter a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:Parameter .
-ws:hasExperiment a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:Experiment .
-ws:forTask a owl:ObjectProperty ; rdfs:domain ws:Scenario ; rdfs:range ws:TaskProfile .
-ws:supportedBy a owl:ObjectProperty ; rdfs:domain ws:UserValue ; rdfs:range ws:Evidence .
-ws:fromRequest a owl:ObjectProperty ; rdfs:domain ws:Evidence ; rdfs:range ws:Request .
-ws:followsConvention a owl:ObjectProperty ; rdfs:domain ws:Hypothesis ; rdfs:range ws:QualifierMapping .
-ws:acceptedBy a owl:ObjectProperty ; rdfs:domain ws:Hypothesis ; rdfs:range ws:Acceptance .
-ws:qualifiedBy a owl:ObjectProperty ; rdfs:domain ws:SimulationOutput ; rdfs:range ws:Qualification .
+wsem:concept a owl:ObjectProperty ; rdfs:domain wsem:Parameter ; rdfs:range wsem:ParameterDefinition .
+wsem:hasParameter a owl:ObjectProperty ; rdfs:domain wsem:Scenario ; rdfs:range wsem:Parameter .
+wsem:hasExperiment a owl:ObjectProperty ; rdfs:domain wsem:Scenario ; rdfs:range wsem:Experiment .
+wsem:forTask a owl:ObjectProperty ; rdfs:domain wsem:Scenario ; rdfs:range wsem:TaskProfile .
+wsem:supportedBy a owl:ObjectProperty ; rdfs:domain wsem:UserValue ; rdfs:range wsem:Evidence .
+wsem:fromRequest a owl:ObjectProperty ; rdfs:domain wsem:Evidence ; rdfs:range wsem:Request .
+wsem:followsConvention a owl:ObjectProperty ; rdfs:domain wsem:Hypothesis ; rdfs:range wsem:QualifierMapping .
+wsem:acceptedBy a owl:ObjectProperty ; rdfs:domain wsem:Hypothesis ; rdfs:range wsem:Acceptance .
+wsem:qualifiedBy a owl:ObjectProperty ; rdfs:domain wsem:SimulationOutput ; rdfs:range wsem:Qualification .
 
 ########################################################################
 # 6. Datatype properties
 ########################################################################
 
-ws:apiVariable a owl:DatatypeProperty ; rdfs:range xsd:string ;
+wsem:apiVariable a owl:DatatypeProperty ; rdfs:range xsd:string ;
     rdfs:comment "Exact backend identifier (e.g. TunnelConfig.length_m)."@en .
-ws:fieldPath a owl:DatatypeProperty ; rdfs:range xsd:string .
-ws:repository a owl:DatatypeProperty ; rdfs:range xsd:anyURI .
-ws:pinnedRevision a owl:DatatypeProperty ; rdfs:range xsd:string .
-ws:conceptDOI a owl:DatatypeProperty ; rdfs:range xsd:string .
-ws:boundValue a owl:DatatypeProperty ; rdfs:domain ws:Bound .
-ws:boundKind a owl:DatatypeProperty ; rdfs:domain ws:Bound ; rdfs:range xsd:string ;
+wsem:fieldPath a owl:DatatypeProperty ; rdfs:range xsd:string .
+wsem:repository a owl:DatatypeProperty ; rdfs:range xsd:anyURI .
+wsem:pinnedRevision a owl:DatatypeProperty ; rdfs:range xsd:string .
+wsem:conceptDOI a owl:DatatypeProperty ; rdfs:range xsd:string .
+wsem:boundValue a owl:DatatypeProperty ; rdfs:domain wsem:Bound .
+wsem:boundKind a owl:DatatypeProperty ; rdfs:domain wsem:Bound ; rdfs:range xsd:string ;
     rdfs:comment "min, max, min_exclusive or max_exclusive."@en .
-ws:proposedValue a owl:DatatypeProperty ; rdfs:domain ws:QualifierMapping .
-ws:requiresAcceptance a owl:DatatypeProperty ; rdfs:domain ws:QualifierMapping ; rdfs:range xsd:boolean .
-ws:sourceNote a owl:DatatypeProperty ; rdfs:range xsd:string .
-ws:value a owl:DatatypeProperty ; rdfs:domain ws:Parameter .
-ws:accepted a owl:DatatypeProperty ; rdfs:domain ws:Parameter ; rdfs:range xsd:boolean .
-ws:evidenceText a owl:DatatypeProperty ; rdfs:domain ws:Evidence ; rdfs:range xsd:string .
-ws:temporalSupport a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:string ;
+wsem:proposedValue a owl:DatatypeProperty ; rdfs:domain wsem:QualifierMapping .
+wsem:requiresAcceptance a owl:DatatypeProperty ; rdfs:domain wsem:QualifierMapping ; rdfs:range xsd:boolean .
+wsem:sourceNote a owl:DatatypeProperty ; rdfs:range xsd:string .
+wsem:value a owl:DatatypeProperty ; rdfs:domain wsem:Parameter .
+wsem:accepted a owl:DatatypeProperty ; rdfs:domain wsem:Parameter ; rdfs:range xsd:boolean .
+wsem:evidenceText a owl:DatatypeProperty ; rdfs:domain wsem:Evidence ; rdfs:range xsd:string .
+wsem:temporalSupport a owl:DatatypeProperty ; rdfs:domain wsem:OutputVariable ; rdfs:range xsd:string ;
     rdfs:comment "native step, daily, hourly envelope, whole period, per course..."@en .
-ws:additive a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:boolean ;
+wsem:additive a owl:DatatypeProperty ; rdfs:domain wsem:OutputVariable ; rdfs:range xsd:boolean ;
     rdfs:comment "True if values may be summed over time steps (energy), false otherwise (power, ratios, doses per course)."@en .
 
 # Relational properties used by the domain extensions (condition B3).
-ws:derivedFrom a owl:ObjectProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:ParameterDefinition ;
+wsem:derivedFrom a owl:ObjectProperty ; rdfs:domain wsem:ParameterDefinition ; rdfs:range wsem:ParameterDefinition ;
     rdfs:comment "The quantity is computed from others; an inconsistent stated value is a conflict."@en .
-ws:convertibleTo a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range ws:ParameterDefinition ;
-    rdfs:comment "Two expressions of one physical state related by the stated ws:derivationRule (e.g. S0 = RH_fraction - 1). Not a numerical equality and not a unit change alone."@en .
-ws:dependsOnReference a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:ParameterDefinition ;
+wsem:convertibleTo a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:domain wsem:ParameterDefinition ; rdfs:range wsem:ParameterDefinition ;
+    rdfs:comment "Two expressions of one physical state related by the stated wsem:derivationRule (e.g. S0 = RH_fraction - 1). Not a numerical equality and not a unit change alone."@en .
+wsem:dependsOnReference a owl:ObjectProperty ; rdfs:domain wsem:OutputVariable ; rdfs:range wsem:ParameterDefinition ;
     rdfs:comment "Output meaningful only with the stated reference parameter."@en .
-ws:invalidates a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:OutputVariable ;
+wsem:invalidates a owl:ObjectProperty ; rdfs:domain wsem:OutputVariable ; rdfs:range wsem:OutputVariable ;
     rdfs:comment "Direction: boolean backend flag -> output. When the flag (subject) is true, the object output must not be reported as a result."@en .
-ws:derivationRule a owl:DatatypeProperty ; rdfs:range xsd:string .
-ws:derivedFromOutput a owl:ObjectProperty ; rdfs:domain ws:OutputVariable ; rdfs:range ws:OutputVariable ;
+wsem:derivationRule a owl:DatatypeProperty ; rdfs:range xsd:string .
+wsem:derivedFromOutput a owl:ObjectProperty ; rdfs:domain wsem:OutputVariable ; rdfs:range wsem:OutputVariable ;
     rdfs:comment "Output obtained from another output by an exact conversion (unit change, x100...)."@en .
-ws:codeDefault a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ;
+wsem:codeDefault a owl:DatatypeProperty ; rdfs:domain wsem:ParameterDefinition ;
     rdfs:comment "Default set by the backend code; stated, never treated as user data."@en .
-ws:validityFlag a owl:DatatypeProperty ; rdfs:domain ws:OutputVariable ; rdfs:range xsd:string .
-ws:groupInstance a owl:DatatypeProperty ; rdfs:domain ws:Parameter ; rdfs:range xsd:string ;
+wsem:validityFlag a owl:DatatypeProperty ; rdfs:domain wsem:OutputVariable ; rdfs:range xsd:string .
+wsem:groupInstance a owl:DatatypeProperty ; rdfs:domain wsem:Parameter ; rdfs:range xsd:string ;
     rdfs:comment "Identifier of the course, aerosol mode or other repeated group a record belongs to; checks never mix instances."@en .
-ws:requiresInstance a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range xsd:boolean ;
-    rdfs:comment "Records of this parameter must carry ws:groupInstance (repeated course, aerosol mode...)."@en .
-ws:partOfGroup a owl:DatatypeProperty ; rdfs:domain ws:ParameterDefinition ; rdfs:range xsd:string ;
+wsem:requiresInstance a owl:DatatypeProperty ; rdfs:domain wsem:ParameterDefinition ; rdfs:range xsd:boolean ;
+    rdfs:comment "Records of this parameter must carry wsem:groupInstance (repeated course, aerosol mode...)."@en .
+wsem:partOfGroup a owl:DatatypeProperty ; rdfs:domain wsem:ParameterDefinition ; rdfs:range xsd:string ;
     rdfs:comment "Parameters that must be supplied together."@en .
 
 ########################################################################
 # 7. Controlled individuals
 ########################################################################
 
-ws:AuthorityCode a ws:BoundAuthority ; rdfs:label "enforced by backend code"@en .
-ws:AuthorityUI a ws:BoundAuthority ; rdfs:label "user-interface limit, not physical"@en .
-ws:AuthorityPolicy a ws:BoundAuthority ; rdfs:label "experimental policy of the study"@en .
-ws:AuthorityDomain a ws:BoundAuthority ; rdfs:label "domain literature or expert"@en .
+wsem:AuthorityCode a wsem:BoundAuthority ; rdfs:label "enforced by backend code"@en .
+wsem:AuthorityUI a wsem:BoundAuthority ; rdfs:label "user-interface limit, not physical"@en .
+wsem:AuthorityPolicy a wsem:BoundAuthority ; rdfs:label "experimental policy of the study"@en .
+wsem:AuthorityDomain a wsem:BoundAuthority ; rdfs:label "domain literature or expert"@en .
 
-ws:SyntheticSimulation a ws:DataOrigin ; rdfs:label "synthetic simulation"@en .
-ws:Measured a ws:DataOrigin ; rdfs:label "measured"@en .
-ws:Assumed a ws:DataOrigin ; rdfs:label "assumed"@en .
+wsem:SyntheticSimulation a wsem:DataOrigin ; rdfs:label "synthetic simulation"@en .
+wsem:Measured a wsem:DataOrigin ; rdfs:label "measured"@en .
+wsem:Assumed a wsem:DataOrigin ; rdfs:label "assumed"@en .
 
-ws:AggNativeStep a ws:Aggregation ; rdfs:label "value at native time step"@en .
-ws:AggSum a ws:Aggregation ; rdfs:label "sum over steps"@en .
-ws:AggMean a ws:Aggregation ; rdfs:label "mean over steps"@en .
-ws:AggMax a ws:Aggregation ; rdfs:label "maximum over steps"@en .
-ws:AggQuantileAcrossRuns a ws:Aggregation ; rdfs:label "empirical quantile across realisations, not a confidence interval"@en .
-ws:AggExtrapolation a ws:Aggregation ; rdfs:label "linear extrapolation (e.g. 365/n_days), not an observed year"@en .
-ws:AggPerCourse a ws:Aggregation ; rdfs:label "per treatment course"@en .
+wsem:AggNativeStep a wsem:Aggregation ; rdfs:label "value at native time step"@en .
+wsem:AggSum a wsem:Aggregation ; rdfs:label "sum over steps"@en .
+wsem:AggMean a wsem:Aggregation ; rdfs:label "mean over steps"@en .
+wsem:AggMax a wsem:Aggregation ; rdfs:label "maximum over steps"@en .
+wsem:AggQuantileAcrossRuns a wsem:Aggregation ; rdfs:label "empirical quantile across realisations, not a confidence interval"@en .
+wsem:AggExtrapolation a wsem:Aggregation ; rdfs:label "linear extrapolation (e.g. 365/n_days), not an observed year"@en .
+wsem:AggPerCourse a wsem:Aggregation ; rdfs:label "per treatment course"@en .
 
 # Ordinal qualitative scale shared by all software. Values are given only by
-# parameter-specific ws:QualifierMapping instances in each contract.
-ws:QualitativeScale a skos:ConceptScheme ; skos:prefLabel "Échelle qualitative commune"@fr, "Shared qualitative scale"@en .
-ws:LevelVeryLow  a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "très faible"@fr, "very low"@en ; skos:altLabel "très peu"@fr ; ws:rank 1 .
-ws:LevelLow      a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "faible"@fr, "low"@en ; skos:altLabel "peu"@fr, "court"@fr ; ws:rank 2 .
-ws:LevelTypical  a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "courant"@fr, "typical"@en ; skos:altLabel "moyen"@fr, "normal"@fr ; ws:rank 3 .
-ws:LevelHigh     a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "élevé"@fr, "high"@en ; skos:altLabel "beaucoup"@fr, "fort"@fr, "long"@fr ; ws:rank 4 .
-ws:LevelVeryHigh a ws:QualitativeTerm ; skos:inScheme ws:QualitativeScale ; skos:prefLabel "très élevé"@fr, "very high"@en ; skos:altLabel "énormément"@fr, "très fort"@fr ; ws:rank 5 .
+# parameter-specific wsem:QualifierMapping instances in each contract.
+wsem:QualitativeScale a skos:ConceptScheme ; skos:prefLabel "Échelle qualitative commune"@fr, "Shared qualitative scale"@en .
+wsem:LevelVeryLow  a wsem:QualitativeTerm ; skos:inScheme wsem:QualitativeScale ; skos:prefLabel "très faible"@fr, "very low"@en ; skos:altLabel "très peu"@fr ; wsem:rank 1 .
+wsem:LevelLow      a wsem:QualitativeTerm ; skos:inScheme wsem:QualitativeScale ; skos:prefLabel "faible"@fr, "low"@en ; skos:altLabel "peu"@fr, "court"@fr ; wsem:rank 2 .
+wsem:LevelTypical  a wsem:QualitativeTerm ; skos:inScheme wsem:QualitativeScale ; skos:prefLabel "courant"@fr, "typical"@en ; skos:altLabel "moyen"@fr, "normal"@fr ; wsem:rank 3 .
+wsem:LevelHigh     a wsem:QualitativeTerm ; skos:inScheme wsem:QualitativeScale ; skos:prefLabel "élevé"@fr, "high"@en ; skos:altLabel "beaucoup"@fr, "fort"@fr, "long"@fr ; wsem:rank 4 .
+wsem:LevelVeryHigh a wsem:QualitativeTerm ; skos:inScheme wsem:QualitativeScale ; skos:prefLabel "très élevé"@fr, "very high"@en ; skos:altLabel "énormément"@fr, "très fort"@fr ; wsem:rank 5 .
 
-ws:rank a owl:DatatypeProperty ; rdfs:domain ws:QualitativeTerm ; rdfs:range xsd:integer .
+wsem:rank a owl:DatatypeProperty ; rdfs:domain wsem:QualitativeTerm ; rdfs:range xsd:integer .
 
 ########################################################################
 # 8. Software instances (identity and task profiles only; full parameter
 #    definitions are exported from each descriptor)
 ########################################################################
 
-ws:TLS a ws:Software ;
+wsem:TLS a wsem:Software ;
     rdfs:label "Tunnel Load Simulator" ;
-    ws:repository "https://github.com/cyrilvoyant/tunnel-load-simulator"^^xsd:anyURI ;
-    ws:pinnedRevision "748e053e129669cf3e896d381e3c0ac01c763edd" ;
-    ws:conceptDOI "10.5281/zenodo.20080042" ;
-    ws:hasContract ws:TLSContract .
+    wsem:repository "https://github.com/cyrilvoyant/tunnel-load-simulator"^^xsd:anyURI ;
+    wsem:pinnedRevision "748e053e129669cf3e896d381e3c0ac01c763edd" ;
+    wsem:conceptDOI "10.5281/zenodo.20080042" ;
+    wsem:hasContract wsem:TLSContract .
 
-ws:TLSContract a ws:Contract ;
-    ws:supportsTask ws:TaskTunnelDemand ;
-    ws:excludesTask ws:TaskTunnelCertification ;
-    ws:declaresValidityLimit ws:LimitNoCalibration .
+wsem:TLSContract a wsem:Contract ;
+    wsem:supportsTask wsem:TaskTunnelDemand ;
+    wsem:excludesTask wsem:TaskTunnelCertification ;
+    wsem:declaresValidityLimit wsem:LimitNoCalibration .
 
-ws:TaskTunnelDemand a ws:TaskProfile ;
+wsem:TaskTunnelDemand a wsem:TaskProfile ;
     rdfs:label "Estimate electricity demand of a road tunnel under stated assumptions"@en .
-ws:TaskTunnelCertification a ws:TaskProfile ;
+wsem:TaskTunnelCertification a wsem:TaskProfile ;
     rdfs:label "Certify design values or predict consumption of a real tunnel"@en .
-ws:LimitNoCalibration a ws:ValidityLimit ;
+wsem:LimitNoCalibration a wsem:ValidityLimit ;
     rdfs:label "Synthetic first-order model, not calibrated against measured tunnels"@en .
 
-ws:LQLEquiv a ws:Software ;
+wsem:LQLEquiv a wsem:Software ;
     rdfs:label "LQL-Equiv" ;
-    ws:repository "https://github.com/cyrilvoyant/LQL-Equiv-web"^^xsd:anyURI ;
-    ws:pinnedRevision "dfc9a338205b8864b8e3470c4ae245b019e88844" ;
-    ws:conceptDOI "10.5281/zenodo.21948623" ;
-    ws:hasContract ws:LQLContract .
+    wsem:repository "https://github.com/cyrilvoyant/LQL-Equiv-web"^^xsd:anyURI ;
+    wsem:pinnedRevision "dfc9a338205b8864b8e3470c4ae245b019e88844" ;
+    wsem:conceptDOI "10.5281/zenodo.21948623" ;
+    wsem:hasContract wsem:LQLContract .
 
-ws:LQLContract a ws:Contract ;
-    ws:supportsTask ws:TaskFractionationEquivalence ;
-    ws:excludesTask ws:TaskPatientDecision ;
-    ws:declaresValidityLimit ws:LimitNotMedicalDevice .
+wsem:LQLContract a wsem:Contract ;
+    wsem:supportsTask wsem:TaskFractionationEquivalence ;
+    wsem:excludesTask wsem:TaskPatientDecision ;
+    wsem:declaresValidityLimit wsem:LimitNotMedicalDevice .
 
-ws:TaskFractionationEquivalence a ws:TaskProfile ;
+wsem:TaskFractionationEquivalence a wsem:TaskProfile ;
     rdfs:label "Compare fractionation schedules (BED, EQD2, NTCP, TCP) for research and education"@en .
-ws:TaskPatientDecision a ws:TaskProfile ;
+wsem:TaskPatientDecision a wsem:TaskProfile ;
     rdfs:label "Prescribe, modify or validate treatment for an individual patient"@en .
-ws:LimitNotMedicalDevice a ws:ValidityLimit ;
+wsem:LimitNotMedicalDevice a wsem:ValidityLimit ;
     rdfs:label "Research and education software; not a medical device"@en .
 
-ws:Pyrcel a ws:Software ;
+wsem:Pyrcel a wsem:Software ;
     rdfs:label "pyrcel" ;
-    ws:repository "https://github.com/darothen/pyrcel"^^xsd:anyURI ;
-    ws:pinnedRevision "977e9094644ec4a17d658d657094651928591c89" ;
+    wsem:repository "https://github.com/darothen/pyrcel"^^xsd:anyURI ;
+    wsem:pinnedRevision "977e9094644ec4a17d658d657094651928591c89" ;
     rdfs:comment "Version 2.0.0, BSD-3-Clause, used unmodified."@en ;
-    ws:hasContract ws:PyrcelContract .
+    wsem:hasContract wsem:PyrcelContract .
 
-ws:PyrcelContract a ws:Contract ;
-    ws:supportsTask ws:TaskParcelActivation ;
-    ws:excludesTask ws:TaskWeatherForecast ;
-    ws:declaresValidityLimit ws:LimitAdiabaticParcel .
+wsem:PyrcelContract a wsem:Contract ;
+    wsem:supportsTask wsem:TaskParcelActivation ;
+    wsem:excludesTask wsem:TaskWeatherForecast ;
+    wsem:declaresValidityLimit wsem:LimitAdiabaticParcel .
 
-ws:TaskParcelActivation a ws:TaskProfile ;
+wsem:TaskParcelActivation a wsem:TaskProfile ;
     rdfs:label "Simulate adiabatic parcel ascent and aerosol activation for a stated updraft, initial state and aerosol population"@en .
-ws:TaskWeatherForecast a ws:TaskProfile ;
+wsem:TaskWeatherForecast a wsem:TaskProfile ;
     rdfs:label "Forecast clouds or precipitation for a real place and time"@en .
-ws:LimitAdiabaticParcel a ws:ValidityLimit ;
+wsem:LimitAdiabaticParcel a wsem:ValidityLimit ;
     rdfs:label "Zero-dimensional adiabatic parcel; not a weather forecast or a cloud-resolving simulation"@en .
 
 ########################################################################
@@ -376,175 +378,175 @@ ws:LimitAdiabaticParcel a ws:ValidityLimit ;
 #    from docs/qualificatifs.md. Full tables are exported from descriptors.
 ########################################################################
 
-ws:TLS_traffic_level a ws:ParameterDefinition ;
+wsem:TLS_traffic_level a wsem:ParameterDefinition ;
     skos:prefLabel "Trafic relatif"@fr, "Relative traffic"@en ;
-    ws:apiVariable "TunnelConfig.traffic_level" ;
-    ws:fieldPath "inputs.traffic_level" ;
-    ws:quantityKind qk:Dimensionless ;
-    ws:canonicalUnit unit:UNITLESS ;
+    wsem:apiVariable "TunnelConfig.traffic_level" ;
+    wsem:fieldPath "inputs.traffic_level" ;
+    wsem:quantityKind qk:Dimensionless ;
+    wsem:canonicalUnit unit:UNITLESS ;
     skos:definition "Multiplier of the reference traffic profile; not vehicles per day."@en .
 
-ws:TLSContract ws:declaresParameter ws:TLS_traffic_level .
+wsem:TLSContract wsem:declaresParameter wsem:TLS_traffic_level .
 
-ws:TLS_traffic_low a ws:QualifierMapping ;
-    ws:term ws:LevelLow ; ws:appliesTo ws:TLS_traffic_level ;
-    ws:proposedValue 0.3 ; ws:requiresAcceptance true ;
-    ws:sourceNote "Study convention, not a traffic count." .
-ws:TLS_traffic_typical a ws:QualifierMapping ;
-    ws:term ws:LevelTypical ; ws:appliesTo ws:TLS_traffic_level ;
-    ws:proposedValue 1.0 ; ws:requiresAcceptance true ;
-    ws:sourceNote "Reference level of the backend profile." .
-ws:TLS_traffic_high a ws:QualifierMapping ;
-    ws:term ws:LevelHigh ; ws:appliesTo ws:TLS_traffic_level ;
-    ws:proposedValue 1.5 ; ws:requiresAcceptance true ;
-    ws:sourceNote "Study convention, not a traffic count." .
-ws:TLS_traffic_veryhigh a ws:QualifierMapping ;
-    ws:term ws:LevelVeryHigh ; ws:appliesTo ws:TLS_traffic_level ;
-    ws:proposedValue 2.0 ; ws:requiresAcceptance true ;
-    ws:sourceNote "Study convention, not a traffic count." .
+wsem:TLS_traffic_low a wsem:QualifierMapping ;
+    wsem:term wsem:LevelLow ; wsem:appliesTo wsem:TLS_traffic_level ;
+    wsem:proposedValue 0.3 ; wsem:requiresAcceptance true ;
+    wsem:sourceNote "Study convention, not a traffic count." .
+wsem:TLS_traffic_typical a wsem:QualifierMapping ;
+    wsem:term wsem:LevelTypical ; wsem:appliesTo wsem:TLS_traffic_level ;
+    wsem:proposedValue 1.0 ; wsem:requiresAcceptance true ;
+    wsem:sourceNote "Reference level of the backend profile." .
+wsem:TLS_traffic_high a wsem:QualifierMapping ;
+    wsem:term wsem:LevelHigh ; wsem:appliesTo wsem:TLS_traffic_level ;
+    wsem:proposedValue 1.5 ; wsem:requiresAcceptance true ;
+    wsem:sourceNote "Study convention, not a traffic count." .
+wsem:TLS_traffic_veryhigh a wsem:QualifierMapping ;
+    wsem:term wsem:LevelVeryHigh ; wsem:appliesTo wsem:TLS_traffic_level ;
+    wsem:proposedValue 2.0 ; wsem:requiresAcceptance true ;
+    wsem:sourceNote "Study convention, not a traffic count." .
 
-ws:TLS_lighting_type a ws:ParameterDefinition ;
+wsem:TLS_lighting_type a wsem:ParameterDefinition ;
     skos:prefLabel "Éclairage"@fr ;
-    ws:apiVariable "TunnelConfig.lighting_type" ;
-    ws:fieldPath "inputs.lighting_type" ;
+    wsem:apiVariable "TunnelConfig.lighting_type" ;
+    wsem:fieldPath "inputs.lighting_type" ;
     skos:definition "Lighting technology and control; not an illuminance."@en .
 
-ws:TLS_lighting_intensity_policy a ws:ClarificationPolicy ;
-    ws:appliesTo ws:TLS_lighting_type ;
+wsem:TLS_lighting_intensity_policy a wsem:ClarificationPolicy ;
+    wsem:appliesTo wsem:TLS_lighting_type ;
     rdfs:comment "Intensity words (fortement / faiblement éclairé) have no mapping: TLS has no illuminance parameter. Ask the user."@en .
 
-ws:TLS_specific_energy a ws:OutputVariable ;
+wsem:TLS_specific_energy a wsem:OutputVariable ;
     skos:prefLabel "Énergie spécifique annualisée"@fr ;
-    ws:apiVariable "kpis.specific_kwh_m_year" ;
-    ws:quantityKind qk:Energy ;
-    ws:aggregation ws:AggExtrapolation ;
-    ws:additive false ;
-    ws:temporalSupport "whole period, extrapolated by 365/n_days, per metre of tunnel (all tubes)" ;
-    ws:dataOrigin ws:SyntheticSimulation .
+    wsem:apiVariable "kpis.specific_kwh_m_year" ;
+    wsem:quantityKind qk:Energy ;
+    wsem:aggregation wsem:AggExtrapolation ;
+    wsem:additive false ;
+    wsem:temporalSupport "whole period, extrapolated by 365/n_days, per metre of tunnel (all tubes)" ;
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:TLS_power a ws:OutputVariable ;
+wsem:TLS_power a wsem:OutputVariable ;
     skos:prefLabel "Puissance électrique"@fr ;
-    ws:apiVariable "representative.power_kw" ;
-    ws:quantityKind qk:Power ;
-    ws:canonicalUnit unit:KiloW ;
-    ws:aggregation ws:AggNativeStep ;
-    ws:additive false ;
-    ws:temporalSupport "native step" ;
-    ws:dataOrigin ws:SyntheticSimulation .
+    wsem:apiVariable "representative.power_kw" ;
+    wsem:quantityKind qk:Power ;
+    wsem:canonicalUnit unit:KiloW ;
+    wsem:aggregation wsem:AggNativeStep ;
+    wsem:additive false ;
+    wsem:temporalSupport "native step" ;
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
-ws:TLS_energy_step a ws:OutputVariable ;
+wsem:TLS_energy_step a wsem:OutputVariable ;
     skos:prefLabel "Énergie du pas"@fr ;
-    ws:apiVariable "representative.energy_kwh" ;
-    ws:quantityKind qk:Energy ;
-    ws:canonicalUnit unit:KiloW-HR ;
-    ws:aggregation ws:AggNativeStep ;
-    ws:additive true ;
-    ws:temporalSupport "native step" ;
-    ws:dataOrigin ws:SyntheticSimulation .
+    wsem:apiVariable "representative.energy_kwh" ;
+    wsem:quantityKind qk:Energy ;
+    wsem:canonicalUnit unit:KiloW-HR ;
+    wsem:aggregation wsem:AggNativeStep ;
+    wsem:additive true ;
+    wsem:temporalSupport "native step" ;
+    wsem:dataOrigin wsem:SyntheticSimulation .
 
 # Human-readable labels derived from the term names (FOOPS VOC3); definitions are only given where written.
-ws:accepted rdfs:label "accepted"@en .
-ws:acceptedBy rdfs:label "accepted by"@en .
-ws:additive rdfs:label "additive"@en .
-ws:aggregation rdfs:label "aggregation"@en .
-ws:apiVariable rdfs:label "api variable"@en .
-ws:appliesTo rdfs:label "applies to"@en .
-ws:authority rdfs:label "authority"@en .
-ws:boundKind rdfs:label "bound kind"@en .
-ws:boundValue rdfs:label "bound value"@en .
-ws:canonicalUnit rdfs:label "canonical unit"@en .
-ws:codeDefault rdfs:label "code default"@en .
-ws:concept rdfs:label "concept"@en .
-ws:conceptDOI rdfs:label "concept doi"@en .
-ws:convertibleTo rdfs:label "convertible to"@en .
-ws:dataOrigin rdfs:label "data origin"@en .
-ws:declaresOutput rdfs:label "declares output"@en .
-ws:declaresParameter rdfs:label "declares parameter"@en .
-ws:declaresValidityLimit rdfs:label "declares validity limit"@en .
-ws:dependsOnReference rdfs:label "depends on reference"@en .
-ws:derivationRule rdfs:label "derivation rule"@en .
-ws:derivedFrom rdfs:label "derived from"@en .
-ws:derivedFromOutput rdfs:label "derived from output"@en .
-ws:evidenceText rdfs:label "evidence text"@en .
-ws:excludesTask rdfs:label "excludes task"@en .
-ws:fieldPath rdfs:label "field path"@en .
-ws:followsConvention rdfs:label "follows convention"@en .
-ws:forTask rdfs:label "for task"@en .
-ws:fromRequest rdfs:label "from request"@en .
-ws:groupInstance rdfs:label "group instance"@en .
-ws:hasBound rdfs:label "has bound"@en .
-ws:hasContract rdfs:label "has contract"@en .
-ws:hasExperiment rdfs:label "has experiment"@en .
-ws:hasParameter rdfs:label "has parameter"@en .
-ws:invalidates rdfs:label "invalidates"@en .
-ws:partOfGroup rdfs:label "part of group"@en .
-ws:pinnedRevision rdfs:label "pinned revision"@en .
-ws:producesOutput rdfs:label "produces output"@en .
-ws:proposedValue rdfs:label "proposed value"@en .
-ws:qualifiedBy rdfs:label "qualified by"@en .
-ws:quantityKind rdfs:label "quantity kind"@en .
-ws:rank rdfs:label "rank"@en .
-ws:repository rdfs:label "repository"@en .
-ws:requiresAcceptance rdfs:label "requires acceptance"@en .
-ws:requiresInstance rdfs:label "requires instance"@en .
-ws:requiresParameter rdfs:label "requires parameter"@en .
-ws:sourceNote rdfs:label "source note"@en .
-ws:supportedBy rdfs:label "supported by"@en .
-ws:supportsTask rdfs:label "supports task"@en .
-ws:temporalSupport rdfs:label "temporal support"@en .
-ws:term rdfs:label "term"@en .
-ws:validityFlag rdfs:label "validity flag"@en .
-ws:value rdfs:label "value"@en .
+wsem:accepted rdfs:label "accepted"@en .
+wsem:acceptedBy rdfs:label "accepted by"@en .
+wsem:additive rdfs:label "additive"@en .
+wsem:aggregation rdfs:label "aggregation"@en .
+wsem:apiVariable rdfs:label "api variable"@en .
+wsem:appliesTo rdfs:label "applies to"@en .
+wsem:authority rdfs:label "authority"@en .
+wsem:boundKind rdfs:label "bound kind"@en .
+wsem:boundValue rdfs:label "bound value"@en .
+wsem:canonicalUnit rdfs:label "canonical unit"@en .
+wsem:codeDefault rdfs:label "code default"@en .
+wsem:concept rdfs:label "concept"@en .
+wsem:conceptDOI rdfs:label "concept doi"@en .
+wsem:convertibleTo rdfs:label "convertible to"@en .
+wsem:dataOrigin rdfs:label "data origin"@en .
+wsem:declaresOutput rdfs:label "declares output"@en .
+wsem:declaresParameter rdfs:label "declares parameter"@en .
+wsem:declaresValidityLimit rdfs:label "declares validity limit"@en .
+wsem:dependsOnReference rdfs:label "depends on reference"@en .
+wsem:derivationRule rdfs:label "derivation rule"@en .
+wsem:derivedFrom rdfs:label "derived from"@en .
+wsem:derivedFromOutput rdfs:label "derived from output"@en .
+wsem:evidenceText rdfs:label "evidence text"@en .
+wsem:excludesTask rdfs:label "excludes task"@en .
+wsem:fieldPath rdfs:label "field path"@en .
+wsem:followsConvention rdfs:label "follows convention"@en .
+wsem:forTask rdfs:label "for task"@en .
+wsem:fromRequest rdfs:label "from request"@en .
+wsem:groupInstance rdfs:label "group instance"@en .
+wsem:hasBound rdfs:label "has bound"@en .
+wsem:hasContract rdfs:label "has contract"@en .
+wsem:hasExperiment rdfs:label "has experiment"@en .
+wsem:hasParameter rdfs:label "has parameter"@en .
+wsem:invalidates rdfs:label "invalidates"@en .
+wsem:partOfGroup rdfs:label "part of group"@en .
+wsem:pinnedRevision rdfs:label "pinned revision"@en .
+wsem:producesOutput rdfs:label "produces output"@en .
+wsem:proposedValue rdfs:label "proposed value"@en .
+wsem:qualifiedBy rdfs:label "qualified by"@en .
+wsem:quantityKind rdfs:label "quantity kind"@en .
+wsem:rank rdfs:label "rank"@en .
+wsem:repository rdfs:label "repository"@en .
+wsem:requiresAcceptance rdfs:label "requires acceptance"@en .
+wsem:requiresInstance rdfs:label "requires instance"@en .
+wsem:requiresParameter rdfs:label "requires parameter"@en .
+wsem:sourceNote rdfs:label "source note"@en .
+wsem:supportedBy rdfs:label "supported by"@en .
+wsem:supportsTask rdfs:label "supports task"@en .
+wsem:temporalSupport rdfs:label "temporal support"@en .
+wsem:term rdfs:label "term"@en .
+wsem:validityFlag rdfs:label "validity flag"@en .
+wsem:value rdfs:label "value"@en .
 
 ########################################################################
 # Definitions of the remaining core terms (FOOPS VOC4), written from their use in descriptors, scenarios and shapes.
 ########################################################################
-ws:Aggregation rdfs:comment "How an output value summarises its native values: per step, per course, sum, mean, median across realisations or maximum. Fixes which values can be added or compared."@en .
-ws:BoundAuthority rdfs:comment "Origin of a bound: the backend code itself, a profile policy of the contract, or a scientific source. A code bound cannot be relaxed by the contract."@en .
-ws:DataOrigin rdfs:comment "Nature of the data behind a value or output, e.g. synthetic simulation, user statement or measurement. Simulated outputs are never presented as measurements."@en .
-ws:Execution rdfs:comment "Controlled run of a pinned backend on a validated scenario, producing simulation outputs and a manifest."@en .
-ws:Request rdfs:comment "Natural-language request of a user, kept verbatim as the source of the evidence spans that support provided values."@en .
-ws:Scenario rdfs:comment "Machine-readable configuration built from a request: task, parameters with origin and acceptance, and experiment settings. Only a validated scenario is executed."@en .
-ws:SimulationOutput rdfs:comment "Result produced by an execution (series, indicators, flags), linked to its scenario, software revision and qualification."@en .
-ws:UnknownValue rdfs:comment "Parameter whose value is neither given, derived, nor accepted; it blocks execution and leads to a clarification."@en .
-ws:UserValue rdfs:comment "Parameter value stated in the request, or an exact unit conversion of a stated value, supported by evidence from the request."@en .
-ws:Validation rdfs:comment "Activity checking a scenario against the contract before execution: types, units, bounds, complete groups, acceptance and relational shapes."@en .
-ws:accepted rdfs:comment "True when the user explicitly accepted a proposed default or convention; an unaccepted proposal cannot be executed."@en .
-ws:boundValue rdfs:comment "Numerical limit of a bound, in the canonical unit of the parameter."@en .
-ws:conceptDOI rdfs:comment "DOI that resolves to all versions of an archived software or dataset (Zenodo concept DOI)."@en .
-ws:derivationRule rdfs:comment "Documented rule linking a quantity to others (e.g. total dose = dose per fraction x fractions). Documentary; executed checks are the SHACL shapes and the Python gate."@en .
-ws:evidenceText rdfs:comment "Exact span of the request that supports a value; quoted, never paraphrased."@en .
-ws:fieldPath rdfs:comment "Path of the field in the published scenario JSON (e.g. inputs.length_m, courses[k].dose_per_fraction)."@en .
-ws:pinnedRevision rdfs:comment "Exact source revision (commit or tag) of the backend used for execution."@en .
-ws:proposedValue rdfs:comment "Numerical value that a qualitative convention proposes for a parameter, in its canonical unit, pending acceptance."@en .
-ws:rank rdfs:comment "Position of a qualitative term on the shared ordinal scale (1 very low to 5 very high); carries no number by itself."@en .
-ws:repository rdfs:comment "URL of the original source repository of a software."@en .
-ws:requiresAcceptance rdfs:comment "True when a convention may only be proposed and must be accepted by the user before execution."@en .
-ws:sourceNote rdfs:comment "Short statement of the source or rationale of a convention, default or bound."@en .
-ws:validityFlag rdfs:comment "Name of the backend flag that marks an output as invalid or saturated (e.g. Result.oar_total_valid); flagged values are not reported as valid results."@en .
-ws:value rdfs:comment "Value of a parameter in a scenario, expressed in the canonical unit of its definition."@en .
-ws:acceptedBy rdfs:comment "Links a hypothesis to the explicit acceptance that allows its use in execution."@en .
-ws:aggregation rdfs:comment "Links an output variable to the aggregation that defines it."@en .
-ws:appliesTo rdfs:comment "Links a qualifier mapping or clarification policy to the parameter it concerns."@en .
-ws:authority rdfs:comment "Links a bound to its authority (code, profile policy or source)."@en .
-ws:concept rdfs:comment "Links a parameter value in a scenario to the parameter definition that gives its meaning, unit and bounds."@en .
-ws:dataOrigin rdfs:comment "Links a value or output to the nature of its data (simulated, stated, measured)."@en .
-ws:declaresOutput rdfs:comment "Links a contract to an output variable it publishes with quantity, unit and aggregation."@en .
-ws:declaresParameter rdfs:comment "Links a contract to a parameter definition it publishes."@en .
-ws:declaresValidityLimit rdfs:comment "Links a contract to a declared limit of validity or use (e.g. not a medical device)."@en .
-ws:excludesTask rdfs:comment "Links a contract to a task profile it explicitly refuses (e.g. patient treatment decision)."@en .
-ws:followsConvention rdfs:comment "Links a hypothesis to the qualitative convention it applies."@en .
-ws:forTask rdfs:comment "Links a scenario to the supported task profile it instantiates."@en .
-ws:fromRequest rdfs:comment "Links evidence to the request it is quoted from."@en .
-ws:hasBound rdfs:comment "Links a parameter definition to one of its bounds."@en .
-ws:hasContract rdfs:comment "Links a software to its semantic contract."@en .
-ws:hasExperiment rdfs:comment "Links a scenario to its experiment settings (period, step, realisations, seed or solver settings)."@en .
-ws:hasParameter rdfs:comment "Links a scenario to one of its parameter values."@en .
-ws:producesOutput rdfs:comment "Links a task profile to an output variable it produces."@en .
-ws:qualifiedBy rdfs:comment "Links a simulation output to its qualification (quantity, unit, support, origin, limits)."@en .
-ws:supportedBy rdfs:comment "Links a user value to the request evidence that supports it."@en .
-ws:supportsTask rdfs:comment "Links a contract to a task profile it supports."@en .
-ws:term rdfs:comment "Links a qualifier mapping to the qualitative term of the shared scale that it interprets."@en .
+wsem:Aggregation rdfs:comment "How an output value summarises its native values: per step, per course, sum, mean, median across realisations or maximum. Fixes which values can be added or compared."@en .
+wsem:BoundAuthority rdfs:comment "Origin of a bound: the backend code itself, a profile policy of the contract, or a scientific source. A code bound cannot be relaxed by the contract."@en .
+wsem:DataOrigin rdfs:comment "Nature of the data behind a value or output, e.g. synthetic simulation, user statement or measurement. Simulated outputs are never presented as measurements."@en .
+wsem:Execution rdfs:comment "Controlled run of a pinned backend on a validated scenario, producing simulation outputs and a manifest."@en .
+wsem:Request rdfs:comment "Natural-language request of a user, kept verbatim as the source of the evidence spans that support provided values."@en .
+wsem:Scenario rdfs:comment "Machine-readable configuration built from a request: task, parameters with origin and acceptance, and experiment settings. Only a validated scenario is executed."@en .
+wsem:SimulationOutput rdfs:comment "Result produced by an execution (series, indicators, flags), linked to its scenario, software revision and qualification."@en .
+wsem:UnknownValue rdfs:comment "Parameter whose value is neither given, derived, nor accepted; it blocks execution and leads to a clarification."@en .
+wsem:UserValue rdfs:comment "Parameter value stated in the request, or an exact unit conversion of a stated value, supported by evidence from the request."@en .
+wsem:Validation rdfs:comment "Activity checking a scenario against the contract before execution: types, units, bounds, complete groups, acceptance and relational shapes."@en .
+wsem:accepted rdfs:comment "True when the user explicitly accepted a proposed default or convention; an unaccepted proposal cannot be executed."@en .
+wsem:boundValue rdfs:comment "Numerical limit of a bound, in the canonical unit of the parameter."@en .
+wsem:conceptDOI rdfs:comment "DOI that resolves to all versions of an archived software or dataset (Zenodo concept DOI)."@en .
+wsem:derivationRule rdfs:comment "Documented rule linking a quantity to others (e.g. total dose = dose per fraction x fractions). Documentary; executed checks are the SHACL shapes and the Python gate."@en .
+wsem:evidenceText rdfs:comment "Exact span of the request that supports a value; quoted, never paraphrased."@en .
+wsem:fieldPath rdfs:comment "Path of the field in the published scenario JSON (e.g. inputs.length_m, courses[k].dose_per_fraction)."@en .
+wsem:pinnedRevision rdfs:comment "Exact source revision (commit or tag) of the backend used for execution."@en .
+wsem:proposedValue rdfs:comment "Numerical value that a qualitative convention proposes for a parameter, in its canonical unit, pending acceptance."@en .
+wsem:rank rdfs:comment "Position of a qualitative term on the shared ordinal scale (1 very low to 5 very high); carries no number by itself."@en .
+wsem:repository rdfs:comment "URL of the original source repository of a software."@en .
+wsem:requiresAcceptance rdfs:comment "True when a convention may only be proposed and must be accepted by the user before execution."@en .
+wsem:sourceNote rdfs:comment "Short statement of the source or rationale of a convention, default or bound."@en .
+wsem:validityFlag rdfs:comment "Name of the backend flag that marks an output as invalid or saturated (e.g. Result.oar_total_valid); flagged values are not reported as valid results."@en .
+wsem:value rdfs:comment "Value of a parameter in a scenario, expressed in the canonical unit of its definition."@en .
+wsem:acceptedBy rdfs:comment "Links a hypothesis to the explicit acceptance that allows its use in execution."@en .
+wsem:aggregation rdfs:comment "Links an output variable to the aggregation that defines it."@en .
+wsem:appliesTo rdfs:comment "Links a qualifier mapping or clarification policy to the parameter it concerns."@en .
+wsem:authority rdfs:comment "Links a bound to its authority (code, profile policy or source)."@en .
+wsem:concept rdfs:comment "Links a parameter value in a scenario to the parameter definition that gives its meaning, unit and bounds."@en .
+wsem:dataOrigin rdfs:comment "Links a value or output to the nature of its data (simulated, stated, measured)."@en .
+wsem:declaresOutput rdfs:comment "Links a contract to an output variable it publishes with quantity, unit and aggregation."@en .
+wsem:declaresParameter rdfs:comment "Links a contract to a parameter definition it publishes."@en .
+wsem:declaresValidityLimit rdfs:comment "Links a contract to a declared limit of validity or use (e.g. not a medical device)."@en .
+wsem:excludesTask rdfs:comment "Links a contract to a task profile it explicitly refuses (e.g. patient treatment decision)."@en .
+wsem:followsConvention rdfs:comment "Links a hypothesis to the qualitative convention it applies."@en .
+wsem:forTask rdfs:comment "Links a scenario to the supported task profile it instantiates."@en .
+wsem:fromRequest rdfs:comment "Links evidence to the request it is quoted from."@en .
+wsem:hasBound rdfs:comment "Links a parameter definition to one of its bounds."@en .
+wsem:hasContract rdfs:comment "Links a software to its semantic contract."@en .
+wsem:hasExperiment rdfs:comment "Links a scenario to its experiment settings (period, step, realisations, seed or solver settings)."@en .
+wsem:hasParameter rdfs:comment "Links a scenario to one of its parameter values."@en .
+wsem:producesOutput rdfs:comment "Links a task profile to an output variable it produces."@en .
+wsem:qualifiedBy rdfs:comment "Links a simulation output to its qualification (quantity, unit, support, origin, limits)."@en .
+wsem:supportedBy rdfs:comment "Links a user value to the request evidence that supports it."@en .
+wsem:supportsTask rdfs:comment "Links a contract to a task profile it supports."@en .
+wsem:term rdfs:comment "Links a qualifier mapping to the qualitative term of the shared scale that it interprets."@en .
 
 
 # ---- domain extension ----
@@ -552,120 +554,120 @@ ws:term rdfs:comment "Links a qualifier mapping to the qualitative term of the s
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
-@prefix ws: <https://w3id.org/websemantic/ns#> .
+@prefix wsem: <https://w3id.org/websemantic/ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-ws:ComparisonActivity a rdfs:Class ;
+wsem:ComparisonActivity a rdfs:Class ;
     rdfs:subClassOf prov:Activity .
 
-ws:Hypothesis a rdfs:Class ;
-    rdfs:subClassOf ws:Parameter .
+wsem:Hypothesis a rdfs:Class ;
+    rdfs:subClassOf wsem:Parameter .
 
-ws:Intent a rdfs:Class .
+wsem:Intent a rdfs:Class .
 
-ws:OperationalSetting a rdfs:Class ;
-    rdfs:subClassOf ws:Parameter .
+wsem:OperationalSetting a rdfs:Class ;
+    rdfs:subClassOf wsem:Parameter .
 
-ws:Parameter a rdfs:Class ;
+wsem:Parameter a rdfs:Class ;
     rdfs:subClassOf prov:Entity .
 
-ws:Scenario a rdfs:Class ;
+wsem:Scenario a rdfs:Class ;
     rdfs:subClassOf prov:Entity .
 
-ws:SimulationOutput a rdfs:Class ;
+wsem:SimulationOutput a rdfs:Class ;
     rdfs:subClassOf prov:Entity .
 
-ws:UserValue a rdfs:Class ;
-    rdfs:subClassOf ws:Parameter .
+wsem:UserValue a rdfs:Class ;
+    rdfs:subClassOf wsem:Parameter .
 
-ws:accepted a rdf:Property ;
+wsem:accepted a rdf:Property ;
     rdfs:comment "Acceptation explicite de l'hypothèse."@fr ;
-    rdfs:domain ws:Parameter ;
+    rdfs:domain wsem:Parameter ;
     rdfs:range rdfs:Literal .
 
-ws:aggregation a rdf:Property ;
+wsem:aggregation a rdf:Property ;
     rdfs:comment "Méthode de regroupement de la table calculée."@fr .
 
-ws:allowedValue a rdf:Property ;
+wsem:allowedValue a rdf:Property ;
     rdfs:comment "Valeur catégorielle autorisée."@fr .
 
-ws:boundAuthority a rdf:Property ;
+wsem:boundAuthority a rdf:Property ;
     rdfs:comment "Origine déclarée de la borne ; code ou politique du prototype."@fr .
 
-ws:canonicalUnitToken a rdf:Property ;
+wsem:canonicalUnitToken a rdf:Property ;
     rdfs:comment "Identifiant d'unité utilisé par le contrôle Python."@fr .
 
-ws:concept a rdf:Property ;
+wsem:concept a rdf:Property ;
     rdfs:comment "Relie un enregistrement à la définition du paramètre."@fr ;
     rdfs:domain rdfs:Resource ;
     rdfs:range skos:Concept .
 
-ws:dataType a rdf:Property ;
+wsem:dataType a rdf:Property ;
     rdfs:comment "Type attendu par le contrôle déterministe."@fr .
 
-ws:defaultAuthorization a rdf:Property ;
+wsem:defaultAuthorization a rdf:Property ;
     rdfs:comment "Source de l’autorisation du défaut technique fixe."@fr .
 
-ws:defaultValue a rdf:Property ;
+wsem:defaultValue a rdf:Property ;
     rdfs:comment "Proposition du profil ; jamais acceptée automatiquement par le graphe."@fr .
 
-ws:evidence a rdf:Property ;
+wsem:evidence a rdf:Property ;
     rdfs:comment "Extrait exact de la demande ; présence ne prouve pas la justesse sémantique."@fr .
 
-ws:fieldPath a rdf:Property ;
+wsem:fieldPath a rdf:Property ;
     rdfs:comment "Chemin exact inputs.nom ou experiment.nom."@fr .
 
-ws:hasColumn a rdf:Property ;
+wsem:hasColumn a rdf:Property ;
     rdfs:comment "Colonne d'une table calculée."@fr .
 
-ws:hasParameter a rdf:Property ;
+wsem:hasParameter a rdf:Property ;
     rdfs:comment "Relie un scénario à ses enregistrements de paramètres."@fr ;
-    rdfs:domain ws:Scenario ;
-    rdfs:range ws:Parameter .
+    rdfs:domain wsem:Scenario ;
+    rdfs:range wsem:Parameter .
 
-ws:implementationReference a rdf:Property ;
+wsem:implementationReference a rdf:Property ;
     rdfs:comment "Fonction du backend où le paramètre est utilisé."@fr .
 
-ws:maximum a rdf:Property ;
+wsem:maximum a rdf:Property ;
     rdfs:comment "Borne maximale incluse."@fr .
 
-ws:maximumExclusive a rdf:Property ;
+wsem:maximumExclusive a rdf:Property ;
     rdfs:comment "Borne maximale exclue."@fr .
 
-ws:meaning a rdf:Property ;
+wsem:meaning a rdf:Property ;
     rdfs:comment "Sens scientifique et limites de la quantité."@fr .
 
-ws:minimum a rdf:Property ;
+wsem:minimum a rdf:Property ;
     rdfs:comment "Borne minimale incluse."@fr .
 
-ws:minimumExclusive a rdf:Property ;
+wsem:minimumExclusive a rdf:Property ;
     rdfs:comment "Borne minimale exclue."@fr .
 
-ws:modelComponent a rdf:Property ;
+wsem:modelComponent a rdf:Property ;
     rdfs:comment "Composante du modèle à laquelle appartient le paramètre."@fr .
 
-ws:operationalDefault a rdf:Property ;
+wsem:operationalDefault a rdf:Property ;
     rdfs:comment "Réglage technique préautorisé par la politique utilisateur, sans hypothèse physique nouvelle."@fr .
 
-ws:origin a rdf:Property ;
+wsem:origin a rdf:Property ;
     rdfs:comment "Origine : provided, default, assumption ou missing."@fr .
 
-ws:quantity a rdf:Property ;
+wsem:quantity a rdf:Property ;
     rdfs:comment "Nature de la quantité : énergie, puissance, indice, identifiant, etc."@fr .
 
-ws:repository a rdf:Property ;
+wsem:repository a rdf:Property ;
     rdfs:comment "Dépôt source du logiciel."@fr .
 
-ws:request a rdf:Property ;
+wsem:request a rdf:Property ;
     rdfs:comment "Demande ayant produit la configuration."@fr .
 
-ws:requiresIndicator a rdf:Property ;
+wsem:requiresIndicator a rdf:Property ;
     rdfs:comment "Indicateur associé à l'intention."@fr .
 
-ws:revision a rdf:Property ;
+wsem:revision a rdf:Property ;
     rdfs:comment "Révision du logiciel effectivement exécuté."@fr .
 
-ws:task a rdf:Property ;
+wsem:task a rdf:Property ;
     rdfs:comment "Tâche déclarée du scénario."@fr .
 
 <https://w3id.org/websemantic/ns#tls/accident_probability_per_day> a skos:Concept ;
@@ -676,23 +678,23 @@ ws:task a rdf:Property ;
     skos:notation "inputs.accident_probability_per_day" ;
     skos:prefLabel "Probabilité d'accident"@fr ;
     skos:scopeNote "Ce n’est pas une fréquence d’accident par véhicule ni une statistique directement déduite de BAAC."@fr ;
-    ws:boundAuthority "code" ;
-    ws:canonicalUnitToken "unit:UNITLESS" ;
-    ws:dataType "float" ;
-    ws:defaultValue 1.5e-02 ;
-    ws:fieldPath "inputs.accident_probability_per_day" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:maximum 1 ;
-    ws:minimum 0 ;
-    ws:modelComponent "stochastic" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"probabilité d’accident courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.015}, \"faible\": {\"aliases\": [\"faible probabilité d’accident\", \"accidents rares\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.00375}, \"très élevé\": {\"aliases\": [\"très forte probabilité d’accident\", \"accidents très fréquents\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte probabilité d’accident\", \"accidents fréquents\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 0.2}"^^rdf:JSON ;
-    ws:quantity "daily_event_probability" ;
-    ws:unitAlias "1",
+    wsem:boundAuthority "code" ;
+    wsem:canonicalUnitToken "unit:UNITLESS" ;
+    wsem:dataType "float" ;
+    wsem:defaultValue 1.5e-02 ;
+    wsem:fieldPath "inputs.accident_probability_per_day" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:maximum 1 ;
+    wsem:minimum 0 ;
+    wsem:modelComponent "stochastic" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"probabilité d’accident courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.015}, \"faible\": {\"aliases\": [\"faible probabilité d’accident\", \"accidents rares\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.00375}, \"très élevé\": {\"aliases\": [\"très forte probabilité d’accident\", \"accidents très fréquents\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte probabilité d’accident\", \"accidents fréquents\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 0.2}"^^rdf:JSON ;
+    wsem:quantity "daily_event_probability" ;
+    wsem:unitAlias "1",
         "UNITLESS",
         "dimensionless",
         "sans dimension",
         "unit:NUM" ;
-    ws:unitSymbol "1" .
+    wsem:unitSymbol "1" .
 
 <https://w3id.org/websemantic/ns#tls/accident_sensitivity> a skos:Concept ;
     skos:altLabel "sensibilité aux accidents"@fr ;
@@ -702,20 +704,20 @@ ws:task a rdf:Property ;
     skos:notation "inputs.accident_sensitivity" ;
     skos:prefLabel "Sensibilité accidents"@fr ;
     skos:scopeNote "Ce paramètre ne représente ni la gravité ni le coût énergétique complet d’un accident réel."@fr ;
-    ws:canonicalUnitToken "unit:UNITLESS" ;
-    ws:dataType "float" ;
-    ws:defaultValue 7.5e-01 ;
-    ws:fieldPath "inputs.accident_sensitivity" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:modelComponent "ventilation" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"sensibilité aux accidents courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.75}, \"faible\": {\"aliases\": [\"faible sensibilité aux accidents\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.1875}, \"très élevé\": {\"aliases\": [\"très forte sensibilité aux accidents\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte sensibilité aux accidents\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 2.0}"^^rdf:JSON ;
-    ws:quantity "dimensionless_coefficient" ;
-    ws:unitAlias "1",
+    wsem:canonicalUnitToken "unit:UNITLESS" ;
+    wsem:dataType "float" ;
+    wsem:defaultValue 7.5e-01 ;
+    wsem:fieldPath "inputs.accident_sensitivity" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:modelComponent "ventilation" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"sensibilité aux accidents courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.75}, \"faible\": {\"aliases\": [\"faible sensibilité aux accidents\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.1875}, \"très élevé\": {\"aliases\": [\"très forte sensibilité aux accidents\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte sensibilité aux accidents\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 2.0}"^^rdf:JSON ;
+    wsem:quantity "dimensionless_coefficient" ;
+    wsem:unitAlias "1",
         "UNITLESS",
         "dimensionless",
         "sans dimension",
         "unit:NUM" ;
-    ws:unitSymbol "1" .
+    wsem:unitSymbol "1" .
 
 <https://w3id.org/websemantic/ns#tls/altitude_m> a skos:Concept ;
     skos:altLabel "altitude du tunnel"@fr ;
@@ -725,24 +727,24 @@ ws:task a rdf:Property ;
     skos:notation "inputs.altitude_m" ;
     skos:prefLabel "Altitude"@fr ;
     skos:scopeNote "Le référentiel altimétrique n’est pas déclaré par le modèle ; l’altitude de la commune ne fixe pas celle du tunnel."@fr ;
-    ws:canonicalUnitToken "unit:M" ;
-    ws:dataType "float" ;
-    ws:defaultValue 300 ;
-    ws:fieldPath "inputs.altitude_m" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:modelComponent "ventilation" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"altitude courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 300}, \"faible\": {\"aliases\": [\"faible altitude\", \"basse altitude\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 75.0}, \"très élevé\": {\"aliases\": [\"très haute altitude\", \"altitude très élevée\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"haute altitude\", \"altitude élevée\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 3000.0}"^^rdf:JSON ;
-    ws:quantity "length" ;
-    ws:unitAlias "m",
+    wsem:canonicalUnitToken "unit:M" ;
+    wsem:dataType "float" ;
+    wsem:defaultValue 300 ;
+    wsem:fieldPath "inputs.altitude_m" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:modelComponent "ventilation" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"altitude courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 300}, \"faible\": {\"aliases\": [\"faible altitude\", \"basse altitude\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 75.0}, \"très élevé\": {\"aliases\": [\"très haute altitude\", \"altitude très élevée\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"haute altitude\", \"altitude élevée\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 3000.0}"^^rdf:JSON ;
+    wsem:quantity "length" ;
+    wsem:unitAlias "m",
         "metre",
         "metres",
         "mètre",
         "mètres" ;
-    ws:unitSymbol "m" .
+    wsem:unitSymbol "m" .
 
-<https://w3id.org/websemantic/ns#tls/annual_energy> a ws:Intent ;
+<https://w3id.org/websemantic/ns#tls/annual_energy> a wsem:Intent ;
     skos:related <https://w3id.org/websemantic/ns#tls/annualized_mwh> ;
-    ws:requiresIndicator <https://w3id.org/websemantic/ns#tls/annualized_mwh> .
+    wsem:requiresIndicator <https://w3id.org/websemantic/ns#tls/annualized_mwh> .
 
 <https://w3id.org/websemantic/ns#tls/aux_kw_per_km_tube> a skos:Concept ;
     skos:altLabel "charge des auxiliaires"@fr ;
@@ -752,19 +754,19 @@ ws:task a rdf:Property ;
     skos:notation "inputs.aux_kw_per_km_tube" ;
     skos:prefLabel "Auxiliaires"@fr ;
     skos:scopeNote "Ne pas confondre cette charge linéique avec une énergie ; un bruit propre aux auxiliaires est ajouté par TLS."@fr ;
-    ws:canonicalUnitToken "unit:KiloW per km per tube" ;
-    ws:dataType "float" ;
-    ws:defaultValue 3.5e+01 ;
-    ws:fieldPath "inputs.aux_kw_per_km_tube" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:modelComponent "auxiliaries" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"charge auxiliaire courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 35.0}, \"faible\": {\"aliases\": [\"faible charge auxiliaire\", \"auxiliaires peu puissants\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 8.75}, \"très élevé\": {\"aliases\": [\"très forte charge auxiliaire\", \"auxiliaires très puissants\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte charge auxiliaire\", \"auxiliaires puissants\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 120.0}"^^rdf:JSON ;
-    ws:quantity "linear_power_per_tube" ;
-    ws:unitAlias "kW par km et par tube",
+    wsem:canonicalUnitToken "unit:KiloW per km per tube" ;
+    wsem:dataType "float" ;
+    wsem:defaultValue 3.5e+01 ;
+    wsem:fieldPath "inputs.aux_kw_per_km_tube" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:modelComponent "auxiliaries" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"charge auxiliaire courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 35.0}, \"faible\": {\"aliases\": [\"faible charge auxiliaire\", \"auxiliaires peu puissants\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 8.75}, \"très élevé\": {\"aliases\": [\"très forte charge auxiliaire\", \"auxiliaires très puissants\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte charge auxiliaire\", \"auxiliaires puissants\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 120.0}"^^rdf:JSON ;
+    wsem:quantity "linear_power_per_tube" ;
+    wsem:unitAlias "kW par km et par tube",
         "kW/(km.tube)",
         "kW/(km·tube)",
         "kW/km/tube" ;
-    ws:unitSymbol "kW/(km·tube)" .
+    wsem:unitSymbol "kW/(km·tube)" .
 
 <https://w3id.org/websemantic/ns#tls/base_fixed_kw> a skos:Concept ;
     skos:altLabel "charge fixe"@fr ;
@@ -774,106 +776,106 @@ ws:task a rdf:Property ;
     skos:notation "inputs.base_fixed_kw" ;
     skos:prefLabel "Charge fixe"@fr ;
     skos:scopeNote "Cette puissance concerne l’ensemble du tunnel, pas chaque tube."@fr ;
-    ws:canonicalUnitToken "unit:KiloW" ;
-    ws:dataType "float" ;
-    ws:defaultValue 4e+01 ;
-    ws:fieldPath "inputs.base_fixed_kw" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:modelComponent "base_load" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"charge fixe courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 40.0}, \"faible\": {\"aliases\": [\"faible charge fixe\", \"charge fixe faible\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 10.0}, \"très élevé\": {\"aliases\": [\"très forte charge fixe\", \"charge fixe très élevée\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte charge fixe\", \"charge fixe élevée\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 500.0}"^^rdf:JSON ;
-    ws:quantity "power" ;
-    ws:unitAlias "kW",
+    wsem:canonicalUnitToken "unit:KiloW" ;
+    wsem:dataType "float" ;
+    wsem:defaultValue 4e+01 ;
+    wsem:fieldPath "inputs.base_fixed_kw" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:modelComponent "base_load" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"charge fixe courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 40.0}, \"faible\": {\"aliases\": [\"faible charge fixe\", \"charge fixe faible\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 10.0}, \"très élevé\": {\"aliases\": [\"très forte charge fixe\", \"charge fixe très élevée\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte charge fixe\", \"charge fixe élevée\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 500.0}"^^rdf:JSON ;
+    wsem:quantity "power" ;
+    wsem:unitAlias "kW",
         "kilowatt",
         "kilowatts",
         "kw" ;
-    ws:unitSymbol "kW" .
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/comparison> a skos:Concept ;
     skos:definition "Deux exécutions indépendantes après validation complète. CSV réunis avec une colonne scenario valant scenario_1 ou scenario_2 ; aucune moyenne entre scénarios. Conserver les sorties et manifestes individuels. Écarts entre médianes ; pourcentage relatif au scénario 2, indéfini si référence nulle. Graines communes, sans garantie de tirages identiques après modification de configuration."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Comparaison de deux scénarios"@fr ;
-    ws:controlledParameter <https://w3id.org/websemantic/ns#tls/base_seed>,
+    wsem:controlledParameter <https://w3id.org/websemantic/ns#tls/base_seed>,
         <https://w3id.org/websemantic/ns#tls/freq_minutes>,
         <https://w3id.org/websemantic/ns#tls/n_days>,
         <https://w3id.org/websemantic/ns#tls/n_runs>,
         <https://w3id.org/websemantic/ns#tls/start_date> ;
-    ws:scenarioCount 2 .
+    wsem:scenarioCount 2 .
 
-<https://w3id.org/websemantic/ns#tls/energy_demand> a ws:Intent ;
+<https://w3id.org/websemantic/ns#tls/energy_demand> a wsem:Intent ;
     skos:related <https://w3id.org/websemantic/ns#tls/total_mwh> ;
-    ws:requiresIndicator <https://w3id.org/websemantic/ns#tls/total_mwh> .
+    wsem:requiresIndicator <https://w3id.org/websemantic/ns#tls/total_mwh> .
 
 <https://w3id.org/websemantic/ns#tls/equation-1> a skos:Concept ;
     skos:definition "R est le profil de pointes et de nuit ; Q98 est sa référence déterministe au 98e percentile, C le contexte, S la saison, W le jour de semaine et D_j un tirage journalier normal de moyenne 1 et écart-type 0,06. Aucun comptage de véhicules."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Trafic"@fr ;
-    ws:expression "T(t) = clip((R(t)/Q98) × C × S × W × traffic_level × D_j, 0, 2)" ;
-    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
-    ws:unitSymbol "sans unité" .
+    wsem:expression "T(t) = clip((R(t)/Q98) × C × S × W × traffic_level × D_j, 0, 2)" ;
+    wsem:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    wsem:unitSymbol "sans unité" .
 
 <https://w3id.org/websemantic/ns#tls/equation-2> a skos:Concept ;
     skos:definition "h, c et w sont en heures ; A est sans unité. R = 0,16 + 0,06 cos(2π(h-3)/24) + G(h;c_m,w,1) + G(h;c_s,1,15w,1,1), plus G(h;18,7;2,5;0,25) en contexte urbain. w est un écart-type temporel."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Pointes"@fr ;
-    ws:expression "G(h;c,w,A) = A × exp(-0,5 × ((h-c)/w)^2)" ;
-    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
-    ws:unitSymbol "sans unité" .
+    wsem:expression "G(h;c,w,A) = A × exp(-0,5 × ((h-c)/w)^2)" ;
+    wsem:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    wsem:unitSymbol "sans unité" .
 
 <https://w3id.org/websemantic/ns#tls/equation-3> a skos:Concept ;
     skos:definition "Altitude et profondeur en m ; pente saisie en %, donc 2 pour 2 %. Le plafond de profondeur concerne le facteur, pas la longueur ni la validité géologique."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Facteurs géométriques"@fr ;
-    ws:expression "F_alt = 1 + max(altitude_m-500,0)/6000 ; F_pente = 1 + abs(gradient_percent)/20 ; F_profondeur = 1 + min(max_depth_m,800)/6000" ;
-    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
-    ws:unitSymbol "sans unité" .
+    wsem:expression "F_alt = 1 + max(altitude_m-500,0)/6000 ; F_pente = 1 + abs(gradient_percent)/20 ; F_profondeur = 1 + min(max_depth_m,800)/6000" ;
+    wsem:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    wsem:unitSymbol "sans unité" .
 
 <https://w3id.org/websemantic/ns#tls/equation-4> a skos:Concept ;
     skos:definition "L = length_m/1000 en km. k_l en kW/(km·voie), f_min et c_l sans unité dépendent de la catégorie. J(t) est le profil synthétique de lumière du jour, sans éphéméride locale ; même une catégorie fixed est modulée."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Éclairage"@fr ;
-    ws:expression "P_lumière(t) = k_l × L × N_tubes × N_voies × min(f_min + (1-f_min)(1-J(t)) + c_l T(t), 1)" ;
-    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
-    ws:unitSymbol "kW" .
+    wsem:expression "P_lumière(t) = k_l × L × N_tubes × N_voies × min(f_min + (1-f_min)(1-J(t)) + c_l T(t), 1)" ;
+    wsem:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/equation-5> a skos:Concept ;
     skos:definition "k_v est en kW/(km·tube). I_p et I_a sont des indicateurs 0/1 d’événements synthétiques. Les deux coefficients s’ajoutent si les deux événements sont actifs ; ce n’est pas un modèle de sécurité."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Ventilation"@fr ;
-    ws:expression "P_vent(t) = k_v × L × N_tubes × (0,15 + traffic_sensitivity × T(t)) × F_alt × F_pente × (1 + pollution_sensitivity × I_p(t) + accident_sensitivity × I_a(t))" ;
-    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
-    ws:unitSymbol "kW" .
+    wsem:expression "P_vent(t) = k_v × L × N_tubes × (0,15 + traffic_sensitivity × T(t)) × F_alt × F_pente × (1 + pollution_sensitivity × I_p(t) + accident_sensitivity × I_a(t))" ;
+    wsem:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/equation-6> a skos:Concept ;
     skos:definition "Z(t) suit une loi normale de moyenne 1 et d’écart-type 0,025 ; ce tirage reste actif même si noise_sigma vaut zéro."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Auxiliaires"@fr ;
-    ws:expression "P_aux(t) = aux_kw_per_km_tube × L × N_tubes × F_profondeur × Z(t)" ;
-    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
-    ws:unitSymbol "kW" .
+    wsem:expression "P_aux(t) = aux_kw_per_km_tube × L × N_tubes × F_profondeur × Z(t)" ;
+    wsem:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/equation-7> a skos:Concept ;
     skos:definition "ε suit une loi normale de moyenne zéro et d’écart-type noise_sigma. La graine fixe rend les trajectoires reproductibles, sans supprimer les tirages."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Puissance totale"@fr ;
-    ws:expression "P(t) = max((base_fixed_kw + P_lumière(t) + P_vent(t) + P_aux(t)) × (1 + ε(t)), 0)" ;
-    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
-    ws:unitSymbol "kW" .
+    wsem:expression "P(t) = max((base_fixed_kw + P_lumière(t) + P_vent(t) + P_aux(t)) × (1 + ε(t)), 0)" ;
+    wsem:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/equation-8> a skos:Concept ;
     skos:definition "L’énergie journalière somme les pas d’une journée. La puissance quotidienne est la moyenne des puissances. E_ann est une extrapolation de la période simulée ; aucune mesure annuelle terrain."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Énergie et annualisation"@fr ;
-    ws:expression "E_pas = P(t) × freq_minutes/60 ; E_MWh = somme(E_pas)/1000 ; E_ann = E_MWh × 365/n_days" ;
-    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
-    ws:unitSymbol "kWh ; MWh ; MWh/an" .
+    wsem:expression "E_pas = P(t) × freq_minutes/60 ; E_MWh = somme(E_pas)/1000 ; E_ann = E_MWh × 365/n_days" ;
+    wsem:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    wsem:unitSymbol "kWh ; MWh ; MWh/an" .
 
 <https://w3id.org/websemantic/ns#tls/equation-9> a skos:Concept ;
     skos:definition "p est la probabilité journalière déclarée, pas un taux par véhicule. Pollution : début uniforme de 7 à 18 h, durée de 2 à 8 h. Accident : début de 6,5 à 20 h, durée de 0,5 à 3 h. Un événement peut déborder sur le lendemain."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "Événements"@fr ;
-    ws:expression "B_j ~ Bernoulli(p) ; I(t) = 1 pendant l’événement si B_j = 1" ;
-    ws:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
-    ws:unitSymbol "probabilité sans unité ; durée en h" .
+    wsem:expression "B_j ~ Bernoulli(p) ; I(t) = 1 pendant l’événement si B_j = 1" ;
+    wsem:implementationReference "TLS simulator.py:simulate_one_realization / run_monte_carlo, commit 748e053e129669cf3e896d381e3c0ac01c763edd." ;
+    wsem:unitSymbol "probabilité sans unité ; durée en h" .
 
 <https://w3id.org/websemantic/ns#tls/evening_peak_hour> a skos:Concept ;
     skos:altLabel "pointe du soir"@fr ;
@@ -883,21 +885,21 @@ ws:task a rdf:Property ;
     skos:notation "inputs.evening_peak_hour" ;
     skos:prefLabel "Pointe du soir"@fr ;
     skos:scopeNote "Heure du calendrier simulé ; aucun fuseau horaire ni changement d’heure n’est modélisé."@fr ;
-    ws:canonicalUnitToken "unit:HR" ;
-    ws:dataType "float" ;
-    ws:defaultValue 1.8e+01 ;
-    ws:fieldPath "inputs.evening_peak_hour" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:modelComponent "traffic" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.\", \"levels\": {\"courant\": {\"aliases\": [\"pointe du soir courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 18}, \"tard\": {\"aliases\": [\"pointe du soir tardive\", \"pic du soir tardif\"], \"answer_aliases\": [\"tard\"], \"value\": 22}, \"tôt\": {\"aliases\": [\"pointe du soir tôt\", \"pic du soir précoce\"], \"answer_aliases\": [\"tôt\"], \"value\": 15}}}"^^rdf:JSON ;
-    ws:quantity "time_of_day" ;
-    ws:unitAlias "h",
+    wsem:canonicalUnitToken "unit:HR" ;
+    wsem:dataType "float" ;
+    wsem:defaultValue 1.8e+01 ;
+    wsem:fieldPath "inputs.evening_peak_hour" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:modelComponent "traffic" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.\", \"levels\": {\"courant\": {\"aliases\": [\"pointe du soir courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 18}, \"tard\": {\"aliases\": [\"pointe du soir tardive\", \"pic du soir tardif\"], \"answer_aliases\": [\"tard\"], \"value\": 22}, \"tôt\": {\"aliases\": [\"pointe du soir tôt\", \"pic du soir précoce\"], \"answer_aliases\": [\"tôt\"], \"value\": 15}}}"^^rdf:JSON ;
+    wsem:quantity "time_of_day" ;
+    wsem:unitAlias "h",
         "h du jour",
         "heure",
         "heures",
         "hour",
         "hours" ;
-    ws:unitSymbol "h du jour" .
+    wsem:unitSymbol "h du jour" .
 
 <https://w3id.org/websemantic/ns#tls/gradient_percent> a skos:Concept ;
     skos:altLabel "pente du tunnel"@fr ;
@@ -907,23 +909,23 @@ ws:task a rdf:Property ;
     skos:notation "inputs.gradient_percent" ;
     skos:prefLabel "Pente"@fr ;
     skos:scopeNote "Une pente de 2 % se saisit 2, pas 0,02 ; l’adaptateur courant demande une valeur non négative."@fr ;
-    ws:canonicalUnitToken "unit:PERCENT" ;
-    ws:dataType "float" ;
-    ws:defaultValue 2e+00 ;
-    ws:fieldPath "inputs.gradient_percent" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:modelComponent "ventilation" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"pente courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 2.0}, \"faible\": {\"aliases\": [\"faible pente\", \"pente faible\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.5}, \"très élevé\": {\"aliases\": [\"très forte pente\", \"pente très forte\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte pente\", \"pente forte\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 12.0}"^^rdf:JSON ;
-    ws:quantity "percentage" ;
-    ws:unitAlias "%",
+    wsem:canonicalUnitToken "unit:PERCENT" ;
+    wsem:dataType "float" ;
+    wsem:defaultValue 2e+00 ;
+    wsem:fieldPath "inputs.gradient_percent" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:modelComponent "ventilation" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"pente courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 2.0}, \"faible\": {\"aliases\": [\"faible pente\", \"pente faible\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.5}, \"très élevé\": {\"aliases\": [\"très forte pente\", \"pente très forte\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte pente\", \"pente forte\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 12.0}"^^rdf:JSON ;
+    wsem:quantity "percentage" ;
+    wsem:unitAlias "%",
         "percent",
         "pourcent",
         "pourcentage" ;
-    ws:unitSymbol "%" .
+    wsem:unitSymbol "%" .
 
-<https://w3id.org/websemantic/ns#tls/length_efficiency> a ws:Intent ;
+<https://w3id.org/websemantic/ns#tls/length_efficiency> a wsem:Intent ;
     skos:related <https://w3id.org/websemantic/ns#tls/specific_kwh_m_year> ;
-    ws:requiresIndicator <https://w3id.org/websemantic/ns#tls/specific_kwh_m_year> .
+    wsem:requiresIndicator <https://w3id.org/websemantic/ns#tls/specific_kwh_m_year> .
 
 <https://w3id.org/websemantic/ns#tls/length_m> a skos:Concept ;
     skos:altLabel "longueur du tunnel"@fr ;
@@ -933,22 +935,22 @@ ws:task a rdf:Property ;
     skos:notation "inputs.length_m" ;
     skos:prefLabel "Longueur"@fr ;
     skos:scopeNote "Ne pas multiplier la longueur par le nombre de tubes ; ce facteur est appliqué séparément."@fr ;
-    ws:boundAuthority "code" ;
-    ws:canonicalUnitToken "unit:M" ;
-    ws:dataType "float" ;
-    ws:defaultValue 1500 ;
-    ws:fieldPath "inputs.length_m" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:minimumExclusive 0 ;
-    ws:modelComponent "geometry" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"longueur courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 1500}, \"faible\": {\"aliases\": [\"tunnel court\", \"faible longueur\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 375.0}, \"très élevé\": {\"aliases\": [\"tunnel très long\", \"très grande longueur\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"tunnel long\", \"grande longueur\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 12000.0}"^^rdf:JSON ;
-    ws:quantity "length" ;
-    ws:unitAlias "m",
+    wsem:boundAuthority "code" ;
+    wsem:canonicalUnitToken "unit:M" ;
+    wsem:dataType "float" ;
+    wsem:defaultValue 1500 ;
+    wsem:fieldPath "inputs.length_m" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:minimumExclusive 0 ;
+    wsem:modelComponent "geometry" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"longueur courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 1500}, \"faible\": {\"aliases\": [\"tunnel court\", \"faible longueur\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 375.0}, \"très élevé\": {\"aliases\": [\"tunnel très long\", \"très grande longueur\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"tunnel long\", \"grande longueur\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 12000.0}"^^rdf:JSON ;
+    wsem:quantity "length" ;
+    wsem:unitAlias "m",
         "metre",
         "metres",
         "mètre",
         "mètres" ;
-    ws:unitSymbol "m" .
+    wsem:unitSymbol "m" .
 
 <https://w3id.org/websemantic/ns#tls/lighting_type> a skos:Concept ;
     skos:altLabel "type d’éclairage"@fr ;
@@ -959,17 +961,17 @@ ws:task a rdf:Property ;
     skos:prefLabel "Éclairage"@fr ;
     skos:scopeNote "Catégories sans ordre universel : utiliser uniquement les catégories déclarées et leurs synonymes non ambigus. « Ancien », « moderne », « fort » ou « faible » seuls demandent une précision ; l’âge ne détermine pas une technologie ni ses performances."@fr,
         "Même les catégories fixed ont une modulation horaire dans ce modèle ; aucun éclairement en lux n’est calculé."@fr ;
-    ws:allowedValue "LED adaptive",
+    wsem:allowedValue "LED adaptive",
         "LED fixed",
         "mixed",
         "sodium fixed" ;
-    ws:dataType "category" ;
-    ws:defaultValue "LED adaptive" ;
-    ws:fieldPath "inputs.lighting_type" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:modelComponent "lighting" ;
-    ws:quantity "category" ;
-    ws:unitAlias "",
+    wsem:dataType "category" ;
+    wsem:defaultValue "LED adaptive" ;
+    wsem:fieldPath "inputs.lighting_type" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:modelComponent "lighting" ;
+    wsem:quantity "category" ;
+    wsem:unitAlias "",
         "1",
         "None",
         "categorical",
@@ -980,7 +982,7 @@ ws:task a rdf:Property ;
         "sans dimension",
         "sans unité",
         "unit:UNITLESS" ;
-    ws:unitSymbol "catégorie" .
+    wsem:unitSymbol "catégorie" .
 
 <https://w3id.org/websemantic/ns#tls/max_depth_m> a skos:Concept ;
     skos:altLabel "profondeur maximale"@fr ;
@@ -990,20 +992,20 @@ ws:task a rdf:Property ;
     skos:notation "inputs.max_depth_m" ;
     skos:prefLabel "Couverture maximale"@fr ;
     skos:scopeNote "Le plafonnement de l’effet à 800 m n’est pas une limite géométrique de validité physique."@fr ;
-    ws:canonicalUnitToken "unit:M" ;
-    ws:dataType "float" ;
-    ws:defaultValue 80 ;
-    ws:fieldPath "inputs.max_depth_m" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:modelComponent "auxiliaries" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"profondeur courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 80}, \"faible\": {\"aliases\": [\"faible profondeur\", \"tunnel peu profond\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 20.0}, \"très élevé\": {\"aliases\": [\"très grande profondeur\", \"tunnel très profond\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"grande profondeur\", \"tunnel profond\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 1000.0}"^^rdf:JSON ;
-    ws:quantity "length" ;
-    ws:unitAlias "m",
+    wsem:canonicalUnitToken "unit:M" ;
+    wsem:dataType "float" ;
+    wsem:defaultValue 80 ;
+    wsem:fieldPath "inputs.max_depth_m" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:modelComponent "auxiliaries" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"profondeur courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 80}, \"faible\": {\"aliases\": [\"faible profondeur\", \"tunnel peu profond\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 20.0}, \"très élevé\": {\"aliases\": [\"très grande profondeur\", \"tunnel très profond\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"grande profondeur\", \"tunnel profond\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 1000.0}"^^rdf:JSON ;
+    wsem:quantity "length" ;
+    wsem:unitAlias "m",
         "metre",
         "metres",
         "mètre",
         "mètres" ;
-    ws:unitSymbol "m" .
+    wsem:unitSymbol "m" .
 
 <https://w3id.org/websemantic/ns#tls/morning_peak_hour> a skos:Concept ;
     skos:altLabel "pointe du matin"@fr ;
@@ -1013,21 +1015,21 @@ ws:task a rdf:Property ;
     skos:notation "inputs.morning_peak_hour" ;
     skos:prefLabel "Pointe du matin"@fr ;
     skos:scopeNote "Heure du calendrier simulé ; aucun fuseau horaire ni changement d’heure n’est modélisé."@fr ;
-    ws:canonicalUnitToken "unit:HR" ;
-    ws:dataType "float" ;
-    ws:defaultValue 8e+00 ;
-    ws:fieldPath "inputs.morning_peak_hour" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:modelComponent "traffic" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.\", \"levels\": {\"courant\": {\"aliases\": [\"pointe du matin courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 8}, \"tard\": {\"aliases\": [\"pointe du matin tardive\", \"pic du matin tardif\"], \"answer_aliases\": [\"tard\"], \"value\": 11}, \"tôt\": {\"aliases\": [\"pointe du matin tôt\", \"pic du matin précoce\"], \"answer_aliases\": [\"tôt\"], \"value\": 5}}}"^^rdf:JSON ;
-    ws:quantity "time_of_day" ;
-    ws:unitAlias "h",
+    wsem:canonicalUnitToken "unit:HR" ;
+    wsem:dataType "float" ;
+    wsem:defaultValue 8e+00 ;
+    wsem:fieldPath "inputs.morning_peak_hour" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:modelComponent "traffic" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Centre de la pointe en heures du jour, proposé à valider ; ce n’est pas une durée ni un horaire local observé.\", \"levels\": {\"courant\": {\"aliases\": [\"pointe du matin courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 8}, \"tard\": {\"aliases\": [\"pointe du matin tardive\", \"pic du matin tardif\"], \"answer_aliases\": [\"tard\"], \"value\": 11}, \"tôt\": {\"aliases\": [\"pointe du matin tôt\", \"pic du matin précoce\"], \"answer_aliases\": [\"tôt\"], \"value\": 5}}}"^^rdf:JSON ;
+    wsem:quantity "time_of_day" ;
+    wsem:unitAlias "h",
         "h du jour",
         "heure",
         "heures",
         "hour",
         "hours" ;
-    ws:unitSymbol "h du jour" .
+    wsem:unitSymbol "h du jour" .
 
 <https://w3id.org/websemantic/ns#tls/n_lanes_per_tube> a skos:Concept ;
     skos:altLabel "nombre de voies par tube"@fr ;
@@ -1037,18 +1039,18 @@ ws:task a rdf:Property ;
     skos:notation "inputs.n_lanes_per_tube" ;
     skos:prefLabel "Voies par tube"@fr ;
     skos:scopeNote "Ne pas fournir le nombre total de voies à la place du nombre par tube."@fr ;
-    ws:boundAuthority "code" ;
-    ws:canonicalUnitToken "unit:NUM" ;
-    ws:dataType "int" ;
-    ws:defaultValue 2 ;
-    ws:fieldPath "inputs.n_lanes_per_tube" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:maximum 6 ;
-    ws:minimum 1 ;
-    ws:modelComponent "geometry" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Comptage par tube, à valider ; ne pas le confondre avec le total de voies.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de voies par tube\"], \"answer_aliases\": [\"beaucoup\"], \"value\": 3}, \"courant\": {\"aliases\": [\"nombre courant de voies par tube\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 2}, \"maximum de référence\": {\"aliases\": [\"énormément de voies par tube\"], \"answer_aliases\": [\"énormément\"], \"value\": 4}, \"peu\": {\"aliases\": [\"peu de voies par tube\"], \"answer_aliases\": [\"peu\"], \"value\": 1}}}"^^rdf:JSON ;
-    ws:quantity "count" ;
-    ws:unitAlias "1",
+    wsem:boundAuthority "code" ;
+    wsem:canonicalUnitToken "unit:NUM" ;
+    wsem:dataType "int" ;
+    wsem:defaultValue 2 ;
+    wsem:fieldPath "inputs.n_lanes_per_tube" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:maximum 6 ;
+    wsem:minimum 1 ;
+    wsem:modelComponent "geometry" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Comptage par tube, à valider ; ne pas le confondre avec le total de voies.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de voies par tube\"], \"answer_aliases\": [\"beaucoup\"], \"value\": 3}, \"courant\": {\"aliases\": [\"nombre courant de voies par tube\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 2}, \"maximum de référence\": {\"aliases\": [\"énormément de voies par tube\"], \"answer_aliases\": [\"énormément\"], \"value\": 4}, \"peu\": {\"aliases\": [\"peu de voies par tube\"], \"answer_aliases\": [\"peu\"], \"value\": 1}}}"^^rdf:JSON ;
+    wsem:quantity "count" ;
+    wsem:unitAlias "1",
         "count",
         "nombre",
         "number",
@@ -1057,7 +1059,7 @@ ws:task a rdf:Property ;
         "tubes",
         "unit:UNITLESS",
         "voies" ;
-    ws:unitSymbol "nombre" .
+    wsem:unitSymbol "nombre" .
 
 <https://w3id.org/websemantic/ns#tls/n_tubes> a skos:Concept ;
     skos:altLabel "nombre de tubes"@fr ;
@@ -1067,18 +1069,18 @@ ws:task a rdf:Property ;
     skos:notation "inputs.n_tubes" ;
     skos:prefLabel "Tubes"@fr ;
     skos:scopeNote "Un tube est distinct d’une voie de circulation."@fr ;
-    ws:boundAuthority "code" ;
-    ws:canonicalUnitToken "unit:NUM" ;
-    ws:dataType "int" ;
-    ws:defaultValue 2 ;
-    ws:fieldPath "inputs.n_tubes" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:maximum 8 ;
-    ws:minimum 1 ;
-    ws:modelComponent "geometry" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Comptages entiers de scénario, à valider ; références discrètes de l’interface TLS, pas maxima du moteur.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de tubes\"], \"answer_aliases\": [\"beaucoup\"], \"value\": 3}, \"courant\": {\"aliases\": [\"nombre courant de tubes\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 2}, \"maximum de référence\": {\"aliases\": [\"énormément de tubes\"], \"answer_aliases\": [\"énormément\"], \"value\": 4}, \"peu\": {\"aliases\": [\"peu de tubes\"], \"answer_aliases\": [\"peu\"], \"value\": 1}}}"^^rdf:JSON ;
-    ws:quantity "count" ;
-    ws:unitAlias "1",
+    wsem:boundAuthority "code" ;
+    wsem:canonicalUnitToken "unit:NUM" ;
+    wsem:dataType "int" ;
+    wsem:defaultValue 2 ;
+    wsem:fieldPath "inputs.n_tubes" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:maximum 8 ;
+    wsem:minimum 1 ;
+    wsem:modelComponent "geometry" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Comptages entiers de scénario, à valider ; références discrètes de l’interface TLS, pas maxima du moteur.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de tubes\"], \"answer_aliases\": [\"beaucoup\"], \"value\": 3}, \"courant\": {\"aliases\": [\"nombre courant de tubes\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 2}, \"maximum de référence\": {\"aliases\": [\"énormément de tubes\"], \"answer_aliases\": [\"énormément\"], \"value\": 4}, \"peu\": {\"aliases\": [\"peu de tubes\"], \"answer_aliases\": [\"peu\"], \"value\": 1}}}"^^rdf:JSON ;
+    wsem:quantity "count" ;
+    wsem:unitAlias "1",
         "count",
         "nombre",
         "number",
@@ -1087,7 +1089,7 @@ ws:task a rdf:Property ;
         "tubes",
         "unit:UNITLESS",
         "voies" ;
-    ws:unitSymbol "nombre" .
+    wsem:unitSymbol "nombre" .
 
 <https://w3id.org/websemantic/ns#tls/noise_sigma> a skos:Concept ;
     skos:altLabel "bruit relatif"@fr ;
@@ -1097,26 +1099,26 @@ ws:task a rdf:Property ;
     skos:notation "inputs.noise_sigma" ;
     skos:prefLabel "Bruit multiplicatif"@fr ;
     skos:scopeNote "D’autres tirages restent actifs même si noise_sigma=0 : trafic quotidien, auxiliaires et événements."@fr ;
-    ws:boundAuthority "code" ;
-    ws:canonicalUnitToken "unit:UNITLESS" ;
-    ws:dataType "float" ;
-    ws:defaultValue 6e-02 ;
-    ws:fieldPath "inputs.noise_sigma" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:minimum 0 ;
-    ws:modelComponent "stochastic" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"bruit relatif courant\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.06}, \"faible\": {\"aliases\": [\"faible bruit relatif\", \"faible bruit gaussien\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.015}, \"très élevé\": {\"aliases\": [\"très fort bruit relatif\", \"bruit gaussien très élevé\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"fort bruit relatif\", \"bruit gaussien élevé\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 0.5}"^^rdf:JSON ;
-    ws:quantity "relative_standard_deviation" ;
-    ws:unitAlias "1",
+    wsem:boundAuthority "code" ;
+    wsem:canonicalUnitToken "unit:UNITLESS" ;
+    wsem:dataType "float" ;
+    wsem:defaultValue 6e-02 ;
+    wsem:fieldPath "inputs.noise_sigma" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:minimum 0 ;
+    wsem:modelComponent "stochastic" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"bruit relatif courant\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.06}, \"faible\": {\"aliases\": [\"faible bruit relatif\", \"faible bruit gaussien\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.015}, \"très élevé\": {\"aliases\": [\"très fort bruit relatif\", \"bruit gaussien très élevé\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"fort bruit relatif\", \"bruit gaussien élevé\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 0.5}"^^rdf:JSON ;
+    wsem:quantity "relative_standard_deviation" ;
+    wsem:unitAlias "1",
         "UNITLESS",
         "dimensionless",
         "sans dimension",
         "unit:NUM" ;
-    ws:unitSymbol "1" .
+    wsem:unitSymbol "1" .
 
-<https://w3id.org/websemantic/ns#tls/peak_demand> a ws:Intent ;
+<https://w3id.org/websemantic/ns#tls/peak_demand> a wsem:Intent ;
     skos:related <https://w3id.org/websemantic/ns#tls/peak_kw> ;
-    ws:requiresIndicator <https://w3id.org/websemantic/ns#tls/peak_kw> .
+    wsem:requiresIndicator <https://w3id.org/websemantic/ns#tls/peak_kw> .
 
 <https://w3id.org/websemantic/ns#tls/peak_width_h> a skos:Concept ;
     skos:altLabel "largeur des pointes"@fr ;
@@ -1126,21 +1128,21 @@ ws:task a rdf:Property ;
     skos:notation "inputs.peak_width_h" ;
     skos:prefLabel "Largeur des pics"@fr ;
     skos:scopeNote "Ce n’est pas la durée totale de la pointe ni sa largeur à mi-hauteur."@fr ;
-    ws:canonicalUnitToken "unit:HR" ;
-    ws:dataType "float" ;
-    ws:defaultValue 1.4e+00 ;
-    ws:fieldPath "inputs.peak_width_h" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:modelComponent "traffic" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"largeur de pointe courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 1.4}, \"faible\": {\"aliases\": [\"pics de trafic étroits\", \"pointes étroites\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.35}, \"très élevé\": {\"aliases\": [\"pics de trafic très larges\", \"pointes très larges\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"pics de trafic larges\", \"pointes larges\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 4.0}"^^rdf:JSON ;
-    ws:quantity "duration" ;
-    ws:unitAlias "h",
+    wsem:canonicalUnitToken "unit:HR" ;
+    wsem:dataType "float" ;
+    wsem:defaultValue 1.4e+00 ;
+    wsem:fieldPath "inputs.peak_width_h" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:modelComponent "traffic" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"largeur de pointe courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 1.4}, \"faible\": {\"aliases\": [\"pics de trafic étroits\", \"pointes étroites\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.35}, \"très élevé\": {\"aliases\": [\"pics de trafic très larges\", \"pointes très larges\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"pics de trafic larges\", \"pointes larges\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 4.0}"^^rdf:JSON ;
+    wsem:quantity "duration" ;
+    wsem:unitAlias "h",
         "h du jour",
         "heure",
         "heures",
         "hour",
         "hours" ;
-    ws:unitSymbol "h" .
+    wsem:unitSymbol "h" .
 
 <https://w3id.org/websemantic/ns#tls/pollution_probability_per_day> a skos:Concept ;
     skos:altLabel "probabilité de pollution"@fr ;
@@ -1150,23 +1152,23 @@ ws:task a rdf:Property ;
     skos:notation "inputs.pollution_probability_per_day" ;
     skos:prefLabel "Probabilité de pollution"@fr ;
     skos:scopeNote "Une valeur de 0,05 signifie une probabilité de 5 % par jour, pas un taux de pollution ni une concentration."@fr ;
-    ws:boundAuthority "code" ;
-    ws:canonicalUnitToken "unit:UNITLESS" ;
-    ws:dataType "float" ;
-    ws:defaultValue 5e-02 ;
-    ws:fieldPath "inputs.pollution_probability_per_day" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:maximum 1 ;
-    ws:minimum 0 ;
-    ws:modelComponent "stochastic" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"probabilité de pollution courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.05}, \"faible\": {\"aliases\": [\"faible probabilité de pollution\", \"événements de pollution rares\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.0125}, \"très élevé\": {\"aliases\": [\"très forte probabilité de pollution\", \"événements de pollution très fréquents\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte probabilité de pollution\", \"événements de pollution fréquents\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 0.5}"^^rdf:JSON ;
-    ws:quantity "daily_event_probability" ;
-    ws:unitAlias "1",
+    wsem:boundAuthority "code" ;
+    wsem:canonicalUnitToken "unit:UNITLESS" ;
+    wsem:dataType "float" ;
+    wsem:defaultValue 5e-02 ;
+    wsem:fieldPath "inputs.pollution_probability_per_day" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:maximum 1 ;
+    wsem:minimum 0 ;
+    wsem:modelComponent "stochastic" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"probabilité de pollution courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.05}, \"faible\": {\"aliases\": [\"faible probabilité de pollution\", \"événements de pollution rares\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.0125}, \"très élevé\": {\"aliases\": [\"très forte probabilité de pollution\", \"événements de pollution très fréquents\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte probabilité de pollution\", \"événements de pollution fréquents\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 0.5}"^^rdf:JSON ;
+    wsem:quantity "daily_event_probability" ;
+    wsem:unitAlias "1",
         "UNITLESS",
         "dimensionless",
         "sans dimension",
         "unit:NUM" ;
-    ws:unitSymbol "1" .
+    wsem:unitSymbol "1" .
 
 <https://w3id.org/websemantic/ns#tls/pollution_sensitivity> a skos:Concept ;
     skos:altLabel "sensibilité à la pollution"@fr ;
@@ -1176,20 +1178,20 @@ ws:task a rdf:Property ;
     skos:notation "inputs.pollution_sensitivity" ;
     skos:prefLabel "Sensibilité pollution"@fr ;
     skos:scopeNote "Quand les deux événements sont actifs, leurs coefficients s’ajoutent ; aucune dispersion atmosphérique n’est simulée."@fr ;
-    ws:canonicalUnitToken "unit:UNITLESS" ;
-    ws:dataType "float" ;
-    ws:defaultValue 5.5e-01 ;
-    ws:fieldPath "inputs.pollution_sensitivity" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:modelComponent "ventilation" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"sensibilité à la pollution courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.55}, \"faible\": {\"aliases\": [\"faible sensibilité à la pollution\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.1375}, \"très élevé\": {\"aliases\": [\"très forte sensibilité à la pollution\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte sensibilité à la pollution\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 2.0}"^^rdf:JSON ;
-    ws:quantity "dimensionless_coefficient" ;
-    ws:unitAlias "1",
+    wsem:canonicalUnitToken "unit:UNITLESS" ;
+    wsem:dataType "float" ;
+    wsem:defaultValue 5.5e-01 ;
+    wsem:fieldPath "inputs.pollution_sensitivity" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:modelComponent "ventilation" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"sensibilité à la pollution courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.55}, \"faible\": {\"aliases\": [\"faible sensibilité à la pollution\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.1375}, \"très élevé\": {\"aliases\": [\"très forte sensibilité à la pollution\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte sensibilité à la pollution\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 2.0}"^^rdf:JSON ;
+    wsem:quantity "dimensionless_coefficient" ;
+    wsem:unitAlias "1",
         "UNITLESS",
         "dimensionless",
         "sans dimension",
         "unit:NUM" ;
-    ws:unitSymbol "1" .
+    wsem:unitSymbol "1" .
 
 <https://w3id.org/websemantic/ns#tls/traffic_level> a skos:Concept ;
     skos:altLabel "niveau de trafic"@fr ;
@@ -1199,20 +1201,20 @@ ws:task a rdf:Property ;
     skos:notation "inputs.traffic_level" ;
     skos:prefLabel "Trafic relatif"@fr ;
     skos:scopeNote "Ce paramètre n’est ni un débit en véhicules/heure ni un trafic journalier observé."@fr ;
-    ws:canonicalUnitToken "unit:UNITLESS" ;
-    ws:dataType "float" ;
-    ws:defaultValue 1e+00 ;
-    ws:fieldPath "inputs.traffic_level" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:modelComponent "traffic" ;
-    ws:qualitativeScale "{\"authority\": \"TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum.\", \"interpretation\": \"Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de trafic\", \"beaucoup de traffic\", \"trafic important\", \"trafic élevé\", \"fort trafic\"], \"answer_aliases\": [\"beaucoup\"], \"fraction\": 0.75}, \"courant\": {\"aliases\": [\"trafic courant\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 1.0}, \"faible\": {\"aliases\": [\"peu de trafic\", \"faible trafic\", \"trafic faible\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.3}, \"énormément\": {\"aliases\": [\"énormément de trafic\", \"énormément de traffic\", \"trafic très élevé\", \"trafic énorme\"], \"answer_aliases\": [\"énormément\"], \"fraction\": 1.0}}, \"reference_upper\": 2.0}"^^rdf:JSON ;
-    ws:quantity "dimensionless_multiplier" ;
-    ws:unitAlias "1",
+    wsem:canonicalUnitToken "unit:UNITLESS" ;
+    wsem:dataType "float" ;
+    wsem:defaultValue 1e+00 ;
+    wsem:fieldPath "inputs.traffic_level" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:modelComponent "traffic" ;
+    wsem:qualitativeScale "{\"authority\": \"TLS app.py, Global traffic level slider, revision 748e053e129669cf3e896d381e3c0ac01c763edd; upper interface reference, not physical capacity or adapter maximum.\", \"interpretation\": \"Convention de scénario autorisée pour les essais : fraction de la référence haute 2 ; hypothèse à valider, sans comptage local.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de trafic\", \"beaucoup de traffic\", \"trafic important\", \"trafic élevé\", \"fort trafic\"], \"answer_aliases\": [\"beaucoup\"], \"fraction\": 0.75}, \"courant\": {\"aliases\": [\"trafic courant\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 1.0}, \"faible\": {\"aliases\": [\"peu de trafic\", \"faible trafic\", \"trafic faible\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.3}, \"énormément\": {\"aliases\": [\"énormément de trafic\", \"énormément de traffic\", \"trafic très élevé\", \"trafic énorme\"], \"answer_aliases\": [\"énormément\"], \"fraction\": 1.0}}, \"reference_upper\": 2.0}"^^rdf:JSON ;
+    wsem:quantity "dimensionless_multiplier" ;
+    wsem:unitAlias "1",
         "UNITLESS",
         "dimensionless",
         "sans dimension",
         "unit:NUM" ;
-    ws:unitSymbol "1" .
+    wsem:unitSymbol "1" .
 
 <https://w3id.org/websemantic/ns#tls/traffic_sensitivity> a skos:Concept ;
     skos:altLabel "sensibilité au trafic"@fr ;
@@ -1222,20 +1224,20 @@ ws:task a rdf:Property ;
     skos:notation "inputs.traffic_sensitivity" ;
     skos:prefLabel "Sensibilité au trafic"@fr ;
     skos:scopeNote "Coefficient de modèle ; ce n’est pas une élasticité mesurée de consommation."@fr ;
-    ws:canonicalUnitToken "unit:UNITLESS" ;
-    ws:dataType "float" ;
-    ws:defaultValue 6.5e-01 ;
-    ws:fieldPath "inputs.traffic_sensitivity" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:modelComponent "ventilation" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"sensibilité au trafic courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.65}, \"faible\": {\"aliases\": [\"faible sensibilité au trafic\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.1625}, \"très élevé\": {\"aliases\": [\"très forte sensibilité au trafic\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte sensibilité au trafic\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 1.5}"^^rdf:JSON ;
-    ws:quantity "dimensionless_coefficient" ;
-    ws:unitAlias "1",
+    wsem:canonicalUnitToken "unit:UNITLESS" ;
+    wsem:dataType "float" ;
+    wsem:defaultValue 6.5e-01 ;
+    wsem:fieldPath "inputs.traffic_sensitivity" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:modelComponent "ventilation" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Valeur de scénario proposée, à valider. Le niveau courant reprend le défaut déclaré ; élevé et très élevé utilisent 75 % et 100 % de la référence haute du curseur. Ces niveaux ne sont pas des statistiques observées.\", \"levels\": {\"courant\": {\"aliases\": [\"sensibilité au trafic courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 0.65}, \"faible\": {\"aliases\": [\"faible sensibilité au trafic\"], \"answer_aliases\": [\"faible\", \"peu\"], \"value\": 0.1625}, \"très élevé\": {\"aliases\": [\"très forte sensibilité au trafic\"], \"answer_aliases\": [\"très élevé\", \"très fort\"], \"fraction\": 1.0}, \"élevé\": {\"aliases\": [\"forte sensibilité au trafic\"], \"answer_aliases\": [\"élevé\", \"fort\"], \"fraction\": 0.75}}, \"reference_upper\": 1.5}"^^rdf:JSON ;
+    wsem:quantity "dimensionless_coefficient" ;
+    wsem:unitAlias "1",
         "UNITLESS",
         "dimensionless",
         "sans dimension",
         "unit:NUM" ;
-    ws:unitSymbol "1" .
+    wsem:unitSymbol "1" .
 
 <https://w3id.org/websemantic/ns#tls/tunnel_context> a skos:Concept ;
     skos:altLabel "contexte du tunnel"@fr ;
@@ -1246,16 +1248,16 @@ ws:task a rdf:Property ;
     skos:prefLabel "Contexte"@fr ;
     skos:scopeNote "Catégories sans ordre universel : utiliser uniquement les catégories déclarées et leurs synonymes non ambigus. « Ancien », « moderne », « fort » ou « faible » seuls demandent une précision ; l’âge ne détermine pas une technologie ni ses performances."@fr,
         "Le contexte n’est pas une commune et ne constitue pas une calibration du trafic."@fr ;
-    ws:allowedValue "peri-urban",
+    wsem:allowedValue "peri-urban",
         "rural",
         "urban" ;
-    ws:dataType "category" ;
-    ws:defaultValue "peri-urban" ;
-    ws:fieldPath "inputs.tunnel_context" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:modelComponent "traffic" ;
-    ws:quantity "category" ;
-    ws:unitAlias "",
+    wsem:dataType "category" ;
+    wsem:defaultValue "peri-urban" ;
+    wsem:fieldPath "inputs.tunnel_context" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:modelComponent "traffic" ;
+    wsem:quantity "category" ;
+    wsem:unitAlias "",
         "1",
         "None",
         "categorical",
@@ -1266,7 +1268,7 @@ ws:task a rdf:Property ;
         "sans dimension",
         "sans unité",
         "unit:UNITLESS" ;
-    ws:unitSymbol "catégorie" .
+    wsem:unitSymbol "catégorie" .
 
 <https://w3id.org/websemantic/ns#tls/ventilation_type> a skos:Concept ;
     skos:altLabel "type de ventilation"@fr ;
@@ -1277,17 +1279,17 @@ ws:task a rdf:Property ;
     skos:prefLabel "Ventilation"@fr ;
     skos:scopeNote "Catégories sans ordre universel : utiliser uniquement les catégories déclarées et leurs synonymes non ambigus. « Ancien », « moderne », « fort » ou « faible » seuls demandent une précision ; l’âge ne détermine pas une technologie ni ses performances."@fr,
         "Il s’agit d’une charge électrique synthétique, pas d’un débit d’air ni d’une vérification de sécurité."@fr ;
-    ws:allowedValue "longitudinal",
+    wsem:allowedValue "longitudinal",
         "natural/low ventilation",
         "semi-transverse",
         "transverse" ;
-    ws:dataType "category" ;
-    ws:defaultValue "longitudinal" ;
-    ws:fieldPath "inputs.ventilation_type" ;
-    ws:implementationReference "simulator.py:simulate_one_realization" ;
-    ws:modelComponent "ventilation" ;
-    ws:quantity "category" ;
-    ws:unitAlias "",
+    wsem:dataType "category" ;
+    wsem:defaultValue "longitudinal" ;
+    wsem:fieldPath "inputs.ventilation_type" ;
+    wsem:implementationReference "simulator.py:simulate_one_realization" ;
+    wsem:modelComponent "ventilation" ;
+    wsem:quantity "category" ;
+    wsem:unitAlias "",
         "1",
         "None",
         "categorical",
@@ -1298,17 +1300,17 @@ ws:task a rdf:Property ;
         "sans dimension",
         "sans unité",
         "unit:UNITLESS" ;
-    ws:unitSymbol "catégorie" .
+    wsem:unitSymbol "catégorie" .
 
-ws:unitAlias a rdf:Property ;
+wsem:unitAlias a rdf:Property ;
     rdfs:comment "Unité reconnue à l'interprétation ; conversion avant validation."@fr .
 
-ws:unitSymbol a rdf:Property ;
+wsem:unitSymbol a rdf:Property ;
     rdfs:comment "Symbole lisible ; ne constitue pas un alignement QUDT vérifié."@fr .
 
-ws:value a rdf:Property ;
+wsem:value a rdf:Property ;
     rdfs:comment "Valeur typée dans l'unité canonique déclarée."@fr ;
-    rdfs:domain ws:Parameter ;
+    rdfs:domain wsem:Parameter ;
     rdfs:range rdfs:Literal .
 
 <https://w3id.org/websemantic/ns#tls/accident_event> a skos:Concept ;
@@ -1332,20 +1334,20 @@ ws:value a rdf:Property ;
     skos:notation "experiment.freq_minutes" ;
     skos:prefLabel "Pas de calcul"@fr ;
     skos:scopeNote "Pas admis : 5, 10, 15, 30 ou 60 min. Une sortie quotidienne est une agrégation, pas un calcul à minuit."@fr ;
-    ws:boundAuthority "policy" ;
-    ws:canonicalUnitToken "unit:MIN" ;
-    ws:dataType "int" ;
-    ws:defaultValue 60 ;
-    ws:fieldPath "experiment.freq_minutes" ;
-    ws:implementationReference "simulator.py:run_monte_carlo" ;
-    ws:minimum 1 ;
-    ws:modelComponent "experiment" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.\", \"levels\": {\"fin\": {\"aliases\": [\"pas fin\", \"résolution temporelle fine\"], \"answer_aliases\": [\"fin\"], \"value\": 10}, \"grossier\": {\"aliases\": [\"pas grossier\", \"résolution temporelle grossière\"], \"answer_aliases\": [\"grossier\"], \"value\": 60}, \"intermédiaire\": {\"aliases\": [\"pas intermédiaire\"], \"answer_aliases\": [\"intermédiaire\"], \"value\": 15}, \"large\": {\"aliases\": [\"pas large\"], \"answer_aliases\": [\"large\"], \"value\": 30}, \"très fin\": {\"aliases\": [\"pas très fin\", \"résolution temporelle très fine\"], \"answer_aliases\": [\"très fin\"], \"value\": 5}}}"^^rdf:JSON ;
-    ws:quantity "duration_minutes" ;
-    ws:unitAlias "min",
+    wsem:boundAuthority "policy" ;
+    wsem:canonicalUnitToken "unit:MIN" ;
+    wsem:dataType "int" ;
+    wsem:defaultValue 60 ;
+    wsem:fieldPath "experiment.freq_minutes" ;
+    wsem:implementationReference "simulator.py:run_monte_carlo" ;
+    wsem:minimum 1 ;
+    wsem:modelComponent "experiment" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Pas internes admis par TLS, en minutes. Un pas plus fin est plus petit. Une sortie journalière est une agrégation et ne fixe pas ce pas interne.\", \"levels\": {\"fin\": {\"aliases\": [\"pas fin\", \"résolution temporelle fine\"], \"answer_aliases\": [\"fin\"], \"value\": 10}, \"grossier\": {\"aliases\": [\"pas grossier\", \"résolution temporelle grossière\"], \"answer_aliases\": [\"grossier\"], \"value\": 60}, \"intermédiaire\": {\"aliases\": [\"pas intermédiaire\"], \"answer_aliases\": [\"intermédiaire\"], \"value\": 15}, \"large\": {\"aliases\": [\"pas large\"], \"answer_aliases\": [\"large\"], \"value\": 30}, \"très fin\": {\"aliases\": [\"pas très fin\", \"résolution temporelle très fine\"], \"answer_aliases\": [\"très fin\"], \"value\": 5}}}"^^rdf:JSON ;
+    wsem:quantity "duration_minutes" ;
+    wsem:unitAlias "min",
         "minute",
         "minutes" ;
-    ws:unitSymbol "min" .
+    wsem:unitSymbol "min" .
 
 <https://w3id.org/websemantic/ns#tls/lighting_kw> a skos:Concept ;
     skos:prefLabel "lighting_kw" .
@@ -1370,22 +1372,22 @@ ws:value a rdf:Property ;
     skos:notation "experiment.n_days" ;
     skos:prefLabel "Durée"@fr ;
     skos:scopeNote "L’annualisation utilise 365/n_days ; 365 jours ne couvrent pas une année civile bissextile complète."@fr ;
-    ws:boundAuthority "policy" ;
-    ws:canonicalUnitToken "unit:DAY" ;
-    ws:dataType "int" ;
-    ws:defaultValue 7 ;
-    ws:fieldPath "experiment.n_days" ;
-    ws:implementationReference "simulator.py:run_monte_carlo" ;
-    ws:minimum 1 ;
-    ws:modelComponent "experiment" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.\", \"levels\": {\"courant\": {\"aliases\": [\"durée de simulation courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 7}, \"court\": {\"aliases\": [\"courte période de simulation\", \"simulation courte\"], \"answer_aliases\": [\"court\"], \"value\": 1}, \"long\": {\"aliases\": [\"longue période de simulation\", \"simulation longue\"], \"answer_aliases\": [\"long\"], \"value\": 365}, \"très long\": {\"aliases\": [\"très longue période de simulation\", \"simulation très longue\"], \"answer_aliases\": [\"très long\"], \"value\": 1095}}}"^^rdf:JSON ;
-    ws:quantity "duration_days" ;
-    ws:unitAlias "day",
+    wsem:boundAuthority "policy" ;
+    wsem:canonicalUnitToken "unit:DAY" ;
+    wsem:dataType "int" ;
+    wsem:defaultValue 7 ;
+    wsem:fieldPath "experiment.n_days" ;
+    wsem:implementationReference "simulator.py:run_monte_carlo" ;
+    wsem:minimum 1 ;
+    wsem:modelComponent "experiment" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Durées conventionnelles en jours : 1, 7, 365 et 1095. Les calculs longs peuvent être plus coûteux ; ces durées ne garantissent pas une couverture calendaire complète.\", \"levels\": {\"courant\": {\"aliases\": [\"durée de simulation courante\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 7}, \"court\": {\"aliases\": [\"courte période de simulation\", \"simulation courte\"], \"answer_aliases\": [\"court\"], \"value\": 1}, \"long\": {\"aliases\": [\"longue période de simulation\", \"simulation longue\"], \"answer_aliases\": [\"long\"], \"value\": 365}, \"très long\": {\"aliases\": [\"très longue période de simulation\", \"simulation très longue\"], \"answer_aliases\": [\"très long\"], \"value\": 1095}}}"^^rdf:JSON ;
+    wsem:quantity "duration_days" ;
+    wsem:unitAlias "day",
         "days",
         "j",
         "jour",
         "jours" ;
-    ws:unitSymbol "jours" .
+    wsem:unitSymbol "jours" .
 
 <https://w3id.org/websemantic/ns#tls/n_pollution_events> a skos:Concept ;
     skos:prefLabel "n_pollution_events" .
@@ -1398,17 +1400,17 @@ ws:value a rdf:Property ;
     skos:notation "experiment.n_runs" ;
     skos:prefLabel "Réalisations"@fr ;
     skos:scopeNote "Augmenter ce nombre décrit mieux la variabilité du modèle, sans ajouter une validation terrain."@fr ;
-    ws:boundAuthority "policy" ;
-    ws:canonicalUnitToken "unit:NUM" ;
-    ws:dataType "int" ;
-    ws:defaultValue 3 ;
-    ws:fieldPath "experiment.n_runs" ;
-    ws:implementationReference "simulator.py:run_monte_carlo" ;
-    ws:minimum 1 ;
-    ws:modelComponent "experiment" ;
-    ws:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Comptages Monte Carlo conventionnels, à valider ; beaucoup = 30 et énormément = 50 selon une échelle entière. Plus de réalisations augmente le coût ; cela ne valide pas le modèle.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de réalisations\"], \"answer_aliases\": [\"beaucoup\"], \"value\": 30}, \"courant\": {\"aliases\": [\"nombre courant de réalisations\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 3}, \"maximum de référence\": {\"aliases\": [\"énormément de réalisations\"], \"answer_aliases\": [\"énormément\"], \"value\": 50}, \"peu\": {\"aliases\": [\"peu de réalisations\"], \"answer_aliases\": [\"peu\"], \"value\": 1}}}"^^rdf:JSON ;
-    ws:quantity "count" ;
-    ws:unitAlias "1",
+    wsem:boundAuthority "policy" ;
+    wsem:canonicalUnitToken "unit:NUM" ;
+    wsem:dataType "int" ;
+    wsem:defaultValue 3 ;
+    wsem:fieldPath "experiment.n_runs" ;
+    wsem:implementationReference "simulator.py:run_monte_carlo" ;
+    wsem:minimum 1 ;
+    wsem:modelComponent "experiment" ;
+    wsem:qualitativeScale "{\"authority\": \"Convention d’essai WebSemantic ; références de curseurs vérifiées dans TLS app.py @748e053e129669cf3e896d381e3c0ac01c763edd. Ni limite physique ni calibration terrain.\", \"interpretation\": \"Comptages Monte Carlo conventionnels, à valider ; beaucoup = 30 et énormément = 50 selon une échelle entière. Plus de réalisations augmente le coût ; cela ne valide pas le modèle.\", \"levels\": {\"beaucoup\": {\"aliases\": [\"beaucoup de réalisations\"], \"answer_aliases\": [\"beaucoup\"], \"value\": 30}, \"courant\": {\"aliases\": [\"nombre courant de réalisations\"], \"answer_aliases\": [\"courant\", \"habituel\"], \"value\": 3}, \"maximum de référence\": {\"aliases\": [\"énormément de réalisations\"], \"answer_aliases\": [\"énormément\"], \"value\": 50}, \"peu\": {\"aliases\": [\"peu de réalisations\"], \"answer_aliases\": [\"peu\"], \"value\": 1}}}"^^rdf:JSON ;
+    wsem:quantity "count" ;
+    wsem:unitAlias "1",
         "count",
         "nombre",
         "number",
@@ -1417,288 +1419,288 @@ ws:value a rdf:Property ;
         "tubes",
         "unit:UNITLESS",
         "voies" ;
-    ws:unitSymbol "nombre" .
+    wsem:unitSymbol "nombre" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/daily/energy_kwh> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/daily> ;
     skos:definition "Somme des énergies des pas natifs de la journée, réalisation 0."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/energy_kwh> ;
-    ws:quantity "energy" ;
-    ws:unitSymbol "kWh" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/energy_kwh> ;
+    wsem:quantity "energy" ;
+    wsem:unitSymbol "kWh" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/daily/mean_kw> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/daily> ;
     skos:definition "Moyenne des puissances des pas natifs de la journée, réalisation 0."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/mean_kw> ;
-    ws:quantity "power" ;
-    ws:unitSymbol "kW" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/mean_kw> ;
+    wsem:quantity "power" ;
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/daily/timestamp> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/daily> ;
     skos:definition "Horodatage sans fuseau horaire déclaré ; aucune localisation déduite."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/timestamp> ;
-    ws:quantity "time" ;
-    ws:unitSymbol "ISO 8601" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/timestamp> ;
+    wsem:quantity "time" ;
+    wsem:unitSymbol "ISO 8601" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/envelope/mean> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/envelope> ;
     skos:definition "Puissance électrique calculée."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/mean> ;
-    ws:quantity "power" ;
-    ws:unitSymbol "kW" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/mean> ;
+    wsem:quantity "power" ;
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/envelope/median> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/envelope> ;
     skos:definition "Puissance électrique calculée."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/median> ;
-    ws:quantity "power" ;
-    ws:unitSymbol "kW" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/median> ;
+    wsem:quantity "power" ;
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/envelope/p10> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/envelope> ;
     skos:definition "Puissance électrique calculée."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/p10> ;
-    ws:quantity "power" ;
-    ws:unitSymbol "kW" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/p10> ;
+    wsem:quantity "power" ;
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/envelope/p90> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/envelope> ;
     skos:definition "Puissance électrique calculée."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/p90> ;
-    ws:quantity "power" ;
-    ws:unitSymbol "kW" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/p90> ;
+    wsem:quantity "power" ;
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/envelope/timestamp> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/envelope> ;
     skos:definition "Horodatage sans fuseau horaire déclaré ; aucune localisation déduite."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/timestamp> ;
-    ws:quantity "time" ;
-    ws:unitSymbol "ISO 8601" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/timestamp> ;
+    wsem:quantity "time" ;
+    wsem:unitSymbol "ISO 8601" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/kpis/annualized_mwh> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Extrapolation : total_mwh × 365 / n_days ; pas une année observée."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/annualized_mwh> ;
-    ws:quantity "annualized_energy" ;
-    ws:unitSymbol "MWh/an" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/annualized_mwh> ;
+    wsem:quantity "annualized_energy" ;
+    wsem:unitSymbol "MWh/an" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/kpis/base_seed> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Graine de base fixe de l’expérience ; 42 par défaut, modifiable explicitement."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/base_seed> ;
-    ws:quantity "identifier" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/base_seed> ;
+    wsem:quantity "identifier" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/kpis/load_factor> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "mean_kw / peak_kw par réalisation ; sans dimension, 0,6 équivaut à 60 %."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/load_factor> ;
-    ws:quantity "power_ratio" ;
-    ws:unitSymbol "1" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/load_factor> ;
+    wsem:quantity "power_ratio" ;
+    wsem:unitSymbol "1" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/kpis/mean_kw> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Puissance électrique calculée."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/mean_kw> ;
-    ws:quantity "power" ;
-    ws:unitSymbol "kW" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/mean_kw> ;
+    wsem:quantity "power" ;
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/kpis/n_accident_events> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Nombre de transitions 0 vers 1 dans la série accident_event ; un événement actif au premier pas n'est pas compté."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/n_accident_events> ;
-    ws:quantity "transition_count" ;
-    ws:unitSymbol "1" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/n_accident_events> ;
+    wsem:quantity "transition_count" ;
+    wsem:unitSymbol "1" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/kpis/n_pollution_events> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Nombre de transitions 0 vers 1 dans la série pollution_event ; un événement actif au premier pas n'est pas compté."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/n_pollution_events> ;
-    ws:quantity "transition_count" ;
-    ws:unitSymbol "1" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/n_pollution_events> ;
+    wsem:quantity "transition_count" ;
+    wsem:unitSymbol "1" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/kpis/peak_kw> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Puissance électrique calculée."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/peak_kw> ;
-    ws:quantity "power" ;
-    ws:unitSymbol "kW" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/peak_kw> ;
+    wsem:quantity "power" ;
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/kpis/run> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Identifiant de réalisation Monte Carlo, à partir de 0."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/run> ;
-    ws:quantity "identifier" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/run> ;
+    wsem:quantity "identifier" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/kpis/seed> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Graine pseudo-aléatoire : base_seed + run."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/seed> ;
-    ws:quantity "identifier" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/seed> ;
+    wsem:quantity "identifier" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/kpis/specific_kwh_m_year> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "annualized_mwh × 1000 / length_m ; ensemble des tubes, par mètre de longueur du tunnel, pas par mètre-tube."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/specific_kwh_m_year> ;
-    ws:quantity "length_normalized_annualized_energy" ;
-    ws:unitSymbol "kWh/(m·an)" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/specific_kwh_m_year> ;
+    wsem:quantity "length_normalized_annualized_energy" ;
+    wsem:unitSymbol "kWh/(m·an)" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/kpis/total_mwh> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/kpis> ;
     skos:definition "Énergie de toute la période : somme des energy_kwh / 1000."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/total_mwh> ;
-    ws:quantity "energy" ;
-    ws:unitSymbol "MWh" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/total_mwh> ;
+    wsem:quantity "energy" ;
+    wsem:unitSymbol "MWh" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/representative/accident_event> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Indicateur binaire d'accident simulé."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/accident_event> ;
-    ws:quantity "event_flag" ;
-    ws:unitSymbol "1" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/accident_event> ;
+    wsem:quantity "event_flag" ;
+    wsem:unitSymbol "1" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/representative/auxiliary_kw> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Puissance électrique calculée."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/auxiliary_kw> ;
-    ws:quantity "power" ;
-    ws:unitSymbol "kW" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/auxiliary_kw> ;
+    wsem:quantity "power" ;
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/representative/day_type> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Jour de semaine ou week-end du calendrier simulé."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/day_type> ;
-    ws:quantity "category" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/day_type> ;
+    wsem:quantity "category" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/representative/dayofweek> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Indice : lundi 0, dimanche 6."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/dayofweek> ;
-    ws:quantity "weekday_index" ;
-    ws:unitSymbol "1" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/dayofweek> ;
+    wsem:quantity "weekday_index" ;
+    wsem:unitSymbol "1" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/representative/energy_kwh> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Énergie du pas : power_kw × freq_minutes / 60."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/energy_kwh> ;
-    ws:quantity "energy" ;
-    ws:unitSymbol "kWh" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/energy_kwh> ;
+    wsem:quantity "energy" ;
+    wsem:unitSymbol "kWh" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/representative/hour_int> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Heure du jour, de 0 à 23 ; pas une durée."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/hour_int> ;
-    ws:quantity "hour_of_day" ;
-    ws:unitSymbol "h" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/hour_int> ;
+    wsem:quantity "hour_of_day" ;
+    wsem:unitSymbol "h" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/representative/lighting_kw> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Puissance électrique calculée."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/lighting_kw> ;
-    ws:quantity "power" ;
-    ws:unitSymbol "kW" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/lighting_kw> ;
+    wsem:quantity "power" ;
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/representative/pollution_event> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Indicateur binaire d'événement de pollution simulé."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/pollution_event> ;
-    ws:quantity "event_flag" ;
-    ws:unitSymbol "1" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/pollution_event> ;
+    wsem:quantity "event_flag" ;
+    wsem:unitSymbol "1" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/representative/power_kw> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Puissance électrique calculée."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/power_kw> ;
-    ws:quantity "power" ;
-    ws:unitSymbol "kW" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/power_kw> ;
+    wsem:quantity "power" ;
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/representative/season> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Saison du calendrier simulé ; ne prouve pas une couverture annuelle."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/season> ;
-    ws:quantity "category" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/season> ;
+    wsem:quantity "category" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/representative/timestamp> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Horodatage sans fuseau horaire déclaré ; aucune localisation déduite."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/timestamp> ;
-    ws:quantity "time" ;
-    ws:unitSymbol "ISO 8601" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/timestamp> ;
+    wsem:quantity "time" ;
+    wsem:unitSymbol "ISO 8601" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/representative/traffic_index> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Indice relatif de trafic ; pas un nombre de véhicules par jour."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/traffic_index> ;
-    ws:quantity "relative_traffic_index" ;
-    ws:unitSymbol "1" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/traffic_index> ;
+    wsem:quantity "relative_traffic_index" ;
+    wsem:unitSymbol "1" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/representative/ventilation_kw> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/representative> ;
     skos:definition "Puissance électrique calculée."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/ventilation_kw> ;
-    ws:quantity "power" ;
-    ws:unitSymbol "kW" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/ventilation_kw> ;
+    wsem:quantity "power" ;
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/season_profiles/hour_int> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/season_profiles> ;
     skos:definition "Heure du jour, de 0 à 23 ; pas une durée."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/hour_int> ;
-    ws:quantity "hour_of_day" ;
-    ws:unitSymbol "h" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/hour_int> ;
+    wsem:quantity "hour_of_day" ;
+    wsem:unitSymbol "h" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/season_profiles/power_kw> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/season_profiles> ;
     skos:definition "Puissance électrique calculée."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/power_kw> ;
-    ws:quantity "power" ;
-    ws:unitSymbol "kW" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/power_kw> ;
+    wsem:quantity "power" ;
+    wsem:unitSymbol "kW" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/season_profiles/run> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/season_profiles> ;
     skos:definition "Identifiant de réalisation Monte Carlo, à partir de 0."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/run> ;
-    ws:quantity "identifier" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/run> ;
+    wsem:quantity "identifier" .
 
 <https://w3id.org/websemantic/ns#tls/outputs/season_profiles/season> a skos:Concept ;
     skos:broader <https://w3id.org/websemantic/ns#tls/outputs/season_profiles> ;
     skos:definition "Saison du calendrier simulé ; ne prouve pas une couverture annuelle."@fr ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
-    ws:concept <https://w3id.org/websemantic/ns#tls/season> ;
-    ws:quantity "category" .
+    wsem:concept <https://w3id.org/websemantic/ns#tls/season> ;
+    wsem:quantity "category" .
 
 <https://w3id.org/websemantic/ns#tls/p10> a skos:Concept ;
     skos:prefLabel "p10" .
@@ -1721,13 +1723,13 @@ ws:value a rdf:Property ;
     skos:prefLabel "Début"@fr ;
     skos:scopeNote "Demander une date ou une référence temporelle explicite. « Tôt », « tard » et « début d’année » sans année ne déterminent pas une date. Ne pas choisir silencieusement la date du jour. Le défaut est une proposition acceptée seulement sur accord."@fr,
         "Pas de fuseau déclaré ; le profil de lumière saisonnier est celui du modèle, pas une éphéméride du site."@fr ;
-    ws:dataType "date" ;
-    ws:defaultValue "2025-01-01" ;
-    ws:fieldPath "experiment.start_date" ;
-    ws:implementationReference "simulator.py:run_monte_carlo" ;
-    ws:modelComponent "experiment" ;
-    ws:quantity "calendar_date" ;
-    ws:unitAlias "",
+    wsem:dataType "date" ;
+    wsem:defaultValue "2025-01-01" ;
+    wsem:fieldPath "experiment.start_date" ;
+    wsem:implementationReference "simulator.py:run_monte_carlo" ;
+    wsem:modelComponent "experiment" ;
+    wsem:quantity "calendar_date" ;
+    wsem:unitAlias "",
         "1",
         "ISO8601",
         "None",
@@ -1737,7 +1739,7 @@ ws:value a rdf:Property ;
         "sans dimension",
         "sans unité",
         "unit:UNITLESS" ;
-    ws:unitSymbol "date" .
+    wsem:unitSymbol "date" .
 
 <https://w3id.org/websemantic/ns#tls/traffic_index> a skos:Concept ;
     skos:prefLabel "traffic_index" .
@@ -1756,17 +1758,17 @@ ws:value a rdf:Property ;
         "Graine"@fr ;
     skos:scopeNote "Identifiant technique fixe à 42 par autorisation antérieure, modifiable uniquement sur demande explicite chiffrée. Faible, forte, meilleure ou nouvelle graine ne désignent pas une intensité physique ; demander une valeur. Ne pas proposer de graine qualitative."@fr,
         "Valeur fixe 42 selon la politique d’essai, modifiable explicitement ; ce n’est pas un paramètre physique."@fr ;
-    ws:boundAuthority "policy" ;
-    ws:dataType "int" ;
-    ws:defaultAuthorization "Politique de reproductibilité des essais : graine initiale fixe à 42, modifiable sur demande explicite." ;
-    ws:defaultValue 42 ;
-    ws:fieldPath "experiment.base_seed" ;
-    ws:implementationReference "simulator.py:run_monte_carlo" ;
-    ws:minimum 0 ;
-    ws:modelComponent "operational" ;
-    ws:operationalDefault true ;
-    ws:quantity "identifier" ;
-    ws:unitAlias "",
+    wsem:boundAuthority "policy" ;
+    wsem:dataType "int" ;
+    wsem:defaultAuthorization "Politique de reproductibilité des essais : graine initiale fixe à 42, modifiable sur demande explicite." ;
+    wsem:defaultValue 42 ;
+    wsem:fieldPath "experiment.base_seed" ;
+    wsem:implementationReference "simulator.py:run_monte_carlo" ;
+    wsem:minimum 0 ;
+    wsem:modelComponent "operational" ;
+    wsem:operationalDefault true ;
+    wsem:quantity "identifier" ;
+    wsem:unitAlias "",
         "1",
         "None",
         "id",
@@ -1779,7 +1781,7 @@ ws:value a rdf:Property ;
         "sans unité",
         "unit:NUM",
         "unit:UNITLESS" ;
-    ws:unitSymbol "identifiant" .
+    wsem:unitSymbol "identifiant" .
 
 <https://w3id.org/websemantic/ns#tls/energy_kwh> a skos:Concept ;
     skos:prefLabel "energy_kwh" .
@@ -1806,8 +1808,8 @@ ws:value a rdf:Property ;
     skos:broader <https://w3id.org/websemantic/ns#tls/group/outputs> ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "daily" ;
-    ws:aggregation "Agrégation journalière de la réalisation 0 : somme de l'énergie et moyenne de la puissance ; pas une médiane Monte Carlo. Les dates suivent le calendrier sans fuseau déclaré."@fr ;
-    ws:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/daily/energy_kwh>,
+    wsem:aggregation "Agrégation journalière de la réalisation 0 : somme de l'énergie et moyenne de la puissance ; pas une médiane Monte Carlo. Les dates suivent le calendrier sans fuseau déclaré."@fr ;
+    wsem:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/daily/energy_kwh>,
         <https://w3id.org/websemantic/ns#tls/outputs/daily/mean_kw>,
         <https://w3id.org/websemantic/ns#tls/outputs/daily/timestamp> .
 
@@ -1827,8 +1829,8 @@ ws:value a rdf:Property ;
     skos:broader <https://w3id.org/websemantic/ns#tls/group/outputs> ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "season_profiles" ;
-    ws:aggregation "Puissance moyenne par saison et heure du jour, dans chaque réalisation, uniquement sur les jours simulés."@fr ;
-    ws:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/season_profiles/hour_int>,
+    wsem:aggregation "Puissance moyenne par saison et heure du jour, dans chaque réalisation, uniquement sur les jours simulés."@fr ;
+    wsem:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/season_profiles/hour_int>,
         <https://w3id.org/websemantic/ns#tls/outputs/season_profiles/power_kw>,
         <https://w3id.org/websemantic/ns#tls/outputs/season_profiles/run>,
         <https://w3id.org/websemantic/ns#tls/outputs/season_profiles/season> .
@@ -1837,8 +1839,8 @@ ws:value a rdf:Property ;
     skos:broader <https://w3id.org/websemantic/ns#tls/group/outputs> ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "envelope" ;
-    ws:aggregation "Puissances moyennées par heure dans chaque réalisation, puis statistiques entre réalisations. p10/p90 sont des quantiles empiriques, pas un intervalle de confiance."@fr ;
-    ws:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/envelope/mean>,
+    wsem:aggregation "Puissances moyennées par heure dans chaque réalisation, puis statistiques entre réalisations. p10/p90 sont des quantiles empiriques, pas un intervalle de confiance."@fr ;
+    wsem:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/envelope/mean>,
         <https://w3id.org/websemantic/ns#tls/outputs/envelope/median>,
         <https://w3id.org/websemantic/ns#tls/outputs/envelope/p10>,
         <https://w3id.org/websemantic/ns#tls/outputs/envelope/p90>,
@@ -1856,8 +1858,8 @@ ws:value a rdf:Property ;
     skos:broader <https://w3id.org/websemantic/ns#tls/group/outputs> ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "kpis" ;
-    ws:aggregation "Une ligne par réalisation sur toute la période simulée."@fr ;
-    ws:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/kpis/annualized_mwh>,
+    wsem:aggregation "Une ligne par réalisation sur toute la période simulée."@fr ;
+    wsem:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/kpis/annualized_mwh>,
         <https://w3id.org/websemantic/ns#tls/outputs/kpis/base_seed>,
         <https://w3id.org/websemantic/ns#tls/outputs/kpis/load_factor>,
         <https://w3id.org/websemantic/ns#tls/outputs/kpis/mean_kw>,
@@ -1873,8 +1875,8 @@ ws:value a rdf:Property ;
     skos:broader <https://w3id.org/websemantic/ns#tls/group/outputs> ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "representative" ;
-    ws:aggregation "Réalisation 0 au pas natif ; exemple de trajectoire, pas la médiane."@fr ;
-    ws:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/representative/accident_event>,
+    wsem:aggregation "Réalisation 0 au pas natif ; exemple de trajectoire, pas la médiane."@fr ;
+    wsem:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/representative/accident_event>,
         <https://w3id.org/websemantic/ns#tls/outputs/representative/auxiliary_kw>,
         <https://w3id.org/websemantic/ns#tls/outputs/representative/day_type>,
         <https://w3id.org/websemantic/ns#tls/outputs/representative/dayofweek>,

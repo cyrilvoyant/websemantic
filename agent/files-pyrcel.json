@@ -71,7 +71,7 @@
     {
       "path": "src/websemantic/semantics.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/semantics.py",
-      "sha256_lf": "2917521d77a9799cf99476ce8348e79cdee45fbb8864b00df3cf69ad6faec425"
+      "sha256_lf": "f415f90b650b80ad1baf51dda91df37a4d3e48012c5a25d59cbe92a7cf9128a9"
     },
     {
       "path": "descriptors/pyrcel/descriptor.yaml",
@@ -91,27 +91,27 @@
     {
       "path": "ontology/core.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/core.ttl",
-      "sha256_lf": "b9544b7659ba7a123989561c90b213d9144c2a593fbe14fe80cbf1b94f241d50"
+      "sha256_lf": "152b50667c85b3c7ccfa874790088f92bc7f22933b535784ab0642829d7749d8"
     },
     {
       "path": "ontology/pyrcel.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/pyrcel.ttl",
-      "sha256_lf": "adddddba08909e3b5445d27e7060f40efea0f979115d0053d245acc1d10a4be1"
+      "sha256_lf": "59888a3d94f72f908707e1e582ddbaa432587488a400f15b6f6b202906c36c84"
     },
     {
       "path": "ontology/shapes.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/shapes.ttl",
-      "sha256_lf": "e5cf638a10b2ffa5f8e06c5f1b84ac78f47fc013b2340df3aaab57d9a39aa111"
+      "sha256_lf": "e764d35916aa106c28b592b9ef20589236b4d4537ba74fbaa8bcdbf0efae27ba"
     },
     {
       "path": "ontology/competency-questions.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/competency-questions.md",
-      "sha256_lf": "e0ffbd34eeb4d1777392c79bc18c37259a7b7a4eeb1da0205b11f2bc6b6a03ec"
+      "sha256_lf": "876416d150207943a1ea96427514af599442a4da550ac376a1230f74b9de35e7"
     },
     {
       "path": "ontology/README.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/README.md",
-      "sha256_lf": "a16e7bbb1a6bd232a37bd8d015d93207ae22f179c906fbd98329f18837685a68"
+      "sha256_lf": "df53c43582cf14f2859b03ebf36e6859936fe101ef2298a938efe7fda5fd3176"
     },
     {
       "path": "llm.md",
