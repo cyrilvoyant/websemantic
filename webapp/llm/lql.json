@@ -1,0 +1,90 @@
+{
+ "code": "lql",
+ "tasks": [
+  "simulate fictitious radiobiological fractionation",
+  "compare fictitious schedules for one target, a list of targets or an anatomical group (compare_schedules)"
+ ],
+ "params": [
+  {
+   "field": "organ",
+   "type": "category",
+   "unit": null,
+   "default": null,
+   "label": "Organe à risque",
+   "categories": null,
+   "declared_levels": null
+  },
+  {
+   "field": "tumour_site",
+   "type": "category",
+   "unit": null,
+   "default": null,
+   "label": "Site tumoral",
+   "categories": null,
+   "declared_levels": null
+  },
+  {
+   "field": "dose_per_fraction",
+   "type": "float",
+   "unit": "unit:GRAY",
+   "default": null,
+   "label": "Dose par fraction",
+   "categories": null,
+   "declared_levels": {
+    "conventional": {
+     "value": 2.0,
+     "expressions": [
+      "fractionnement conventionnel",
+      "dose conventionnelle"
+     ]
+    }
+   }
+  },
+  {
+   "field": "n_fractions",
+   "type": "int",
+   "unit": "unit:NUM",
+   "default": null,
+   "label": "Fractions",
+   "categories": null,
+   "declared_levels": null
+  },
+  {
+   "field": "gap_days",
+   "type": "float",
+   "unit": "unit:DAY",
+   "default": 0,
+   "label": "Interruption",
+   "categories": null,
+   "declared_levels": null
+  },
+  {
+   "field": "reference_dose",
+   "type": "float",
+   "unit": "unit:GRAY",
+   "default": 2,
+   "label": "Dose de référence",
+   "categories": null,
+   "declared_levels": null
+  },
+  {
+   "field": "bifractionated",
+   "type": "category",
+   "unit": null,
+   "default": "no",
+   "label": "Deux fractions par jour",
+   "categories": null,
+   "declared_levels": null
+  },
+  {
+   "field": "scenario_scope",
+   "type": "category",
+   "unit": null,
+   "default": "fictitious",
+   "label": "Cadre",
+   "categories": null,
+   "declared_levels": null
+  }
+ ],
+ "contract": "# LLM contract — read this file first\n\nPlace this pack next to the original code. Files: variables.csv, units.csv, outputs.csv, ontology.ttl, shapes.ttl, codemeta.json.\n\n## Rules\n\n1. **Never invent a value.** Each value is given in the request, an exact conversion of a given value (2 km → 2000 m), a declared default *proposed* to the user, or a declared qualitative convention *proposed* to the user.\n2. **Defaults and qualitative conventions need explicit acceptance** before any calculation. « Prends les valeurs par défaut » accepts defaults; it does not accept a qualitative proposal, which needs its own agreement.\n3. **Qualitative words have a meaning only through the tables below**, parameter by parameter. A word absent from the tables, or listed under *clarify*, has no numerical meaning: ask.\n4. **Units**: use the canonical unit listed. Never mix a percentage and a fraction.\n5. **Out of scope → refuse** (see each software).\n6. **Conflicts** (two values for one quantity, a total that disagrees with its parts) are reported, never resolved silently.\n7. Return the scenario as JSON: `decision` (execute | clarify | refuse), `values` [{field, value, unit, origin, evidence}], `questions`, and a plain three-sentence `restatement` (objective; retained values with units; what still needs acceptance).\n\nExecution is done by the reviewed Python entry points (`agent/README.md`). Never present an unexecuted calculation as a result.\n\n## LQL-Equiv\n\nOriginal code: https://github.com/cyrilvoyant/LQL-Equiv-web (pinned revision in `descriptors/lqlequiv/descriptor.yaml`).\n\nSupported: simulate fictitious radiobiological fractionation; compare fictitious schedules for one target, a list of targets or an anatomical group (compare_schedules). Out of scope: any treatment decision for a patient.\n\n| Field | Unit or categories | Bounds | Default (proposal only) | Meaning |\n|---|---|---|---|---|\n| `organ` | categories: Temporomandibular joint, Rib cage, Oral cavity / oropharynx, Brain, Optic chiasm, Heart, Colon, Stomach, Liver, Small bowel, Larynx / supraglottis, Spinal cord, Oral mucosa, Muscle / vasculature / cartilage, Optic nerve, Eye, Oesophagus, Middle / external ear, Parotid, Skin (acute), Skin (late), Brachial plexus, Lung, Cauda equina, Rectum, Kidney, Retina, Testis, Femoral head, Thyroid, Brainstem, Bladder, Standard acute-responding tissue, Standard late-responding tissue |  |  | Nom exact dans la bibliothèque radiobiologique ; ne définit pas un patient. |\n| `tumour_site` | categories: Tonsil, Carcinoma, Cervix (LQ-L), Vocal cord, Glioblastoma (LQ-L), Larynx, Liposarcoma, Medulloblastoma (LQ-L), Oral mucosa, Nasopharynx, Oesophagus, Oropharynx, Skin carcinoma, Skin melanoma (LQ-L), Lung, Prostate, Rectum, Breast carcinoma, Standard tumour, Standard tumour, no proliferation |  |  | Nom exact dans la bibliothèque ; cas fictif uniquement. |\n| `dose_per_fraction` | unit:GRAY | min_exclusive 0 |  | Dose physique pour chaque fraction du seul cursus. |\n| `n_fractions` | unit:NUM | min 1 |  | Nombre entier de fractions du seul cursus. |\n| `gap_days` | unit:DAY | min 0 | 0 | Intervalle avant le cursus en jours, dans la convention calendaire native. |\n| `reference_dose` | unit:GRAY | min_exclusive 0 | 2 | Dose physique par fraction du régime auquel EQD se rapporte ; EQD2 seulement si 2 Gy. |\n| `bifractionated` | categories: yes, no |  | no | yes active deux fractions par jour et un intervalle natif fixe de 6 h ; no sinon. |\n| `scenario_scope` | categories: fictitious |  | fictitious | Scénario fictif de recherche, sans décision clinique. |\n\n**Qualitative conventions** (propose the value, then ask for acceptance):\n\n| Expression | Field | Proposed value |\n|---|---|---|\n| « fractionnement conventionnel », « dose conventionnelle » | `dose_per_fraction` | 2 unit:GRAY |\n\n**Clarify, never convert:** « hypofractionnement modéré / extrême », « stéréotaxique », « hyperfractionnement », « dose élevée », « peu de séances ».\n\n**Qualitative policy:** Pour LQL-Equiv, toute expression qualitative de dose, de nombre de séances ou de fractionnement (sauf « fractionnement conventionnel » = 2 Gy proposé) conduit à une question ; aucune valeur n'est proposée ni devinée. Peu de paramètres, conséquences fortes (NTCP de 3 % à 47 % selon la dose lue pour « hypofractionnement modéré » en 20 séances).\n\n**Task `compare_schedules`** — Comparer deux schémas fictifs (ou plus) pour une cible, une liste de cibles ou un groupe anatomique. Scope: une ligne par cible et par schéma ; même organe à risque, même dose de référence pour tous les schémas.\n\nCriterion: Un schéma est dit meilleur pour une cible seulement s'il la domine (TCP supérieur ou égal ET NTCP inférieur ou égal, avec au moins une inégalité stricte). Sinon, compromis, à expliciter avec les valeurs. Jamais de recommandation clinique.\n\nAdmissible decisions: deux schémas entièrement spécifiés -> exécuter les deux; organe à risque absent -> demander (jamais choisi par le groupe); dose qualitative -> demander; patient nommé ou décision de traitement -> refuser; TCP ou NTCP non défini dans la bibliothèque pour une cible -> aucun verdict pour cette cible, le dire; cas le plus fréquent (dose plus forte = TCP et NTCP plus élevés) -> compromis, valeurs à l'appui.\n\n**Anatomical groups** (study convention over exact library names; a group never selects the organ at risk):\n\n| Group | Expressions | Tumour sites | Organs |\n|---|---|---|---|\n| `thoracic` (Thorax (cibles et organes thoraciques)) | « thoracique », « thorax », « cibles thoraciques », « volumes cibles thoraciques » | Lung, Oesophagus, Breast carcinoma | Heart, Lung, Oesophagus, Spinal cord, Brachial plexus, Rib cage |\n| `head_and_neck` (Tête et cou (ORL)) | « ORL », « tête et cou », « cervico-facial » | Tonsil, Vocal cord, Larynx, Oral mucosa, Nasopharynx, Oropharynx | Temporomandibular joint, Oral cavity / oropharynx, Larynx / supraglottis, Oral mucosa, Parotid, Middle / external ear, Thyroid |\n| `central_nervous_system` (Système nerveux central) | « cérébral », « encéphale », « SNC », « neuro » | Glioblastoma (LQ-L), Medulloblastoma (LQ-L) | Brain, Brainstem, Optic chiasm, Optic nerve, Eye, Retina, Spinal cord |\n| `pelvis` (Pelvis) | « pelvien », « pelvis », « petit bassin » | Prostate, Rectum, Cervix (LQ-L) | Rectum, Bladder, Femoral head, Testis, Small bowel, Colon, Cauda equina |\n| `abdomen` (Abdomen) | « abdominal », « abdomen » | — | Stomach, Liver, Kidney, Small bowel, Colon |\n| `skin` (Peau) | « cutané », « peau » | Skin carcinoma, Skin melanoma (LQ-L) | Skin (acute), Skin (late) |\n"
+}

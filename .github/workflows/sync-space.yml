@@ -1,4 +1,4 @@
-# Push the space/ folder to the Hugging Face Space CyrilVoyant/websemantic.
+# Push the static web app (webapp/) to the Hugging Face Space CyrilVoyant/websemantic.
 # Needs the repository secret HF_TOKEN (a Hugging Face token with write access to that Space only).
 name: Sync Space to Hugging Face
 
@@ -6,20 +6,19 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["space/**"]
+    paths: ["webapp/**"]
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Push space/ to the Space
+      - name: Push webapp/ to the Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           if [ -z "$HF_TOKEN" ]; then echo "HF_TOKEN secret not set: nothing pushed."; exit 0; fi
-          cd space
-          rm -rf workspace
+          cd webapp
           git init -q -b main
           git config user.name "Cyril Voyant"
           git config user.email "cyrilvoyant@users.noreply.github.com"
