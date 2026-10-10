@@ -76,7 +76,7 @@
     {
       "path": "ontology/core.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/core.ttl",
-      "sha256_lf": "152b50667c85b3c7ccfa874790088f92bc7f22933b535784ab0642829d7749d8"
+      "sha256_lf": "2999ec7bb90f8986282cea65e31222256f6566da98fbdf3f27e5f3d080207a78"
     },
     {
       "path": "ontology/tls-vocabulary.ttl",
@@ -96,7 +96,7 @@
     {
       "path": "ontology/README.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/README.md",
-      "sha256_lf": "df53c43582cf14f2859b03ebf36e6859936fe101ef2298a938efe7fda5fd3176"
+      "sha256_lf": "854dd89cf5f41ed6e936fabcdc305f4bcdcb884d0d809b2291b8b41e0a50e66c"
     },
     {
       "path": "ontology/tls-scenario.schema.json",

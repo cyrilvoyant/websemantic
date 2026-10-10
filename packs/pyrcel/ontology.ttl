@@ -18,12 +18,12 @@
 # never by new core classes. Alignments use rdfs:subClassOf / rdfs:seeAlso only:
 # no owl:equivalentClass is asserted towards external vocabularies.
 
-<https://w3id.org/websemantic/ns/core> a owl:Ontology ;
+<https://w3id.org/websemantic/ns> a owl:Ontology ;
     dcterms:title "WebSemantic core ontology"@en ;
     dcterms:description "Common vocabulary linking user requests, software contracts, accepted assumptions, executions and qualified simulation outputs."@en ;
-    owl:versionInfo "0.2.2" ;
-    owl:versionIRI <https://w3id.org/websemantic/ns/core/0.2.2> ;
-    owl:priorVersion <https://w3id.org/websemantic/ns/core/0.2.1> ;
+    owl:versionInfo "0.2.3" ;
+    owl:versionIRI <https://w3id.org/websemantic/ns/core/0.2.3> ;
+    owl:priorVersion <https://w3id.org/websemantic/ns/core/0.2.2> ;
     dcterms:created "2026-10-06"^^xsd:date ;
     dcterms:issued "2026-10-08"^^xsd:date ;
     dcterms:modified "2026-10-10"^^xsd:date ;
