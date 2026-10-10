@@ -3,10 +3,7 @@
 name: Sync Space to Hugging Face
 
 on:
-  workflow_dispatch:
-  push:
-    branches: [main]
-    paths: ["webapp/**"]
+  workflow_dispatch:  # manual only: run after review
 
 jobs:
   sync:
