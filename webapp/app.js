@@ -192,11 +192,13 @@ function render(out) {
     (u.covered ? `<p><b>${t.prov[2]}:</b> ${esc(u.covered.join(", "))} · <b>${t.prov[3]}:</b> ${esc((u.not_covered || []).join(", "))}</p>` : "") +
     (q.validity_notes || []).map((n) => `<p>– ${esc(n)}</p>`).join("");
   $("files").innerHTML = `<b>${t.prov[4]}:</b> ` + Object.entries(r.files).map(([name, text]) => {
-    const url = URL.createObjectURL(new Blob([text], { type: name.endsWith(".json") ? "application/json" : "text/csv" }));
+    const url = URL.createObjectURL(new Blob([text], { type: name.endsWith(".json") ? "application/json" : name.endsWith(".ttl") ? "text/turtle" : "text/csv" }));
     blobs.push(url);
     return `<a download="${esc(name)}" href="${url}">${esc(name)}</a>`;
   }).join("");
   showTab("results");
+  // on a phone the results sit below the chat: bring them into view
+  if (window.matchMedia("(max-width:900px)").matches) $("decision").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function clearResults(all = true) {

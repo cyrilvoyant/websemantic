@@ -54,7 +54,8 @@ class Relay(BaseHTTPRequestHandler):
         try:
             with urllib.request.urlopen(req, timeout=60) as r:
                 raw = json.load(r)
-            self._send(200, {"parsed": json.loads(raw["choices"][0]["message"]["content"])})
+            self._send(200, {"parsed": json.loads(raw["choices"][0]["message"]["content"]),
+                             "model": str(raw.get("model") or MODEL)[:80]})
         except Exception:  # noqa: BLE001 - local test tool
             self._send(503, {"error": "llm"})
 

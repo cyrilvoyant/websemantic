@@ -1,8 +1,10 @@
 // WebSemantic language-model relay (Cloudflare Worker, free plan).
 // Keeps the Mistral key secret (secret MISTRAL_API_KEY). The prompt is built here from the published contract of one
-// code and the answer is reduced to the expected fields, which limits misuse; it is not an authentication. Abuse is
-// bounded by a per-visitor limit (Cloudflare rate-limiting binding LIMITER when configured, else a best-effort
-// in-memory count) and, globally, by the free plan of the key, which cannot be billed.
+// code and the answer is reduced to the expected fields, which limits misuse. The origin check is not an
+// authentication: any HTTP client can send the allowed Origin header. Abuse is bounded by a per-visitor limit
+// (Cloudflare rate-limiting binding LIMITER when configured; otherwise a best-effort in-memory count per instance,
+// not a guarantee) and, globally, by the Mistral account's monthly allowance. Non-billing is an account setting
+// (free plan, pay-as-you-go not activated, checked by the owner on 10 October 2026), not something this code enforces.
 
 const ORIGINS = ["https://cyrilvoyant-websemantic.static.hf.space", "https://huggingface.co"];
 const CONTEXT = "https://huggingface.co/spaces/CyrilVoyant/websemantic/resolve/main/llm/";
@@ -122,7 +124,7 @@ export default {
       }, TIMEOUT_MS);
       if (!r.ok) return json({ error: r.status === 429 ? "busy" : "llm" }, 503, echo);
       const data = await r.json();
-      return json({ parsed: sanitize(JSON.parse(data.choices[0].message.content)) }, 200, echo);
+      return json({ parsed: sanitize(JSON.parse(data.choices[0].message.content)), model: str(data.model, 80) }, 200, echo);
     } catch {
       return json({ error: "llm" }, 503, echo);  // timeout, network error or malformed answer
     }

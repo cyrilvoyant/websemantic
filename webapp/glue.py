@@ -30,7 +30,7 @@ WS = Path(os.environ.get("WEBSEMANTIC_WS", "/home/pyodide/ws"))
 CODES = ("tls", "lql")
 DESC = {m: load_descriptor(WS, m) for m in CODES}
 SINGLE_TASK = {m: DESC[m]["tasks"]["supported"][0] for m in CODES}
-MAX_DAYS, MAX_RUNS, MAX_POINTS = 60, 10, 60 * 96 * 10  # keeps the visitor's browser responsive
+MAX_DAYS, MAX_RUNS, MAX_POINTS = 366, 10, 366 * 96 * 10  # one year at 15 min, 10 runs: keeps the browser responsive
 NBSP = chr(0x00A0)
 NAME = re.compile(r"^[a-z_][a-z0-9_]*$")
 
@@ -54,6 +54,10 @@ T = {
         "accepted_some": "Accepted: {}. The other proposals are still waiting.",
         "noted": "Noted from your words: {}.",
         "unchanged": "No value was changed by this message.",
+        "blocked": "Still unresolved: **{}** (your last request for it could not be applied). Give the value you want, "
+                   "or say **keep** to leave the current value; nothing is computed before that.",
+        "kept": "Understood: {} keeps its current value.",
+        "not_named": " — this parameter was not named in your message: please check",
         "held": "Understood: nothing is computed for now.",
         "fix": "To fix: {}.",
         "unused": "I could not use: {}. Nothing is computed until this is clarified.",
@@ -65,12 +69,14 @@ T = {
         "example_done": "Example computed without the language model: every value is stated and accepted (see Variables).",
         "not_computable": "not computable",
         "status": ("stated by you", "accepted", "proposed, to accept"),
-        "period": "Default period in the browser (7 days, 5 runs); change it in the chat (up to 60 days, 10 runs)",
+        "period": "Default period in the browser (7 days, 5 runs); change it in the chat (up to one year, 10 runs)",
         "tls_analysis": "Over {days} simulated days the median peak power is {peak:,.0f} kW and the mean {mean:,.0f} kW "
                         "(load factor {lf:.2f}); the representative run peaks around {hour}:00. In that run, energy "
                         "splits into lighting {li:.0f} %, ventilation {ve:.0f} % and auxiliaries {au:.0f} %. The 10–90 % "
-                        "band between Monte Carlo runs has a mean width of {band:.0f} % of the median. The annual figure "
-                        "({ann:,.0f} MWh/yr) extrapolates the period by 365/{days}; it is not a seasonally complete year.",
+                        "band between Monte Carlo runs has a mean width of {band:.0f} % of the median. ",
+        "annual_extrapolated": "The annual figure ({ann:,.0f} MWh/yr) extrapolates the period by 365/{days}; it is not "
+                               "a seasonally complete year.",
+        "annual_full": "The annual figure ({ann:,.0f} MWh/yr) comes from a simulated year with its seasons.",
         "lql_analysis": "A physical dose of {phys} Gy corresponds to an EQD2 of {eqt} Gy for the target and {eqo} Gy "
                         "for the organ at risk, over {days} days. The model gives a tumour control probability of {tcp} % "
                         "and a complication probability of {ntcp} %. These are model outputs for a fictitious scenario "
@@ -95,6 +101,10 @@ T = {
         "accepted_some": "Accepté : {}. Les autres propositions restent en attente.",
         "noted": "Noté d'après vos mots : {}.",
         "unchanged": "Ce message n'a changé aucune valeur.",
+        "blocked": "Reste en suspens : **{}** (votre dernière demande n'a pas pu être appliquée). Donnez la valeur "
+                   "voulue, ou dites **garder** pour conserver la valeur actuelle ; rien n'est calculé avant.",
+        "kept": "Entendu : {} garde sa valeur actuelle.",
+        "not_named": " — paramètre non nommé dans votre message : vérifiez",
         "held": "Entendu : rien n'est calculé pour l'instant.",
         "fix": "À corriger : {}.",
         "unused": "Je n'ai pas pu utiliser : {}. Rien n'est calculé tant que ce n'est pas précisé.",
@@ -107,13 +117,15 @@ T = {
         "not_computable": "non calculable",
         "status": ("donné par vous", "accepté", "proposé, à accepter"),
         "period": "Période par défaut dans le navigateur (7 jours, 5 tirages) ; modifiable dans la conversation "
-                  "(jusqu'à 60 jours, 10 tirages)",
+                  "(jusqu'à un an, 10 tirages)",
         "tls_analysis": "Sur {days} jours simulés, la puissance de pointe médiane est {peak:,.0f} kW et la moyenne "
                         "{mean:,.0f} kW (facteur de charge {lf:.2f}) ; le tirage représentatif culmine vers {hour} h. Dans "
                         "ce tirage, l'énergie se répartit entre éclairage {li:.0f} %, ventilation {ve:.0f} % et "
                         "auxiliaires {au:.0f} %. La bande 10–90 % entre tirages Monte Carlo a une largeur moyenne de "
-                        "{band:.0f} % de la médiane. Le chiffre annuel ({ann:,.0f} MWh/an) extrapole la période par "
-                        "365/{days} ; ce n'est pas une année complète avec ses saisons.",
+                        "{band:.0f} % de la médiane. ",
+        "annual_extrapolated": "Le chiffre annuel ({ann:,.0f} MWh/an) extrapole la période par 365/{days} ; ce n'est "
+                               "pas une année complète avec ses saisons.",
+        "annual_full": "Le chiffre annuel ({ann:,.0f} MWh/an) vient d'une année simulée avec ses saisons.",
         "lql_analysis": "Une dose physique de {phys} Gy correspond à une EQD2 de {eqt} Gy pour la cible et de {eqo} Gy "
                         "pour l'organe à risque, sur {days} jours. Le modèle donne une probabilité de contrôle tumoral de "
                         "{tcp} % et de complication de {ntcp} %. Ce sont des sorties de modèle pour un scénario fictif, "
@@ -158,11 +170,14 @@ SOURCES = {"en": {"provided": "your words: “{}”", "convention": "declared co
 ERRORS = {"en": {"path": "{}: several courses or nested fields are not available here",
                  "unknown": "{}: not a parameter of this code", "number": "{}: the number does not match your words",
                  "level": "{}: no declared convention for these words", "default": "{}: no declared default",
-                 "value": "{}: value not usable", "twice": "{}: two different readings in one message"},
+                 "value": "{}: value not usable", "twice": "{}: two different readings in one message",
+                 "relative": "{}: your words give a change that I cannot check exactly; please give the final value"},
           "fr": {"path": "{} : plusieurs cures ou champs imbriqués ne sont pas disponibles ici",
                  "unknown": "{} : pas un paramètre de ce code", "number": "{} : le nombre ne correspond pas à vos mots",
                  "level": "{} : pas de convention déclarée pour ces mots", "default": "{} : pas de valeur par défaut déclarée",
-                 "value": "{} : valeur inutilisable", "twice": "{} : deux lectures différentes dans le même message"}}
+                 "value": "{} : valeur inutilisable", "twice": "{} : deux lectures différentes dans le même message",
+                 "relative": "{} : vos mots donnent une variation que je ne peux pas vérifier exactement ; indiquez la "
+                             "valeur finale"}}
 
 # ---------------------------------------------------------------- formatting
 
@@ -264,8 +279,11 @@ def evidence_numbers(evidence):
             found.add(float(value))
     if re.search(r"\b(sans|aucune?|without|no|none)\b", text):  # "sans interruption", "no gap": zero
         found.add(0.0)
-    if re.search(r"\b(semaines?|weeks?)\b", text):  # exact calendar conversion: 1 week = 7 days
-        found |= {7 * x for x in found} | ({7.0} if not found else set())
+    base = set(found)  # exact calendar conversions: 1 week = 7 days, 1 year = 365 days (no months: not exact)
+    if re.search(r"\b(semaines?|weeks?)\b", text):
+        found |= {7 * x for x in base} | ({7.0} if not base else set())
+    if re.search(r"\b(annees?|years?|ans)\b|\b(un|1) an\b", text):
+        found |= {365 * x for x in base} | ({365.0} if not base else set())
     return found
 
 
@@ -281,6 +299,26 @@ def in_words(value, evidence):
         return float(value) in evidence_numbers(evidence)
     except (TypeError, ValueError):
         return fold(value) in fold(evidence)
+
+
+UP = re.compile(r"\b(plus|augmente\w*|ajoute\w*|supplementaires?|more|increase\w*|higher|add|added|extra)\b|\+")
+DOWN = re.compile(r"\b(moins|reduit\w*|reduire|baisse\w*|diminue\w*|less|decrease\w*|lower|reduce\w*|fewer)\b")
+RELATIVE = re.compile(UP.pattern + "|" + DOWN.pattern)
+
+
+def relative_change(old, value, evidence):
+    """A change stated relative to the current value ('200 m de plus'): exact only if value = current ± a stated number."""
+    try:
+        before, after = float(old["value"]), float(value)
+    except (TypeError, ValueError, KeyError):
+        return None
+    text = fold(evidence)
+    for x in sorted(evidence_numbers(evidence)):
+        if UP.search(text) and math.isclose(after, before + x):
+            return before, "+", x
+        if DOWN.search(text) and math.isclose(after, before - x):
+            return before, "−", x
+    return None
 
 
 def apply_value(model, state, v, message, lang):
@@ -325,15 +363,22 @@ def apply_value(model, state, v, message, lang):
         elif origin == "provided":
             numeric = spec.get("type") in ("int", "float")
             value, source = parse_number(raw, spec["type"]) if numeric else (raw, None)
+            change = None
             if numeric and not spec.get("evidence_conversion"):  # with a declared conversion, normalize() reads the
                 stated = evidence_numbers(evidence)                 # number and unit from the quoted words itself
                 if not stated or float(value) not in stated:
-                    return e["number"].format(label(name, lang))
+                    change = relative_change(old, value, evidence) if old else None
+                    if change is None:
+                        return e["relative" if RELATIVE.search(fold(evidence)) else "number"].format(label(name, lang))
             value, unit, conv = normalize(value, unit, evidence, spec)
             if not (evidence and evidence in message):
                 return e["value"].format(label(name, lang))
             source = "; ".join(s for s in (source, conv) if s) or None
             rec = dict(value=value, unit=unit, origin="provided", evidence=evidence, source=source, accepted=False)
+            if change:  # exact arithmetic on a stated number, shown to the visitor
+                before, sign, x = change
+                rec["relative"] = f"{shown(name, before, lang)} {sign} {shown(name, x, lang)}"
+                rec["source"] = f"Exact change stated relative to the current value: {rec['relative']}"
         else:
             return e["value"].format(label(name, lang))
     except (ValueError, TypeError):
@@ -354,6 +399,12 @@ HOLD = re.compile(r"\b(attends|attendez|wait|hold on|pas encore|not yet|ne calcu
 ONLY = re.compile(r"\b(seulement|uniquement|only|just|sauf|except|mais|but)\b", re.IGNORECASE)
 ACCEPT_WORD = re.compile(r"\b(oui|yes|ok|okay|d'accord|d’accord|accepte|j'accepte|j’accepte|accept|agree|valide)\b",
                          re.IGNORECASE)
+KEEP = re.compile(r"\b(garde|garder|gardez|conserve|conserver|laisse|laisser|annule|annuler|keep|leave|cancel)\b",
+                  re.IGNORECASE)
+
+
+def names(fields, lang):
+    return ", ".join(label(f, lang) for f in fields)
 
 
 def is_pure_confirmation(message):
@@ -420,7 +471,8 @@ def tls_results(target, state, lang):
     total = sum(shares) or float("nan")
     band = ((env.p90 - env.p10) / env["median"].where(env["median"] != 0)).mean() * 100
     days = state["experiment"].get("n_days", {}).get("value")
-    analysis = localise(T[lang]["tls_analysis"].format(
+    annual = T[lang]["annual_full" if days and days >= 365 else "annual_extrapolated"]
+    analysis = localise((T[lang]["tls_analysis"] + annual).format(
         days=days, peak=k.peak_kw, mean=k.mean_kw, lf=k.load_factor, hour=int(hourly.sum(axis=1).idxmax()),
         li=100 * shares[0] / total, ve=100 * shares[1] / total, au=100 * shares[2] / total, band=float(band),
         ann=k.annualized_mwh), lang)
@@ -430,7 +482,8 @@ def tls_results(target, state, lang):
             "series": {"t": env.timestamp.tolist(), "median": env["median"].round(2).tolist(),
                        "p10": env.p10.round(2).tolist(), "p90": env.p90.round(2).tolist()},
             "hourly": {"hour": hourly.index.tolist(), **{c: hourly[c].round(2).tolist() for c in cols}},
-            "files": files_of(target, ("representative.csv", "envelope.csv", "daily.csv", "kpis.csv", "manifest.json"))}
+            "files": files_of(target, ("representative.csv", "envelope.csv", "daily.csv", "kpis.csv", "manifest.json",
+                                       "semantics.ttl"))}
 
 
 def lql_results(target, ind, lang):
@@ -444,7 +497,7 @@ def lql_results(target, ind, lang):
             f"{num(ntcp, '.0f', lang)} / {num(tcp, '.0f', lang)}"]
     return {"kind": "lql", "kpis": kpis, "analysis": analysis, "qualification": qualification(target, "lql"),
             "bars": [phys, eqt, eqo], "probs": [tcp, ntcp],
-            "files": files_of(target, ("indicators.csv", "manifest.json"))}
+            "files": files_of(target, ("indicators.csv", "manifest.json", "semantics.ttl"))}
 
 
 def run(model, state, lang):
@@ -479,7 +532,7 @@ def variables(state, lang):
     return rows
 
 
-def clarify_text(model, state, verdict, questions, lang):
+def clarify_text(model, state, verdict, lang):
     t = T[lang]
     short = lambda i: i["parameter"].split(".")[-1]  # noqa: E731
     waiting = [short(i) for i in verdict["issues"] if i["code"] == "unaccepted_assumption"]
@@ -493,8 +546,6 @@ def clarify_text(model, state, verdict, questions, lang):
     parts = []
     if missing:
         parts.append(t["needed"].format(", ".join(label(n, lang) for n in missing)))
-        if questions:
-            parts.append(" ".join(questions))
     if conv:
         parts.append(t["conventions"].format("; ".join(
             f"**{label(n, lang)}{sep}{shown(n, rec_of(n)['value'], lang)}** ({q[0]}{rec_of(n).get('said', '')}{q[1]})"
@@ -521,8 +572,12 @@ def api_needs_reading(message):
 
 def api_summary(state_json):
     state = json.loads(state_json)
-    return json.dumps({g: {n: {k: r.get(k) for k in ("value", "unit", "origin", "accepted")}
-                           for n, r in state[g].items()} for g in ("inputs", "experiment")}, ensure_ascii=False)
+    summary = {g: {n: {k: r.get(k) for k in ("value", "unit", "origin", "accepted")}
+                   for n, r in state[g].items()} for g in ("inputs", "experiment")}
+    # context only, so that "that means 1200 m" refers to the parameter left unresolved; values are never taken from it
+    summary["unresolved"] = state.get("unresolved") or []
+    summary["previous_message"] = ((state.get("request") or "").splitlines() or [""])[-1][:300]
+    return json.dumps(summary, ensure_ascii=False)
 
 
 def respond(model, lang, state, reply, results=None, decision=None):
@@ -548,12 +603,14 @@ def api_turn(model, lang, state_json, message, parsed_json):
     message = message.strip()
 
     if is_pure_confirmation(message):  # deterministic: accept what was shown, then run if the validator agrees
+        if state.get("unresolved"):  # a request that could not be applied is never replaced by the old value
+            return respond(model, lang, state, t["blocked"].format(names(state["unresolved"], lang)), decision="clarify")
         for g, n in pending(state):
             state[g][n]["accepted"] = True
         verdict = check(model, state, lang)
         if verdict["decision"] == "execute":
             return compute(model, lang, state)
-        return respond(model, lang, state, clarify_text(model, state, verdict, [], lang))
+        return respond(model, lang, state, clarify_text(model, state, verdict, lang))
 
     if not parsed_json:  # a composite message that could not be read: nothing changes
         return respond(model, lang, state, t["unread"])
@@ -572,17 +629,34 @@ def api_turn(model, lang, state_json, message, parsed_json):
     fields = [str(v.get("field") or "") for v in values]
     twice = {f for f in fields if fields.count(f) > 1}
     errors += [ERRORS[lang]["twice"].format(label(f, lang)) for f in sorted(twice)]
+    failed = set(twice)
     for v in values:
         if str(v.get("field") or "") in twice:
             continue  # two readings for one parameter: neither is used
         error = apply_value(model, state, v, message, lang)
         if error:
             errors.append(error)
+            failed.add(str(v.get("field") or ""))
     q = ("« ", " »") if lang == "fr" else ("“", "”")
-    noted = [f"**{label(n, lang)}{' : ' if lang == 'fr' else ': '}{shown(n, r['value'], lang)}** ({q[0]}{r['evidence']}{q[1]})"
-             for g in ("inputs", "experiment") for n, r in state[g].items()
-             if r.get("origin") == "provided" and r != old[g].get(n)]
-    changed = any(state[g] != old[g] for g in ("inputs", "experiment"))
+    sep = " : " if lang == "fr" else ": "
+    named = named_fields(model, state, message)
+    noted = []
+    for g in ("inputs", "experiment"):
+        for n, r in state[g].items():
+            before = old[g].get(n)
+            if r.get("origin") != "provided" or r == before:
+                continue
+            arrow = (f"{shown(n, before['value'], lang)} → " if before and before.get("value") is not None
+                     and not same(before["value"], r["value"]) else "")
+            how = f"{q[0]}{r['evidence']}{q[1]}" + (f"{sep}{r['relative']}" if r.get("relative") else "")
+            warn = (t["not_named"] if before and (before.get("origin") == "provided" or before.get("accepted"))
+                    and (g, n) not in named else "")
+            noted.append(f"**{label(n, lang)}{sep}{arrow}{shown(n, r['value'], lang)}** ({how}){warn}")
+    changed_fields = {n for g in ("inputs", "experiment") for n in state[g] if state[g][n] != old[g].get(n)}
+    changed = bool(changed_fields)
+    kept = bool(KEEP.search(message)) and bool(state.get("unresolved"))  # "keep": the current value stays
+    kept_text = t["kept"].format(names(state["unresolved"], lang)) if kept else ""
+    state["unresolved"] = sorted(failed | (set() if kept else set(state.get("unresolved") or []) - changed_fields))
     hold = bool(HOLD.search(message))
     restricted = bool(ONLY.search(message))
     if ACCEPT_WORD.search(message) and restricted and not hold:  # "yes, only for the length": named fields only
@@ -593,10 +667,12 @@ def api_turn(model, lang, state_json, message, parsed_json):
         chosen = []
     propose_defaults(model, state)
     verdict = check(model, state, lang)
-    # the model's own sentences are not shown: every statement in the reply comes from this deterministic state
-    questions = [q for q in parsed.get("questions") or [] if isinstance(q, str)][:2]
+    # the model's own sentences and questions are not shown: every statement and question in the reply comes from
+    # this deterministic state, so the reply cannot contradict what was retained
     parts = [t["noted"].format("; ".join(noted))] if noted else []
-    if not (changed or errors or chosen):
+    if kept_text:
+        parts.append(kept_text)
+    if not (changed or errors or chosen or kept):
         parts.append(t["unchanged"])
     if errors:
         parts.append(t["unused"].format("; ".join(errors)))
@@ -607,10 +683,14 @@ def api_turn(model, lang, state_json, message, parsed_json):
     if verdict["decision"] == "refuse":
         parts.append(t["refused"])
     elif verdict["decision"] == "execute":
-        parts.append(t["ready"])  # a change or a question never runs the code in the same turn
+        if not state["unresolved"]:
+            parts.append(t["ready"])  # a change or a question never runs the code in the same turn
     else:
-        parts.append(clarify_text(model, state, verdict, questions, lang))
-    decision = "clarify" if verdict["decision"] == "execute" or errors else verdict["decision"]
+        parts.append(clarify_text(model, state, verdict, lang))
+    if state["unresolved"]:
+        parts.append(t["blocked"].format(names(state["unresolved"], lang)))
+    blocked = verdict["decision"] == "execute" or errors or state["unresolved"]
+    decision = "clarify" if blocked and verdict["decision"] != "refuse" else verdict["decision"]
     return respond(model, lang, state, "\n\n".join(p for p in parts if p), decision=decision)
 
 

@@ -3,6 +3,11 @@ importScripts("https://cdn.jsdelivr.net/pyodide/v0.27.2/full/pyodide.js");
 
 let py = null;
 
+async function sha256(data) {
+  const digest = await crypto.subtle.digest("SHA-256", data);
+  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 async function init() {
   py = await loadPyodide();
   await py.loadPackage(["numpy", "pandas", "pyyaml", "micropip"]);
@@ -10,9 +15,11 @@ async function init() {
   const bundle = await (await fetch("bundle.zip", { cache: "no-cache" })).arrayBuffer();
   py.FS.mkdirTree("/home/pyodide/ws");
   py.unpackArchive(bundle, "zip", { extractDir: "/home/pyodide/ws" });
-  py.FS.writeFile("/home/pyodide/glue.py", await (await fetch("glue.py", { cache: "no-cache" })).text());
+  const glue = await (await fetch("glue.py", { cache: "no-cache" })).text();
+  py.FS.writeFile("/home/pyodide/glue.py", glue);
   py.runPython("import sys; sys.path[:0] = ['/home/pyodide/ws/src', '/home/pyodide']; import glue");
-  postMessage({ type: "ready" });
+  // fingerprints of exactly what runs here, for the visitor's trace
+  postMessage({ type: "ready", hashes: { "bundle.zip": await sha256(bundle), "glue.py": await sha256(new TextEncoder().encode(glue)) } });
 }
 
 const ready = init().catch((e) => postMessage({ type: "error", error: String(e) }));

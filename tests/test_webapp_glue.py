@@ -118,6 +118,14 @@ def test_the_model_sentences_are_not_shown(calls):
     assert "Ce message n'a changé aucune valeur." in out["reply"]
 
 
+def test_the_model_questions_are_not_shown(calls):
+    """Online test by Cyril: the model asked for the tumour site while the deterministic list asked for the organ."""
+    state = json.loads(glue.api_fresh("lql", "fr"))
+    parsed = dict(reading(LQL_TASK), questions=["Quel est le site tumoral ?"])
+    out, _ = turn("lql", state, "tous les organes à risque", parsed)
+    assert "site tumoral ?" not in out["reply"] and "Il manque encore" in out["reply"]
+
+
 @pytest.mark.parametrize("message", ["ok mais attends avant de calculer", "ok, but wait before computing"])
 def test_a_request_to_wait_accepts_and_runs_nothing(calls, message):
     state = proposed_tls(calls)
@@ -147,7 +155,7 @@ def test_change_with_yes_is_not_run_in_the_same_turn(calls):
                                          "evidence": "45 jours"}))
     assert out["decision"] == "clarify" and not calls
     assert state["experiment"]["n_days"]["value"] == 45
-    assert "Noté d'après vos mots : **période simulée : 45 jours** (« 45 jours »)" in out["reply"]
+    assert "Noté d'après vos mots : **période simulée : 7 jours → 45 jours** (« 45 jours »)" in out["reply"]
 
 
 def test_explanation_does_not_run(calls):
@@ -253,3 +261,86 @@ def test_published_bundle_matches_the_sources():
     with zipfile.ZipFile(ROOT / "webapp" / "bundle.zip") as z:
         published = {n: z.read(n) for n in z.namelist()}
     assert published == expected
+
+
+@pytest.mark.parametrize("model", ["tls", "lql"])
+def test_the_rdf_graph_of_each_result_is_downloadable(model):
+    """The graph written by export_semantics (ontology terms, units, provenance) is offered with the result."""
+    out = json.loads(glue.api_example(model, "fr"))
+    ttl = out["results"]["files"]["semantics.ttl"]
+    assert "@prefix wsem: <https://w3id.org/websemantic/ns#>" in ttl and "prov:" in ttl
+
+
+@pytest.mark.parametrize("words,expected", [("sur un an", 365), ("une année", 365), ("over one year", 365),
+                                            ("2 ans", 730), ("deux semaines", 14)])
+def test_years_and_weeks_are_converted_exactly(words, expected):
+    assert expected in glue.evidence_numbers(words)
+
+
+def test_the_english_article_an_is_not_a_year():
+    assert 3650 not in glue.evidence_numbers("an interruption of 10 days")
+
+
+def test_one_year_is_allowed_and_more_is_refused_before_running(calls):
+    state = accepted_tls(calls)
+    state["experiment"]["n_days"]["value"] = 365
+    state["experiment"]["n_runs"]["value"] = 10
+    state["experiment"]["freq_minutes"] = dict(state["experiment"].get("freq_minutes", {}), value=15)
+    assert not glue.over_limit("tls", state)
+    state["experiment"]["n_days"]["value"] = 400
+    assert glue.over_limit("tls", state)
+
+
+# ------------------------------------------------------------ Cyril's online test: "200 m higher", then "that means 1200 m"
+
+
+def altitude_1000(calls):
+    state = accepted_tls(calls)
+    out, state = turn("tls", state, "change l'altitude à 1000m",
+                      reading(TLS_TASK, {"field": "altitude_m", "value": 1000, "unit": "m", "origin": "provided",
+                                         "evidence": "change l'altitude à 1000m"}))
+    out, state = turn("tls", state, "oui")
+    assert state["inputs"]["altitude_m"]["value"] == 1000 and calls == ["tls"]
+    calls.clear()
+    return state
+
+
+def test_an_exact_relative_change_is_applied_and_shown(calls):
+    state = altitude_1000(calls)
+    out, state = turn("tls", state, "une altitude plus importante de 200m",
+                      reading(TLS_TASK, {"field": "altitude_m", "value": 1200, "unit": "m", "origin": "provided",
+                                         "evidence": "plus importante de 200m"}))
+    assert state["inputs"]["altitude_m"]["value"] == 1200 and not calls
+    assert "1 000 m → 1 200 m" in out["reply"].replace(glue.NBSP, " ") and "+ 200 m" in out["reply"]
+
+
+def test_a_failed_request_blocks_the_confirmation(calls):
+    state = altitude_1000(calls)
+    out, state = turn("tls", state, "une altitude plus importante de 200m",
+                      reading(TLS_TASK, {"field": "altitude_m", "value": 1500, "unit": "m", "origin": "provided",
+                                         "evidence": "plus importante de 200m"}))  # not 1000 + 200: refused
+    assert state["inputs"]["altitude_m"]["value"] == 1000 and state["unresolved"] == ["altitude_m"]
+    assert "Répondez **oui** pour lancer" not in out["reply"] and "Reste en suspens" in out["reply"]
+    out, state = turn("tls", state, "oui")
+    assert not calls and out["decision"] == "clarify"  # the old altitude is not computed silently
+    out, state = turn("tls", state, "garder", reading(TLS_TASK))
+    assert state["unresolved"] == [] and "garde sa valeur actuelle" in out["reply"]
+    out, state = turn("tls", state, "oui")
+    assert calls == ["tls"]
+
+
+def test_an_unnamed_change_of_a_stated_value_is_flagged(calls):
+    state = altitude_1000(calls)
+    out, state = turn("tls", state, "ça veut dire 1200 metre",
+                      reading(TLS_TASK, {"field": "length_m", "value": 1200, "unit": "m", "origin": "provided",
+                                         "evidence": "1200 metre"}))
+    text = out["reply"].replace(glue.NBSP, " ")
+    assert "2 000 m → 1 200 m" in text and "non nommé" in text
+
+
+def test_the_reading_context_carries_the_unresolved_parameter(calls):
+    state = altitude_1000(calls)
+    state["unresolved"] = ["altitude_m"]
+    state["request"] += "\nune altitude plus importante de 200m"
+    summary = json.loads(glue.api_summary(json.dumps(state)))
+    assert summary["unresolved"] == ["altitude_m"] and summary["previous_message"].endswith("200m")
