@@ -68,5 +68,5 @@ td:nth-child(4){color:var(--mid)}
   .kpis{grid-template-columns:1fr 1fr}
   .kpi:nth-child(3){border-left:0}
   .kpi:nth-child(n+3){border-top:1px solid var(--line)}
-  td:nth-child(4),th:nth-child(4){display:none}
+  .pane{overflow-x:auto}
 }

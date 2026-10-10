@@ -1,0 +1,76 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>relay check</title>
+<pre id="out">running…</pre>
+<script type="module">
+// Checks relay/worker.js with the browser's standard Response (no Node here). Requests are plain objects because
+// browsers forbid setting the Origin header; the language model and the context are mocked (no network call).
+import worker, { sanitize } from "/relay/worker.js";
+
+const OK = "https://cyrilvoyant-websemantic.static.hf.space";
+const env = { MISTRAL_API_KEY: "test-only", MISTRAL_MODEL: "mock" };
+let mistral = async () => new Response(JSON.stringify({ choices: [{ message: { content: JSON.stringify({
+  task: "t", values: [{ field: "n_tubes", value: 2, unit: null, origin: "provided", evidence: "deux tubes", junk: 1 },
+                      { field: "x", value: { a: 1 }, origin: "chosen-by-model" }],
+  questions: ["q1", "q2", "q3"], message: "m", extra: "dropped" }) } }] }), { status: 200 });
+globalThis.fetch = async (url, init) => String(url).includes("/llm/")
+  ? new Response(JSON.stringify({ tasks: ["t"], contract: "c", params: [] }), { status: 200 })
+  : mistral(url, init);
+
+function req(method, origin, body, ip = "1.1.1.1", extra = {}) {
+  const h = { origin, "cf-connecting-ip": ip, ...extra };
+  return { method, headers: { get: (k) => h[k.toLowerCase()] ?? null }, text: async () => body };
+}
+const valid = JSON.stringify({ code: "tls", lang: "fr", message: "deux tubes", state: {} });
+const results = [];
+async function check(name, fn) {
+  try { results.push(((await fn()) ? "PASS " : "FAIL ") + name); } catch (e) { results.push("FAIL " + name + " — " + e); }
+}
+
+await check("preflight from the Space: 204, no body, CORS echo", async () => {
+  const r = await worker.fetch(req("OPTIONS", OK, ""), env);
+  return r.status === 204 && r.headers.get("Access-Control-Allow-Origin") === OK && (await r.text()) === "";
+});
+await check("preflight from another origin: 403", async () => (await worker.fetch(req("OPTIONS", "https://evil.example", ""), env)).status === 403);
+await check("POST from another origin: 403", async () => (await worker.fetch(req("POST", "https://evil.example", valid, "2.2.2.2"), env)).status === 403);
+await check("non-JSON body: 400", async () => (await worker.fetch(req("POST", OK, "{oops", "3.3.3.3"), env)).status === 400);
+await check("declared body too large: 413", async () =>
+  (await worker.fetch(req("POST", OK, valid, "4.4.4.4", { "content-length": "999999" }), env)).status === 413);
+await check("unknown code: 400", async () =>
+  (await worker.fetch(req("POST", OK, JSON.stringify({ code: "x", lang: "fr", message: "a" }), "5.5.5.5"), env)).status === 400);
+await check("message too long: 400", async () =>
+  (await worker.fetch(req("POST", OK, JSON.stringify({ code: "tls", lang: "fr", message: "a".repeat(801) }), "6.6.6.6"), env)).status === 400);
+await check("valid request: sanitised reading only", async () => {
+  const r = await worker.fetch(req("POST", OK, valid, "7.7.7.7"), env);
+  const p = (await r.json()).parsed;
+  return r.status === 200 && Object.keys(p).sort().join() === "message,questions,task,values" && p.questions.length === 2
+    && !("junk" in p.values[0]) && p.values[1].origin === "invalid" && p.values[1].value === null;
+});
+await check("model busy (429): 503", async () => {
+  mistral = async () => new Response("{}", { status: 429 });
+  return (await worker.fetch(req("POST", OK, valid, "8.8.8.8"), env)).status === 503;
+});
+await check("network error: 503", async () => {
+  mistral = async () => { throw new TypeError("network"); };
+  return (await worker.fetch(req("POST", OK, valid, "9.9.9.9"), env)).status === 503;
+});
+await check("malformed model answer: 503", async () => {
+  mistral = async () => new Response(JSON.stringify({ choices: [{ message: { content: "not json" } }] }), { status: 200 });
+  return (await worker.fetch(req("POST", OK, valid, "10.0.0.1"), env)).status === 503;
+});
+await check("per-visitor limit: 9th request in a minute is refused", async () => {
+  const codes = [];
+  for (let i = 0; i < 9; i++) codes.push((await worker.fetch(req("POST", OK, valid, "11.0.0.1"), env)).status);
+  return codes.slice(0, 8).every((c) => c !== 429) && codes[8] === 429;
+});
+await check("limiter binding is used when present", async () => {
+  const r = await worker.fetch(req("POST", OK, valid, "12.0.0.1"), { ...env, LIMITER: { limit: async () => ({ success: false }) } });
+  return r.status === 429;
+});
+await check("sanitize keeps sizes bounded", async () => {
+  const p = sanitize({ task: "t".repeat(500), values: Array(50).fill({ field: "f", evidence: "e".repeat(999) }) });
+  return p.task.length === 200 && p.values.length === 40 && p.values[0].evidence.length === 300;
+});
+document.getElementById("out").textContent = results.join("\n");
+window.RELAY_RESULTS = results;
+</script>

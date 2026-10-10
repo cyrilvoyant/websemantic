@@ -7,6 +7,7 @@ Usage: python tools/build_webapp.py
 """
 
 import json
+import sys
 import zipfile
 from pathlib import Path
 
@@ -37,25 +38,40 @@ def declared_levels(spec):
     return out
 
 
-def bundle():
+def entries():
+    """Published path -> LF-normalised bytes, for every file of the bundle (also used by the consistency test)."""
     files = []
     for folder, patterns in INCLUDE:
         for pattern in patterns:
             files += [p for p in (ROOT / folder).rglob(pattern) if "__pycache__" not in p.parts]
     files += [ROOT / s for s in SINGLE]
+    return {p.relative_to(ROOT).as_posix(): p.read_bytes().replace(b"\r\n", b"\n") for p in sorted(set(files))}
+
+
+def bundle():
+    content = entries()
     target = OUT / "bundle.zip"
     with zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as z:
-        for path in sorted(set(files)):
-            z.writestr(path.relative_to(ROOT).as_posix(), path.read_bytes().replace(b"\r\n", b"\n"))
-    print(f"{target.relative_to(ROOT)}: {len(set(files))} files, {target.stat().st_size / 1024:.0f} kB")
+        for name, data in content.items():
+            z.writestr(name, data)
+    print(f"{target.relative_to(ROOT)}: {len(content)} files, {target.stat().st_size / 1024:.0f} kB")
+
+
+def library_names(desc):
+    """Organ and tumour-site names of the pinned LQL-Equiv library (sha256-checked loader), unchanged."""
+    sys.path.insert(0, str(ROOT / "src"))
+    from websemantic.adapters.lql import _backend
+    library = _backend(ROOT, desc).load_library()
+    return {"organ": list(library.organ_names), "tumour_site": list(library.tumour_names)}
 
 
 def reading_context():
     (OUT / "llm").mkdir(exist_ok=True)
     for code, (folder, pack) in CODES.items():
         desc = yaml.safe_load((ROOT / "descriptors" / folder / "descriptor.yaml").read_text(encoding="utf-8"))
+        names = library_names(desc) if code == "lql" else {}
         params = [{"field": n, "type": s.get("type"), "unit": s.get("unit"), "default": s.get("default"),
-                   "label": s.get("label"), "categories": s.get("categories"),
+                   "label": s.get("label"), "categories": s.get("categories") or names.get(n),
                    "declared_levels": declared_levels(s) or None}
                   for g in ("inputs", "experiment") for n, s in (desc.get(g) or {}).items()]
         doc = {"code": code, "tasks": desc["tasks"]["supported"], "params": params,

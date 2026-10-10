@@ -1,25 +1,38 @@
 """WebSemantic in the browser (Pyodide): the deterministic half of each conversation turn.
 
-The relay sends the visitor's message and the contract to the language model and returns its JSON reading. Here,
-locally and unchanged from the study: declared conventions and defaults are only proposed, acceptance must be
-explicit, the validator decides (execute, clarify, refuse), and the pinned codes compute (sha256-checked sources).
+Only the original, validated codes compute (TLS, LQL-Equiv, pinned and sha256-checked through the reviewed adapters).
+The language model only translates the visitor's message into variables of the contract; here, locally:
+- nothing is accepted on the visitor's behalf; a calculation starts only on a pure confirmation ("yes", "compute"),
+  never in the same turn as a change, a restriction, a request to wait or a question;
+- every translated value is checked: exact parameter names only, numbers present in the quoted words, declared
+  conventions and defaults taken from the descriptor (never a number chosen by the model);
+- anything that cannot be used blocks the calculation and is explained;
+- if the message could not be read, nothing changes.
 """
 
 import json
+import math
+import os
 import re
+import shutil
 import tempfile
+import unicodedata
 from pathlib import Path
 
 import pandas as pd
 
 from websemantic.core.validation import Parameter, Scenario, validate
+from websemantic.qualitative import resolve
 from websemantic.registry import execute, load_descriptor
-from websemantic.units import normalize, parse_number
+from websemantic.units import NUMBER_WORDS, normalize, parse_number
 
-WS = Path("/home/pyodide/ws")
+WS = Path(os.environ.get("WEBSEMANTIC_WS", "/home/pyodide/ws"))
 CODES = ("tls", "lql")
 DESC = {m: load_descriptor(WS, m) for m in CODES}
-MAX_DAYS, MAX_RUNS = 60, 10  # keeps the visitor's browser responsive
+SINGLE_TASK = {m: DESC[m]["tasks"]["supported"][0] for m in CODES}
+MAX_DAYS, MAX_RUNS, MAX_POINTS = 60, 10, 60 * 96 * 10  # keeps the visitor's browser responsive
+NBSP = chr(0x00A0)
+NAME = re.compile(r"^[a-z_][a-z0-9_]*$")
 
 T = {
     "en": {
@@ -29,28 +42,39 @@ T = {
                     "category": "not an allowed category", "type": "wrong type", "finite": "must be finite",
                     "unknown_field": "not a parameter of this code", "conflict": "conflicting values",
                     "unsupported_task": "outside what the code supports"},
-        "computed": "All values are stated or accepted: the pinned code has run. Results are on the right.",
+        "computed": "The pinned code has run on the accepted values. Results are on the right.",
         "refused": "This request is outside what the code supports, so nothing is computed.",
+        "not_here": "This kind of request (for instance a comparison of several schedules) is not available on this "
+                    "page. Nothing was changed or computed.",
         "needed": "Still needed: **{}**.",
         "conventions": "From your words I propose {}.",
         "defaults": "The other {} parameters take the code's default values (see Variables).",
-        "pending": "Reply **yes** to accept, or give your own values. Nothing is computed before that.",
-        "fix": "To fix: {}.", "unused": "_Not used: {}._",
-        "limit": "In the browser, simulations are limited to {} days and {} Monte Carlo runs: please reduce the period.",
-        "llm_down": "The language service is busy or unavailable right now. Try again in a moment, or run the example.",
+        "pending": "Reply **yes** to accept everything, or give your own values. Nothing is computed before that.",
+        "ready": "Everything is stated or accepted. Reply **yes** to run the calculation.",
+        "accepted_some": "Accepted: {}. The other proposals are still waiting.",
+        "noted": "Noted from your words: {}.",
+        "unchanged": "No value was changed by this message.",
+        "held": "Understood: nothing is computed for now.",
+        "fix": "To fix: {}.",
+        "unused": "I could not use: {}. Nothing is computed until this is clarified.",
+        "unread": "I could not read your message right now (language service busy or unavailable). Nothing was changed "
+                  "or computed; please try again, or reply **yes** to confirm the scenario already shown.",
+        "limit": "In the browser, simulations are limited to {} days, {} Monte Carlo runs and about {:,} time points: "
+                 "please reduce the period or the number of runs.",
+        "failed_run": "The code refused this scenario: {}",
         "example_done": "Example computed without the language model: every value is stated and accepted (see Variables).",
+        "not_computable": "not computable",
         "status": ("stated by you", "accepted", "proposed, to accept"),
         "period": "Default period in the browser (7 days, 5 runs); change it in the chat (up to 60 days, 10 runs)",
         "tls_analysis": "Over {days} simulated days the median peak power is {peak:,.0f} kW and the mean {mean:,.0f} kW "
-                        "(load factor {lf:.2f}); demand is highest around {hour}:00. Energy splits into lighting "
-                        "{li:.0f} %, ventilation {ve:.0f} % and auxiliaries {au:.0f} %. Between Monte Carlo runs the "
-                        "10–90 % band is ±{band:.0f} % of the median on average. The annual figure ({ann:,.0f} MWh/yr) "
-                        "extrapolates the period by 365/{days}; it is not a seasonally complete year.",
-        "lql_analysis": "A physical dose of {phys:.1f} Gy corresponds to an EQD2 of {eqt:.1f} Gy for the target "
-                        "({gain:+.0f} %) and {eqo:.1f} Gy for the organ at risk, over {days:.0f} days. The model gives a "
-                        "tumour control probability of {tcp:.0f} % and a complication probability of {ntcp:.0f} %. "
-                        "These are model outputs for a fictitious scenario with the parameters of the code's library; "
-                        "they do not support any clinical decision.",
+                        "(load factor {lf:.2f}); the representative run peaks around {hour}:00. In that run, energy "
+                        "splits into lighting {li:.0f} %, ventilation {ve:.0f} % and auxiliaries {au:.0f} %. The 10–90 % "
+                        "band between Monte Carlo runs has a mean width of {band:.0f} % of the median. The annual figure "
+                        "({ann:,.0f} MWh/yr) extrapolates the period by 365/{days}; it is not a seasonally complete year.",
+        "lql_analysis": "A physical dose of {phys} Gy corresponds to an EQD2 of {eqt} Gy for the target and {eqo} Gy "
+                        "for the organ at risk, over {days} days. The model gives a tumour control probability of {tcp} % "
+                        "and a complication probability of {ntcp} %. These are model outputs for a fictitious scenario "
+                        "with the parameters of the code's library; they do not support any clinical decision.",
     },
     "fr": {
         "explain": {"missing": "pas encore de valeur", "unaccepted_assumption": "proposé, en attente de votre accord",
@@ -59,33 +83,43 @@ T = {
                     "category": "catégorie non admise", "type": "type incorrect", "finite": "doit être fini",
                     "unknown_field": "pas un paramètre de ce code", "conflict": "valeurs contradictoires",
                     "unsupported_task": "hors du périmètre du code"},
-        "computed": "Toutes les valeurs sont données ou acceptées : le code figé a tourné. Les résultats sont à droite.",
+        "computed": "Le code figé a tourné sur les valeurs acceptées. Les résultats sont à droite.",
         "refused": "Cette demande sort du périmètre du code : rien n'est calculé.",
+        "not_here": "Ce type de demande (par exemple une comparaison de plusieurs schémas) n'est pas disponible sur "
+                    "cette page. Rien n'a été modifié ni calculé.",
         "needed": "Il manque encore : **{}**.",
         "conventions": "D'après vos mots, je propose {}.",
         "defaults": "Les {} autres paramètres reprennent les valeurs par défaut du code (voir Variables).",
-        "pending": "Répondez **oui** pour accepter, ou donnez vos propres valeurs. Rien n'est calculé avant.",
-        "fix": "À corriger : {}.", "unused": "_Non utilisé : {}._",
-        "limit": "Dans le navigateur, les simulations sont limitées à {} jours et {} tirages Monte Carlo : réduisez la période.",
-        "llm_down": "Le service de langage est occupé ou indisponible. Réessayez dans un instant, ou lancez l'exemple.",
+        "pending": "Répondez **oui** pour tout accepter, ou donnez vos propres valeurs. Rien n'est calculé avant.",
+        "ready": "Tout est donné ou accepté. Répondez **oui** pour lancer le calcul.",
+        "accepted_some": "Accepté : {}. Les autres propositions restent en attente.",
+        "noted": "Noté d'après vos mots : {}.",
+        "unchanged": "Ce message n'a changé aucune valeur.",
+        "held": "Entendu : rien n'est calculé pour l'instant.",
+        "fix": "À corriger : {}.",
+        "unused": "Je n'ai pas pu utiliser : {}. Rien n'est calculé tant que ce n'est pas précisé.",
+        "unread": "Je n'ai pas pu lire votre message (service de langage occupé ou indisponible). Rien n'a été modifié "
+                  "ni calculé ; réessayez, ou répondez **oui** pour confirmer le scénario déjà affiché.",
+        "limit": "Dans le navigateur, les simulations sont limitées à {} jours, {} tirages Monte Carlo et environ {:,} "
+                 "points de temps : réduisez la période ou le nombre de tirages.",
+        "failed_run": "Le code a refusé ce scénario : {}",
         "example_done": "Exemple calculé sans modèle de langage : toutes les valeurs sont données et acceptées (voir Variables).",
+        "not_computable": "non calculable",
         "status": ("donné par vous", "accepté", "proposé, à accepter"),
         "period": "Période par défaut dans le navigateur (7 jours, 5 tirages) ; modifiable dans la conversation "
                   "(jusqu'à 60 jours, 10 tirages)",
         "tls_analysis": "Sur {days} jours simulés, la puissance de pointe médiane est {peak:,.0f} kW et la moyenne "
-                        "{mean:,.0f} kW (facteur de charge {lf:.2f}) ; la demande culmine vers {hour} h. L'énergie se "
-                        "répartit entre éclairage {li:.0f} %, ventilation {ve:.0f} % et auxiliaires {au:.0f} %. Entre "
-                        "tirages Monte Carlo, la bande 10–90 % vaut ±{band:.0f} % de la médiane en moyenne. Le chiffre "
-                        "annuel ({ann:,.0f} MWh/an) extrapole la période par 365/{days} ; ce n'est pas une année complète.",
-        "lql_analysis": "Une dose physique de {phys:.1f} Gy correspond à une EQD2 de {eqt:.1f} Gy pour la cible "
-                        "({gain:+.0f} %) et de {eqo:.1f} Gy pour l'organe à risque, sur {days:.0f} jours. Le modèle donne "
-                        "une probabilité de contrôle tumoral de {tcp:.0f} % et de complication de {ntcp:.0f} %. Ce sont "
-                        "des sorties de modèle pour un scénario fictif, avec les paramètres de la bibliothèque du code ; "
-                        "elles ne fondent aucune décision clinique.",
+                        "{mean:,.0f} kW (facteur de charge {lf:.2f}) ; le tirage représentatif culmine vers {hour} h. Dans "
+                        "ce tirage, l'énergie se répartit entre éclairage {li:.0f} %, ventilation {ve:.0f} % et "
+                        "auxiliaires {au:.0f} %. La bande 10–90 % entre tirages Monte Carlo a une largeur moyenne de "
+                        "{band:.0f} % de la médiane. Le chiffre annuel ({ann:,.0f} MWh/an) extrapole la période par "
+                        "365/{days} ; ce n'est pas une année complète avec ses saisons.",
+        "lql_analysis": "Une dose physique de {phys} Gy correspond à une EQD2 de {eqt} Gy pour la cible et de {eqo} Gy "
+                        "pour l'organe à risque, sur {days} jours. Le modèle donne une probabilité de contrôle tumoral de "
+                        "{tcp} % et de complication de {ntcp} %. Ce sont des sorties de modèle pour un scénario fictif, "
+                        "avec les paramètres de la bibliothèque du code ; elles ne fondent aucune décision clinique.",
     },
 }
-
-
 LABELS = {  # name: (English, French, unit shown)
     "length_m": ("tunnel length", "longueur du tunnel", "m"), "n_tubes": ("tubes", "tubes", ""),
     "n_lanes_per_tube": ("lanes per tube", "voies par tube", ""), "altitude_m": ("altitude", "altitude", "m"),
@@ -110,13 +144,33 @@ LABELS = {  # name: (English, French, unit shown)
     "gap_days": ("treatment gap", "interruption", "days"), "reference_dose": ("reference dose", "dose de référence", "Gy"),
     "bifractionated": ("two sessions a day", "deux séances par jour", ""), "scenario_scope": ("scope", "cadre", ""),
 }
+SHORT = {  # short words that name a field in a partial consent ("yes, only the length"); full labels also count
+    "length_m": ("length", "longueur"), "traffic_level": ("traffic", "trafic"), "n_tubes": ("tube",),
+    "n_lanes_per_tube": ("lanes", "voies"), "gradient_percent": ("slope", "pente"),
+    "n_days": ("period", "duration", "période", "durée"), "n_runs": ("runs", "tirages"),
+    "freq_minutes": ("step", "pas"), "dose_per_fraction": ("dose",), "n_fractions": ("sessions", "séances"),
+}
 UNIT_FR = {"days": "jours", "× reference": "× référence"}
+SOURCES = {"en": {"provided": "your words: “{}”", "convention": "declared convention of the code for “{}”",
+                  "default": "declared default of the code", "read": "read by the language model, to confirm"},
+           "fr": {"provided": "vos mots : « {} »", "convention": "convention déclarée du code pour « {} »",
+                  "default": "valeur par défaut du code", "read": "lu par le modèle de langage, à confirmer"}}
+ERRORS = {"en": {"path": "{}: several courses or nested fields are not available here",
+                 "unknown": "{}: not a parameter of this code", "number": "{}: the number does not match your words",
+                 "level": "{}: no declared convention for these words", "default": "{}: no declared default",
+                 "value": "{}: value not usable", "twice": "{}: two different readings in one message"},
+          "fr": {"path": "{} : plusieurs cures ou champs imbriqués ne sont pas disponibles ici",
+                 "unknown": "{} : pas un paramètre de ce code", "number": "{} : le nombre ne correspond pas à vos mots",
+                 "level": "{} : pas de convention déclarée pour ces mots", "default": "{} : pas de valeur par défaut déclarée",
+                 "value": "{} : valeur inutilisable", "twice": "{} : deux lectures différentes dans le même message"}}
+
+# ---------------------------------------------------------------- formatting
 
 
 def localise(text, lang):
     if lang != "fr":
         return text
-    return re.sub(r"\d[\d,]*\.?\d*", lambda m: m.group(0).replace(",", "\u00a0").replace(".", ","), text)
+    return re.sub(r"\d[\d,]*\.?\d*", lambda m: m.group(0).replace(",", NBSP).replace(".", ","), text)
 
 
 def label(name, lang):
@@ -125,7 +179,6 @@ def label(name, lang):
 
 
 def shown(name, value, lang):
-    """A value as a person reads it: 9 000 m, 1,5 × référence, Rectum."""
     unit = LABELS.get(name, ("", "", ""))[2]
     unit = UNIT_FR.get(unit, unit) if lang == "fr" else unit
     if isinstance(value, float) and value.is_integer():
@@ -133,12 +186,19 @@ def shown(name, value, lang):
     text = f"{value:,}" if isinstance(value, (int, float)) and not isinstance(value, bool) else str(value)
     return localise(f"{text} {unit}".strip(), lang)
 
+
+def num(value, fmt, lang):
+    """Formatted native number, or 'not computable' when the code returned none."""
+    if not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(value):
+        return T[lang]["not_computable"]
+    return localise(format(value, fmt), lang)
+
 # ---------------------------------------------------------------- scenario state
 
 
 def fresh(model, lang="en"):
     desc = DESC[model]
-    state = {"request": "", "task": desc["tasks"]["supported"][0], "inputs": {}, "experiment": {}}
+    state = {"request": "", "task": SINGLE_TASK[model], "inputs": {}, "experiment": {}}
     for group in ("inputs", "experiment"):
         for name, spec in (desc.get(group) or {}).items():
             if spec.get("operational_default") and "default" in spec:
@@ -147,7 +207,7 @@ def fresh(model, lang="en"):
     if model == "tls":
         for name, value in (("n_days", 7), ("n_runs", 5)):
             state["experiment"][name] = dict(value=value, unit=desc["experiment"][name].get("unit"), origin="default",
-                                             evidence=None, source=T[lang]["period"], accepted=False)
+                                             evidence=None, source=T[lang]["period"], accepted=False, kind="default")
     return state
 
 
@@ -173,9 +233,9 @@ def check(model, state, lang="en"):
 def declared_levels(spec):
     scale = spec.get("qualitative_scale") or {}
     out = {}
-    for label, level in (scale.get("levels") or {}).items():
+    for name, level in (scale.get("levels") or {}).items():
         value = level["value"] if "value" in level else scale.get("reference_upper", 0) * level.get("fraction", 0)
-        out[int(value) if spec.get("type") == "int" else float(value)] = label
+        out[name] = int(value) if spec.get("type") == "int" else float(value)
     return out
 
 
@@ -187,79 +247,163 @@ def propose_defaults(model, state):
                                           source="Declared default of the code, proposed", accepted=False, kind="default")
 
 
-def apply_value(model, state, v, message):
-    name = str(v.get("field") or "").split(".")[-1]
-    group = group_of(model, name)
+def fold(text):
+    return "".join(c for c in unicodedata.normalize("NFD", str(text).lower()) if not unicodedata.combining(c))
+
+
+ENGLISH_WORDS = {"zero": 0, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8,
+                 "nine": 9, "ten": 10, "eleven": 11, "twelve": 12, "fifteen": 15, "twenty": 20, "thirty": 30}
+
+
+def evidence_numbers(evidence):
+    """Numbers explicitly present in the quoted words (digits, French and English number words)."""
+    text = fold(evidence)
+    found = {float(x.replace(",", ".")) for x in re.findall(r"\d+(?:[.,]\d+)?", text.replace(NBSP, ""))}
+    for word, value in {**NUMBER_WORDS, **ENGLISH_WORDS}.items():
+        if re.search(r"(?<!\w)" + re.escape(word) + r"(?!\w)", text):
+            found.add(float(value))
+    if re.search(r"\b(sans|aucune?|without|no|none)\b", text):  # "sans interruption", "no gap": zero
+        found.add(0.0)
+    if re.search(r"\b(semaines?|weeks?)\b", text):  # exact calendar conversion: 1 week = 7 days
+        found |= {7 * x for x in found} | ({7.0} if not found else set())
+    return found
+
+
+def same(a, b):
+    try:
+        return a is not None and b is not None and float(a) == float(b)
+    except (TypeError, ValueError):
+        return str(a) == str(b)
+
+
+def in_words(value, evidence):
+    try:
+        return float(value) in evidence_numbers(evidence)
+    except (TypeError, ValueError):
+        return fold(value) in fold(evidence)
+
+
+def apply_value(model, state, v, message, lang):
+    """One translated value, checked locally. Returns an error text when it cannot be used (nothing changes then)."""
+    e = ERRORS[lang]
+    raw_name = str(v.get("field") or "")
+    if not NAME.match(raw_name):
+        return e["path"].format(raw_name)
+    group = group_of(model, raw_name)
     if group is None:
-        return f"'{name}'"
-    spec = DESC[model][group][name]
+        return e["unknown"].format(raw_name)
+    name, spec = raw_name, DESC[model][group][raw_name]
     origin, evidence, raw, unit = v.get("origin"), str(v.get("evidence") or ""), v.get("value"), v.get("unit")
     old = state[group].get(name)
-    if old and (old.get("origin") == "provided" or old.get("accepted")) and not (evidence and evidence in message):
+    quoted = bool(evidence) and evidence in message
+    if old and same(raw, old.get("value")) and not (quoted and in_words(raw, evidence)):
+        return None  # the current value repeated without being stated in the message: no change
+    if old and (old.get("origin") == "provided" or old.get("accepted")) and not quoted:
         return None  # a later message that does not state this value never overrides it
     try:
         if origin == "convention":
-            levels = {label: value for value, label in declared_levels(spec).items()}
-            label = str(v.get("level") or "")
-            if label not in levels:
-                return f"{name} ('{label}')"
-            value = levels[label]
+            if not (evidence and evidence in message):
+                return e["level"].format(label(name, lang))
+            declared = resolve(evidence, spec)  # the descriptor's own resolver first (declared expressions)
+            if declared is not None:
+                value, source = declared
+            else:  # words outside the declared expressions (e.g. English): the model's level, to be accepted
+                levels = declared_levels(spec)
+                level = str(v.get("level") or "")
+                if level not in levels:
+                    return e["level"].format(label(name, lang))
+                value = levels[level]
+                source = (f"Declared convention of the code: '{evidence}' read as level '{level}' = {value}. "
+                          "Proposed, to accept; not a measurement.")
             rec = dict(value=value, unit=spec.get("unit"), origin="assumption", evidence=None, accepted=False,
-                       said=evidence, kind="convention",
-                       source=f"Declared convention of the code: '{evidence}' read as level '{label}' = {value}. "
-                              "Proposed, to accept; not a measurement.")
+                       said=evidence, kind="convention", source=source)
         elif origin == "default":
             if spec.get("default") is None:
-                return name
+                return e["default"].format(label(name, lang))
             rec = dict(value=spec["default"], unit=spec.get("unit"), origin="default", evidence=None, accepted=False,
                        kind="default", source="Declared default of the code, proposed")
-        else:
-            value, source = (parse_number(raw, spec["type"]) if spec.get("type") in ("int", "float") else (raw, None))
+        elif origin == "provided":
+            numeric = spec.get("type") in ("int", "float")
+            value, source = parse_number(raw, spec["type"]) if numeric else (raw, None)
+            if numeric and not spec.get("evidence_conversion"):  # with a declared conversion, normalize() reads the
+                stated = evidence_numbers(evidence)                 # number and unit from the quoted words itself
+                if not stated or float(value) not in stated:
+                    return e["number"].format(label(name, lang))
             value, unit, conv = normalize(value, unit, evidence, spec)
+            if not (evidence and evidence in message):
+                return e["value"].format(label(name, lang))
             source = "; ".join(s for s in (source, conv) if s) or None
-            if evidence and evidence in message:
-                rec = dict(value=value, unit=unit, origin="provided", evidence=evidence, source=source, accepted=False)
-            else:
-                rec = dict(value=value, unit=unit, origin="assumption", evidence=None, accepted=False, kind="read",
-                           source="Read by the language model from your message (no exact quote); please confirm")
-    except (ValueError, TypeError) as exc:
-        return f"{name}: {exc}"
+            rec = dict(value=value, unit=unit, origin="provided", evidence=evidence, source=source, accepted=False)
+        else:
+            return e["value"].format(label(name, lang))
+    except (ValueError, TypeError):
+        return e["value"].format(label(name, lang))
     state[group][name] = rec
     return None
 
-
-CONSENT = re.compile(r"\b(yes|ok|okay|agree|accept|accepted|go ahead|confirm|fine|sure|sounds good|do it|"
-                     r"oui|d'accord|j'accepte|j’accepte|vas-y|valide|je valide|c'est bon)\b", re.IGNORECASE)
-NEGATION = re.compile(r"\b(no|not|don't|dont|never|non|pas|refuse)\b", re.IGNORECASE)
+# ---------------------------------------------------------------- what the message asks (deterministic guards)
 
 
-def consents(message):
-    return bool(CONSENT.search(message)) and not NEGATION.search(message) and "?" not in message
+PURE = re.compile(r"^\s*(oui|yes|ok|okay|d'accord|d’accord|daccord|j'accepte|j’accepte|j'accepte tout|j’accepte tout|"
+                  r"i accept|i accept all|accept all|accept everything|tout accepter|accepte tout|vas-y|go|go ahead|"
+                  r"valide|je valide|c'est bon|c’est bon|parfait|sure|fine|calcule|calcule-le|lance le calcul|lance|"
+                  r"compute|run|run it|recalcule|recompute)(\s*[,;]?\s*(calcule|lance le calcul|compute|run it|go|vas-y))?"
+                  r"\s*[.!]*\s*$", re.IGNORECASE)
+HOLD = re.compile(r"\b(attends|attendez|wait|hold on|pas encore|not yet|ne calcule pas|don't compute|do not compute|"
+                  r"sans calculer|without computing|stop)\b", re.IGNORECASE)
+ONLY = re.compile(r"\b(seulement|uniquement|only|just|sauf|except|mais|but)\b", re.IGNORECASE)
+ACCEPT_WORD = re.compile(r"\b(oui|yes|ok|okay|d'accord|d’accord|accepte|j'accepte|j’accepte|accept|agree|valide)\b",
+                         re.IGNORECASE)
 
 
-def accept_all(state):
+def is_pure_confirmation(message):
+    return bool(PURE.match(message))
+
+
+def named_fields(model, state, message):
+    text = fold(message)
+    out = []
     for group in ("inputs", "experiment"):
-        for rec in state[group].values():
-            if rec.get("origin") in ("assumption", "default") and rec.get("source") and rec.get("value") is not None:
-                rec["accepted"] = True
+        for name in state[group]:
+            en, fr, _ = LABELS.get(name, (name, name, ""))
+            words = (name, en, fr) + SHORT.get(name, ())
+            if any(re.search(r"(?<!\w)" + re.escape(fold(x)) + r"(?!\w)", text) for x in words):
+                out.append((group, name))
+    return out
+
+
+def pending(state):
+    return [(g, n) for g in ("inputs", "experiment") for n, r in state[g].items()
+            if r.get("origin") in ("assumption", "default") and not r.get("accepted")
+            and r.get("source") and r.get("value") is not None]
 
 
 def over_limit(model, state):
     if model != "tls":
         return False
     exp = state["experiment"]
-    return (exp.get("n_days", {}).get("value") or 0) > MAX_DAYS or (exp.get("n_runs", {}).get("value") or 0) > MAX_RUNS
+    days = exp.get("n_days", {}).get("value") or 0
+    runs = exp.get("n_runs", {}).get("value") or 0
+    step = exp.get("freq_minutes", {}).get("value") or 15
+    points = days * 1440 / max(step, 1) * runs
+    return days > MAX_DAYS or runs > MAX_RUNS or points > MAX_POINTS
 
-# ---------------------------------------------------------------- results
+# ---------------------------------------------------------------- results (native values only)
 
 
-def qualification(target):
+def qualification(target, model):
     m = json.loads((target / "manifest.json").read_text(encoding="utf-8"))
     sw = m.get("software", {})
-    return {"software": {k: sw.get(k) for k in ("name", "version", "repository", "commit", "doi", "licence")},
-            "nature": m.get("nature"), "uncertainty": m.get("uncertainty") or {},
-            "validity_notes": m.get("validity_notes") or [], "note": m.get("note"),
-            "verification": m.get("source_verification")}
+    q = {"software": {k: sw.get(k) for k in ("name", "version", "repository", "commit", "doi", "licence")},
+         "nature": m.get("nature"), "uncertainty": m.get("uncertainty") or {},
+         "validity_notes": m.get("validity_notes") or [], "note": m.get("note"),
+         "verification": (m.get("source_verification") or {}).get("method"),
+         "options": {k: str(v) for k, v in (m.get("backend_options") or {}).items()}}
+    if model == "lql":
+        row = pd.read_csv(target / "indicators.csv").iloc[0].to_dict()
+        q["flags"] = {k: bool(row[k]) for k in ("oar_total_valid", "tumour_total_valid", "oar_saturated",
+                                                "tumour_saturated") if k in row}
+    return q
 
 
 def files_of(target, names):
@@ -272,15 +416,17 @@ def tls_results(target, state, lang):
     k = pd.read_csv(target / "kpis.csv").median(numeric_only=True)
     cols = ("lighting_kw", "ventilation_kw", "auxiliary_kw")
     hourly = rep.groupby(rep.timestamp.dt.hour)[list(cols)].mean()
-    shares = [rep[c].sum() for c in cols]
+    shares = [float(rep[c].sum()) for c in cols]
+    total = sum(shares) or float("nan")
+    band = ((env.p90 - env.p10) / env["median"].where(env["median"] != 0)).mean() * 100
     days = state["experiment"].get("n_days", {}).get("value")
     analysis = localise(T[lang]["tls_analysis"].format(
         days=days, peak=k.peak_kw, mean=k.mean_kw, lf=k.load_factor, hour=int(hourly.sum(axis=1).idxmax()),
-        li=100 * shares[0] / sum(shares), ve=100 * shares[1] / sum(shares), au=100 * shares[2] / sum(shares),
-        band=float(((env.p90 - env.p10) / env["median"]).mean() * 50), ann=k.annualized_mwh), lang)
-    kpis = [localise(f"{k.annualized_mwh:,.0f}", lang), localise(f"{k.peak_kw:,.0f}", lang),
-            localise(f"{k.load_factor:.2f}", lang), localise(f"{k.specific_kwh_m_year:,.0f}", lang)]
-    return {"kind": "tls", "kpis": kpis, "analysis": analysis, "qualification": qualification(target),
+        li=100 * shares[0] / total, ve=100 * shares[1] / total, au=100 * shares[2] / total, band=float(band),
+        ann=k.annualized_mwh), lang)
+    kpis = [num(k.annualized_mwh, ",.0f", lang), num(k.peak_kw, ",.0f", lang), num(k.load_factor, ".2f", lang),
+            num(k.specific_kwh_m_year, ",.0f", lang)]
+    return {"kind": "tls", "kpis": kpis, "analysis": analysis, "qualification": qualification(target, "tls"),
             "series": {"t": env.timestamp.tolist(), "median": env["median"].round(2).tolist(),
                        "p10": env.p10.round(2).tolist(), "p90": env.p90.round(2).tolist()},
             "hourly": {"hour": hourly.index.tolist(), **{c: hourly[c].round(2).tolist() for c in cols}},
@@ -288,27 +434,27 @@ def tls_results(target, state, lang):
 
 
 def lql_results(target, ind, lang):
-    vals = (ind["physical_dose_gy"], ind["eqd_tumour_total"], ind["eqd_oar_total"])
-    analysis = localise(T[lang]["lql_analysis"].format(
-        phys=vals[0], eqt=vals[1], eqo=vals[2], gain=100 * (vals[1] / vals[0] - 1), days=ind["overall_days_tumour"],
-        tcp=ind["tcp_percent"], ntcp=ind["ntcp_percent"]), lang)
-    kpis = [localise(f"{vals[1]:.1f}", lang), localise(f"{vals[2]:.1f}", lang),
-            localise(f"{ind['bed_tumour']:.1f}", lang), f"{ind['ntcp_percent']:.0f} / {ind['tcp_percent']:.0f}"]
-    return {"kind": "lql", "kpis": kpis, "analysis": analysis, "qualification": qualification(target),
-            "bars": [round(v, 2) for v in vals], "probs": [round(ind["tcp_percent"], 1), round(ind["ntcp_percent"], 1)],
+    get = lambda k: ind.get(k) if isinstance(ind.get(k), (int, float)) else None  # noqa: E731
+    phys, eqt, eqo = get("physical_dose_gy"), get("eqd_tumour_total"), get("eqd_oar_total")
+    tcp, ntcp = get("tcp_percent"), get("ntcp_percent")
+    analysis = T[lang]["lql_analysis"].format(
+        phys=num(phys, ".1f", lang), eqt=num(eqt, ".1f", lang), eqo=num(eqo, ".1f", lang),
+        days=num(get("overall_days_tumour"), ".0f", lang), tcp=num(tcp, ".0f", lang), ntcp=num(ntcp, ".0f", lang))
+    kpis = [num(eqt, ".1f", lang), num(eqo, ".1f", lang), num(get("bed_tumour"), ".1f", lang),
+            f"{num(ntcp, '.0f', lang)} / {num(tcp, '.0f', lang)}"]
+    return {"kind": "lql", "kpis": kpis, "analysis": analysis, "qualification": qualification(target, "lql"),
+            "bars": [phys, eqt, eqo], "probs": [tcp, ntcp],
             "files": files_of(target, ("indicators.csv", "manifest.json"))}
 
 
 def run(model, state, lang):
-    target, ind = execute(to_scenario(state), DESC[model], WS, Path(tempfile.mkdtemp(prefix="ws-")))
-    target = Path(target)
-    return tls_results(target, state, lang) if model == "tls" else lql_results(target, ind, lang)
-
-
-SOURCES = {"en": {"provided": "your words: “{}”", "convention": "declared convention of the code for “{}”",
-                   "default": "declared default of the code", "read": "read by the language model, to confirm"},
-           "fr": {"provided": "vos mots : « {} »", "convention": "convention déclarée du code pour « {} »",
-                   "default": "valeur par défaut du code", "read": "lu par le modèle de langage, à confirmer"}}
+    out_root = Path(tempfile.mkdtemp(prefix="ws-"))
+    try:
+        target, ind = execute(to_scenario(state), DESC[model], WS, out_root)
+        target = Path(target)
+        return tls_results(target, state, lang) if model == "tls" else lql_results(target, ind, lang)
+    finally:
+        shutil.rmtree(out_root, ignore_errors=True)
 
 
 def source_text(rec, lang):
@@ -332,6 +478,35 @@ def variables(state, lang):
             rows.append([label(name, lang), shown(name, rec.get("value"), lang), "", status, source_text(rec, lang)])
     return rows
 
+
+def clarify_text(model, state, verdict, questions, lang):
+    t = T[lang]
+    short = lambda i: i["parameter"].split(".")[-1]  # noqa: E731
+    waiting = [short(i) for i in verdict["issues"] if i["code"] == "unaccepted_assumption"]
+    missing = [short(i) for i in verdict["issues"] if i["code"] == "missing"]
+    other = [f"{label(short(i), lang)} ({i['message']})" for i in verdict["issues"]
+             if i["code"] not in ("unaccepted_assumption", "missing")]
+    rec_of = lambda n: state[group_of(model, n)][n]  # noqa: E731
+    conv = [n for n in waiting if rec_of(n).get("kind") == "convention"]
+    q = ("« ", " »") if lang == "fr" else ("“", "”")
+    sep = " : " if lang == "fr" else ": "
+    parts = []
+    if missing:
+        parts.append(t["needed"].format(", ".join(label(n, lang) for n in missing)))
+        if questions:
+            parts.append(" ".join(questions))
+    if conv:
+        parts.append(t["conventions"].format("; ".join(
+            f"**{label(n, lang)}{sep}{shown(n, rec_of(n)['value'], lang)}** ({q[0]}{rec_of(n).get('said', '')}{q[1]})"
+            for n in conv)))
+    if len(waiting) > len(conv):
+        parts.append(t["defaults"].format(len(waiting) - len(conv)))
+    if waiting:
+        parts.append(t["pending"])
+    if other:
+        parts.append(t["fix"].format("; ".join(other)))
+    return "\n\n".join(parts)
+
 # ---------------------------------------------------------------- API used by the page (JSON in, JSON out)
 
 
@@ -339,73 +514,104 @@ def api_fresh(model, lang):
     return json.dumps(fresh(model, lang))
 
 
+def api_needs_reading(message):
+    """A pure confirmation is handled without the language model."""
+    return json.dumps(not is_pure_confirmation(message.strip()))
+
+
 def api_summary(state_json):
-    """What the relay sends to the language model: current values only (small, no sources)."""
     state = json.loads(state_json)
     return json.dumps({g: {n: {k: r.get(k) for k in ("value", "unit", "origin", "accepted")}
                            for n, r in state[g].items()} for g in ("inputs", "experiment")}, ensure_ascii=False)
 
 
+def respond(model, lang, state, reply, results=None, decision=None):
+    verdict = decision or check(model, state, lang)["decision"]
+    return json.dumps({"state": state, "reply": reply.strip(), "decision": verdict,
+                       "variables": variables(state, lang), "results": results}, ensure_ascii=False, default=str)
+
+
+def compute(model, lang, state):
+    if over_limit(model, state):
+        return respond(model, lang, state, T[lang]["limit"].format(MAX_DAYS, MAX_RUNS, MAX_POINTS), decision="clarify")
+    try:
+        results = run(model, state, lang)
+    except ValueError as exc:
+        return respond(model, lang, state, T[lang]["failed_run"].format(exc), decision="clarify")
+    return respond(model, lang, state, T[lang]["computed"], results=results, decision="execute")
+
+
 def api_turn(model, lang, state_json, message, parsed_json):
-    """One turn after the language model answered (parsed_json = '' when it could not be reached)."""
+    """One turn. parsed_json is the language model's reading ('' when not read or not needed)."""
     t = T[lang]
     state = json.loads(state_json)
     message = message.strip()
-    if consents(message):
-        accept_all(state)  # acceptance covers what was proposed before this message, never what it adds
+
+    if is_pure_confirmation(message):  # deterministic: accept what was shown, then run if the validator agrees
+        for g, n in pending(state):
+            state[g][n]["accepted"] = True
+        verdict = check(model, state, lang)
+        if verdict["decision"] == "execute":
+            return compute(model, lang, state)
+        return respond(model, lang, state, clarify_text(model, state, verdict, [], lang))
+
+    if not parsed_json:  # a composite message that could not be read: nothing changes
+        return respond(model, lang, state, t["unread"])
+
+    parsed = json.loads(parsed_json)
     state["request"] = (state["request"] + "\n" + message).strip()
-    notes, questions, reply = [], [], ""
-    if parsed_json:
-        parsed = json.loads(parsed_json)
-        if parsed.get("task") == "unsupported":
-            state["task"] = "unsupported request"
-        for v in parsed.get("values") or []:
-            note = apply_value(model, state, v, message)
-            if note:
-                notes.append(note)
-        questions = [q for q in parsed.get("questions") or [] if isinstance(q, str)][:2]
-        reply = str(parsed.get("message") or "").strip()
+    task = str(parsed.get("task") or "")
+    if task == "unsupported":
+        return respond(model, lang, state, t["refused"], decision="refuse")
+    if task and task != SINGLE_TASK[model]:
+        return respond(model, lang, state, t["not_here"], decision="clarify")
+
+    errors = []
+    old = json.loads(json.dumps(state))  # to report what this message changed
+    values = [v if isinstance(v, dict) else {} for v in parsed.get("values") or []]
+    fields = [str(v.get("field") or "") for v in values]
+    twice = {f for f in fields if fields.count(f) > 1}
+    errors += [ERRORS[lang]["twice"].format(label(f, lang)) for f in sorted(twice)]
+    for v in values:
+        if str(v.get("field") or "") in twice:
+            continue  # two readings for one parameter: neither is used
+        error = apply_value(model, state, v, message, lang)
+        if error:
+            errors.append(error)
+    q = ("« ", " »") if lang == "fr" else ("“", "”")
+    noted = [f"**{label(n, lang)}{' : ' if lang == 'fr' else ': '}{shown(n, r['value'], lang)}** ({q[0]}{r['evidence']}{q[1]})"
+             for g in ("inputs", "experiment") for n, r in state[g].items()
+             if r.get("origin") == "provided" and r != old[g].get(n)]
+    changed = any(state[g] != old[g] for g in ("inputs", "experiment"))
+    hold = bool(HOLD.search(message))
+    restricted = bool(ONLY.search(message))
+    if ACCEPT_WORD.search(message) and restricted and not hold:  # "yes, only for the length": named fields only
+        chosen = [(g, n) for g, n in named_fields(model, state, message) if (g, n) in pending(state)]
+        for g, n in chosen:
+            state[g][n]["accepted"] = True
     else:
-        reply = t["llm_down"]
+        chosen = []
     propose_defaults(model, state)
     verdict = check(model, state, lang)
-    results = None
-    if verdict["decision"] == "execute" and over_limit(model, state):
-        verdict = {"decision": "clarify", "issues": []}
-        reply += "\n\n" + t["limit"].format(MAX_DAYS, MAX_RUNS)
+    # the model's own sentences are not shown: every statement in the reply comes from this deterministic state
+    questions = [q for q in parsed.get("questions") or [] if isinstance(q, str)][:2]
+    parts = [t["noted"].format("; ".join(noted))] if noted else []
+    if not (changed or errors or chosen):
+        parts.append(t["unchanged"])
+    if errors:
+        parts.append(t["unused"].format("; ".join(errors)))
+    if chosen:
+        parts.append(t["accepted_some"].format(", ".join(label(n, lang) for _, n in chosen)))
+    if hold:
+        parts.append(t["held"])
+    if verdict["decision"] == "refuse":
+        parts.append(t["refused"])
     elif verdict["decision"] == "execute":
-        results = run(model, state, lang)
-        reply = t["computed"]  # the model's sentence may still ask for agreement; the code has the last word
-    elif verdict["decision"] == "refuse":
-        reply += "\n\n" + t["refused"]
+        parts.append(t["ready"])  # a change or a question never runs the code in the same turn
     else:
-        short = lambda i: i["parameter"].split(".")[-1]  # noqa: E731
-        pending = [short(i) for i in verdict["issues"] if i["code"] == "unaccepted_assumption"]
-        missing = [short(i) for i in verdict["issues"] if i["code"] == "missing"]
-        other = [f"{label(short(i), lang)} ({i['message']})" for i in verdict["issues"]
-                 if i["code"] not in ("unaccepted_assumption", "missing")]
-        rec_of = lambda n: state[group_of(model, n)][n]  # noqa: E731
-        conv = [n for n in pending if rec_of(n).get("kind") == "convention"]
-        quotes = ("« ", " »") if lang == "fr" else ("“", "”")
-        if missing:
-            reply += "\n\n" + t["needed"].format(", ".join(label(n, lang) for n in missing))
-            if questions:
-                reply += "\n\n" + " ".join(questions)
-        if conv:
-            reply += "\n\n" + t["conventions"].format("; ".join(
-                f"**{label(n, lang)} : {shown(n, rec_of(n)['value'], lang)}** ({quotes[0]}{rec_of(n).get('said', '')}{quotes[1]})"
-                if lang == "fr" else
-                f"**{label(n, lang)}: {shown(n, rec_of(n)['value'], lang)}** ({quotes[0]}{rec_of(n).get('said', '')}{quotes[1]})"
-                for n in conv))
-        others = len(pending) - len(conv)
-        if others:
-            reply += "\n\n" + t["defaults"].format(others)
-        if pending:
-            reply += "\n\n" + t["pending"]
-        if other:
-            reply += "\n\n" + t["fix"].format("; ".join(other))
-    return json.dumps({"state": state, "notes": notes, "reply": reply.strip(), "decision": verdict["decision"],
-                       "variables": variables(state, lang), "results": results}, ensure_ascii=False, default=str)
+        parts.append(clarify_text(model, state, verdict, questions, lang))
+    decision = "clarify" if verdict["decision"] == "execute" or errors else verdict["decision"]
+    return respond(model, lang, state, "\n\n".join(p for p in parts if p), decision=decision)
 
 
 def api_example(model, lang):
@@ -418,6 +624,6 @@ def api_example(model, lang):
     if model == "tls":
         state["experiment"]["n_days"]["value"], state["experiment"]["n_runs"]["value"] = 7, 5
     state["request"] = "Example scenario"
-    return json.dumps({"state": state, "reply": T[lang]["example_done"], "decision": check(model, state, lang)["decision"],
-                       "variables": variables(state, lang), "results": run(model, state, lang)},
-                      ensure_ascii=False, default=str)
+    out = json.loads(compute(model, lang, state))
+    out["reply"] = T[lang]["example_done"]
+    return json.dumps(out, ensure_ascii=False, default=str)
