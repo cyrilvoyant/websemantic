@@ -10,6 +10,8 @@ a{color:var(--navy)}
 .head h1{margin:0;font-size:22px;font-weight:600;letter-spacing:-.01em;color:var(--navy)}
 .head h1 span{font-weight:400;color:var(--mid);font-size:16px;margin-left:8px}
 .head p{margin:2px 0 0;color:#3b4654}
+.head .affiliation{margin-left:auto;flex:none;line-height:0}
+.head .affiliation img{height:44px;width:auto}
 .switches{max-width:1360px;margin:0 auto;padding:12px 20px;display:flex;gap:14px;flex-wrap:wrap}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff}
 .seg button{border:0;background:#fff;padding:6px 13px;cursor:pointer;color:var(--mid)}
@@ -73,12 +75,26 @@ th,td{border-bottom:1px solid var(--line);text-align:left;padding:5px 6px;vertic
 th{color:var(--mid);font-weight:500}
 td:nth-child(4){color:var(--mid)}
 .about p{margin:0 0 10px}
+.table-wrap{overflow-x:auto;margin-top:4px}
+table.cases{font-size:12.5px}
+table.cases th:first-child,table.cases tr th{white-space:nowrap}
+table.cases tr:first-child th{background:var(--soft);color:var(--navy);font-weight:500}
+table.cases tr:last-child th,table.cases tr:last-child td{font-weight:500}
+caption{caption-side:top;text-align:left;font-size:12.5px;color:var(--mid);padding:2px 0 8px}
+.app-link{display:inline-block;margin-left:4px;padding:3px 10px;border:1px solid var(--navy);border-radius:8px;color:var(--navy);
+  text-decoration:none;font-size:12.5px;background:#fff}
+.app-link:hover{background:var(--navy);color:#fff}
+.files .open{margin:10px 0 0}
+details summary{cursor:pointer;color:var(--navy);font-weight:500;margin-bottom:4px}
 .foot{max-width:1360px;margin:0 auto;padding:10px 20px 18px;text-align:center;color:#8c96a3;font-size:12px}
 .foot a{color:#8c96a3}
 @media (max-width:900px){
   .grid{grid-template-columns:1fr;gap:16px;padding:4px 12px 10px}
   .head,.switches{padding-left:12px;padding-right:12px}
   .head .mark{width:34px;height:34px}
+  .head{flex-wrap:wrap}
+  .head .affiliation{order:3;margin:4px 0 0 46px}
+  .head .affiliation img{height:28px}
   .head h1{font-size:20px}
   .head h1 span{display:block;margin:0;font-size:14px}
   /* one scroll only on a phone: the conversation grows with the page instead of capturing the finger */

@@ -1,8 +1,23 @@
 # WebSemantic
 
+<a href="https://www.oie.minesparis.psl.eu/"><img src="docs/mines-paris-psl-oie.png" alt="Mines Paris – PSL, centre O.I.E. (Observation, Impacts, Énergie)" height="48"></a>
+
+Centre O.I.E. (Observation, Impacts, Énergie), Mines Paris – PSL.
+
 Préparer une simulation en phrases, examiner les hypothèses et obtenir des résultats avec leurs unités et leur provenance. Trois profils : TLS, LQL-Equiv (un cursus fictif) et pyrcel (un mode d’aérosol, ascendance constante).
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23238902.svg)](https://doi.org/10.5281/zenodo.23238902) [![PyPI](https://img.shields.io/pypi/v/websemantic.svg)](https://pypi.org/project/websemantic/) [![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/15359/badge)](https://www.bestpractices.dev/projects/15359) · ontologie : [w3id.org/websemantic/ns](https://w3id.org/websemantic/ns) · [Contribuer](CONTRIBUTING.md) · [Sécurité](SECURITY.md)
+
+## Application en ligne
+
+**[huggingface.co/spaces/CyrilVoyant/websemantic](https://huggingface.co/spaces/CyrilVoyant/websemantic)**: free, nothing to install, English or French, phone-ready.
+
+Describe a case in your own words. A language model (Mistral) only translates your words into the code's variables. The page shows what it understood and asks for what is missing. The original, unchanged codes compute in your browser after a yes, with their sources checked by SHA-256:
+
+- **TLS:** electricity demand of road tunnels, up to one simulated year.
+- **LQL-Equiv:** EQD2, BED, TCP and NTCP for one or several organs at risk. It also compares schedules, gives the biologically equivalent resumption after an interruption, the maximum dose without exceeding the organs, and the minimum organ dose for the same tumour effect.
+
+Every result can be downloaded: tables, a manifest with versions and checks, and the semantics.ttl RDF graph. The page code is in [`webapp/`](webapp/). Fictitious scenarios for research and teaching.
 
 ## Avec un agent Python
 

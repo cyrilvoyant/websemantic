@@ -92,7 +92,7 @@ def test_partial_consent_by_a_short_word_ignores_a_restated_value(calls):
     assert "Je n'ai pas pu utiliser" not in out["reply"] and out["decision"] == "clarify" and not calls
 
 
-def test_two_readings_for_one_field_use_neither(calls):
+def test_a_tumour_site_read_as_an_organ_is_moved_by_the_library_lists(calls):
     """Browser retest: 'Prostate, rectum comme organe à risque' read as organ=Prostate then organ=Rectum."""
     state = json.loads(glue.api_fresh("lql", "fr"))
     msg = "Prostate, rectum comme organe à risque, 20 séances de 3 Gy, sans interruption."
@@ -100,9 +100,16 @@ def test_two_readings_for_one_field_use_neither(calls):
         LQL_TASK, {"field": "organ", "value": "Prostate", "origin": "provided", "evidence": "Prostate"},
         {"field": "organ", "value": "Rectum", "origin": "provided", "evidence": "rectum"},
         {"field": "gap_days", "value": 0, "unit": "unit:DAY", "origin": "provided", "evidence": "sans interruption"}))
-    assert "organ" not in after["inputs"] and "deux lectures différentes" in out["reply"]
-    assert after["inputs"]["gap_days"]["value"] == 0 and after["inputs"]["gap_days"]["origin"] == "provided"
-    assert out["decision"] == "clarify" and not calls
+    assert after["inputs"]["tumour_site"]["value"] == "Prostate" and after["inputs"]["organ"]["value"] == "Rectum"
+    assert after["inputs"]["gap_days"]["value"] == 0 and not calls
+
+
+def test_two_readings_for_one_other_field_use_neither(calls):
+    state = json.loads(glue.api_fresh("tls", "fr"))
+    out, after = turn("tls", state, "un tunnel de 2 km ou 3 km", reading(
+        TLS_TASK, {"field": "length_m", "value": 2000, "unit": "m", "origin": "provided", "evidence": "2 km"},
+        {"field": "length_m", "value": 3000, "unit": "m", "origin": "provided", "evidence": "3 km"}))
+    assert after["inputs"]["length_m"]["origin"] == "default" and "deux lectures différentes" in out["reply"]
 
 
 def test_reading_context_lists_the_library_categories():
@@ -238,7 +245,7 @@ def test_not_computable_native_outputs_are_shown_as_such(tmp_path):
     none = {k: None for k in ("physical_dose_gy", "eqd_tumour_total", "eqd_oar_total", "tcp_percent", "ntcp_percent",
                               "bed_tumour", "overall_days_tumour")}
     out = glue.lql_results(tmp_path, none, "fr")
-    assert out["kpis"][0] == "non calculable" and "non calculable" in out["analysis"]
+    assert out["kpis"][0] == "non calculable" and "non calculable" in out["headline"]
     assert out["bars"] == [None, None, None]
 
 
@@ -383,3 +390,139 @@ def test_the_quote_is_stored_with_the_visitors_own_characters(calls):
                       reading(LQL_TASK, {"field": "tumour_site", "value": "Prostate", "origin": "provided",
                                          "evidence": "Prostate"}))
     assert state["inputs"]["tumour_site"]["evidence"] == "prostate"
+
+
+# ------------------------------------------------------------ Cyril's online test: a second example typed into the first case
+
+
+def test_a_restated_value_is_not_flagged_and_a_new_case_is_suggested(calls):
+    state = json.loads(glue.api_fresh("lql", "fr"))
+    msg1 = "Glioblastome, chiasma optique comme organe à risque, 30 séances de 2 Gy."
+    out, state = turn("lql", state, msg1, reading(
+        LQL_TASK, {"field": "tumour_site", "value": "Glioblastoma (LQ-L)", "origin": "provided", "evidence": "Glioblastome"},
+        {"field": "organ", "value": "Optic chiasm", "origin": "provided", "evidence": "chiasma optique"},
+        {"field": "n_fractions", "value": 30, "origin": "provided", "evidence": "30 séances"},
+        {"field": "dose_per_fraction", "value": 2, "unit": "unit:GRAY", "origin": "provided", "evidence": "2 Gy"}))
+    msg2 = "Tumeur du larynx, parotide comme organe à risque, 35 séances de 2 Gy."
+    out, state = turn("lql", state, msg2, reading(
+        LQL_TASK, {"field": "tumour_site", "value": "Larynx", "origin": "provided", "evidence": "Tumeur du larynx"},
+        {"field": "organ", "value": "Parotid", "origin": "provided", "evidence": "parotide"},
+        {"field": "n_fractions", "value": 35, "origin": "provided", "evidence": "35 séances"},
+        {"field": "dose_per_fraction", "value": 2, "unit": "unit:GRAY", "origin": "provided", "evidence": "2 Gy"}))
+    reply = out["reply"]
+    assert "dose par séance" not in reply  # restated unchanged: neither listed nor flagged
+    assert "non nommé" not in reply  # "tumeur", "organe", "séances" name the changed fields
+    assert "Glioblastoma (LQ-L) → Larynx" in reply and "Nouvelle conversation" in reply and not calls
+
+
+def test_a_refusal_during_a_case_says_the_case_is_unchanged(calls):
+    state = proposed_tls(calls)
+    out, after = turn("tls", state, "pas pareil !", reading("unsupported"))
+    assert out["decision"] == "refuse" and "Le cas en cours est inchangé" in out["reply"]
+    assert after["inputs"] == state["inputs"] and not calls
+
+
+# ------------------------------------------------------------ LQL workbench through the conversation (real LQL-Equiv runs)
+
+
+def lql_case(message, *values, lang="fr", state=None):
+    state = state or json.loads(glue.api_fresh("lql", lang))
+    out, state = turn("lql", state, message, reading(LQL_TASK, *values), lang=lang)
+    return out, state
+
+
+SITE = {"field": "tumour_site", "value": "Prostate", "origin": "provided", "evidence": "prostate"}
+RECTUM = {"field": "organ", "value": "Rectum", "origin": "provided", "evidence": "rectum"}
+BOWEL = {"field": "organ", "value": "Small bowel", "origin": "provided", "evidence": "grêle"}
+
+
+def yes(state, lang="fr"):
+    return turn("lql", state, "oui" if lang == "fr" else "yes", lang=lang)
+
+
+def test_several_organs_give_one_row_each():
+    out, state = lql_case("20 séances de 3 Gy pour la prostate, rectum et grêle comme organes à risque", SITE, RECTUM, BOWEL,
+                          {"field": "dose_per_fraction", "value": 3, "origin": "provided", "evidence": "3 Gy"},
+                          {"field": "n_fractions", "value": 20, "origin": "provided", "evidence": "20 séances"})
+    assert state["organs"] == ["Rectum", "Small bowel"]
+    out, state = yes(state)
+    r = out["results"]
+    assert out["decision"] == "execute" and r["kind"] == "lql_table"
+    assert [row[0] for row in r["table"]["rows"]][1:] == ["Rectum", "Small bowel"] and "Réponse" in out["reply"]
+
+
+def test_two_schedules_are_compared_from_the_words():
+    out, state = lql_case("Compare 20 × 3 Gy et 39 séances de 2 Gy avec une interruption de 10 jours, prostate, rectum",
+                          SITE, RECTUM)
+    assert state["lql"]["mode"] == "compare" and len(state["lql"]["schedules"]) == 2
+    assert state["lql"]["schedules"][1]["gap_days"] == 10 and state["lql"]["schedules"][0]["gap_days"] == 0
+    out, state = yes(state)
+    assert out["results"]["table"]["head"][1:] == ["20 × 3 Gy", "39 × 2 Gy, arrêt de 10 jours"]
+
+
+def test_resumption_asks_when_the_sessions_given_are_ambiguous():
+    msg = ("prostate 35×2gy, 5 jours d'arrêt, on veut garder le même nombre de séances, nous sommes à la 15ème séance, "
+           "rectum comme organe à risque")
+    out, state = lql_case(msg, SITE, RECTUM)
+    assert state["lql"]["mode"] == "resume" and state["lql"]["ambiguous_done"] == 15
+    out, state = yes(state)
+    assert "14 séances déjà faites" in out["reply"] and out["decision"] == "clarify"
+    out, state = turn("lql", state, "14", reading(LQL_TASK))
+    out, state = yes(state)
+    r = out["results"]
+    assert out["decision"] == "execute" and state["lql"]["remaining"] == 21
+    assert "21 séances restantes" in out["reply"] and "dose maximale" in out["reply"]
+
+
+def test_maximum_dose_reports_the_limiting_organ():
+    msg = "dose maximale en 20 séances sans dépasser l'équivalent de 39 × 2 Gy pour la prostate, rectum et vessie"
+    out, state = lql_case(msg, SITE, RECTUM, {"field": "organ", "value": "Bladder", "origin": "provided", "evidence": "vessie"})
+    assert state["lql"]["mode"] == "maximum" and state["lql"]["target"] == 20
+    out, state = yes(state)
+    assert out["decision"] == "execute" and "limitée par" in out["reply"]
+
+
+def test_all_organs_come_from_the_ontology_and_are_confirmed():
+    out, state = lql_case("20 séances de 3 Gy pour la prostate, tous les organes à risque", SITE,
+                          {"field": "dose_per_fraction", "value": 3, "origin": "provided", "evidence": "3 Gy"},
+                          {"field": "n_fractions", "value": 20, "origin": "provided", "evidence": "20 séances"})
+    assert "Pelvis" in out["reply"] and "Rectum" in out["reply"] and out["decision"] == "clarify"
+    assert state["inputs"]["organ"]["accepted"] is False and len(state["organs"]) == 7
+    out, state = yes(state)
+    assert out["decision"] == "execute" and len(out["results"]["table"]["rows"]) == 8
+
+
+def test_an_organ_of_another_group_is_dropped_when_the_tumour_changes():
+    out, state = lql_case("tumeur du larynx, parotide", {"field": "tumour_site", "value": "Larynx", "origin": "provided",
+                                                         "evidence": "tumeur du larynx"},
+                          {"field": "organ", "value": "Parotid", "origin": "provided", "evidence": "parotide"})
+    out, state = turn("lql", state, "en fait une tumeur de la prostate", reading(
+        LQL_TASK, {"field": "tumour_site", "value": "Prostate", "origin": "provided", "evidence": "tumeur de la prostate"}))
+    assert "organ" not in state["inputs"] and "Parotid" in out["reply"] and "Pelvis" in out["reply"]
+
+
+def test_months_are_a_declared_conversion_to_accept(calls):
+    state = accepted_tls(calls)
+    out, state = turn("tls", state, "non prends 6 mois", reading(
+        TLS_TASK, {"field": "n_days", "value": 180, "unit": "unit:DAY", "origin": "provided", "evidence": "6 mois"}))
+    rec = state["experiment"]["n_days"]
+    assert rec["value"] == 182 and rec["accepted"] is False and "365/12" in rec["source"] and not calls
+    out, state = turn("tls", state, "oui")
+    assert calls == ["tls"]
+
+
+def test_minimum_organ_dose_for_the_same_tumour_effect():
+    msg = "dose minimale aux organes pour le même effet tumoral que 39 × 2 Gy, prostate, rectum et grêle"
+    out, state = lql_case(msg, SITE, RECTUM, BOWEL)
+    assert state["lql"]["mode"] == "minimum"
+    out, state = yes(state)
+    assert out["decision"] == "execute" and "le moins exposés" in out["reply"]
+    assert out["results"]["chart"]["unit"] == "%"
+
+
+def test_the_ontology_names_catch_an_organ_the_model_missed():
+    out, state = lql_case("20 séances de 3 Gy pour la prostate, vessie comme organe à risque",
+                          {"field": "dose_per_fraction", "value": 3, "origin": "provided", "evidence": "3 Gy"},
+                          {"field": "n_fractions", "value": 20, "origin": "provided", "evidence": "20 séances"})
+    assert state["inputs"]["tumour_site"]["value"] == "Prostate" and state["inputs"]["organ"]["value"] == "Bladder"
+    assert state["inputs"]["organ"]["evidence"] == "vessie"

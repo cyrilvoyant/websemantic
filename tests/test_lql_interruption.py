@@ -139,3 +139,18 @@ def test_invalid_situations_are_refused(changes):
 def test_unknown_organ_is_refused():
     with pytest.raises(Exception):
         run(organs=("Not an organ",))
+
+
+def test_selected_counts_give_the_same_rows_as_the_full_scan():
+    s, full = run()
+    _, part = run(), None
+    part = resume(s, ROOT, DESC, counts=[5, 3])
+    assert [r["sessions"] for r in part["equivalent"]] == [3, 5]
+    assert part["equivalent"] == [r for r in full["equivalent"] if r["sessions"] in (3, 5)]
+    assert part["with_all_remaining_sessions"] == full["with_all_remaining_sessions"]
+
+
+def test_counts_outside_the_possible_sessions_are_refused():
+    s, _ = run()
+    with pytest.raises(ValueError):
+        resume(s, ROOT, DESC, counts=[6])

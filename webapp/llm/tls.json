@@ -10,9 +10,18 @@
    "field": "length_m",
    "type": "float",
    "unit": "unit:M",
+   "unit_names": [
+    "m",
+    "metre",
+    "metres",
+    "mètre",
+    "mètres"
+   ],
    "default": 1500,
    "label": "Longueur",
+   "definition": "Longueur du tunnel commune aux tubes ; convertie en kilomètres pour les charges proportionnelles à la longueur.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "faible": {
      "value": 375.0,
@@ -52,9 +61,21 @@
    "field": "n_tubes",
    "type": "int",
    "unit": "unit:NUM",
+   "unit_names": [
+    "unit:UNITLESS",
+    "tubes",
+    "voies",
+    "nombre",
+    "number",
+    "count",
+    "réalisations",
+    "realisations"
+   ],
    "default": 2,
    "label": "Tubes",
+   "definition": "Nombre de tubes ; multiplie les charges de ventilation et d’auxiliaires et contribue au nombre total de voies.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "peu": {
      "value": 1,
@@ -86,9 +107,21 @@
    "field": "n_lanes_per_tube",
    "type": "int",
    "unit": "unit:NUM",
+   "unit_names": [
+    "unit:UNITLESS",
+    "tubes",
+    "voies",
+    "nombre",
+    "number",
+    "count",
+    "réalisations",
+    "realisations"
+   ],
    "default": 2,
    "label": "Voies par tube",
+   "definition": "Nombre de voies dans chaque tube ; l’éclairage est dimensionné sur n_tubes × n_lanes_per_tube.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "peu": {
      "value": 1,
@@ -120,9 +153,18 @@
    "field": "altitude_m",
    "type": "float",
    "unit": "unit:M",
+   "unit_names": [
+    "m",
+    "metre",
+    "metres",
+    "mètre",
+    "mètres"
+   ],
    "default": 300,
    "label": "Altitude",
+   "definition": "Altitude utilisée dans le facteur de ventilation : 1 + max(altitude_m − 500, 0)/6000.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "faible": {
      "value": 75.0,
@@ -161,9 +203,18 @@
    "field": "max_depth_m",
    "type": "float",
    "unit": "unit:M",
+   "unit_names": [
+    "m",
+    "metre",
+    "metres",
+    "mètre",
+    "mètres"
+   ],
    "default": 80,
    "label": "Couverture maximale",
+   "definition": "Profondeur maximale utilisée pour les auxiliaires : facteur 1 + min(max_depth_m, 800)/6000.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "faible": {
      "value": 20.0,
@@ -201,9 +252,17 @@
    "field": "gradient_percent",
    "type": "float",
    "unit": "unit:PERCENT",
+   "unit_names": [
+    "%",
+    "percent",
+    "pourcent",
+    "pourcentage"
+   ],
    "default": 2.0,
    "label": "Pente",
+   "definition": "Pente en pourcentage, utilisée dans le facteur de ventilation 1 + abs(gradient_percent)/20.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "faible": {
      "value": 0.5,
@@ -243,36 +302,83 @@
    "field": "tunnel_context",
    "type": "category",
    "unit": null,
+   "unit_names": [
+    "sans dimension",
+    "sans unité",
+    "unit:UNITLESS",
+    "None",
+    "null",
+    "catégorie",
+    "categorie",
+    "category",
+    "categorical"
+   ],
    "default": "peri-urban",
    "label": "Contexte",
+   "definition": "Catégorie appliquant un multiplicateur au profil de trafic ; urban ajoute également une composante de pointe en soirée.",
    "categories": null,
+   "category_names": null,
    "declared_levels": null
   },
   {
    "field": "lighting_type",
    "type": "category",
    "unit": null,
+   "unit_names": [
+    "sans dimension",
+    "sans unité",
+    "unit:UNITLESS",
+    "None",
+    "null",
+    "catégorie",
+    "categorie",
+    "category",
+    "categorical"
+   ],
    "default": "LED adaptive",
    "label": "Éclairage",
+   "definition": "Catégorie déterminant la puissance spécifique installée, le couplage au trafic et la fraction minimale d’éclairage.",
    "categories": null,
+   "category_names": null,
    "declared_levels": null
   },
   {
    "field": "ventilation_type",
    "type": "category",
    "unit": null,
+   "unit_names": [
+    "sans dimension",
+    "sans unité",
+    "unit:UNITLESS",
+    "None",
+    "null",
+    "catégorie",
+    "categorie",
+    "category",
+    "categorical"
+   ],
    "default": "longitudinal",
    "label": "Ventilation",
+   "definition": "Catégorie déterminant la charge de ventilation par kilomètre et par tube, modulée par trafic, altitude, pente et événements.",
    "categories": null,
+   "category_names": null,
    "declared_levels": null
   },
   {
    "field": "aux_kw_per_km_tube",
    "type": "float",
    "unit": "unit:KiloW per km per tube",
+   "unit_names": [
+    "kW par km et par tube",
+    "kW/(km.tube)",
+    "kW/(km·tube)",
+    "kW/km/tube"
+   ],
    "default": 35.0,
    "label": "Auxiliaires",
+   "definition": "Charge de référence des auxiliaires en kW/(km·tube), multipliée par la longueur, les tubes et le facteur de profondeur.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "faible": {
      "value": 8.75,
@@ -307,9 +413,17 @@
    "field": "base_fixed_kw",
    "type": "float",
    "unit": "unit:KiloW",
+   "unit_names": [
+    "kW",
+    "kilowatt",
+    "kilowatts",
+    "kw"
+   ],
    "default": 40.0,
    "label": "Charge fixe",
+   "definition": "Puissance fixe ajoutée une seule fois à la demande totale du tunnel, avant le bruit multiplicatif global.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "faible": {
      "value": 10.0,
@@ -344,9 +458,17 @@
    "field": "traffic_level",
    "type": "float",
    "unit": "unit:UNITLESS",
+   "unit_names": [
+    "unit:NUM",
+    "sans dimension",
+    "dimensionless",
+    "UNITLESS"
+   ],
    "default": 1.0,
    "label": "Trafic relatif",
+   "definition": "Multiplicateur du profil synthétique de trafic normalisé ; l’indice final est borné entre 0 et 2 dans TLS.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "beaucoup": {
      "value": 1.5,
@@ -400,9 +522,19 @@
    "field": "morning_peak_hour",
    "type": "float",
    "unit": "unit:HR",
+   "unit_names": [
+    "h",
+    "h du jour",
+    "heure",
+    "heures",
+    "hour",
+    "hours"
+   ],
    "default": 8.0,
    "label": "Pointe du matin",
+   "definition": "Heure du centre du pic gaussien du matin, comprise entre 0 inclus et 24 exclu.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "tôt": {
      "value": 5.0,
@@ -430,9 +562,19 @@
    "field": "evening_peak_hour",
    "type": "float",
    "unit": "unit:HR",
+   "unit_names": [
+    "h",
+    "h du jour",
+    "heure",
+    "heures",
+    "hour",
+    "hours"
+   ],
    "default": 18.0,
    "label": "Pointe du soir",
+   "definition": "Heure du centre du pic gaussien du soir, comprise entre 0 inclus et 24 exclu.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "tôt": {
      "value": 15.0,
@@ -460,9 +602,19 @@
    "field": "peak_width_h",
    "type": "float",
    "unit": "unit:HR",
+   "unit_names": [
+    "h",
+    "h du jour",
+    "heure",
+    "heures",
+    "hour",
+    "hours"
+   ],
    "default": 1.4,
    "label": "Largeur des pics",
+   "definition": "Écart-type temporel du pic gaussien du matin en heures ; TLS utilise 1,15 fois cette valeur pour le soir.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "faible": {
      "value": 0.35,
@@ -497,9 +649,17 @@
    "field": "traffic_sensitivity",
    "type": "float",
    "unit": "unit:UNITLESS",
+   "unit_names": [
+    "unit:NUM",
+    "sans dimension",
+    "dimensionless",
+    "UNITLESS"
+   ],
    "default": 0.65,
    "label": "Sensibilité au trafic",
+   "definition": "Coefficient du trafic dans la charge de ventilation : facteur 0,15 + traffic_sensitivity × traffic_index.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "faible": {
      "value": 0.1625,
@@ -531,9 +691,17 @@
    "field": "noise_sigma",
    "type": "float",
    "unit": "unit:UNITLESS",
+   "unit_names": [
+    "unit:NUM",
+    "sans dimension",
+    "dimensionless",
+    "UNITLESS"
+   ],
    "default": 0.06,
    "label": "Bruit multiplicatif",
+   "definition": "Écart-type du bruit gaussien relatif appliqué à la puissance totale ; la puissance résultante est ramenée au minimum à zéro.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "faible": {
      "value": 0.015,
@@ -568,9 +736,17 @@
    "field": "pollution_probability_per_day",
    "type": "float",
    "unit": "unit:UNITLESS",
+   "unit_names": [
+    "unit:NUM",
+    "sans dimension",
+    "dimensionless",
+    "UNITLESS"
+   ],
    "default": 0.05,
    "label": "Probabilité de pollution",
+   "definition": "Probabilité journalière de tirer un événement synthétique de pollution ; TLS tire ensuite son début et sa durée.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "faible": {
      "value": 0.0125,
@@ -611,9 +787,17 @@
    "field": "accident_probability_per_day",
    "type": "float",
    "unit": "unit:UNITLESS",
+   "unit_names": [
+    "unit:NUM",
+    "sans dimension",
+    "dimensionless",
+    "UNITLESS"
+   ],
    "default": 0.015,
    "label": "Probabilité d'accident",
+   "definition": "Probabilité journalière de tirer un événement synthétique d’accident ; TLS tire ensuite son début et sa durée.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "faible": {
      "value": 0.00375,
@@ -652,9 +836,17 @@
    "field": "pollution_sensitivity",
    "type": "float",
    "unit": "unit:UNITLESS",
+   "unit_names": [
+    "unit:NUM",
+    "sans dimension",
+    "dimensionless",
+    "UNITLESS"
+   ],
    "default": 0.55,
    "label": "Sensibilité pollution",
+   "definition": "Coefficient de surcroît de ventilation lorsqu’un événement de pollution est actif : ajout à 1 + pollution_sensitivity × indicateur.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "faible": {
      "value": 0.1375,
@@ -686,9 +878,17 @@
    "field": "accident_sensitivity",
    "type": "float",
    "unit": "unit:UNITLESS",
+   "unit_names": [
+    "unit:NUM",
+    "sans dimension",
+    "dimensionless",
+    "UNITLESS"
+   ],
    "default": 0.75,
    "label": "Sensibilité accidents",
+   "definition": "Coefficient de surcroît de ventilation lorsqu’un accident est actif ; il s’ajoute au coefficient de pollution dans le même facteur.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "faible": {
      "value": 0.1875,
@@ -720,18 +920,39 @@
    "field": "start_date",
    "type": "date",
    "unit": null,
+   "unit_names": [
+    "sans dimension",
+    "sans unité",
+    "unit:UNITLESS",
+    "None",
+    "null",
+    "date",
+    "YYYY-MM-DD",
+    "ISO8601"
+   ],
    "default": "2025-01-01",
    "label": "Début",
+   "definition": "Date de début au format YYYY-MM-DD ; détermine le calendrier, les jours de semaine et les saisons du modèle.",
    "categories": null,
+   "category_names": null,
    "declared_levels": null
   },
   {
    "field": "n_days",
    "type": "int",
    "unit": "unit:DAY",
+   "unit_names": [
+    "day",
+    "days",
+    "j",
+    "jour",
+    "jours"
+   ],
    "default": 7,
    "label": "Durée",
+   "definition": "Nombre de jours entiers simulés à partir de start_date.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "court": {
      "value": 1,
@@ -766,9 +987,16 @@
    "field": "freq_minutes",
    "type": "int",
    "unit": "unit:MIN",
+   "unit_names": [
+    "min",
+    "minute",
+    "minutes"
+   ],
    "default": 60,
    "label": "Pas de calcul",
+   "definition": "Durée constante du pas interne ; l’énergie du pas vaut puissance × freq_minutes/60.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "très fin": {
      "value": 5,
@@ -809,9 +1037,21 @@
    "field": "n_runs",
    "type": "int",
    "unit": "unit:NUM",
+   "unit_names": [
+    "unit:UNITLESS",
+    "tubes",
+    "voies",
+    "nombre",
+    "number",
+    "count",
+    "réalisations",
+    "realisations"
+   ],
    "default": 3,
    "label": "Réalisations",
+   "definition": "Nombre de réalisations Monte Carlo indépendantes ; chaque réalisation utilise base_seed + son indice.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "peu": {
      "value": 1,
@@ -843,9 +1083,24 @@
    "field": "base_seed",
    "type": "int",
    "unit": null,
+   "unit_names": [
+    "sans dimension",
+    "sans unité",
+    "unit:UNITLESS",
+    "None",
+    "null",
+    "identifiant",
+    "identifier",
+    "id",
+    "nombre",
+    "number",
+    "unit:NUM"
+   ],
    "default": 42,
    "label": "Graine",
+   "definition": "Identifiant initial du générateur pseudo-aléatoire ; chaque réalisation utilise base_seed + run.",
    "categories": null,
+   "category_names": null,
    "declared_levels": null
   }
  ],

@@ -3,6 +3,20 @@
 Versions follow MAJOR.MINOR.PATCH; each version has a git tag `vX.Y.Z`. Archived versions have a Zenodo DOI under
 the concept DOI [10.5281/zenodo.23238902](https://doi.org/10.5281/zenodo.23238902).
 
+## Unreleased (web app 0.3.x, 2026-10-11)
+
+- **Public web app** ([Hugging Face Space](https://huggingface.co/spaces/CyrilVoyant/websemantic), `webapp/`) and Cloudflare relay (`relay/`).
+- **LQL-Equiv workbench** (`src/websemantic/lql_workbench.py`), all computed by the pinned library:
+  - several organs at risk and several schedules;
+  - maximum dose per session without exceeding any organ's EQD2;
+  - minimum organ dose for the same tumour effect;
+  - biologically equivalent resumption after an interruption (`lql_interruption.py`).
+- **Ontology:**
+  - French and common names of the LQL organs and tumour sites (`skos:altLabel`);
+  - anatomical groups used by the app.
+- **Descriptors:** English expressions for the qualitative conventions (values unchanged).
+- **Paper.** The paper refers to version 0.2.6 and to the frozen experiments; this line evolves separately.
+
 ## 0.2.6 — 2026-10-10
 
 - Licence MIT from this version on (0.2.0 to 0.2.5 remain under PolyForm Noncommercial 1.0.0).

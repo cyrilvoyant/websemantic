@@ -9,8 +9,15 @@
    "field": "organ",
    "type": "category",
    "unit": null,
+   "unit_names": [
+    "sans unité",
+    "sans unite",
+    "unit:UNITLESS",
+    "none"
+   ],
    "default": null,
    "label": "Organe à risque",
+   "definition": "Nom exact dans la bibliothèque radiobiologique ; ne définit pas un patient.",
    "categories": [
     "Temporomandibular joint",
     "Rib cage",
@@ -47,14 +54,206 @@
     "Standard acute-responding tissue",
     "Standard late-responding tissue"
    ],
-   "declared_levels": null
+   "category_names": {
+    "Bladder": [
+     "vessie"
+    ],
+    "Brachial plexus": [
+     "plexus brachial"
+    ],
+    "Brain": [
+     "cerveau",
+     "encéphale"
+    ],
+    "Brainstem": [
+     "brain stem",
+     "tronc cérébral"
+    ],
+    "Cauda equina": [
+     "queue de cheval"
+    ],
+    "Colon": [
+     "côlon"
+    ],
+    "Eye": [
+     "eyes",
+     "oeil",
+     "yeux",
+     "œil"
+    ],
+    "Femoral head": [
+     "femoral heads",
+     "tête fémorale",
+     "têtes fémorales"
+    ],
+    "Heart": [
+     "coeur",
+     "cœur"
+    ],
+    "Kidney": [
+     "kidneys",
+     "rein",
+     "reins"
+    ],
+    "Larynx / supraglottis": [
+     "supraglotte",
+     "supraglottis"
+    ],
+    "Liver": [
+     "foie"
+    ],
+    "Lung": [
+     "lungs",
+     "poumon",
+     "poumons"
+    ],
+    "Middle / external ear": [
+     "external ear",
+     "middle ear",
+     "oreille externe",
+     "oreille moyenne"
+    ],
+    "Oesophagus": [
+     "esophagus",
+     "oesophage",
+     "œsophage"
+    ],
+    "Optic chiasm": [
+     "chiasma",
+     "chiasma optique"
+    ],
+    "Optic nerve": [
+     "nerf optique",
+     "nerfs optiques",
+     "optic nerves"
+    ],
+    "Oral cavity / oropharynx": [
+     "cavité buccale",
+     "oral cavity"
+    ],
+    "Oral mucosa": [
+     "muqueuse buccale"
+    ],
+    "Parotid": [
+     "glande parotide",
+     "parotid gland",
+     "parotide",
+     "parotides",
+     "parotids"
+    ],
+    "Rectum": [
+     "rectum"
+    ],
+    "Retina": [
+     "retine",
+     "rétine"
+    ],
+    "Rib cage": [
+     "cage thoracique",
+     "côtes",
+     "gril costal",
+     "ribs"
+    ],
+    "Skin (acute)": [
+     "acute skin",
+     "peau aiguë",
+     "réaction cutanée aiguë"
+    ],
+    "Skin (late)": [
+     "fibrose cutanée",
+     "late skin",
+     "peau tardive"
+    ],
+    "Small bowel": [
+     "grele",
+     "grêle",
+     "intestin grêle",
+     "small intestine"
+    ],
+    "Spinal cord": [
+     "moelle",
+     "moelle épinière"
+    ],
+    "Stomach": [
+     "estomac"
+    ],
+    "Temporomandibular joint": [
+     "articulation temporo-mandibulaire"
+    ],
+    "Testis": [
+     "testes",
+     "testicle",
+     "testicule",
+     "testicules"
+    ],
+    "Thyroid": [
+     "thyroide",
+     "thyroïde"
+    ]
+   },
+   "declared_levels": null,
+   "anatomical_groups": {
+    "Abdomen": [
+     "Colon",
+     "Kidney",
+     "Liver",
+     "Small bowel",
+     "Stomach"
+    ],
+    "Système nerveux central": [
+     "Brain",
+     "Brainstem",
+     "Eye",
+     "Optic chiasm",
+     "Optic nerve",
+     "Retina",
+     "Spinal cord"
+    ],
+    "Tête et cou (ORL)": [
+     "Larynx / supraglottis",
+     "Middle / external ear",
+     "Oral cavity / oropharynx",
+     "Oral mucosa",
+     "Parotid",
+     "Temporomandibular joint",
+     "Thyroid"
+    ],
+    "Pelvis": [
+     "Bladder",
+     "Cauda equina",
+     "Colon",
+     "Femoral head",
+     "Rectum",
+     "Small bowel",
+     "Testis"
+    ],
+    "Peau": [
+     "Skin (acute)",
+     "Skin (late)"
+    ],
+    "Thorax (cibles et organes thoraciques)": [
+     "Brachial plexus",
+     "Heart",
+     "Lung",
+     "Oesophagus",
+     "Rib cage",
+     "Spinal cord"
+    ]
+   }
   },
   {
    "field": "tumour_site",
    "type": "category",
    "unit": null,
+   "unit_names": [
+    "sans unité",
+    "sans unite",
+    "unit:UNITLESS",
+    "none"
+   ],
    "default": null,
    "label": "Site tumoral",
+   "definition": "Nom exact dans la bibliothèque ; cas fictif uniquement.",
    "categories": [
     "Tonsil",
     "Carcinoma",
@@ -77,15 +276,102 @@
     "Standard tumour",
     "Standard tumour, no proliferation"
    ],
+   "category_names": {
+    "Breast carcinoma": [
+     "breast",
+     "breast cancer",
+     "cancer du sein",
+     "carcinome du sein",
+     "sein"
+    ],
+    "Cervix (LQ-L)": [
+     "cancer du col",
+     "cervical cancer",
+     "cervix",
+     "col de l'utérus",
+     "col utérin"
+    ],
+    "Glioblastoma (LQ-L)": [
+     "GBM",
+     "glioblastoma",
+     "glioblastome"
+    ],
+    "Larynx": [
+     "cancer du larynx",
+     "laryngeal cancer",
+     "tumeur du larynx"
+    ],
+    "Lung": [
+     "cancer du poumon",
+     "lung cancer",
+     "lung tumour",
+     "tumeur du poumon"
+    ],
+    "Medulloblastoma (LQ-L)": [
+     "medulloblastoma",
+     "médulloblastome"
+    ],
+    "Nasopharynx": [
+     "cavum"
+    ],
+    "Oesophagus": [
+     "cancer de l'œsophage",
+     "oesophageal cancer",
+     "tumeur de l'œsophage"
+    ],
+    "Oral mucosa": [
+     "tumeur de la muqueuse buccale"
+    ],
+    "Oropharynx": [
+     "tumeur de l'oropharynx"
+    ],
+    "Prostate": [
+     "cancer de la prostate",
+     "cancer de prostate",
+     "prostate",
+     "prostate cancer"
+    ],
+    "Rectum": [
+     "cancer du rectum",
+     "rectal cancer",
+     "tumeur du rectum"
+    ],
+    "Skin carcinoma": [
+     "carcinome cutané",
+     "carcinome de la peau",
+     "skin cancer"
+    ],
+    "Skin melanoma (LQ-L)": [
+     "melanoma",
+     "mélanome",
+     "mélanome cutané"
+    ],
+    "Tonsil": [
+     "amygdale"
+    ],
+    "Vocal cord": [
+     "corde vocale",
+     "cordes vocales",
+     "vocal cords"
+    ]
+   },
    "declared_levels": null
   },
   {
    "field": "dose_per_fraction",
    "type": "float",
    "unit": "unit:GRAY",
+   "unit_names": [
+    "Gy",
+    "gray",
+    "grays",
+    "gy"
+   ],
    "default": null,
    "label": "Dose par fraction",
+   "definition": "Dose physique pour chaque fraction du seul cursus.",
    "categories": null,
+   "category_names": null,
    "declared_levels": {
     "conventional": {
      "value": 2.0,
@@ -103,45 +389,83 @@
    "field": "n_fractions",
    "type": "int",
    "unit": "unit:NUM",
+   "unit_names": [
+    "nombre",
+    "fractions"
+   ],
    "default": null,
    "label": "Fractions",
+   "definition": "Nombre entier de fractions du seul cursus.",
    "categories": null,
+   "category_names": null,
    "declared_levels": null
   },
   {
    "field": "gap_days",
    "type": "float",
    "unit": "unit:DAY",
+   "unit_names": [
+    "j",
+    "jour",
+    "jours",
+    "day",
+    "days"
+   ],
    "default": 0,
    "label": "Interruption",
+   "definition": "Intervalle avant le cursus en jours, dans la convention calendaire native.",
    "categories": null,
+   "category_names": null,
    "declared_levels": null
   },
   {
    "field": "reference_dose",
    "type": "float",
    "unit": "unit:GRAY",
+   "unit_names": [
+    "Gy",
+    "gy",
+    "gray"
+   ],
    "default": 2,
    "label": "Dose de référence",
+   "definition": "Dose physique par fraction du régime auquel EQD se rapporte ; EQD2 seulement si 2 Gy.",
    "categories": null,
+   "category_names": null,
    "declared_levels": null
   },
   {
    "field": "bifractionated",
    "type": "category",
    "unit": null,
+   "unit_names": [
+    "sans unité",
+    "sans unite",
+    "unit:UNITLESS",
+    "none"
+   ],
    "default": "no",
    "label": "Deux fractions par jour",
+   "definition": "yes active deux fractions par jour et un intervalle natif fixe de 6 h ; no sinon.",
    "categories": null,
+   "category_names": null,
    "declared_levels": null
   },
   {
    "field": "scenario_scope",
    "type": "category",
    "unit": null,
+   "unit_names": [
+    "sans unité",
+    "sans unite",
+    "unit:UNITLESS",
+    "none"
+   ],
    "default": "fictitious",
    "label": "Cadre",
+   "definition": "Scénario fictif de recherche, sans décision clinique.",
    "categories": null,
+   "category_names": null,
    "declared_levels": null
   }
  ],

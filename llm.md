@@ -6,6 +6,8 @@ defines supported tasks, canonical units, categories, bounds, and the authority 
 conventions. Git and an API key are unnecessary; Python and the declared dependencies must be available. State
 unavailable tools before promising a calculation. `pip install websemantic` installs the Python layer only; the
 simulators, descriptors and ontology come from this repository (source index or clone with submodules).
+A public web page for humans (https://huggingface.co/spaces/CyrilVoyant/websemantic) runs the same descriptors and
+pinned codes in the browser; an agent should use the repository files above, not the page.
 
 Extract explicit values first and convert units exactly. Propose missing defaults and declared qualitative
 conventions with their source, and ask for acceptance before any calculation. A proposal is not an accepted input.

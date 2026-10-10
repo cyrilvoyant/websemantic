@@ -123,10 +123,16 @@ def _iso_dose(effect, target, top):
     return hi, final
 
 
-def resume(situation, workspace, descriptor):
-    """Biologically equivalent resumption, tissue by tissue. Returns plain data (JSON-ready)."""
+def resume(situation, workspace, descriptor, counts=None):
+    """Biologically equivalent resumption, tissue by tissue. Returns plain data (JSON-ready).
+
+    counts: numbers of remaining sessions to examine (default: every number from 1 to max_remaining).
+    """
     s = situation
     check(s)
+    counts = sorted({int(n) for n in counts}) if counts else list(range(1, s.max_remaining + 1))
+    if not all(1 <= n <= s.max_remaining for n in counts):
+        raise ValueError("Each number of remaining sessions must lie between 1 and max_remaining.")
     model = _Model(workspace, descriptor, s)
     first = s.organs[0]
     planned = [(s.planned_dose, s.planned_sessions, 0.0)]
@@ -146,7 +152,7 @@ def resume(situation, workspace, descriptor):
                 "difference_gy": obtained - target}
 
     rows = []
-    for n in range(1, s.max_remaining + 1):
+    for n in counts:
         dose, obtained = _iso_dose(lambda d, n=n: model.eqd2(first, schedule(d, n))[0], plan_tumour, s.max_dose_per_session)
         row = {"sessions": n, "tumour": entry(dose, obtained, plan_tumour), "organs": {}}
         for o in s.organs:

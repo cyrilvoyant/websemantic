@@ -1,6 +1,6 @@
 // WebSemantic web app: chat on the left, qualified results on the right. Python runs in a background worker.
 "use strict";
-const APP_VERSION = "0.3.0";  // also in index.html (cache busting) and the footer
+const APP_VERSION = "0.3.5";  // also in index.html (cache busting) and the footer
 
 const params = new URLSearchParams(location.search);
 const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
@@ -13,7 +13,7 @@ const T = {
     intro: "Describe your case. The code asks for what is missing and computes only what you accept.",
     codes: { tls: "Road tunnel energy", lql: "Radiotherapy dose" },
     placeholder: { tls: "Describe your case… e.g. a long tunnel with a lot of traffic", lql: "Describe your case… e.g. 20 sessions of 3 Gy, prostate, rectum as organ at risk" },
-    examples: "Examples", more: "Other examples ↻", tags: { refuse: "refusal example", ask: "the code will ask" }, exampleBtn: "Example without language model", resetBtn: "New conversation",
+    allCases: "All cases", details: "Technical details (versions, checks, options)", varsNote: "To work in the original application, open it and enter these values:", openApp: { lql: "Open the original LQL-Equiv", tls: "Open the original TLS (code and app)" }, examples: "Examples", more: "Other examples ↻", tags: { refuse: "refusal example", ask: "the code will ask" }, exampleBtn: "Example without language model", resetBtn: "New conversation",
     tabs: { results: "Results", about: "About" },
     loading: "Loading the scientific codes in your browser (about 15 s on the first visit)…",
     timeout: "The calculation took too long in this browser; nothing is shown.",
@@ -30,7 +30,7 @@ const T = {
     prov: ["Code", "Nature", "Uncertainty covered", "not covered", "Download", "Model options", "Validity flags",
            "Source check"],
     vars: ["parameter", "value", "unit", "status", "source"],
-    about: "<p><b>How it works.</b> Describe your case in your own words. A language model (Mistral) only turns your words into the parameters of the code; it never computes. The page shows what it understood, proposes the code's declared values for what you did not say, and computes only after your <b>yes</b>.</p><p><b>Who computes.</b> The original, unchanged codes (TLS for tunnels, LQL-Equiv for radiotherapy), run in your browser after their sources are checked.</p><p><b>Reading the results.</b> Every number comes from the code. The Variables tab shows each value and where it comes from: given by you, accepted convention or default. To keep a result, download its files: tables (CSV), manifest (versions and checks) and semantics.ttl (the same result described with the WebSemantic ontology).</p><p><b>Limits.</b> Fictitious scenarios for research and teaching: no real tunnel is certified, no treatment is decided.</p>",
+    about: "<p><b>How it works.</b> Describe your case in your own words. A language model (Mistral) only turns your words into the parameters of the code; it never computes. The page shows what it understood, proposes the code's declared values for what you did not say, and computes only after your <b>yes</b>.</p><p><b>Who computes.</b> The original, unchanged codes (TLS for tunnels, LQL-Equiv for radiotherapy), run in your browser after their sources are checked.</p><p><b>Reading the results.</b> Every number comes from the code. The Variables tab shows each value and where it comes from: given by you, accepted convention or default. To keep a result, download its files: tables (CSV), manifest (versions and checks) and semantics.ttl (the same result described with the WebSemantic ontology).</p><p><b>Limits.</b> Fictitious scenarios for research and teaching: no real tunnel is certified, no treatment is decided.</p><p><b>Who.</b> Developed at the O.I.E. centre (Observation, Impacts, Énergie), Mines Paris – PSL, by Cyril Voyant.</p>",
     foot: "Fictitious scenarios only, no personal data · messages read by Mistral · voice recognised by your browser (it may use its vendor's online service)",
     voice: "Voice",
   },
@@ -39,7 +39,7 @@ const T = {
     intro: "Décrivez votre cas. Le code demande ce qui manque et ne calcule que ce que vous acceptez.",
     codes: { tls: "Énergie d'un tunnel", lql: "Dose en radiothérapie" },
     placeholder: { tls: "Décrivez votre cas… par ex. un tunnel long avec beaucoup de trafic", lql: "Décrivez votre cas… par ex. 20 séances de 3 Gy, prostate, rectum comme organe à risque" },
-    examples: "Exemples", more: "Autres exemples ↻", tags: { refuse: "exemple de refus", ask: "le code demandera" }, exampleBtn: "Exemple sans modèle de langage", resetBtn: "Nouvelle conversation",
+    allCases: "Tous les cas", details: "Détails techniques (versions, vérifications, options)", varsNote: "Pour travailler dans l'application d'origine, ouvrez-la et saisissez ces valeurs :", openApp: { lql: "Ouvrir LQL-Equiv (application d'origine)", tls: "Ouvrir TLS d'origine (code et application)" }, examples: "Exemples", more: "Autres exemples ↻", tags: { refuse: "exemple de refus", ask: "le code demandera" }, exampleBtn: "Exemple sans modèle de langage", resetBtn: "Nouvelle conversation",
     tabs: { results: "Résultats", about: "À propos" },
     loading: "Chargement des codes scientifiques dans votre navigateur (environ 15 s à la première visite)…",
     timeout: "Le calcul a pris trop de temps dans ce navigateur ; rien n'est affiché.",
@@ -56,7 +56,7 @@ const T = {
     prov: ["Code", "Nature", "Incertitude couverte", "non couverte", "Télécharger", "Options du modèle",
            "Indicateurs de validité", "Vérification des sources"],
     vars: ["paramètre", "valeur", "unité", "statut", "source"],
-    about: "<p><b>Comment ça marche.</b> Décrivez votre cas avec vos mots. Un modèle de langage (Mistral) traduit seulement vos mots en paramètres du code ; il ne calcule jamais. La page montre ce qu'elle a compris, propose les valeurs déclarées par le code pour ce que vous n'avez pas dit, et ne calcule qu'après votre <b>oui</b>.</p><p><b>Qui calcule.</b> Les codes originaux, non modifiés (TLS pour les tunnels, LQL-Equiv pour la radiothérapie), dans votre navigateur, après vérification de leurs sources.</p><p><b>Lire les résultats.</b> Chaque nombre vient du code. L'onglet Variables montre chaque valeur et son origine : donnée par vous, convention acceptée ou valeur par défaut. Pour garder un résultat, téléchargez ses fichiers : tableaux (CSV), manifeste (versions et vérifications) et semantics.ttl (le même résultat décrit avec l'ontologie WebSemantic).</p><p><b>Limites.</b> Scénarios fictifs pour la recherche et l'enseignement : aucun tunnel réel n'est certifié, aucun traitement n'est décidé.</p>",
+    about: "<p><b>Comment ça marche.</b> Décrivez votre cas avec vos mots. Un modèle de langage (Mistral) traduit seulement vos mots en paramètres du code ; il ne calcule jamais. La page montre ce qu'elle a compris, propose les valeurs déclarées par le code pour ce que vous n'avez pas dit, et ne calcule qu'après votre <b>oui</b>.</p><p><b>Qui calcule.</b> Les codes originaux, non modifiés (TLS pour les tunnels, LQL-Equiv pour la radiothérapie), dans votre navigateur, après vérification de leurs sources.</p><p><b>Lire les résultats.</b> Chaque nombre vient du code. L'onglet Variables montre chaque valeur et son origine : donnée par vous, convention acceptée ou valeur par défaut. Pour garder un résultat, téléchargez ses fichiers : tableaux (CSV), manifeste (versions et vérifications) et semantics.ttl (le même résultat décrit avec l'ontologie WebSemantic).</p><p><b>Limites.</b> Scénarios fictifs pour la recherche et l'enseignement : aucun tunnel réel n'est certifié, aucun traitement n'est décidé.</p><p><b>Qui.</b> Développé au centre O.I.E. (Observation, Impacts, Énergie), Mines Paris – PSL, par Cyril Voyant.</p>",
     foot: "Scénarios fictifs, aucune donnée personnelle · messages lus par Mistral · voix reconnue par votre navigateur (qui peut utiliser le service en ligne de son éditeur)",
     voice: "Voix",
   },
@@ -149,6 +149,54 @@ function bars(values, labels, unit, horizontal = false) {
   return `<svg viewBox="0 0 ${w} ${h}">${g}</svg>`;
 }
 
+const APPS = { lql: "https://cyrilvoyant.github.io/LQL-Equiv-web/", tls: "https://github.com/cyrilvoyant/tunnel-load-simulator" };
+function openApp() {
+  return `<a class="app-link" href="${APPS[code]}" target="_blank" rel="noopener">${esc(T[lang].openApp[code])} ↗</a>`;
+}
+function table(tbl) {
+  return `<div class="table-wrap"><table class="cases"><tr>${tbl.head.map((h) => `<th>${esc(h)}</th>`).join("")}</tr>` +
+    tbl.rows.map((row) => `<tr>${row.map((c, i) => i ? `<td>${esc(c)}</td>` : `<th>${esc(c)}</th>`).join("")}</tr>`).join("") +
+    "</table></div>";
+}
+function grouped(chart) {
+  // grouped bars from a zero line (values may be negative: differences in %), with an optional reference line
+  const w = 640, h = 260, pad = { l: 48, r: 10, t: 22, b: 40 }, cats = chart.categories, series = chart.series;
+  const all = series.flatMap((s) => s.values).concat(chart.line ? [chart.line.value] : []).filter(Number.isFinite);
+  const hi = Math.max(...all, 0), lo = Math.min(...all, 0), span = (hi - lo) || 1;
+  // doses per session lie close together: the axis is zoomed around them (ticks shown), not started at 0
+  const zoom = chart.zoom && all.length > 0 && Math.min(...all) > 0, pos = all.filter((v) => v > 0);
+  const zlo = zoom ? Math.min(...pos) : lo, zspan = zoom ? (hi - zlo) || hi * 0.05 : span;
+  const top = hi + zspan * (zoom ? 0.6 : 0.15), bottom = zoom ? Math.max(0, zlo - zspan * 1.2) : (lo < 0 ? lo - span * 0.12 : 0);
+  const Y = (v) => pad.t + ((top - v) / (top - bottom)) * (h - pad.t - pad.b);
+  const cw = (w - pad.l - pad.r) / cats.length, bw = Math.min(46, (cw * 0.8) / series.length);
+  const palette = series.length === 1 ? null : [TEAL, BLUE, ORANGE, NAVY, LIGHT];
+  const digits = Math.max(Math.abs(hi), Math.abs(lo)) < 20 ? (chart.unit === "%" ? 1 : 2) : 1;
+  const step = niceTicks(zoom ? top - bottom : Math.max(Math.abs(top), Math.abs(bottom)))[1] || 1;
+  let g = "";
+  for (let v = Math.ceil(bottom / step) * step; v <= top + 1e-9; v += step) {
+    g += `<line x1="${pad.l}" y1="${Y(v)}" x2="${w - pad.r}" y2="${Y(v)}" stroke="${Math.abs(v) < 1e-9 ? LIGHT : "#eef0f3"}"/>` +
+         `<text x="${pad.l - 6}" y="${Y(v) + 4}" text-anchor="end" font-size="11" fill="${MID}">${+v.toFixed(6)}</text>`;
+  }
+  cats.forEach((c, i) => {
+    const x0 = pad.l + i * cw + (cw - bw * series.length) / 2;
+    series.forEach((s, k) => {
+      const v = s.values[i], ok = Number.isFinite(v), y0 = Y(Math.max(0, bottom)), y = ok ? Y(v) : y0;
+      const colour = palette ? palette[k % 5] : (i === 0 ? TEAL : BLUE), label = ok ? v.toFixed(digits) : "—";
+      g += `<rect x="${x0 + k * bw}" y="${Math.min(y, y0)}" width="${bw - 3}" height="${Math.abs(y0 - y)}" fill="${colour}" fill-opacity="0.85"/>` +
+           `<text x="${x0 + k * bw + bw / 2 - 1.5}" y="${ok && v < 0 ? y + 13 : y - 4}" text-anchor="middle" font-size="10" fill="${INK}">${label}</text>`;
+    });
+    g += `<text x="${pad.l + (i + 0.5) * cw}" y="${h - pad.b + 16}" text-anchor="middle" font-size="10.5" fill="${MID}">${esc(c)}</text>`;
+  });
+  if (chart.line && Number.isFinite(chart.line.value)) {
+    const y = Y(chart.line.value);
+    g += `<line x1="${pad.l}" y1="${y}" x2="${w - pad.r}" y2="${y}" stroke="${ORANGE}" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+  }
+  const items = (palette ? series.map((s, k) => `<i style="background:${palette[k % 5]}"></i>${esc(s.name)}`) : []).concat(
+    chart.line && Number.isFinite(chart.line.value) ? [`<i style="background:none;border-top:2px dashed ${ORANGE};height:0"></i>${esc(chart.line.label)} : ${chart.line.value.toFixed(2)}`] : []);
+  const legend = items.length ? `<div class="legend">${items.join("")}</div>` : "";
+  return `<svg viewBox="0 0 ${w} ${h}">${g}</svg>${legend}`;
+}
+
 // ------------------------------------------------------------ rendering
 function render(out) {
   const t = T[lang];
@@ -156,15 +204,18 @@ function render(out) {
   if (out.reply) say("bot", out.reply);
   $("decision").hidden = false; $("decision").className = "decision " + out.decision;
   $("decision").innerHTML = `<span class="code">${esc(out.decision)}</span>${esc(t.decision[out.decision])}`;
-  $("vars").innerHTML = "<tr>" + [t.vars[0], t.vars[1], t.vars[3], t.vars[4]].map((h) => `<th>${esc(h)}</th>`).join("") + "</tr>" +
+  $("vars").innerHTML = `<caption>${esc(t.varsNote)} ${openApp()}</caption>` + "<tr>" + [t.vars[0], t.vars[1], t.vars[3], t.vars[4]].map((h) => `<th>${esc(h)}</th>`).join("") + "</tr>" +
     out.variables.map((r) => "<tr>" + [r[0], r[1], r[3], r[4]].map((c) => `<td>${esc(c ?? "")}</td>`).join("") + "</tr>").join("");
   clearResults(false);
   if (!out.results) return;  // never leave the figures of an earlier scenario next to new parameters
-  const r = out.results, labels = t.kpis[r.kind];
+  const r = out.results, labels = r.kpi_labels || t.kpis[r.kind];
   $("kpis").innerHTML = r.kpis.map((v, i) => `<div class="kpi"><b>${esc(v)}</b><small>${esc(labels[i])}</small></div>`).join("");
   if (r.kind === "tls") {
     $("fig1").innerHTML = `<figcaption>${esc(t.figs.power)}</figcaption>${lineBand(r.series)}`;
     $("fig2").innerHTML = `<figcaption>${esc(t.figs.daily)}</figcaption>${stacked(r.hourly, t.figs.uses)}`;
+  } else if (r.kind === "lql_table") {
+    $("fig1").innerHTML = `<figcaption>${esc(r.chart.title)}</figcaption>${grouped(r.chart)}`;
+    $("fig2").innerHTML = `<figcaption>${esc(t.allCases)}</figcaption>${table(r.table)}`;
   } else {
     $("fig1").innerHTML = `<figcaption>${esc(t.figs.eqd)}</figcaption>${bars(r.bars, t.figs.bars, "Gy")}`;
     $("fig2").innerHTML = `<figcaption>${esc(t.figs.prob)}</figcaption>${bars(r.probs, t.figs.probs, "%", true)}`;
@@ -173,18 +224,18 @@ function render(out) {
   const q = r.qualification, sw = q.software || {}, u = q.uncertainty || {};
   const doi = sw.doi ? ` · DOI <a href="https://doi.org/${esc(sw.doi)}" target="_blank" rel="noopener">${esc(sw.doi)}</a>` : "";
   const kv = (o) => Object.entries(o || {}).map(([k, v]) => `${esc(k)} = ${esc(v)}`).join(", ");
-  $("provenance").innerHTML = `<p><b>${t.prov[0]}:</b> ${esc(sw.name)} ${esc(sw.version || "")} · commit <code>${esc((sw.commit || "").slice(0, 7))}</code>${doi} · ${esc(sw.licence || "")}</p>` +
+  $("provenance").innerHTML = `<details><summary>${esc(t.details)}</summary><p><b>${t.prov[0]}:</b> ${esc(sw.name)} ${esc(sw.version || "")} · commit <code>${esc((sw.commit || "").slice(0, 7))}</code>${doi} · ${esc(sw.licence || "")}</p>` +
     (q.verification ? `<p><b>${t.prov[7]}:</b> ${esc(q.verification)}</p>` : "") +
     (q.options && Object.keys(q.options).length ? `<p><b>${t.prov[5]}:</b> ${kv(q.options)}</p>` : "") +
     (q.flags ? `<p><b>${t.prov[6]}:</b> ${kv(q.flags)}</p>` : "") +
     `<p><b>${t.prov[1]}:</b> ${esc(q.nature || q.note || "")}</p>` +
     (u.covered ? `<p><b>${t.prov[2]}:</b> ${esc(u.covered.join(", "))} · <b>${t.prov[3]}:</b> ${esc((u.not_covered || []).join(", "))}</p>` : "") +
-    (q.validity_notes || []).map((n) => `<p>– ${esc(n)}</p>`).join("");
+    (q.validity_notes || []).map((n) => `<p>– ${esc(n)}</p>`).join("") + "</details>";
   $("files").innerHTML = `<b>${t.prov[4]}:</b> ` + Object.entries(r.files).map(([name, text]) => {
     const url = URL.createObjectURL(new Blob([text], { type: name.endsWith(".json") ? "application/json" : name.endsWith(".ttl") ? "text/turtle" : "text/csv" }));
     blobs.push(url);
     return `<a download="${esc(name)}" href="${url}">${esc(name)}</a>`;
-  }).join("");
+  }).join("") + `<p class="open">${openApp()}</p>`;
   showTab("results");
   // on a phone the results sit below the chat: bring them into view
   if (window.matchMedia("(max-width:900px)").matches) $("decision").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -227,7 +278,10 @@ function renderExamples() {
     const b = document.createElement("button"), text = ex[lang] || ex.en;
     b.className = ex.kind; b.textContent = text;
     if (t.tags[ex.kind]) { const tag = document.createElement("span"); tag.className = "tag"; tag.textContent = t.tags[ex.kind]; b.appendChild(tag); }
-    b.onclick = () => { $("input").value = text; $("input").focus(); };
+    b.onclick = async () => {  // an example is a complete case: it starts a new conversation
+      if (state && $("chat").children.length) await newConversation();
+      $("input").value = text; $("input").focus();
+    };
     $("examples").appendChild(b);
   }
 }
