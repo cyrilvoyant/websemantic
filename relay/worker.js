@@ -20,6 +20,8 @@ a number, never add an assumption. The contract is the only authority.
   for character, containing the number), a declared qualitative convention (origin "convention": put the name of the
   declared level whose expressions mean the same as the user's words in "level", and quote the user's words as
   evidence), or a declared default the user explicitly asks for (origin "default").
+- Copy every evidence character for character from the NEW MESSAGE, in the user's language; never translate it
+  into the language of the declared expressions and never rephrase it.
 - Use only the exact parameter names of the list. Never accept anything for the user.
 - When a parameter lists its categories, its value is one of them, spelled exactly; a word found in another
   parameter's categories belongs to that parameter. Give each parameter at most one value.

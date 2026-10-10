@@ -71,7 +71,7 @@
     {
       "path": "ontology/tls-contract.json",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/tls-contract.json",
-      "sha256_lf": "a7fdf9dcf6968479348447024c1b144273f5949751f4dc8be9a7f31278876dfb"
+      "sha256_lf": "e7f0b457c1e9611bc291901c68e8b648179862d1fb0be1376b5e4d6b06c2d675"
     },
     {
       "path": "ontology/core.ttl",
@@ -81,7 +81,7 @@
     {
       "path": "ontology/tls-vocabulary.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/tls-vocabulary.ttl",
-      "sha256_lf": "7b5cbd0a2a6aa650081ed2bfdb267222e6fc8b585808be21c34c5056853da242"
+      "sha256_lf": "d8ef72aec325220b8e852387c4ec459e9025c7779a1506f4267dc70569be5f92"
     },
     {
       "path": "ontology/shapes.ttl",

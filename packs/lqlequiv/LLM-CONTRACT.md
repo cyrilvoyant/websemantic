@@ -35,7 +35,7 @@ Supported: simulate fictitious radiobiological fractionation; compare fictitious
 
 | Expression | Field | Proposed value |
 |---|---|---|
-| « fractionnement conventionnel », « dose conventionnelle » | `dose_per_fraction` | 2 unit:GRAY |
+| « fractionnement conventionnel », « conventional fractionation », « standard fractionation », « dose conventionnelle », « conventional dose » | `dose_per_fraction` | 2 unit:GRAY |
 
 **Clarify, never convert:** « hypofractionnement modéré / extrême », « stéréotaxique », « hyperfractionnement », « dose élevée », « peu de séances ».
 

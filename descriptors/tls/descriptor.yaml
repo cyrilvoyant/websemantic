@@ -64,6 +64,7 @@ inputs:
           value: 375.0
           aliases:
           - tunnel court
+          - short tunnel
           - faible longueur
           answer_aliases:
           - faible
@@ -72,6 +73,8 @@ inputs:
           value: 1500
           aliases:
           - longueur courante
+          - usual length
+          - typical length
           answer_aliases:
           - courant
           - habituel
@@ -79,6 +82,7 @@ inputs:
           fraction: 0.75
           aliases:
           - tunnel long
+          - long tunnel
           - grande longueur
           answer_aliases:
           - élevé
@@ -87,6 +91,7 @@ inputs:
           fraction: 1.0
           aliases:
           - tunnel très long
+          - very long tunnel
           - très grande longueur
           answer_aliases:
           - très élevé
@@ -241,6 +246,7 @@ inputs:
           value: 75.0
           aliases:
           - faible altitude
+          - low altitude
           - basse altitude
           answer_aliases:
           - faible
@@ -249,6 +255,7 @@ inputs:
           value: 300
           aliases:
           - altitude courante
+          - usual altitude
           answer_aliases:
           - courant
           - habituel
@@ -256,6 +263,7 @@ inputs:
           fraction: 0.75
           aliases:
           - haute altitude
+          - high altitude
           - altitude élevée
           answer_aliases:
           - élevé
@@ -264,6 +272,7 @@ inputs:
           fraction: 1.0
           aliases:
           - très haute altitude
+          - very high altitude
           - altitude très élevée
           answer_aliases:
           - très élevé
@@ -300,6 +309,7 @@ inputs:
           aliases:
           - faible profondeur
           - tunnel peu profond
+          - shallow tunnel
           answer_aliases:
           - faible
           - peu
@@ -315,6 +325,7 @@ inputs:
           aliases:
           - grande profondeur
           - tunnel profond
+          - deep tunnel
           answer_aliases:
           - élevé
           - fort
@@ -323,6 +334,7 @@ inputs:
           aliases:
           - très grande profondeur
           - tunnel très profond
+          - very deep tunnel
           answer_aliases:
           - très élevé
           - très fort
@@ -356,6 +368,8 @@ inputs:
           value: 0.5
           aliases:
           - faible pente
+          - gentle slope
+          - slight slope
           - pente faible
           answer_aliases:
           - faible
@@ -364,6 +378,7 @@ inputs:
           value: 2.0
           aliases:
           - pente courante
+          - usual slope
           answer_aliases:
           - courant
           - habituel
@@ -371,6 +386,7 @@ inputs:
           fraction: 0.75
           aliases:
           - forte pente
+          - steep slope
           - pente forte
           answer_aliases:
           - élevé
@@ -379,6 +395,7 @@ inputs:
           fraction: 1.0
           aliases:
           - très forte pente
+          - very steep slope
           - pente très forte
           answer_aliases:
           - très élevé
@@ -639,6 +656,10 @@ inputs:
           fraction: 0.75
           aliases:
           - beaucoup de trafic
+          - a lot of traffic
+          - lots of traffic
+          - heavy traffic
+          - high traffic
           - beaucoup de traffic
           - trafic important
           - trafic élevé
@@ -649,6 +670,9 @@ inputs:
           fraction: 1.0
           aliases:
           - énormément de trafic
+          - very heavy traffic
+          - very high traffic
+          - huge traffic
           - énormément de traffic
           - trafic très élevé
           - trafic énorme
@@ -658,6 +682,9 @@ inputs:
           value: 0.3
           aliases:
           - peu de trafic
+          - little traffic
+          - light traffic
+          - low traffic
           - faible trafic
           - trafic faible
           answer_aliases:
@@ -667,6 +694,9 @@ inputs:
           value: 1.0
           aliases:
           - trafic courant
+          - usual traffic
+          - normal traffic
+          - typical traffic
           answer_aliases:
           - courant
           - habituel
@@ -984,6 +1014,8 @@ inputs:
           aliases:
           - faible probabilité de pollution
           - événements de pollution rares
+          - rare pollution episodes
+          - rare pollution events
           answer_aliases:
           - faible
           - peu
@@ -999,6 +1031,8 @@ inputs:
           aliases:
           - forte probabilité de pollution
           - événements de pollution fréquents
+          - frequent pollution episodes
+          - frequent pollution events
           answer_aliases:
           - élevé
           - fort
@@ -1007,6 +1041,8 @@ inputs:
           aliases:
           - très forte probabilité de pollution
           - événements de pollution très fréquents
+          - very frequent pollution episodes
+          - very frequent pollution events
           answer_aliases:
           - très élevé
           - très fort
@@ -1049,6 +1085,8 @@ inputs:
           aliases:
           - faible probabilité d’accident
           - accidents rares
+          - rare accidents
+          - few accidents
           answer_aliases:
           - faible
           - peu
@@ -1064,6 +1102,7 @@ inputs:
           aliases:
           - forte probabilité d’accident
           - accidents fréquents
+          - frequent accidents
           answer_aliases:
           - élevé
           - fort
@@ -1072,6 +1111,7 @@ inputs:
           aliases:
           - très forte probabilité d’accident
           - accidents très fréquents
+          - very frequent accidents
           answer_aliases:
           - très élevé
           - très fort

@@ -344,3 +344,42 @@ def test_the_reading_context_carries_the_unresolved_parameter(calls):
     state["request"] += "\nune altitude plus importante de 200m"
     summary = json.loads(glue.api_summary(json.dumps(state)))
     assert summary["unresolved"] == ["altitude_m"] and summary["previous_message"].endswith("200m")
+
+
+# ------------------------------------------------------------ conventions come only from the descriptor (contract, rule 3)
+
+
+def test_english_expressions_are_declared_in_the_descriptor(calls):
+    state = json.loads(glue.api_fresh("tls", "en"))
+    out, state = turn("tls", state, "A long tunnel with a lot of traffic",
+                      reading(TLS_TASK, {"field": "length_m", "origin": "convention", "level": "très élevé",
+                                         "evidence": "long tunnel"},
+                              {"field": "traffic_level", "origin": "convention", "level": "énormément",
+                               "evidence": "a lot of traffic"}), lang="en")
+    assert state["inputs"]["length_m"]["value"] == 9000 and state["inputs"]["traffic_level"]["value"] == 1.5
+
+
+def test_words_outside_the_tables_are_asked_not_given_a_level(calls):
+    state = json.loads(glue.api_fresh("tls", "en"))
+    out, state = turn("tls", state, "A rather lengthy tunnel",
+                      reading(TLS_TASK, {"field": "length_m", "origin": "convention", "level": "élevé",
+                                         "evidence": "rather lengthy tunnel"}), lang="en")
+    assert state["inputs"]["length_m"]["origin"] == "default" and state["inputs"]["length_m"]["value"] == 1500
+    assert "no declared convention" in out["reply"] and state["unresolved"] == ["length_m"]
+
+
+def test_a_declared_expression_claimed_as_a_number_gets_the_descriptor_value(calls):
+    state = json.loads(glue.api_fresh("tls", "en"))
+    out, state = turn("tls", state, "frequent accidents",
+                      reading(TLS_TASK, {"field": "accident_probability_per_day", "value": 0.15, "origin": "provided",
+                                         "evidence": "frequent accidents"}), lang="en")
+    rec = state["inputs"]["accident_probability_per_day"]
+    assert rec["kind"] == "convention" and rec["accepted"] is False and rec["value"] != 0.15
+
+
+def test_the_quote_is_stored_with_the_visitors_own_characters(calls):
+    state = json.loads(glue.api_fresh("lql", "fr"))
+    out, state = turn("lql", state, "Dose équivalente pour la prostate",
+                      reading(LQL_TASK, {"field": "tumour_site", "value": "Prostate", "origin": "provided",
+                                         "evidence": "Prostate"}))
+    assert state["inputs"]["tumour_site"]["evidence"] == "prostate"

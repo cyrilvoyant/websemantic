@@ -1,5 +1,6 @@
 // WebSemantic web app: chat on the left, qualified results on the right. Python runs in a background worker.
 "use strict";
+const APP_VERSION = "0.3.0";  // also in index.html (cache busting) and the footer
 
 const params = new URLSearchParams(location.search);
 const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
@@ -11,8 +12,8 @@ const T = {
     tagline: "ask before you compute",
     intro: "Describe your case. The code asks for what is missing and computes only what you accept.",
     codes: { tls: "Road tunnel energy", lql: "Radiotherapy dose" },
-    placeholder: "Describe your case… e.g. a long tunnel with a lot of traffic",
-    examples: "Examples", exampleBtn: "Example without language model", resetBtn: "New conversation",
+    placeholder: { tls: "Describe your case… e.g. a long tunnel with a lot of traffic", lql: "Describe your case… e.g. 20 sessions of 3 Gy, prostate, rectum as organ at risk" },
+    examples: "Examples", more: "Other examples ↻", tags: { refuse: "refusal example", ask: "the code will ask" }, exampleBtn: "Example without language model", resetBtn: "New conversation",
     tabs: { results: "Results", about: "About" },
     loading: "Loading the scientific codes in your browser (about 15 s on the first visit)…",
     timeout: "The calculation took too long in this browser; nothing is shown.",
@@ -31,20 +32,14 @@ const T = {
     vars: ["parameter", "value", "unit", "status", "source"],
     about: "<p>Each code has one <b>descriptor</b> (parameters, units, bounds, defaults with their source, outputs, conventions for vague words), compiled into a <b>contract</b> for language models, an <b>ontology with SHACL rules</b> and <b>FAIR metadata</b>.</p><p>Here the language model (Mistral) only reads your message against the contract. Everything else runs in your browser: a <b>validator</b> decides (compute, ask or refuse) and the <b>unchanged, pinned codes</b> compute, after their sources are checked by SHA-256.</p><p>In a benchmark of 72 requests and three models, adding the contract reduced premature execution from 26 to 6 %, 17 to 1 % and 52 to 23 %.</p>",
     foot: "Fictitious scenarios only, no personal data · messages read by Mistral · voice recognised by your browser (it may use its vendor's online service)",
-    voice: "Voice", examplesList: {
-      tls: ["Electricity demand of a 2 km road tunnel, two tubes with two lanes each, fixed LED lighting, over 30 days.",
-            "A long tunnel with a lot of traffic, keep the rest as usual.",
-            "Give me the exact real consumption of the Mont-Blanc tunnel next year to certify its design."],
-      lql: ["Equivalent dose of 20 sessions of 3 Gy for the prostate, rectum as organ at risk.",
-            "Moderate hypofractionation in 20 sessions, prostate, rectum.",
-            "Should I treat my patient, Mr Martin, with 20 × 3 Gy?"] },
+    voice: "Voice",
   },
   fr: {
     tagline: "demander avant de calculer",
     intro: "Décrivez votre cas. Le code demande ce qui manque et ne calcule que ce que vous acceptez.",
     codes: { tls: "Énergie d'un tunnel", lql: "Dose en radiothérapie" },
-    placeholder: "Décrivez votre cas… par ex. un tunnel long avec beaucoup de trafic",
-    examples: "Exemples", exampleBtn: "Exemple sans modèle de langage", resetBtn: "Nouvelle conversation",
+    placeholder: { tls: "Décrivez votre cas… par ex. un tunnel long avec beaucoup de trafic", lql: "Décrivez votre cas… par ex. 20 séances de 3 Gy, prostate, rectum comme organe à risque" },
+    examples: "Exemples", more: "Autres exemples ↻", tags: { refuse: "exemple de refus", ask: "le code demandera" }, exampleBtn: "Exemple sans modèle de langage", resetBtn: "Nouvelle conversation",
     tabs: { results: "Résultats", about: "À propos" },
     loading: "Chargement des codes scientifiques dans votre navigateur (environ 15 s à la première visite)…",
     timeout: "Le calcul a pris trop de temps dans ce navigateur ; rien n'est affiché.",
@@ -63,13 +58,7 @@ const T = {
     vars: ["paramètre", "valeur", "unité", "statut", "source"],
     about: "<p>Chaque code a un seul <b>descripteur</b> (paramètres, unités, bornes, défauts avec leur source, sorties, conventions pour les mots vagues), compilé en un <b>contrat</b> pour les modèles de langage, une <b>ontologie avec règles SHACL</b> et des <b>métadonnées FAIR</b>.</p><p>Ici, le modèle de langage (Mistral) lit seulement votre message au regard du contrat. Tout le reste tourne dans votre navigateur : un <b>validateur</b> décide (calculer, demander ou refuser) et les <b>codes figés, non modifiés</b> calculent, après vérification de leurs sources par SHA-256.</p><p>Sur un banc de 72 demandes et trois modèles, ajouter le contrat a réduit l'exécution prématurée de 26 à 6 %, 17 à 1 % et 52 à 23 %.</p>",
     foot: "Scénarios fictifs, aucune donnée personnelle · messages lus par Mistral · voix reconnue par votre navigateur (qui peut utiliser le service en ligne de son éditeur)",
-    voice: "Voix", examplesList: {
-      tls: ["Demande électrique d'un tunnel routier de 2 km, deux tubes à deux voies, éclairage LED fixe, sur 30 jours.",
-            "Un tunnel long avec beaucoup de trafic, le reste comme d'habitude.",
-            "Donne-moi la consommation réelle exacte du tunnel du Mont-Blanc l'an prochain pour certifier son dimensionnement."],
-      lql: ["Dose équivalente de 20 séances de 3 Gy pour la prostate, rectum comme organe à risque.",
-            "Hypofractionnement modéré en 20 séances, prostate, rectum.",
-            "Dois-je traiter mon patient, M. Martin, avec 20 × 3 Gy ?"] },
+    voice: "Voix",
   },
 };
 
@@ -77,7 +66,7 @@ const $ = (id) => document.getElementById(id);
 let lang = "en", code = "tls", state = null, busy = false, conversation = 0, blobs = [];
 
 // ------------------------------------------------------------ Python worker
-const worker = new Worker("py-worker.js");
+const worker = new Worker("py-worker.js?v=" + APP_VERSION);
 let seq = 0, pyReady = false;
 const pending = new Map();
 let readyResolve, readyReject;
@@ -111,7 +100,7 @@ function say(role, text) {
 }
 
 // ------------------------------------------------------------ charts (plain SVG, sober palette)
-const INK = "#1f2a37", MID = "#6b7280", LIGHT = "#c7ccd3";
+const INK = "#1c2836", MID = "#5f6b7a", LIGHT = "#b8c2cf", NAVY = "#1f3a5f", BLUE = "#3b7dd8", TEAL = "#2a9d8f", ORANGE = "#e07b3f";
 function axes(w, h, pad, ymax, yticks, xlabels) {
   let g = `<line x1="${pad.l}" y1="${h - pad.b}" x2="${w - pad.r}" y2="${h - pad.b}" stroke="${LIGHT}"/>`;
   for (const v of yticks) {
@@ -131,27 +120,27 @@ function lineBand(series) {
   const upper = series.p90.map((v, i) => `${X(i)},${Y(v)}`);
   const days = []; series.t.forEach((t, i) => { if (t.endsWith("00:00:00") && i % 24 === 0) days.push([X(i), t.slice(5, 10)]); });
   return `<svg viewBox="0 0 ${w} ${h}">${axes(w, h, pad, ymax, niceTicks(ymax), days.filter((_, k) => k % Math.ceil(days.length / 8) === 0))}` +
-    `<polygon points="${upper.concat(lower).join(" ")}" fill="rgba(107,114,128,0.18)"/>` +
-    `<polyline points="${series.median.map((v, i) => `${X(i)},${Y(v)}`).join(" ")}" fill="none" stroke="${INK}" stroke-width="1.3"/></svg>`;
+    `<polygon points="${upper.concat(lower).join(" ")}" fill="rgba(59,125,216,0.16)"/>` +
+    `<polyline points="${series.median.map((v, i) => `${X(i)},${Y(v)}`).join(" ")}" fill="none" stroke="${NAVY}" stroke-width="1.4"/></svg>`;
 }
 function stacked(hourly, names) {
-  const w = 640, h = 230, pad = { l: 48, r: 10, t: 8, b: 26 }, cols = ["lighting_kw", "ventilation_kw", "auxiliary_kw"], colours = [INK, MID, LIGHT];
+  const w = 640, h = 230, pad = { l: 48, r: 10, t: 8, b: 26 }, cols = ["lighting_kw", "ventilation_kw", "auxiliary_kw"], colours = [BLUE, TEAL, ORANGE];
   const tot = hourly.hour.map((_, i) => cols.reduce((s, c) => s + (hourly[c][i] || 0), 0)), ymax = Math.max(...tot, 1) * 1.1;
   const bw = (w - pad.l - pad.r) / hourly.hour.length;
   let bars = "";
   hourly.hour.forEach((hr, i) => {
     let y0 = h - pad.b;
-    cols.forEach((c, k) => { const bh = ((hourly[c][i] || 0) / ymax) * (h - pad.t - pad.b); y0 -= bh; bars += `<rect x="${pad.l + i * bw + 1}" y="${y0}" width="${bw - 2}" height="${bh}" fill="${colours[k]}"/>`; });
+    cols.forEach((c, k) => { const bh = ((hourly[c][i] || 0) / ymax) * (h - pad.t - pad.b); y0 -= bh; bars += `<rect x="${pad.l + i * bw + 1}" y="${y0}" width="${bw - 2}" height="${bh}" fill="${colours[k]}" fill-opacity="0.82"/>`; });
   });
   const xl = hourly.hour.filter((hr) => hr % 3 === 0).map((hr) => [pad.l + (hr + 0.5) * bw, hr + "h"]);
   return `<svg viewBox="0 0 ${w} ${h}">${axes(w, h, pad, ymax, niceTicks(ymax), xl)}${bars}</svg>` +
     `<div class="legend">${names.map((n, k) => `<i style="background:${colours[k]}"></i>${esc(n)}`).join("")}</div>`;
 }
 function bars(values, labels, unit, horizontal = false) {
-  const w = 640, colours = [LIGHT, INK, MID];
+  const w = 640, colours = [LIGHT, TEAL, ORANGE];
   if (horizontal) {
     const h = 30 + 34 * values.length; let g = "";
-    values.forEach((v, i) => { const ok = Number.isFinite(v), bw = ok ? (v / 100) * (w - 230) : 0; g += `<text x="0" y="${28 + i * 34}" font-size="12" fill="${INK}">${esc(labels[i])}</text><rect x="190" y="${14 + i * 34}" width="${bw}" height="20" fill="${[INK, MID][i]}"/><text x="${196 + bw}" y="${28 + i * 34}" font-size="12" fill="${INK}">${ok ? v.toFixed(0) + " " + unit : "—"}</text>`; });
+    values.forEach((v, i) => { const ok = Number.isFinite(v), bw = ok ? (v / 100) * (w - 230) : 0; g += `<text x="0" y="${28 + i * 34}" font-size="12" fill="${INK}">${esc(labels[i])}</text><rect x="190" y="${14 + i * 34}" width="${bw}" height="20" fill="${[TEAL, ORANGE][i]}"/><text x="${196 + bw}" y="${28 + i * 34}" font-size="12" fill="${INK}">${ok ? v.toFixed(0) + " " + unit : "—"}</text>`; });
     return `<svg viewBox="0 0 ${w} ${h}">${g}</svg>`;
   }
   const h = 230, pad = { l: 48, r: 10, t: 18, b: 26 }, ymax = Math.max(...values.filter(Number.isFinite), 1) * 1.18, bw = (w - pad.l - pad.r) / values.length;
@@ -165,7 +154,7 @@ function render(out) {
   const t = T[lang];
   state = out.state;
   if (out.reply) say("bot", out.reply);
-  $("decision").hidden = false;
+  $("decision").hidden = false; $("decision").className = "decision " + out.decision;
   $("decision").innerHTML = `<span class="code">${esc(out.decision)}</span>${esc(t.decision[out.decision])}`;
   $("vars").innerHTML = "<tr>" + [t.vars[0], t.vars[1], t.vars[3], t.vars[4]].map((h) => `<th>${esc(h)}</th>`).join("") + "</tr>" +
     out.variables.map((r) => "<tr>" + [r[0], r[1], r[3], r[4]].map((c) => `<td>${esc(c ?? "")}</td>`).join("") + "</tr>").join("");
@@ -212,18 +201,35 @@ function applyLanguage() {
   document.documentElement.lang = lang;
   $("tagline").textContent = t.tagline; $("intro").textContent = t.intro;
   document.querySelectorAll("#code button").forEach((b) => { b.textContent = t.codes[b.dataset.v]; });
-  $("input").placeholder = t.placeholder; $("examples-label").textContent = t.examples;
+  $("input").placeholder = t.placeholder[code]; $("examples-label").textContent = t.examples;
   $("example-btn").textContent = t.exampleBtn; $("reset-btn").textContent = t.resetBtn;
   $("tab-results").textContent = t.tabs.results; $("tab-about").textContent = t.tabs.about;
   $("about").innerHTML = t.about; $("mic").title = t.voice;
-  $("footer").innerHTML = `${esc(t.foot)} · <a href="https://github.com/cyrilvoyant/websemantic" target="_blank" rel="noopener">GitHub</a> · <a href="https://doi.org/10.5281/zenodo.23238902" target="_blank" rel="noopener">DOI</a> · <a href="https://pypi.org/project/websemantic/" target="_blank" rel="noopener">PyPI</a> · MIT`;
+  $("footer").innerHTML = `${esc(t.foot)} · <a href="https://github.com/cyrilvoyant/websemantic" target="_blank" rel="noopener">GitHub</a> · <a href="https://doi.org/10.5281/zenodo.23238902" target="_blank" rel="noopener">DOI</a> · <a href="https://pypi.org/project/websemantic/" target="_blank" rel="noopener">PyPI</a> · MIT · app ${APP_VERSION}`;
+  $("more-examples").textContent = t.more;
+  renderExamples();
+  status(pyReady ? t.ready : t.loading);
+}
+
+// ------------------------------------------------------------ examples: a few at a time, a new set at each visit
+let EXAMPLES = { tls: [], lql: [] }, exampleOffset = 0;
+try {  // per-visitor convenience only; the page works without storage
+  const visits = Number(localStorage.getItem("ws-visits") || 0) + 1;
+  localStorage.setItem("ws-visits", String(visits));
+  exampleOffset = visits * 3;
+} catch (_) { exampleOffset = Math.floor(Math.random() * 10) * 3; }
+fetch("examples.json", { cache: "no-cache" }).then((r) => r.json()).then((e) => { EXAMPLES = e; renderExamples(); }).catch(() => {});
+function renderExamples() {
+  const pool = EXAMPLES[code] || [], t = T[lang], shown = [];
+  for (let k = 0; k < Math.min(3, pool.length); k++) shown.push(pool[(exampleOffset + k) % pool.length]);
   $("examples").innerHTML = "";
-  for (const ex of t.examplesList[code]) {
-    const b = document.createElement("button"); b.textContent = ex;
-    b.onclick = () => { $("input").value = ex; $("input").focus(); };
+  for (const ex of shown) {
+    const b = document.createElement("button"), text = ex[lang] || ex.en;
+    b.className = ex.kind; b.textContent = text;
+    if (t.tags[ex.kind]) { const tag = document.createElement("span"); tag.className = "tag"; tag.textContent = t.tags[ex.kind]; b.appendChild(tag); }
+    b.onclick = () => { $("input").value = text; $("input").focus(); };
     $("examples").appendChild(b);
   }
-  status(pyReady ? t.ready : t.loading);
 }
 
 async function newConversation() {
@@ -300,6 +306,7 @@ if (SR) {
 $("form").onsubmit = (e) => { e.preventDefault(); send($("input").value); };
 $("input").onkeydown = (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send($("input").value); } };
 $("example-btn").onclick = example;
+$("more-examples").onclick = () => { exampleOffset += 3; renderExamples(); };
 $("reset-btn").onclick = newConversation;
 document.querySelectorAll(".tabs button").forEach((b) => { b.onclick = () => showTab(b.dataset.tab); });
 for (const [id, setter] of [["lang", (v) => { lang = v; }], ["code", (v) => { code = v; }]]) {

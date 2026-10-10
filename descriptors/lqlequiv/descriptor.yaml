@@ -114,7 +114,10 @@ inputs:
           value: 2
           aliases:
           - fractionnement conventionnel
+          - conventional fractionation
+          - standard fractionation
           - dose conventionnelle
+          - conventional dose
       interpretation: Convention de fractionnement proposée ; hypothèse à accepter,
         pas prescription.
   n_fractions:

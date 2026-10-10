@@ -7,12 +7,16 @@
   <meta name="description" content="Talk to scientific codes that ask before they compute: road-tunnel electricity demand and radiotherapy dose equivalence, in English or French.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=0.3.0">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
 </head>
 <body>
   <header class="head">
-    <h1>WebSemantic <span id="tagline"></span></h1>
-    <p id="intro"></p>
+    <img class="mark" src="logo.svg" alt="" width="40" height="40">
+    <div>
+      <h1>WebSemantic <span id="tagline"></span></h1>
+      <p id="intro"></p>
+    </div>
   </header>
 
   <nav class="switches">
@@ -32,7 +36,7 @@
         <button type="button" id="mic" class="icon" title="Voice" hidden>●</button>
         <button type="submit" id="send" class="primary">→</button>
       </form>
-      <div class="examples"><span id="examples-label"></span><div id="examples"></div></div>
+      <div class="examples"><div class="row"><span id="examples-label"></span><button type="button" class="more" id="more-examples"></button></div><div id="examples"></div></div>
       <div class="actions">
         <button id="example-btn"></button>
         <button id="reset-btn"></button>
@@ -61,6 +65,6 @@
   </main>
 
   <footer id="footer" class="foot"></footer>
-  <script src="app.js"></script>
+  <script src="app.js?v=0.3.0"></script>
 </body>
 </html>

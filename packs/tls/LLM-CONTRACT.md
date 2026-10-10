@@ -53,10 +53,10 @@ Supported: estimate electricity demand (energy, peak, load factor) of a road tun
 
 | Expression | Field | Proposed value |
 |---|---|---|
-| « tunnel court », « faible longueur » | `length_m` | 375.0 unit:M |
-| « longueur courante » | `length_m` | 1500 unit:M |
-| « tunnel long », « grande longueur » | `length_m` | 9000.0 unit:M |
-| « tunnel très long », « très grande longueur » | `length_m` | 12000.0 unit:M |
+| « tunnel court », « short tunnel », « faible longueur » | `length_m` | 375.0 unit:M |
+| « longueur courante », « usual length », « typical length » | `length_m` | 1500 unit:M |
+| « tunnel long », « long tunnel », « grande longueur » | `length_m` | 9000.0 unit:M |
+| « tunnel très long », « very long tunnel », « très grande longueur » | `length_m` | 12000.0 unit:M |
 | « peu de tubes » | `n_tubes` | 1 unit:NUM |
 | « nombre courant de tubes » | `n_tubes` | 2 unit:NUM |
 | « beaucoup de tubes » | `n_tubes` | 3 unit:NUM |
@@ -65,18 +65,18 @@ Supported: estimate electricity demand (energy, peak, load factor) of a road tun
 | « nombre courant de voies par tube » | `n_lanes_per_tube` | 2 unit:NUM |
 | « beaucoup de voies par tube » | `n_lanes_per_tube` | 3 unit:NUM |
 | « énormément de voies par tube » | `n_lanes_per_tube` | 4 unit:NUM |
-| « faible altitude », « basse altitude » | `altitude_m` | 75.0 unit:M |
-| « altitude courante » | `altitude_m` | 300 unit:M |
-| « haute altitude », « altitude élevée » | `altitude_m` | 2250.0 unit:M |
-| « très haute altitude », « altitude très élevée » | `altitude_m` | 3000.0 unit:M |
-| « faible profondeur », « tunnel peu profond » | `max_depth_m` | 20.0 unit:M |
+| « faible altitude », « low altitude », « basse altitude » | `altitude_m` | 75.0 unit:M |
+| « altitude courante », « usual altitude » | `altitude_m` | 300 unit:M |
+| « haute altitude », « high altitude », « altitude élevée » | `altitude_m` | 2250.0 unit:M |
+| « très haute altitude », « very high altitude », « altitude très élevée » | `altitude_m` | 3000.0 unit:M |
+| « faible profondeur », « tunnel peu profond », « shallow tunnel » | `max_depth_m` | 20.0 unit:M |
 | « profondeur courante » | `max_depth_m` | 80 unit:M |
-| « grande profondeur », « tunnel profond » | `max_depth_m` | 750.0 unit:M |
-| « très grande profondeur », « tunnel très profond » | `max_depth_m` | 1000.0 unit:M |
-| « faible pente », « pente faible » | `gradient_percent` | 0.5 unit:PERCENT |
-| « pente courante » | `gradient_percent` | 2.0 unit:PERCENT |
-| « forte pente », « pente forte » | `gradient_percent` | 9.0 unit:PERCENT |
-| « très forte pente », « pente très forte » | `gradient_percent` | 12.0 unit:PERCENT |
+| « grande profondeur », « tunnel profond », « deep tunnel » | `max_depth_m` | 750.0 unit:M |
+| « très grande profondeur », « tunnel très profond », « very deep tunnel » | `max_depth_m` | 1000.0 unit:M |
+| « faible pente », « gentle slope », « slight slope », « pente faible » | `gradient_percent` | 0.5 unit:PERCENT |
+| « pente courante », « usual slope » | `gradient_percent` | 2.0 unit:PERCENT |
+| « forte pente », « steep slope », « pente forte » | `gradient_percent` | 9.0 unit:PERCENT |
+| « très forte pente », « very steep slope », « pente très forte » | `gradient_percent` | 12.0 unit:PERCENT |
 | « faible charge auxiliaire », « auxiliaires peu puissants » | `aux_kw_per_km_tube` | 8.75 unit:KiloW per km per tube |
 | « charge auxiliaire courante » | `aux_kw_per_km_tube` | 35.0 unit:KiloW per km per tube |
 | « forte charge auxiliaire », « auxiliaires puissants » | `aux_kw_per_km_tube` | 90.0 unit:KiloW per km per tube |
@@ -85,10 +85,10 @@ Supported: estimate electricity demand (energy, peak, load factor) of a road tun
 | « charge fixe courante » | `base_fixed_kw` | 40.0 unit:KiloW |
 | « forte charge fixe », « charge fixe élevée » | `base_fixed_kw` | 375.0 unit:KiloW |
 | « très forte charge fixe », « charge fixe très élevée » | `base_fixed_kw` | 500.0 unit:KiloW |
-| « beaucoup de trafic », « beaucoup de traffic », « trafic important », « trafic élevé », « fort trafic » | `traffic_level` | 1.5 unit:UNITLESS |
-| « énormément de trafic », « énormément de traffic », « trafic très élevé », « trafic énorme » | `traffic_level` | 2.0 unit:UNITLESS |
-| « peu de trafic », « faible trafic », « trafic faible » | `traffic_level` | 0.3 unit:UNITLESS |
-| « trafic courant » | `traffic_level` | 1.0 unit:UNITLESS |
+| « beaucoup de trafic », « a lot of traffic », « lots of traffic », « heavy traffic », « high traffic », « beaucoup de traffic », « trafic important », « trafic élevé », « fort trafic » | `traffic_level` | 1.5 unit:UNITLESS |
+| « énormément de trafic », « very heavy traffic », « very high traffic », « huge traffic », « énormément de traffic », « trafic très élevé », « trafic énorme » | `traffic_level` | 2.0 unit:UNITLESS |
+| « peu de trafic », « little traffic », « light traffic », « low traffic », « faible trafic », « trafic faible » | `traffic_level` | 0.3 unit:UNITLESS |
+| « trafic courant », « usual traffic », « normal traffic », « typical traffic » | `traffic_level` | 1.0 unit:UNITLESS |
 | « pointe du matin tôt », « pic du matin précoce » | `morning_peak_hour` | 5 unit:HR |
 | « pointe du matin courante » | `morning_peak_hour` | 8 unit:HR |
 | « pointe du matin tardive », « pic du matin tardif » | `morning_peak_hour` | 11 unit:HR |
@@ -107,14 +107,14 @@ Supported: estimate electricity demand (energy, peak, load factor) of a road tun
 | « bruit relatif courant » | `noise_sigma` | 0.06 unit:UNITLESS |
 | « fort bruit relatif », « bruit gaussien élevé » | `noise_sigma` | 0.375 unit:UNITLESS |
 | « très fort bruit relatif », « bruit gaussien très élevé » | `noise_sigma` | 0.5 unit:UNITLESS |
-| « faible probabilité de pollution », « événements de pollution rares » | `pollution_probability_per_day` | 0.0125 unit:UNITLESS |
+| « faible probabilité de pollution », « événements de pollution rares », « rare pollution episodes », « rare pollution events » | `pollution_probability_per_day` | 0.0125 unit:UNITLESS |
 | « probabilité de pollution courante » | `pollution_probability_per_day` | 0.05 unit:UNITLESS |
-| « forte probabilité de pollution », « événements de pollution fréquents » | `pollution_probability_per_day` | 0.375 unit:UNITLESS |
-| « très forte probabilité de pollution », « événements de pollution très fréquents » | `pollution_probability_per_day` | 0.5 unit:UNITLESS |
-| « faible probabilité d’accident », « accidents rares » | `accident_probability_per_day` | 0.00375 unit:UNITLESS |
+| « forte probabilité de pollution », « événements de pollution fréquents », « frequent pollution episodes », « frequent pollution events » | `pollution_probability_per_day` | 0.375 unit:UNITLESS |
+| « très forte probabilité de pollution », « événements de pollution très fréquents », « very frequent pollution episodes », « very frequent pollution events » | `pollution_probability_per_day` | 0.5 unit:UNITLESS |
+| « faible probabilité d’accident », « accidents rares », « rare accidents », « few accidents » | `accident_probability_per_day` | 0.00375 unit:UNITLESS |
 | « probabilité d’accident courante » | `accident_probability_per_day` | 0.015 unit:UNITLESS |
-| « forte probabilité d’accident », « accidents fréquents » | `accident_probability_per_day` | 0.15 unit:UNITLESS |
-| « très forte probabilité d’accident », « accidents très fréquents » | `accident_probability_per_day` | 0.2 unit:UNITLESS |
+| « forte probabilité d’accident », « accidents fréquents », « frequent accidents » | `accident_probability_per_day` | 0.15 unit:UNITLESS |
+| « très forte probabilité d’accident », « accidents très fréquents », « very frequent accidents » | `accident_probability_per_day` | 0.2 unit:UNITLESS |
 | « faible sensibilité à la pollution » | `pollution_sensitivity` | 0.1375 unit:UNITLESS |
 | « sensibilité à la pollution courante » | `pollution_sensitivity` | 0.55 unit:UNITLESS |
 | « forte sensibilité à la pollution » | `pollution_sensitivity` | 1.5 unit:UNITLESS |

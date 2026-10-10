@@ -44,6 +44,8 @@ T = {
                     "unsupported_task": "outside what the code supports"},
         "computed": "The pinned code has run on the accepted values. Results are on the right.",
         "refused": "This request is outside what the code supports, so nothing is computed.",
+        "refused_hint": {"tls": "TLS simulates fictitious tunnels from stated assumptions; it neither measures nor predicts the real consumption of an existing tunnel and certifies nothing. You can ask, for example: “a 3 km tunnel, two tubes, over one year”.",
+                         "lql": "LQL-Equiv gives model outputs for fictitious schedules; it makes no treatment decision for a patient. You can ask, for example: “equivalent dose of 20 sessions of 3 Gy for the prostate, rectum as organ at risk”."},
         "not_here": "This kind of request (for instance a comparison of several schedules) is not available on this "
                     "page. Nothing was changed or computed.",
         "needed": "Still needed: **{}**.",
@@ -91,6 +93,8 @@ T = {
                     "unsupported_task": "hors du périmètre du code"},
         "computed": "Le code figé a tourné sur les valeurs acceptées. Les résultats sont à droite.",
         "refused": "Cette demande sort du périmètre du code : rien n'est calculé.",
+        "refused_hint": {"tls": "TLS simule des tunnels fictifs à partir d'hypothèses ; il ne mesure ni ne prédit la consommation réelle d'un tunnel existant et ne certifie rien. Vous pouvez demander par exemple : « un tunnel de 3 km, deux tubes, sur un an ».",
+                         "lql": "LQL-Equiv donne des sorties de modèle pour des schémas fictifs ; il ne décide d'aucun traitement pour un patient. Vous pouvez demander par exemple : « dose équivalente de 20 séances de 3 Gy pour la prostate, rectum comme organe à risque »."},
         "not_here": "Ce type de demande (par exemple une comparaison de plusieurs schémas) n'est pas disponible sur "
                     "cette page. Rien n'a été modifié ni calculé.",
         "needed": "Il manque encore : **{}**.",
@@ -245,15 +249,6 @@ def check(model, state, lang="en"):
                                                   for i in res.issues]}
 
 
-def declared_levels(spec):
-    scale = spec.get("qualitative_scale") or {}
-    out = {}
-    for name, level in (scale.get("levels") or {}).items():
-        value = level["value"] if "value" in level else scale.get("reference_upper", 0) * level.get("fraction", 0)
-        out[name] = int(value) if spec.get("type") == "int" else float(value)
-    return out
-
-
 def propose_defaults(model, state):
     for group in ("inputs", "experiment"):
         for name, spec in (DESC[model].get(group) or {}).items():
@@ -267,7 +262,8 @@ def fold(text):
 
 
 ENGLISH_WORDS = {"zero": 0, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8,
-                 "nine": 9, "ten": 10, "eleven": 11, "twelve": 12, "fifteen": 15, "twenty": 20, "thirty": 30}
+                 "nine": 9, "ten": 10, "eleven": 11, "twelve": 12, "fifteen": 15, "twenty": 20, "thirty": 30,
+                 "single": 1, "double": 2}
 
 
 def evidence_numbers(evidence):
@@ -287,6 +283,31 @@ def evidence_numbers(evidence):
     return found
 
 
+def exact(evidence, message):
+    """The visitor's own characters for a quote found case and accents aside (None if absent)."""
+    if not evidence:
+        return None
+    folded, index = [], []
+    for i, c in enumerate(message):
+        f = fold(c)
+        folded.append(f)
+        index.extend([i] * len(f))
+    target = fold(evidence)
+    at = "".join(folded).find(target)
+    return None if at < 0 or not target else message[index[at]:index[at + len(target) - 1] + 1]
+
+
+def convention_record(spec, evidence, declared):
+    value, source = declared
+    return dict(value=value, unit=spec.get("unit"), origin="assumption", evidence=None, accepted=False,
+                said=evidence, kind="convention", source=source)
+
+
+def said(evidence, message):
+    """The quote is in the visitor's message (case and accents aside): the model never supplies its own words."""
+    return bool(evidence) and fold(evidence) in fold(message)
+
+
 def same(a, b):
     try:
         return a is not None and b is not None and float(a) == float(b)
@@ -299,6 +320,22 @@ def in_words(value, evidence):
         return float(value) in evidence_numbers(evidence)
     except (TypeError, ValueError):
         return fold(value) in fold(evidence)
+
+
+UNIT_WORDS = {"unit:GRAY": r"gy", "unit:M": r"k?m|metres?|meters?", "unit:DAY": r"j|jours?|days?|semaines?|weeks?",
+              "unit:PERCENT": r"%|pour ?cent|percent", "unit:KiloW": r"kw", "unit:HR": r"h|heures?|hours?"}
+
+
+def resolve_words(evidence, spec):
+    """The descriptor's resolver; for a quote that also holds numbers of other parameters ("conventional fractionation
+    in 30 sessions"), it reads the qualitative words alone, unless a number is stated for this very parameter."""
+    declared = resolve(evidence, spec)
+    if declared is not None or not re.search(r"\d", evidence):
+        return declared
+    units = UNIT_WORDS.get(spec.get("unit"))
+    if units and re.search(r"\d+(?:[.,]\d+)?\s*(?:" + units + r")(?!\w)", fold(evidence)):
+        return None  # a number stated for this parameter is never replaced by a convention
+    return resolve(re.sub(r"\d+(?:[.,]\d+)?", " ", evidence), spec)
 
 
 UP = re.compile(r"\b(plus|augmente\w*|ajoute\w*|supplementaires?|more|increase\w*|higher|add|added|extra)\b|\+")
@@ -332,29 +369,24 @@ def apply_value(model, state, v, message, lang):
         return e["unknown"].format(raw_name)
     name, spec = raw_name, DESC[model][group][raw_name]
     origin, evidence, raw, unit = v.get("origin"), str(v.get("evidence") or ""), v.get("value"), v.get("unit")
+    evidence = exact(evidence, message) or evidence  # the visitor's own characters, as the validator checks them
     old = state[group].get(name)
-    quoted = bool(evidence) and evidence in message
+    quoted = said(evidence, message)
     if old and same(raw, old.get("value")) and not (quoted and in_words(raw, evidence)):
         return None  # the current value repeated without being stated in the message: no change
     if old and (old.get("origin") == "provided" or old.get("accepted")) and not quoted:
         return None  # a later message that does not state this value never overrides it
     try:
+        if origin == "convention" and spec.get("type") in ("int", "float") and raw is not None \
+                and resolve_words(evidence, spec) is None and float(raw) in evidence_numbers(evidence):
+            origin = "provided"  # a number stated in the words is a stated value, whatever the model called it
         if origin == "convention":
-            if not (evidence and evidence in message):
+            if not said(evidence, message):
                 return e["level"].format(label(name, lang))
-            declared = resolve(evidence, spec)  # the descriptor's own resolver first (declared expressions)
-            if declared is not None:
-                value, source = declared
-            else:  # words outside the declared expressions (e.g. English): the model's level, to be accepted
-                levels = declared_levels(spec)
-                level = str(v.get("level") or "")
-                if level not in levels:
-                    return e["level"].format(label(name, lang))
-                value = levels[level]
-                source = (f"Declared convention of the code: '{evidence}' read as level '{level}' = {value}. "
-                          "Proposed, to accept; not a measurement.")
-            rec = dict(value=value, unit=spec.get("unit"), origin="assumption", evidence=None, accepted=False,
-                       said=evidence, kind="convention", source=source)
+            declared = resolve_words(evidence, spec)  # only the descriptor's declared expressions give a value;
+            if declared is None:                      # other words have no numerical meaning (contract, rule 3)
+                return e["level"].format(label(name, lang))
+            rec = convention_record(spec, evidence, declared)
         elif origin == "default":
             if spec.get("default") is None:
                 return e["default"].format(label(name, lang))
@@ -363,22 +395,26 @@ def apply_value(model, state, v, message, lang):
         elif origin == "provided":
             numeric = spec.get("type") in ("int", "float")
             value, source = parse_number(raw, spec["type"]) if numeric else (raw, None)
-            change = None
-            if numeric and not spec.get("evidence_conversion"):  # with a declared conversion, normalize() reads the
-                stated = evidence_numbers(evidence)                 # number and unit from the quoted words itself
-                if not stated or float(value) not in stated:
-                    change = relative_change(old, value, evidence) if old else None
-                    if change is None:
-                        return e["relative" if RELATIVE.search(fold(evidence)) else "number"].format(label(name, lang))
-            value, unit, conv = normalize(value, unit, evidence, spec)
-            if not (evidence and evidence in message):
-                return e["value"].format(label(name, lang))
-            source = "; ".join(s for s in (source, conv) if s) or None
-            rec = dict(value=value, unit=unit, origin="provided", evidence=evidence, source=source, accepted=False)
-            if change:  # exact arithmetic on a stated number, shown to the visitor
-                before, sign, x = change
-                rec["relative"] = f"{shown(name, before, lang)} {sign} {shown(name, x, lang)}"
-                rec["source"] = f"Exact change stated relative to the current value: {rec['relative']}"
+            stated = evidence_numbers(evidence) if numeric else set()
+            declared = resolve_words(evidence, spec) if numeric and float(value) not in stated else None
+            if declared is not None:  # the quote is a declared expression: the descriptor, not the model, gives it
+                rec = convention_record(spec, evidence, declared)
+            else:
+                change = None
+                if numeric and not spec.get("evidence_conversion"):  # with a declared conversion, normalize() reads
+                    if not stated or float(value) not in stated:      # the number and unit from the quote itself
+                        change = relative_change(old, value, evidence) if old else None
+                        if change is None:
+                            return e["relative" if RELATIVE.search(fold(evidence)) else "number"].format(label(name, lang))
+                value, unit, conv = normalize(value, unit, evidence, spec)
+                if not said(evidence, message):
+                    return e["value"].format(label(name, lang))
+                source = "; ".join(s for s in (source, conv) if s) or None
+                rec = dict(value=value, unit=unit, origin="provided", evidence=evidence, source=source, accepted=False)
+                if change:  # exact arithmetic on a stated number, shown to the visitor
+                    before, sign, x = change
+                    rec["relative"] = f"{shown(name, before, lang)} {sign} {shown(name, x, lang)}"
+                    rec["source"] = f"Exact change stated relative to the current value: {rec['relative']}"
         else:
             return e["value"].format(label(name, lang))
     except (ValueError, TypeError):
@@ -401,6 +437,10 @@ ACCEPT_WORD = re.compile(r"\b(oui|yes|ok|okay|d'accord|d’accord|accepte|j'acce
                          re.IGNORECASE)
 KEEP = re.compile(r"\b(garde|garder|gardez|conserve|conserver|laisse|laisser|annule|annuler|keep|leave|cancel)\b",
                   re.IGNORECASE)
+
+
+def refusal(model, lang):
+    return T[lang]["refused"] + " " + T[lang]["refused_hint"][model]
 
 
 def names(fields, lang):
@@ -619,7 +659,7 @@ def api_turn(model, lang, state_json, message, parsed_json):
     state["request"] = (state["request"] + "\n" + message).strip()
     task = str(parsed.get("task") or "")
     if task == "unsupported":
-        return respond(model, lang, state, t["refused"], decision="refuse")
+        return respond(model, lang, state, refusal(model, lang), decision="refuse")
     if task and task != SINGLE_TASK[model]:
         return respond(model, lang, state, t["not_here"], decision="clarify")
 
@@ -681,7 +721,7 @@ def api_turn(model, lang, state_json, message, parsed_json):
     if hold:
         parts.append(t["held"])
     if verdict["decision"] == "refuse":
-        parts.append(t["refused"])
+        parts.append(refusal(model, lang))
     elif verdict["decision"] == "execute":
         if not state["unresolved"]:
             parts.append(t["ready"])  # a change or a question never runs the code in the same turn
