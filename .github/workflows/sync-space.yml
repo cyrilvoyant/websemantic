@@ -1,5 +1,6 @@
 # Push the static web app (webapp/) to the Hugging Face Space CyrilVoyant/websemantic.
 # Needs the repository secret HF_TOKEN (a Hugging Face token with write access to that Space only).
+# huggingface_hub stores the binary bundle.zip through the Hub's file storage; a plain git push is refused.
 name: Sync Space to Hugging Face
 
 on:
@@ -10,15 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Push webapp/ to the Space
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Upload webapp/ to the Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           if [ -z "$HF_TOKEN" ]; then echo "::error::HF_TOKEN secret not set: nothing pushed."; exit 1; fi
-          cd webapp
-          git init -q -b main
-          git config user.name "Cyril Voyant"
-          git config user.email "cyrilvoyant@users.noreply.github.com"
-          git add -A
-          git commit -q -m "Sync from github.com/cyrilvoyant/websemantic@${GITHUB_SHA::7}"
-          git push --force "https://CyrilVoyant:${HF_TOKEN}@huggingface.co/spaces/CyrilVoyant/websemantic" main
+          pip install --quiet huggingface_hub==2.2.0
+          python - <<'EOF'
+          import os
+          from huggingface_hub import upload_folder
+          upload_folder(repo_id="CyrilVoyant/websemantic", repo_type="space", folder_path="webapp",
+                        commit_message=f"Sync from github.com/cyrilvoyant/websemantic@{os.environ['GITHUB_SHA'][:7]}",
+                        token=os.environ["HF_TOKEN"])
+          EOF
