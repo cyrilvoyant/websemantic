@@ -20,8 +20,8 @@ identifiers:
   value: 10.5281/zenodo.23238902
   description: Concept DOI (all versions)
 - type: doi
-  value: 10.5281/zenodo.23276942
-  description: Version 0.2.3
+  value: 10.5281/zenodo.23281295
+  description: Version 0.2.6 (MIT)
 - type: url
   value: https://w3id.org/websemantic/ns
   description: Persistent namespace of the WebSemantic ontology (w3id.org)
