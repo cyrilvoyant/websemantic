@@ -1,6 +1,6 @@
 // WebSemantic web app: chat on the left, qualified results on the right. Python runs in a background worker.
 "use strict";
-const APP_VERSION = "0.3.14";  // also in index.html (cache busting) and the footer
+const APP_VERSION = "0.3.15";  // also in index.html (cache busting) and the footer
 
 const params = new URLSearchParams(location.search);
 const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
@@ -13,7 +13,7 @@ const T = {
     intro: "Describe your case. The code asks for what is missing and computes only what you accept.",
     codes: { tls: "Road tunnel energy", lql: "Radiotherapy dose" },
     placeholder: { tls: "Describe your case… e.g. a long tunnel with a lot of traffic", lql: "Describe your case… e.g. 20 sessions of 3 Gy, prostate, rectum as organ at risk" },
-    allCases: "All cases", details: "Technical details (versions, checks, options)", varsNote: "To work in the original application, open it and enter these values:", openApp: { lql: "Open the original LQL-Equiv", tls: "Open the original TLS (code and app)" }, traceBtn: "Download the trace", shacl: { label: "Ontology check (SHACL)", conforms: "the scenario conforms to the ontology's rules (types, declared bounds, complete groups, dose identity per course)", unavailable: "not available in this browser (rules not loaded)", records: "records" }, jump: { chat: "Chat", results: "Results", variables: "Variables", about: "About" }, reuse: "Tap to edit this message again", examples: "Examples", more: "Other examples ↻", tags: { refuse: "refusal example", ask: "the code will ask" }, exampleBtn: "Example without language model", resetBtn: "New conversation",
+    allCases: "All cases", details: "Technical details (versions, checks, options)", varsNote: "To work in the original application, open it and enter these values:", openApp: { lql: "Open the original LQL-Equiv", tls: "Open the original TLS application" }, traceBtn: "Download the trace", shacl: { label: "Ontology check (SHACL)", conforms: "the scenario conforms to the ontology's rules (types, declared bounds, complete groups, dose identity per course)", unavailable: "not available in this browser (rules not loaded)", records: "records" }, jump: { chat: "Chat", results: "Results", variables: "Variables", about: "About" }, reuse: "Tap to edit this message again", examples: "Examples", more: "Other examples ↻", tags: { refuse: "refusal example", ask: "the code will ask" }, exampleBtn: "Example without language model", resetBtn: "New conversation",
     tabs: { results: "Results", about: "About" },
     loading: "Loading the scientific codes in your browser (about 15 s on the first visit)…",
     timeout: "The calculation took too long in this browser; nothing is shown.",
@@ -39,7 +39,7 @@ const T = {
     intro: "Décrivez votre cas. Le code demande ce qui manque et ne calcule que ce que vous acceptez.",
     codes: { tls: "Énergie d'un tunnel", lql: "Dose en radiothérapie" },
     placeholder: { tls: "Décrivez votre cas… par ex. un tunnel long avec beaucoup de trafic", lql: "Décrivez votre cas… par ex. 20 séances de 3 Gy, prostate, rectum comme organe à risque" },
-    allCases: "Tous les cas", details: "Détails techniques (versions, vérifications, options)", varsNote: "Pour travailler dans l'application d'origine, ouvrez-la et saisissez ces valeurs :", openApp: { lql: "Ouvrir LQL-Equiv (application d'origine)", tls: "Ouvrir TLS d'origine (code et application)" }, traceBtn: "Télécharger la trace", shacl: { label: "Contrôle par l'ontologie (SHACL)", conforms: "le scénario respecte les règles de l'ontologie (types, bornes déclarées, groupes complets, identité des doses par cure)", unavailable: "indisponible dans ce navigateur (règles non chargées)", records: "enregistrements" }, jump: { chat: "Conversation", results: "Résultats", variables: "Variables", about: "À propos" }, reuse: "Touchez pour reprendre ce message", examples: "Exemples", more: "Autres exemples ↻", tags: { refuse: "exemple de refus", ask: "le code demandera" }, exampleBtn: "Exemple sans modèle de langage", resetBtn: "Nouvelle conversation",
+    allCases: "Tous les cas", details: "Détails techniques (versions, vérifications, options)", varsNote: "Pour travailler dans l'application d'origine, ouvrez-la et saisissez ces valeurs :", openApp: { lql: "Ouvrir LQL-Equiv (application d'origine)", tls: "Ouvrir TLS (application d'origine)" }, traceBtn: "Télécharger la trace", shacl: { label: "Contrôle par l'ontologie (SHACL)", conforms: "le scénario respecte les règles de l'ontologie (types, bornes déclarées, groupes complets, identité des doses par cure)", unavailable: "indisponible dans ce navigateur (règles non chargées)", records: "enregistrements" }, jump: { chat: "Conversation", results: "Résultats", variables: "Variables", about: "À propos" }, reuse: "Touchez pour reprendre ce message", examples: "Exemples", more: "Autres exemples ↻", tags: { refuse: "exemple de refus", ask: "le code demandera" }, exampleBtn: "Exemple sans modèle de langage", resetBtn: "Nouvelle conversation",
     tabs: { results: "Résultats", about: "À propos" },
     loading: "Chargement des codes scientifiques dans votre navigateur (environ 15 s à la première visite)…",
     timeout: "Le calcul a pris trop de temps dans ce navigateur ; rien n'est affiché.",
@@ -190,7 +190,7 @@ function bars(values, labels, unit, horizontal = false) {
   return `<svg viewBox="0 0 ${w} ${h}">${g}</svg>`;
 }
 
-const APPS = { lql: "https://cyrilvoyant.github.io/LQL-Equiv-web/", tls: "https://github.com/cyrilvoyant/tunnel-load-simulator" };
+const APPS = { lql: "https://cyrilvoyant.github.io/LQL-Equiv-web/", tls: "https://tunnel-load-simulator.onrender.com/" };
 function openApp() {
   return `<a class="app-link" href="${APPS[code]}" target="_blank" rel="noopener">${esc(T[lang].openApp[code])} ↗</a>`;
 }
