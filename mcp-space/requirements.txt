@@ -1,0 +1,6 @@
+numpy==2.5.3
+pandas==3.0.6
+pyyaml==6.0.3
+rdflib==7.6.0
+pyshacl==0.40.1
+gradio[mcp]==6.30.0
