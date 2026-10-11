@@ -104,5 +104,14 @@ details summary{cursor:pointer;color:var(--navy);font-weight:500;margin-bottom:4
   /* one scroll only on a phone: the conversation grows with the page instead of capturing the finger */
   .chat{height:auto;min-height:120px;overflow:visible}
   .kpis{grid-template-columns:1fr 1fr}
+  /* phone: the input stays at the bottom of the screen, always reachable; larger touch targets */
+  body{padding-bottom:84px}
+  .composer{position:fixed;left:0;right:0;bottom:0;z-index:20;margin:0;padding:8px 12px calc(8px + env(safe-area-inset-bottom));
+    background:var(--bg);border-top:1px solid var(--line)}
+  .composer textarea{font-size:16px;min-height:48px}
+  .primary,.icon{min-width:48px;min-height:48px}
+  .seg button,.tabs button{padding:10px 14px}
+  #examples button,.actions button{padding:11px 12px}
+  .msg.user{cursor:pointer}
   .pane{overflow-x:auto}
 }

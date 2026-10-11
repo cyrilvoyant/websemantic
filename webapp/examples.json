@@ -46,14 +46,10 @@
   {
    "kind": "run",
    "expect": {
-    "length_m": 3000,
-    "altitude_m": 1200,
-    "tunnel_context": "rural",
-    "lighting_type": "LED adaptive",
-    "n_runs": 10
+    "mode": "compare"
    },
-   "en": "A 3 km rural tunnel at 1200 m altitude, adaptive LED lighting, 10 Monte Carlo runs.",
-   "fr": "Un tunnel rural de 3 km à 1200 m d'altitude, éclairage LED adaptatif, 10 tirages Monte Carlo."
+   "en": "Which tunnel uses more energy: a 1 km tunnel with 2 tubes or a 3 km tunnel with 1 tube?",
+   "fr": "Quel tunnel consomme le plus : un tunnel de 1 km à 2 tubes ou un tunnel de 3 km à 1 tube ?"
   },
   {
    "kind": "run",
@@ -82,13 +78,11 @@
   {
    "kind": "run",
    "expect": {
-    "length_m": 600,
-    "tunnel_context": "peri-urban",
-    "ventilation_type": "natural/low ventilation",
-    "n_days": 7
+    "mode": "sober",
+    "length_m": 2000
    },
-   "en": "A 600 m peri-urban tunnel with natural ventilation, over 7 days.",
-   "fr": "Un tunnel périurbain de 600 m en ventilation naturelle, sur 7 jours."
+   "en": "The most sober lighting and ventilation for a 2 km tunnel with heavy traffic.",
+   "fr": "La configuration la plus sobre (éclairage et ventilation) pour un tunnel de 2 km avec beaucoup de trafic."
   },
   {
    "kind": "run",

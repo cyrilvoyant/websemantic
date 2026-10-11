@@ -60,6 +60,18 @@ T = {
         "noted": "Noted from your words: {}.",
         "unchanged": "No value was changed by this message.",
         "gap_short": "{} days break",
+        "ask_variants": "I could not read every tunnel completely: please give each tunnel's values (for example “a 1 km tunnel with 2 tubes and a 3 km tunnel with 1 tube”).",
+        "plan_tls_compare": "I will compare **{}**; the other values are common, with the same random seeds.",
+        "plan_tls_sober": "I will run TLS for every declared value of {} (**{} calculations**, same seeds) and rank them by annual energy.",
+        "tls_too_many": "{} calculations are too many for the browser with this period and number of runs: please shorten the period or reduce the runs.",
+        "col_config": "configuration", "k_annual": "annual energy (MWh/yr)", "k_peak": "peak (kW)", "k_lf": "load factor",
+        "k_specific": "specific energy (kWh/m/yr)", "k_diff_b": "B relative to A (%)", "k_tunnels": "tunnels",
+        "k_best_mwh": "most sober (MWh/yr)", "k_best_config": "most sober configuration", "k_saving": "saving vs the least sober (%)",
+        "answer_tls_compare": "Answer: {}. Relative to A: {}.",
+        "answer_tls_sober": "Answer: among the {count} declared configurations, the most sober is **{best}** with {b} MWh/yr; the least sober is {worst} with {w} MWh/yr ({s} % more for it). Simulation: safety requirements (for example the ventilation a long tunnel needs) are not in the model.",
+        "chart_tls_compare": "Annual energy of each tunnel (MWh/yr)", "chart_tls_sober": "Annual energy by configuration (lighting + ventilation, MWh/yr)",
+        "explain_tls_compare": "How to read: one row per tunnel, all computed by TLS with the same random seeds, so the differences come from the stated values only. Annual energy and peak are medians of the Monte Carlo runs.",
+        "explain_tls_sober": "How to read: TLS is run for every declared lighting and ventilation category that you did not state, the rest unchanged and with the same seeds; the rows are sorted by annual energy. Safety and regulatory requirements are not in the model: the engineer decides.",
         "ask_choose": "Two schedules: should I compute them **one after the other** (successive courses) or **compare** them as alternatives?",
         "unparsed": "I did not recognise “{}” as a schedule: please write it as, for example, 20 × 3.5 Gy.",
         "plan_sequence": "Successive courses: **{}**; cumulated effect for the tumour and the organs at risk {}.",
@@ -163,6 +175,18 @@ T = {
         "noted": "Noté d'après vos mots : {}.",
         "unchanged": "Ce message n'a changé aucune valeur.",
         "gap_short": "arrêt de {} jours",
+        "ask_variants": "Je n'ai pas pu lire chaque tunnel complètement : donnez les valeurs de chaque tunnel (par exemple « un tunnel de 1 km à 2 tubes et un tunnel de 3 km à 1 tube »).",
+        "plan_tls_compare": "Je vais comparer **{}** ; les autres valeurs sont communes, avec les mêmes graines aléatoires.",
+        "plan_tls_sober": "Je vais faire tourner TLS pour chaque valeur déclarée de {} (**{} calculs**, mêmes graines) et les classer par énergie annuelle.",
+        "tls_too_many": "{} calculs, c'est trop pour le navigateur avec cette période et ce nombre de tirages : réduisez la période ou les tirages.",
+        "col_config": "configuration", "k_annual": "énergie annuelle (MWh/an)", "k_peak": "pointe (kW)", "k_lf": "facteur de charge",
+        "k_specific": "énergie spécifique (kWh/m/an)", "k_diff_b": "B par rapport à A (%)", "k_tunnels": "tunnels",
+        "k_best_mwh": "le plus sobre (MWh/an)", "k_best_config": "configuration la plus sobre", "k_saving": "gain / la moins sobre (%)",
+        "answer_tls_compare": "Réponse : {}. Par rapport à A : {}.",
+        "answer_tls_sober": "Réponse : parmi les {count} configurations déclarées, la plus sobre est **{best}** avec {b} MWh/an ; la moins sobre est {worst} avec {w} MWh/an ({s} % de plus pour elle). Simulation : les exigences de sécurité (par exemple la ventilation qu'impose un tunnel long) ne sont pas dans le modèle.",
+        "chart_tls_compare": "Énergie annuelle de chaque tunnel (MWh/an)", "chart_tls_sober": "Énergie annuelle par configuration (éclairage + ventilation, MWh/an)",
+        "explain_tls_compare": "Comment lire : une ligne par tunnel, tous calculés par TLS avec les mêmes graines aléatoires, donc les écarts viennent seulement des valeurs données. Énergie annuelle et pointe sont les médianes des tirages Monte Carlo.",
+        "explain_tls_sober": "Comment lire : TLS tourne pour chaque catégorie déclarée d'éclairage et de ventilation que vous n'avez pas fixée, le reste inchangé et avec les mêmes graines ; les lignes sont classées par énergie annuelle. Les exigences de sécurité et réglementaires ne sont pas dans le modèle : l'ingénieur décide.",
         "ask_choose": "Deux schémas : faut-il les calculer **l'un après l'autre** (cures successives) ou les **comparer** comme alternatives ?",
         "unparsed": "Je n'ai pas reconnu « {} » comme un schéma : écrivez-le par exemple 20 × 3,5 Gy.",
         "plan_sequence": "Cures successives : **{}** ; effet cumulé pour la tumeur et les organes à risque {}.",
@@ -288,13 +312,14 @@ ERRORS = {"en": {"path": "{}: several courses or nested fields are not available
                  "unknown": "{}: not a parameter of this code", "number": "{}: the number does not match your words",
                  "level": "{}: no declared convention for these words", "default": "{}: no declared default",
                  "value": "{}: value not usable", "twice": "{}: two different readings in one message",
-                 "relative": "{}: your words give a change that I cannot check exactly; please give the final value"},
+                 "relative": "{}: your words give a change that I cannot check exactly; please give the final value",
+                 "category_words": "{}: this choice is not in your words"},
           "fr": {"path": "{} : plusieurs cures ou champs imbriqués ne sont pas disponibles ici",
                  "unknown": "{} : pas un paramètre de ce code", "number": "{} : le nombre ne correspond pas à vos mots",
                  "level": "{} : pas de convention déclarée pour ces mots", "default": "{} : pas de valeur par défaut déclarée",
                  "value": "{} : valeur inutilisable", "twice": "{} : deux lectures différentes dans le même message",
                  "relative": "{} : vos mots donnent une variation que je ne peux pas vérifier exactement ; indiquez la "
-                             "valeur finale"}}
+                             "valeur finale", "category_words": "{} : ce choix n'est pas dans vos mots"}}
 
 # ---------------------------------------------------------------- formatting
 
@@ -440,6 +465,22 @@ UNIT_WORDS = {"unit:GRAY": r"gy", "unit:M": r"k?m|metres?|meters?", "unit:DAY": 
               "unit:PERCENT": r"%|pour ?cent|percent", "unit:KiloW": r"kw", "unit:HR": r"h|heures?|hours?"}
 
 
+CATEGORY_STOP = {"low", "ventilation", "lighting", "light", "the", "and"}
+
+
+def category_in_words(value, spec, evidence):
+    """A category is stated only if a word that distinguishes it from the other declared values appears in the quote
+    ("sodium", "adaptatif", "naturelle"): the model never chooses a category for the visitor."""
+    values = [str(v) for v in spec.get("values") or []]
+    if str(value) not in values:
+        return True  # not a declared list (e.g. organs, checked against the library): other checks apply
+    words = lambda v: set(re.findall(r"[a-z]+", fold(v))) - CATEGORY_STOP  # noqa: E731
+    others = set().union(*(words(v) for v in values if v != str(value)))
+    distinct = words(value) - others or words(value)
+    quoted = re.findall(r"[a-z]+", fold(evidence))
+    return any(q.startswith(w[:3]) for w in distinct for q in quoted)
+
+
 def stated_unit(evidence, spec):
     """The quote contains one of the parameter's declared unit names after a number ("3 Gy", "10 jours")."""
     names = [str(a) for a in spec.get("unit_aliases") or [] if a and not str(a).isdigit()]
@@ -535,6 +576,8 @@ def apply_value(model, state, v, message, lang):
                 rec = convention_record(spec, evidence, declared)
             elif value is None:
                 return e["value"].format(label(name, lang))
+            elif model == "tls" and not numeric and not category_in_words(value, spec, evidence):
+                return e["category_words"].format(label(name, lang))  # the model never chooses a category
             else:
                 change = None
                 if numeric and not spec.get("evidence_conversion"):  # with a declared conversion, normalize() reads
@@ -747,6 +790,177 @@ def clarify_text(model, state, verdict, lang):
     if other:
         parts.append(t["fix"].format("; ".join(other)))
     return "\n\n".join(parts)
+
+# ---------------------------------------------------------------- TLS: comparison of tunnels, most sober configuration
+# Only TLS computes, once per variant, with the same seeds (task declared by the descriptor: "compare configurations
+# ... with controlled seeds"). Several tunnels in one message: each repeated parameter is split into variants by the
+# order of its quotes in the words. The most sober configuration enumerates the categories declared by the descriptor
+# for lighting and ventilation that the visitor did not state.
+
+TLS_COMPARE = re.compile(r"\b(compar\w*|versus|vs|lequel|laquelle|which|ou bien|plutot que|rather than|plus que|"
+                         r"moins que|more than|less than)\b")
+TLS_SOBER = re.compile(r"(plus sobre|consomm\w* le moins|moins energivore|moins d.energie|least energy|lowest consumption|"
+                       r"most efficient|most sober|minimi\w* (?:la |the )?(?:consommation|energy|consumption))")
+VARIED = ("lighting_type", "ventilation_type")
+TLS_TOTAL_POINTS = 1_500_000  # all the runs of a comparison together, in the browser
+SHORT_CAT = {"LED adaptive": "LED-a", "LED fixed": "LED-f", "mixed": "mixed", "sodium fixed": "sodium",
+             "natural/low ventilation": "natural", "longitudinal": "longit.", "semi-transverse": "semi-tr.",
+             "transverse": "transv."}
+
+
+def tls_reading(state, values, message):
+    """Before the model's values are applied: a request for the most sober configuration, or several tunnels."""
+    text = fold(message)
+    X = state.setdefault("tls", {"mode": "simulate"})
+    if TLS_SOBER.search(text):
+        X["mode"] = "sober"
+    fields = [str(v.get("field") or "") for v in values]
+    repeated = sorted({f for f in fields if fields.count(f) > 1})
+    if not repeated:
+        return values
+
+    def where(v):
+        at = text.find(fold(str(v.get("evidence") or "")))
+        return at if at >= 0 else 10 ** 6
+
+    groups = {f: sorted((v for v in values if v.get("field") == f), key=where) for f in repeated}
+    n = len(groups[repeated[0]])
+    if 2 <= n <= 3 and all(len(g) == n for g in groups.values()):
+        X["mode"] = "compare"
+        X["pending_variants"] = [{f: groups[f][i] for f in repeated} for i in range(1, n)]
+        X["varied"] = repeated
+        values = [v for v in values if v.get("field") not in repeated] + [groups[f][0] for f in repeated]
+    return values
+
+
+def tls_after(state, message, lang, errors):
+    """After the values are applied: the other tunnels are checked like the first one, on copies of the scenario."""
+    X = state.get("tls") or {}
+    pending = X.pop("pending_variants", None)
+    if not pending:
+        return
+    first = {f: state["inputs"].get(f) or state["experiment"].get(f) for f in X["varied"]}
+    variants = [first]
+    for readings in pending:
+        copy = json.loads(json.dumps(state))
+        for f in X["varied"]:
+            group = group_of("tls", f)
+            if group:
+                copy[group].pop(f, None)
+        recs = {}
+        for f, v in readings.items():
+            error = apply_value("tls", copy, v, message, lang)
+            if error:
+                errors.append(error)
+            group = group_of("tls", f)
+            recs[f] = copy[group].get(f) if group else None
+        variants.append(recs)
+    X["variants"] = variants
+
+
+def tls_label(rec_map, lang):
+    return ", ".join(shown(f, r["value"], lang) for f, r in rec_map.items() if r and r.get("value") is not None)
+
+
+def tls_missing(state, lang):
+    X = state.get("tls") or {}
+    if X.get("mode") == "compare" and not all(all(v) for v in X.get("variants") or [[]]):
+        return "variants", T[lang]["ask_variants"]
+    return None, None
+
+
+def tls_plan(state, lang):
+    X, t = state.get("tls") or {}, T[lang]
+    if X.get("mode") == "compare":
+        return t["plan_tls_compare"].format("; ".join(f"{chr(65 + i)} = {tls_label(v, lang)}"
+                                                      for i, v in enumerate(X["variants"])))
+    if X.get("mode") == "sober":
+        free = [f for f in VARIED if state["inputs"].get(f, {}).get("origin") != "provided"]
+        count = 1
+        for f in free:
+            count *= len(DESC["tls"]["inputs"][f]["values"])
+        return t["plan_tls_sober"].format(", ".join(label(f, lang) for f in free) or "—", count)
+    return ""
+
+
+def tls_points(state):
+    exp = state["experiment"]
+    days = exp.get("n_days", {}).get("value") or 0
+    runs = exp.get("n_runs", {}).get("value") or 0
+    step = exp.get("freq_minutes", {}).get("value") or 15
+    return days * 1440 / max(step, 1) * runs
+
+
+def tls_kpis(state):
+    out_root = Path(tempfile.mkdtemp(prefix="ws-"))
+    try:
+        target, _ = execute(to_scenario(state), DESC["tls"], WS, out_root)
+        k = pd.read_csv(Path(target) / "kpis.csv").median(numeric_only=True)
+        return {"mwh": float(k.annualized_mwh), "peak": float(k.peak_kw), "lf": float(k.load_factor),
+                "spec": float(k.specific_kwh_m_year)}, qualification(Path(target), "tls")
+    finally:
+        shutil.rmtree(out_root, ignore_errors=True)
+
+
+def tls_compute(state, lang):
+    """Runs TLS once per variant (same seeds) and builds a clear answer, a table of all cases and a chart."""
+    X, t = state["tls"], T[lang]
+    cases = []
+    if X["mode"] == "compare":
+        for rec_map in X["variants"]:
+            copy = json.loads(json.dumps(state))
+            for f, r in rec_map.items():
+                copy[group_of("tls", f)][f] = dict(r, accepted=True)
+            cases.append((tls_label(rec_map, lang), copy))
+    else:
+        free = [f for f in VARIED if state["inputs"].get(f, {}).get("origin") != "provided"]
+        combos = [[]]
+        for f in free:
+            combos = [c + [(f, v)] for c in combos for v in DESC["tls"]["inputs"][f]["values"]]
+        for combo in combos:
+            copy = json.loads(json.dumps(state))
+            for f, v in combo:
+                copy["inputs"][f] = dict(value=v, unit=None, origin="assumption", evidence=None, accepted=True,
+                                         source="Declared category, enumerated for the comparison")
+            name = " + ".join(SHORT_CAT.get(copy["inputs"][f]["value"], copy["inputs"][f]["value"]) for f in VARIED)
+            cases.append((name, copy))
+    if tls_points(state) * len(cases) > TLS_TOTAL_POINTS:
+        raise ValueError(t["tls_too_many"].format(len(cases)))
+    results = []
+    for name, copy in cases:
+        k, q = tls_kpis(copy)
+        results.append((name, k, q))
+    n = lambda v, f=",.0f": num(v, f, lang)  # noqa: E731
+    head = [t["col_config"], t["k_annual"], t["k_peak"], t["k_lf"], t["k_specific"]]
+    if X["mode"] == "compare":
+        base = results[0][1]["mwh"]
+        rows = [[f"{chr(65 + i)} : {name}", n(k["mwh"]), n(k["peak"]), n(k["lf"], ".2f"), n(k["spec"])]
+                for i, (name, k, _) in enumerate(results)]
+        diffs = "; ".join(f"{chr(65 + i)} {localise(f'{100 * (k['mwh'] / base - 1):+.0f}', lang)} %"
+                          for i, (_, k, _) in enumerate(results) if i)
+        headline = t["answer_tls_compare"].format(
+            "; ".join(f"{chr(65 + i)} ({name}) → {n(k['mwh'])} MWh/an" for i, (name, k, _) in enumerate(results)), diffs)
+        kpis = [(n(results[0][1]["mwh"]), "A : " + t["k_annual"]), (n(results[1][1]["mwh"]), "B : " + t["k_annual"]),
+                (diffs.split("; ")[0].split(" ", 1)[1], t["k_diff_b"]), (str(len(results)), t["k_tunnels"])]
+        chart = {"categories": [chr(65 + i) for i in range(len(results))], "unit": "MWh/an", "title": t["chart_tls_compare"],
+                 "series": [{"name": t["k_annual"], "values": [k["mwh"] for _, k, _ in results]}]}
+    else:
+        results.sort(key=lambda r: r[1]["mwh"])
+        best, worst = results[0], results[-1]
+        rows = [[name, n(k["mwh"]), n(k["peak"]), n(k["lf"], ".2f"), n(k["spec"])] for name, k, _ in results]
+        saving = 100 * (1 - best[1]["mwh"] / worst[1]["mwh"])
+        headline = t["answer_tls_sober"].format(best=best[0], b=n(best[1]["mwh"]), worst=worst[0], w=n(worst[1]["mwh"]),
+                                               s=localise(f"{saving:.0f}", lang), count=len(results))
+        kpis = [(n(best[1]["mwh"]), t["k_best_mwh"]), (best[0], t["k_best_config"]),
+                (localise(f"{saving:.0f}", lang), t["k_saving"]), (str(len(results)), t["k_cases"])]
+        chart = {"categories": [name for name, _, _ in results], "unit": "MWh/an", "title": t["chart_tls_sober"],
+                 "series": [{"name": t["k_annual"], "values": [k["mwh"] for _, k, _ in results]}]}
+    payload = {"mode": X["mode"], "cases": [{"name": name, **k} for name, k, _ in results],
+               "seeds": "same base seed for every case", "qualification": results[0][2]}
+    return {"kind": "table", "headline": headline, "kpis": [k for k, _ in kpis], "kpi_labels": [lab for _, lab in kpis],
+            "table": {"head": head, "rows": rows}, "chart": chart, "analysis": t["explain_tls_" + X["mode"]],
+            "qualification": results[0][2],
+            "files": {"results.json": json.dumps(payload, ensure_ascii=False, indent=1, default=str)}}
 
 # ---------------------------------------------------------------- LQL: several organs and schedules, resumption, maximum dose
 # Only LQL-Equiv computes (lql_workbench, lql_interruption). Here, deterministic reading of the visitor's words:
@@ -1240,6 +1454,8 @@ def compute(model, lang, state):
         mode = (state.get("lql") or {}).get("mode", "simulate")
         if model == "lql" and (mode != "simulate" or len(organs_of(state)) > 1):
             results = lql_compute(state, lang)  # several organs or schedules, resumption, maximum dose
+        elif model == "tls" and (state.get("tls") or {}).get("mode", "simulate") != "simulate":
+            results = tls_compute(state, lang)  # several tunnels, or the most sober declared configuration
         else:
             results = run(model, state, lang)
     except ValueError as exc:
@@ -1262,9 +1478,9 @@ def api_turn(model, lang, state_json, message, parsed_json):
             state[g][n]["accepted"] = True
         verdict = check(model, state, lang)
         if verdict["decision"] == "execute":
-            key, question = lql_missing(state, lang) if model == "lql" else (None, None)
+            key, question = lql_missing(state, lang) if model == "lql" else tls_missing(state, lang)
             if key:  # the kind of question asked still needs an answer (sessions given, remaining, ...)
-                state["lql"]["awaiting"] = key
+                state.setdefault("lql" if model == "lql" else "tls", {})["awaiting"] = key
                 return respond(model, lang, state, question, decision="clarify")
             return compute(model, lang, state)
         return respond(model, lang, state, clarify_text(model, state, verdict, lang))
@@ -1277,7 +1493,7 @@ def api_turn(model, lang, state_json, message, parsed_json):
     task = str(parsed.get("task") or "")
     if task == "unsupported":
         return respond(model, lang, state, refusal(model, lang, state), decision="refuse")
-    allowed = DESC[model]["tasks"]["supported"] if model == "lql" else [SINGLE_TASK[model]]
+    allowed = DESC[model]["tasks"]["supported"]
     if model == "lql" and ("compar" in fold(task) or len(schedules_in(message)) >= 2):
         task = ""  # comparisons are supported here; the schedules are read from the words
     if task and task not in allowed:
@@ -1288,6 +1504,8 @@ def api_turn(model, lang, state_json, message, parsed_json):
     values = [v if isinstance(v, dict) else {} for v in parsed.get("values") or []]
     if model == "lql":  # schedules, sessions, groups: read deterministically from the words
         values = lql_reading(state, values, message, lang, errors)
+    elif model == "tls":  # several tunnels, most sober configuration
+        values = tls_reading(state, values, message)
     fields = [str(v.get("field") or "") for v in values]
     twice = {f for f in fields if fields.count(f) > 1}
     errors += [ERRORS[lang]["twice"].format(label(f, lang)) for f in sorted(twice)]
@@ -1302,6 +1520,8 @@ def api_turn(model, lang, state_json, message, parsed_json):
     lql_parts = []
     if model == "lql":  # organs list, "all organs" from the ontology, consistency with the tumour site
         lql_after(state, old, message, lang, lql_parts)
+    elif model == "tls":
+        tls_after(state, message, lang, errors)
     q = ("« ", " »") if lang == "fr" else ("“", "”")
     sep = " : " if lang == "fr" else ": "
     named = named_fields(model, state, message)
@@ -1349,18 +1569,21 @@ def api_turn(model, lang, state_json, message, parsed_json):
     if hold:
         parts.append(t["held"])
     parts += lql_parts
+    key, question = lql_missing(state, lang) if model == "lql" else tls_missing(state, lang)
+    plan = "" if key or state["unresolved"] else (lql_plan(state, lang) if model == "lql" else tls_plan(state, lang))
     if verdict["decision"] == "refuse":
         parts.append(refusal(model, lang, state))
     elif verdict["decision"] == "execute":
-        key, question = lql_missing(state, lang) if model == "lql" else (None, None)
         if key:  # the kind of question asked still needs an answer
-            state["lql"]["awaiting"] = key
+            state.setdefault("lql" if model == "lql" else "tls", {})["awaiting"] = key
             parts.append(question)
         elif not state["unresolved"]:
-            if model == "lql" and lql_plan(state, lang):
-                parts.append(lql_plan(state, lang))
+            if plan:
+                parts.append(plan)  # what will be computed, before the visitor's yes
             parts.append(t["ready"])  # a change or a question never runs the code in the same turn
     else:
+        if plan:
+            parts.append(plan)
         parts.append(clarify_text(model, state, verdict, lang))
     if state["unresolved"]:
         parts.append(t["blocked"].format(names(state["unresolved"], lang)))

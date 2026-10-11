@@ -1,6 +1,6 @@
 // WebSemantic web app: chat on the left, qualified results on the right. Python runs in a background worker.
 "use strict";
-const APP_VERSION = "0.3.7";  // also in index.html (cache busting) and the footer
+const APP_VERSION = "0.3.9";  // also in index.html (cache busting) and the footer
 
 const params = new URLSearchParams(location.search);
 const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
@@ -13,7 +13,7 @@ const T = {
     intro: "Describe your case. The code asks for what is missing and computes only what you accept.",
     codes: { tls: "Road tunnel energy", lql: "Radiotherapy dose" },
     placeholder: { tls: "Describe your case… e.g. a long tunnel with a lot of traffic", lql: "Describe your case… e.g. 20 sessions of 3 Gy, prostate, rectum as organ at risk" },
-    allCases: "All cases", details: "Technical details (versions, checks, options)", varsNote: "To work in the original application, open it and enter these values:", openApp: { lql: "Open the original LQL-Equiv", tls: "Open the original TLS (code and app)" }, traceBtn: "Download the trace", examples: "Examples", more: "Other examples ↻", tags: { refuse: "refusal example", ask: "the code will ask" }, exampleBtn: "Example without language model", resetBtn: "New conversation",
+    allCases: "All cases", details: "Technical details (versions, checks, options)", varsNote: "To work in the original application, open it and enter these values:", openApp: { lql: "Open the original LQL-Equiv", tls: "Open the original TLS (code and app)" }, traceBtn: "Download the trace", reuse: "Tap to edit this message again", examples: "Examples", more: "Other examples ↻", tags: { refuse: "refusal example", ask: "the code will ask" }, exampleBtn: "Example without language model", resetBtn: "New conversation",
     tabs: { results: "Results", about: "About" },
     loading: "Loading the scientific codes in your browser (about 15 s on the first visit)…",
     timeout: "The calculation took too long in this browser; nothing is shown.",
@@ -39,7 +39,7 @@ const T = {
     intro: "Décrivez votre cas. Le code demande ce qui manque et ne calcule que ce que vous acceptez.",
     codes: { tls: "Énergie d'un tunnel", lql: "Dose en radiothérapie" },
     placeholder: { tls: "Décrivez votre cas… par ex. un tunnel long avec beaucoup de trafic", lql: "Décrivez votre cas… par ex. 20 séances de 3 Gy, prostate, rectum comme organe à risque" },
-    allCases: "Tous les cas", details: "Détails techniques (versions, vérifications, options)", varsNote: "Pour travailler dans l'application d'origine, ouvrez-la et saisissez ces valeurs :", openApp: { lql: "Ouvrir LQL-Equiv (application d'origine)", tls: "Ouvrir TLS d'origine (code et application)" }, traceBtn: "Télécharger la trace", examples: "Exemples", more: "Autres exemples ↻", tags: { refuse: "exemple de refus", ask: "le code demandera" }, exampleBtn: "Exemple sans modèle de langage", resetBtn: "Nouvelle conversation",
+    allCases: "Tous les cas", details: "Détails techniques (versions, vérifications, options)", varsNote: "Pour travailler dans l'application d'origine, ouvrez-la et saisissez ces valeurs :", openApp: { lql: "Ouvrir LQL-Equiv (application d'origine)", tls: "Ouvrir TLS d'origine (code et application)" }, traceBtn: "Télécharger la trace", reuse: "Touchez pour reprendre ce message", examples: "Exemples", more: "Autres exemples ↻", tags: { refuse: "exemple de refus", ask: "le code demandera" }, exampleBtn: "Exemple sans modèle de langage", resetBtn: "Nouvelle conversation",
     tabs: { results: "Résultats", about: "À propos" },
     loading: "Chargement des codes scientifiques dans votre navigateur (environ 15 s à la première visite)…",
     timeout: "Le calcul a pris trop de temps dans ce navigateur ; rien n'est affiché.",
@@ -96,6 +96,7 @@ function status(text) { $("status").textContent = text; }
 function say(role, text) {
   const div = document.createElement("div");
   div.className = "msg " + role; div.innerHTML = md(text);
+  if (role === "user") { div.title = T[lang].reuse; div.onclick = () => { $("input").value = text; $("input").focus(); }; }
   $("chat").appendChild(div); $("chat").scrollTop = $("chat").scrollHeight;
   return div;
 }
@@ -214,7 +215,7 @@ function render(out) {
   if (r.kind === "tls") {
     $("fig1").innerHTML = `<figcaption>${esc(t.figs.power)}</figcaption>${lineBand(r.series)}`;
     $("fig2").innerHTML = `<figcaption>${esc(t.figs.daily)}</figcaption>${stacked(r.hourly, t.figs.uses)}`;
-  } else if (r.kind === "lql_table") {
+  } else if (r.kind === "lql_table" || r.kind === "table") {
     $("fig1").innerHTML = `<figcaption>${esc(r.chart.title)}</figcaption>${grouped(r.chart)}`;
     $("fig2").innerHTML = `<figcaption>${esc(t.allCases)}</figcaption>${table(r.table)}`;
   } else {
@@ -288,7 +289,7 @@ function renderExamples() {
 }
 
 async function newConversation() {
-  conversation++; busy = false; trace = null; $("trace-btn").disabled = true;  // replies of an earlier conversation are ignored
+  conversation++; busy = false; trace = null; $("trace-btn").disabled = true; $("input").value = "";  // replies of an earlier conversation are ignored
   $("chat").innerHTML = ""; clearResults(); state = null;
   try { state = JSON.parse(await py("api_fresh", code, lang)); } catch (e) { status(T[lang].failed + e); }
 }

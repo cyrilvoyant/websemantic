@@ -104,12 +104,13 @@ def test_a_tumour_site_read_as_an_organ_is_moved_by_the_library_lists(calls):
     assert after["inputs"]["gap_days"]["value"] == 0 and not calls
 
 
-def test_two_readings_for_one_other_field_use_neither(calls):
+def test_two_lengths_in_one_tls_message_become_two_tunnels_to_compare(calls):
     state = json.loads(glue.api_fresh("tls", "fr"))
     out, after = turn("tls", state, "un tunnel de 2 km ou 3 km", reading(
         TLS_TASK, {"field": "length_m", "value": 2000, "unit": "m", "origin": "provided", "evidence": "2 km"},
         {"field": "length_m", "value": 3000, "unit": "m", "origin": "provided", "evidence": "3 km"}))
-    assert after["inputs"]["length_m"]["origin"] == "default" and "deux lectures différentes" in out["reply"]
+    X = after["tls"]
+    assert X["mode"] == "compare" and [v["length_m"]["value"] for v in X["variants"]] == [2000, 3000] and not calls
 
 
 def test_reading_context_lists_the_library_categories():
@@ -565,3 +566,46 @@ def test_two_schedules_without_a_word_ask_whether_to_chain_or_compare():
     assert "l'un après l'autre" in out["reply"]
     out, state = turn("lql", state, "l'un après l'autre", reading(LQL_TASK))
     assert state["lql"]["mode"] == "sequence" and len(state["lql"]["courses"]) == 2
+
+
+
+# ------------------------------------------------------------ TLS comparisons (real TLS runs, same seeds)
+
+
+def test_two_tunnels_are_compared_with_the_same_seeds():
+    state = json.loads(glue.api_fresh("tls", "fr"))
+    msg = "quel tunnel consomme le plus, un tunnel de 1 km à 2 tubes ou un de 3 km à 1 tube ?"
+    out, state = turn("tls", state, msg, reading(
+        TLS_TASK, {"field": "length_m", "value": 1000, "unit": "m", "origin": "provided", "evidence": "1 km"},
+        {"field": "n_tubes", "value": 2, "origin": "provided", "evidence": "2 tubes"},
+        {"field": "length_m", "value": 3000, "unit": "m", "origin": "provided", "evidence": "3 km"},
+        {"field": "n_tubes", "value": 1, "origin": "provided", "evidence": "1 tube"}))
+    assert "Je vais comparer" in out["reply"] and "A = 1" in out["reply"].replace(glue.NBSP, " ")
+    out, state = turn("tls", state, "oui")
+    r = out["results"]
+    assert out["decision"] == "execute" and r["kind"] == "table" and len(r["table"]["rows"]) == 2
+    a, b = (c["mwh"] for c in json.loads(r["files"]["results.json"])["cases"])
+    assert a < b and "Réponse" in out["reply"]
+
+
+def test_the_most_sober_configuration_enumerates_declared_categories():
+    state = json.loads(glue.api_fresh("tls", "fr"))
+    out, state = turn("tls", state, "la configuration la plus sobre pour un tunnel de 2 km", reading(
+        TLS_TASK, {"field": "length_m", "value": 2000, "unit": "m", "origin": "provided", "evidence": "2 km"}))
+    assert state["tls"]["mode"] == "sober" and "16 calculs" in out["reply"]
+    out, state = turn("tls", state, "oui")
+    cases = json.loads(out["results"]["files"]["results.json"])["cases"]
+    assert len(cases) == 16 and cases == sorted(cases, key=lambda c: c["mwh"]) and cases[0]["name"] == "LED-a + natural"
+
+
+@pytest.mark.parametrize("value,evidence,ok", [("LED fixed", "The most sober lighting", False),
+                                               ("sodium fixed", "éclairage au sodium", True),
+                                               ("LED adaptive", "éclairage LED adaptatif", True),
+                                               ("natural/low ventilation", "ventilation naturelle", True),
+                                               ("natural/low ventilation", "low traffic", False),
+                                               ("transverse", "ventilation transversale", True),
+                                               ("rural", "tunnel rural", True)])
+def test_a_category_must_be_in_the_words(value, evidence, ok):
+    field = "ventilation_type" if "ventil" in value or value == "transverse" else (
+        "tunnel_context" if value == "rural" else "lighting_type")
+    assert glue.category_in_words(value, glue.DESC["tls"]["inputs"][field], evidence) is ok
