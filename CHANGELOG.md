@@ -22,6 +22,7 @@ the concept DOI [10.5281/zenodo.23238902](https://doi.org/10.5281/zenodo.2323890
   - the conversation survives a reload of the tab (kept in the browser only);
   - wide tables scroll inside their frame;
   - installable (manifest, icons).
+- **SHACL in the browser (app 0.3.14):** every LQL-Equiv scenario is checked by the ontology's shapes (`ontology/shapes.ttl`, pyshacl, pinned pure-Python packages loaded after the codes) before it is computed; a violation stops the calculation and names the parameter (`src/websemantic/scenario_check.py`). TLS parameters are not mapped to ontology concepts in this version.
 - **Paper.** The paper refers to version 0.2.6 and to the frozen experiments; this line evolves separately.
 
 ## 0.2.6 — 2026-10-10

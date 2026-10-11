@@ -616,3 +616,12 @@ def test_a_category_must_be_in_the_words(value, evidence, ok):
     field = "ventilation_type" if "ventil" in value or value == "transverse" else (
         "tunnel_context" if value == "rural" else "lighting_type")
     assert glue.category_in_words(value, glue.DESC["tls"]["inputs"][field], evidence) is ok
+
+
+def test_every_lql_computation_is_checked_by_the_ontology_shapes():
+    pytest.importorskip("pyshacl")
+    out, state = lql_case("Compare 20 × 3 Gy et 39 séances de 2 Gy avec une interruption de 10 jours, prostate, rectum",
+                          SITE, RECTUM)
+    out, state = yes(state)
+    s = out["results"]["shacl"]
+    assert out["decision"] == "execute" and s["status"] == "conforms" and s["records"] == 9  # 2 courses x 3, site, organ, reference dose

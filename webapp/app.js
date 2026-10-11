@@ -1,6 +1,6 @@
 // WebSemantic web app: chat on the left, qualified results on the right. Python runs in a background worker.
 "use strict";
-const APP_VERSION = "0.3.13";  // also in index.html (cache busting) and the footer
+const APP_VERSION = "0.3.14";  // also in index.html (cache busting) and the footer
 
 const params = new URLSearchParams(location.search);
 const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
@@ -13,7 +13,7 @@ const T = {
     intro: "Describe your case. The code asks for what is missing and computes only what you accept.",
     codes: { tls: "Road tunnel energy", lql: "Radiotherapy dose" },
     placeholder: { tls: "Describe your case… e.g. a long tunnel with a lot of traffic", lql: "Describe your case… e.g. 20 sessions of 3 Gy, prostate, rectum as organ at risk" },
-    allCases: "All cases", details: "Technical details (versions, checks, options)", varsNote: "To work in the original application, open it and enter these values:", openApp: { lql: "Open the original LQL-Equiv", tls: "Open the original TLS (code and app)" }, traceBtn: "Download the trace", jump: { chat: "Chat", results: "Results", variables: "Variables", about: "About" }, reuse: "Tap to edit this message again", examples: "Examples", more: "Other examples ↻", tags: { refuse: "refusal example", ask: "the code will ask" }, exampleBtn: "Example without language model", resetBtn: "New conversation",
+    allCases: "All cases", details: "Technical details (versions, checks, options)", varsNote: "To work in the original application, open it and enter these values:", openApp: { lql: "Open the original LQL-Equiv", tls: "Open the original TLS (code and app)" }, traceBtn: "Download the trace", shacl: { label: "Ontology check (SHACL)", conforms: "the scenario conforms to the ontology's rules (types, declared bounds, complete groups, dose identity per course)", unavailable: "not available in this browser (rules not loaded)", records: "records" }, jump: { chat: "Chat", results: "Results", variables: "Variables", about: "About" }, reuse: "Tap to edit this message again", examples: "Examples", more: "Other examples ↻", tags: { refuse: "refusal example", ask: "the code will ask" }, exampleBtn: "Example without language model", resetBtn: "New conversation",
     tabs: { results: "Results", about: "About" },
     loading: "Loading the scientific codes in your browser (about 15 s on the first visit)…",
     timeout: "The calculation took too long in this browser; nothing is shown.",
@@ -39,7 +39,7 @@ const T = {
     intro: "Décrivez votre cas. Le code demande ce qui manque et ne calcule que ce que vous acceptez.",
     codes: { tls: "Énergie d'un tunnel", lql: "Dose en radiothérapie" },
     placeholder: { tls: "Décrivez votre cas… par ex. un tunnel long avec beaucoup de trafic", lql: "Décrivez votre cas… par ex. 20 séances de 3 Gy, prostate, rectum comme organe à risque" },
-    allCases: "Tous les cas", details: "Détails techniques (versions, vérifications, options)", varsNote: "Pour travailler dans l'application d'origine, ouvrez-la et saisissez ces valeurs :", openApp: { lql: "Ouvrir LQL-Equiv (application d'origine)", tls: "Ouvrir TLS d'origine (code et application)" }, traceBtn: "Télécharger la trace", jump: { chat: "Conversation", results: "Résultats", variables: "Variables", about: "À propos" }, reuse: "Touchez pour reprendre ce message", examples: "Exemples", more: "Autres exemples ↻", tags: { refuse: "exemple de refus", ask: "le code demandera" }, exampleBtn: "Exemple sans modèle de langage", resetBtn: "Nouvelle conversation",
+    allCases: "Tous les cas", details: "Détails techniques (versions, vérifications, options)", varsNote: "Pour travailler dans l'application d'origine, ouvrez-la et saisissez ces valeurs :", openApp: { lql: "Ouvrir LQL-Equiv (application d'origine)", tls: "Ouvrir TLS d'origine (code et application)" }, traceBtn: "Télécharger la trace", shacl: { label: "Contrôle par l'ontologie (SHACL)", conforms: "le scénario respecte les règles de l'ontologie (types, bornes déclarées, groupes complets, identité des doses par cure)", unavailable: "indisponible dans ce navigateur (règles non chargées)", records: "enregistrements" }, jump: { chat: "Conversation", results: "Résultats", variables: "Variables", about: "À propos" }, reuse: "Touchez pour reprendre ce message", examples: "Exemples", more: "Autres exemples ↻", tags: { refuse: "exemple de refus", ask: "le code demandera" }, exampleBtn: "Exemple sans modèle de langage", resetBtn: "Nouvelle conversation",
     tabs: { results: "Résultats", about: "À propos" },
     loading: "Chargement des codes scientifiques dans votre navigateur (environ 15 s à la première visite)…",
     timeout: "Le calcul a pris trop de temps dans ce navigateur ; rien n'est affiché.",
@@ -64,7 +64,7 @@ const T = {
 
 const $ = (id) => document.getElementById(id);
 let lang = "en", code = "tls", state = null, busy = false, conversation = 0, blobs = [];
-let hashes = null, trace = null;  // fingerprints of what runs here; the visitor's local record of this conversation
+let hashes = null, trace = null, shaclLoad = null;  // fingerprints of what runs here; the visitor's local record of this conversation
 let log = [], last = null;  // what the page shows, kept in this tab to survive a reload (pull-to-refresh, a tab put to sleep)
 
 // ------------------------------------------------------------ Python worker
@@ -78,6 +78,7 @@ worker.onmessage = (e) => {
   const m = e.data;
   if (m.type === "ready") { pyReady = true; hashes = m.hashes || null; readyResolve(); status(T[lang].ready); return; }
   if (m.type === "error") { readyReject(m.error); status(T[lang].failed + m.error); return; }
+  if (m.type === "shacl") { shaclLoad = m; return; }  // the ontology's rules, loaded after the codes
   const p = pending.get(m.id); if (!p) return; pending.delete(m.id);
   m.error ? p.reject(m.error) : p.resolve(m.result);
 };
@@ -267,6 +268,8 @@ function render(out) {
   const kv = (o) => Object.entries(o || {}).map(([k, v]) => `${esc(k)} = ${esc(v)}`).join(", ");
   $("provenance").innerHTML = `<details><summary>${esc(t.details)}</summary><p><b>${t.prov[0]}:</b> ${esc(sw.name)} ${esc(sw.version || "")} · commit <code>${esc((sw.commit || "").slice(0, 7))}</code>${doi} · ${esc(sw.licence || "")}</p>` +
     (q.verification ? `<p><b>${t.prov[7]}:</b> ${esc(q.verification)}</p>` : "") +
+    (r.shacl ? `<p><b>${t.shacl.label}:</b> ${esc(r.shacl.status === "conforms" ? t.shacl.conforms : t.shacl.unavailable)}` +
+               (r.shacl.engine ? ` (${esc(r.shacl.records)} ${t.shacl.records}, ${esc(r.shacl.engine)}, ${esc(r.shacl.shapes)})` : "") + "</p>" : "") +
     (q.options && Object.keys(q.options).length ? `<p><b>${t.prov[5]}:</b> ${kv(q.options)}</p>` : "") +
     (q.flags ? `<p><b>${t.prov[6]}:</b> ${kv(q.flags)}</p>` : "") +
     `<p><b>${t.prov[1]}:</b> ${esc(q.nature || q.note || "")}</p>` +
@@ -344,6 +347,7 @@ function record(turn) {
   if (!trace) trace = {
     format: "websemantic-trace/1", app_version: APP_VERSION, page: location.origin + location.pathname,
     started_utc: new Date().toISOString(), code, language: lang, relay: RELAY, sha256_of_what_ran: hashes,
+    shacl_packages: shaclLoad,
     notice: "Local record of this conversation, made in the visitor's browser; nothing is stored on a server. " +
             "Fictitious scenarios for research and teaching; not a medical device; the practitioner decides.",
     turns: [] };
@@ -370,7 +374,8 @@ function outcome(r) {
   let results = null;  // LQL workbench: every native value with its provenance (software, options, sha256)
   try { results = r.files && r.files["results.json"] ? JSON.parse(r.files["results.json"]) : null; } catch (_) { results = null; }
   return { kind: r.kind, answer: r.headline || null, key_figures: r.kpis, key_figure_labels: r.kpi_labels || null,
-           table: r.table || null, qualification: r.qualification || null, manifest, results, files: Object.keys(r.files || {}) };
+           table: r.table || null, qualification: r.qualification || null, shacl: r.shacl || null, manifest, results,
+           files: Object.keys(r.files || {}) };
 }
 function downloadTrace() {
   if (!trace) return;

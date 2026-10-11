@@ -11,7 +11,7 @@ async function sha256(data) {
 async function init() {
   py = await loadPyodide();
   await py.loadPackage(["numpy", "pandas", "pyyaml", "micropip"]);
-  await py.pyimport("micropip").install(["rdflib==7.1.1"]);
+  await py.pyimport("micropip").install(["rdflib==7.6.0"]);
   const bundle = await (await fetch("bundle.zip", { cache: "no-cache" })).arrayBuffer();
   py.FS.mkdirTree("/home/pyodide/ws");
   py.unpackArchive(bundle, "zip", { extractDir: "/home/pyodide/ws" });
@@ -24,10 +24,20 @@ async function init() {
 
 const ready = init().catch((e) => postMessage({ type: "error", error: String(e) }));
 
+// the ontology's SHACL shapes: pure-Python packages, pinned, loaded after the codes; every LQL-Equiv turn waits for them
+const SHACL = ["pyshacl==0.40.1", "owlrl==7.6.2", "html5rdf==1.2.1", "prettytable==3.18.0", "wcwidth==0.9.1"];
+const shacl = ready.then(async () => {
+  const start = performance.now();
+  await py.pyimport("micropip").install(SHACL);
+  py.runPython("import pyshacl");
+  postMessage({ type: "shacl", ok: true, packages: SHACL, seconds: Math.round(performance.now() - start) / 1000 });
+}).catch((e) => postMessage({ type: "shacl", ok: false, error: String(e) }));
+
 onmessage = async (event) => {
   const { id, fn, args } = event.data;
   try {
     await ready;
+    if (args[0] === "lql" && (fn === "api_turn" || fn === "api_example")) await shacl;  // never compute unchecked
     const glue = py.pyimport("glue");
     postMessage({ id, result: glue[fn](...args) });
   } catch (e) {

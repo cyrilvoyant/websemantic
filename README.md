@@ -15,7 +15,7 @@ Préparer une simulation en phrases, examiner les hypothèses et obtenir des ré
 Describe a case in your own words. A language model (Mistral) only translates your words into the code's variables. The page shows what it understood and asks for what is missing. The original, unchanged codes compute in your browser after a yes, with their sources checked by SHA-256:
 
 - **TLS:** electricity demand of road tunnels, up to one simulated year.
-- **LQL-Equiv:** EQD2, BED, TCP and NTCP for one or several organs at risk. It also compares schedules, gives the biologically equivalent resumption after an interruption, the maximum dose without exceeding the organs, and the minimum organ dose for the same tumour effect.
+- **LQL-Equiv:** EQD2, BED, TCP and NTCP for one or several organs at risk. It also compares schedules, gives the biologically equivalent resumption after an interruption, the maximum dose without exceeding the organs, and the minimum organ dose for the same tumour effect. Before any LQL-Equiv calculation, the ontology's SHACL shapes check the scenario in the browser (types, declared bounds, complete groups, dose identity per course).
 
 Every result can be downloaded: tables, a manifest with versions and checks, and the semantics.ttl RDF graph. The page code is in [`webapp/`](webapp/). Fictitious scenarios for research and teaching.
 

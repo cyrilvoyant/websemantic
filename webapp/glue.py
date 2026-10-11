@@ -26,6 +26,7 @@ from websemantic.adapters.lql import _backend
 from websemantic.core.validation import Parameter, Scenario, validate
 from websemantic.qualitative import resolve
 from websemantic.registry import execute, load_descriptor
+from websemantic.scenario_check import check_lql
 from websemantic.units import NUMBER_WORDS, normalize, parse_number
 
 WS = Path(os.environ.get("WEBSEMANTIC_WS", "/home/pyodide/ws"))
@@ -139,6 +140,7 @@ T = {
         "limit": "In the browser, simulations are limited to {} days, {} Monte Carlo runs and about {:,} time points: "
                  "please reduce the period or the number of runs.",
         "failed_run": "The code refused this scenario: {}",
+        "shacl_refused": "The ontology's rules (SHACL) reject this scenario, so nothing was computed: {}.",
         "example_done": "Example computed without the language model: every value is stated and accepted (see Variables).",
         "not_computable": "not computable",
         "status": ("stated by you", "accepted", "proposed, to accept"),
@@ -257,6 +259,7 @@ T = {
         "limit": "Dans le navigateur, les simulations sont limitées à {} jours, {} tirages Monte Carlo et environ {:,} "
                  "points de temps : réduisez la période ou le nombre de tirages.",
         "failed_run": "Le code a refusé ce scénario : {}",
+        "shacl_refused": "Les règles de l'ontologie (SHACL) refusent ce scénario, rien n'est calculé : {}.",
         "example_done": "Exemple calculé sans modèle de langage : toutes les valeurs sont données et acceptées (voir Variables).",
         "not_computable": "non calculable",
         "status": ("donné par vous", "accepté", "proposé, à accepter"),
@@ -1454,9 +1457,27 @@ def respond(model, lang, state, reply, results=None, decision=None):
                        "variables": variables(state, lang), "results": results}, ensure_ascii=False, default=str)
 
 
+def lql_shacl(state):
+    """The ontology's SHACL shapes on the LQL-Equiv scenario about to be computed: each course or compared schedule
+    (one group instance each), the tumour site, the organs at risk and the reference dose."""
+    L, inp = state.get("lql") or {}, {n: r.get("value") for n, r in state["inputs"].items()}
+    if L.get("mode") in ("compare", "sequence") and L.get("schedules"):
+        courses = [dict(dose_per_fraction=float(s["dose"]), n_fractions=int(s["sessions"]), gap_days=float(s["gap_days"]))
+                   for s in L["schedules"]]
+    else:
+        courses = [dict(dose_per_fraction=float(inp["dose_per_fraction"]), n_fractions=int(inp["n_fractions"]),
+                        gap_days=float(inp.get("gap_days") or 0))]
+    ref = inp.get("reference_dose")
+    return check_lql(WS, courses, inp.get("tumour_site"), organs_of(state), None if ref is None else float(ref))
+
+
 def compute(model, lang, state):
     if over_limit(model, state):
         return respond(model, lang, state, T[lang]["limit"].format(MAX_DAYS, MAX_RUNS, MAX_POINTS), decision="clarify")
+    shacl = lql_shacl(state) if model == "lql" else None  # TLS parameters are not mapped to ontology concepts
+    if shacl and shacl["status"] == "violation":
+        return respond(model, lang, state, T[lang]["shacl_refused"].format("; ".join(shacl["messages"])),
+                       decision="clarify")
     try:
         mode = (state.get("lql") or {}).get("mode", "simulate")
         if model == "lql" and (mode != "simulate" or len(organs_of(state)) > 1):
@@ -1467,6 +1488,8 @@ def compute(model, lang, state):
             results = run(model, state, lang)
     except ValueError as exc:
         return respond(model, lang, state, T[lang]["failed_run"].format(exc), decision="clarify")
+    if shacl:
+        results["shacl"] = shacl
     # the answer, in plain words, comes first in the conversation; the details are on the right
     return respond(model, lang, state, results.get("headline") or T[lang]["computed"], results=results,
                    decision="execute")
