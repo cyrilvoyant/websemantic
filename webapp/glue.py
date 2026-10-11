@@ -59,6 +59,9 @@ T = {
         "accepted_some": "Accepted: {}. The other proposals are still waiting.",
         "noted": "Noted from your words: {}.",
         "unchanged": "No value was changed by this message.",
+        "lql_noted": "Noted: {}.",
+        "lql_answers": {"done": "{} sessions already given", "remaining": "{} sessions remaining",
+                        "target": "{} sessions targeted", "same_number": "same number of sessions"},
         "gap_short": "{} days break",
         "ask_variants": "I could not read every tunnel completely: please give each tunnel's values (for example “a 1 km tunnel with 2 tubes and a 3 km tunnel with 1 tube”).",
         "plan_tls_compare": "I will compare **{}**; the other values are common, with the same random seeds.",
@@ -174,6 +177,9 @@ T = {
         "accepted_some": "Accepté : {}. Les autres propositions restent en attente.",
         "noted": "Noté d'après vos mots : {}.",
         "unchanged": "Ce message n'a changé aucune valeur.",
+        "lql_noted": "Noté : {}.",
+        "lql_answers": {"done": "{} séances déjà faites", "remaining": "{} séances restantes",
+                        "target": "{} séances visées", "same_number": "même nombre de séances"},
         "gap_short": "arrêt de {} jours",
         "ask_variants": "Je n'ai pas pu lire chaque tunnel complètement : donnez les valeurs de chaque tunnel (par exemple « un tunnel de 1 km à 2 tubes et un tunnel de 3 km à 1 tube »).",
         "plan_tls_compare": "Je vais comparer **{}** ; les autres valeurs sont communes, avec les mêmes graines aléatoires.",
@@ -1016,7 +1022,8 @@ ALL_OARS = re.compile(r"\b(tous les organes|tous les oar|all (?:the )?organs|all
 DONE = [re.compile(NUM + r"\s*" + SESS + r"\s*(?:deja\s*)?(?:faites?|effectuees?|realisees?|delivrees?|done|given|"
                    r"delivered|completed|received)\b"),
         re.compile(r"\b(?:deja|already)\s*" + NUM + r"\s*" + SESS),
-        re.compile(r"\b(?:apres|after)\s*" + NUM + r"\s*" + SESS)]
+        re.compile(r"\b(?:apres|after)\s*" + NUM + r"\s*" + SESS),
+        re.compile(r"\b(?:apres|after)\s*(?:la|the)\s*" + NUM + r"\s*(?:e|eme|ere|th|st|nd|rd)?\s*" + SESS)]  # after the 8th: 8 given
 AT_SESSION = re.compile(r"\b(?:a la|at the|at session)\s*" + NUM + r"\s*(?:e|eme|th|st|nd|rd)?\s*(?:seance|session|fraction)\b")
 REMAIN = [re.compile(r"(?:reste(?:ra|rait)?|only|seulement|plus que)\s*(?:que\s*)?" + NUM + r"\s*" + SESS),
           re.compile(NUM + r"\s*" + SESS + r"\s*(?:restantes?|remaining|left|possibles?)")]
@@ -1539,7 +1546,9 @@ def api_turn(model, lang, state_json, message, parsed_json):
             replaced += bool(arrow and before.get("origin") == "provided")
             noted.append(f"**{label(n, lang)}{sep}{arrow}{shown(n, r['value'], lang)}** ({how}){warn}")
     changed_fields = {n for g in ("inputs", "experiment") for n in state[g] if state[g][n] != old[g].get(n)}
-    changed = bool(changed_fields)
+    answered = [k for k in ("done", "remaining", "target", "same_number") if model == "lql"  # kept by the workbench
+                and state["lql"].get(k) is not None and state["lql"].get(k) != old.get("lql", {}).get(k)]
+    changed = bool(changed_fields) or bool(answered)
     kept = bool(KEEP.search(message)) and bool(state.get("unresolved"))  # "keep": the current value stays
     kept_text = t["kept"].format(names(state["unresolved"], lang)) if kept else ""
     state["unresolved"] = sorted(failed | (set() if kept else set(state.get("unresolved") or []) - changed_fields))
@@ -1556,6 +1565,8 @@ def api_turn(model, lang, state_json, message, parsed_json):
     # the model's own sentences and questions are not shown: every statement and question in the reply comes from
     # this deterministic state, so the reply cannot contradict what was retained
     parts = [t["noted"].format("; ".join(noted))] if noted else []
+    if answered:
+        parts.append(t["lql_noted"].format(", ".join(t["lql_answers"][k].format(state["lql"][k]) for k in answered)))
     if replaced >= 2:  # several stated values replaced at once: probably a new case
         parts.append(t["new_case"])
     if kept_text:

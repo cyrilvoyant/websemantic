@@ -1,6 +1,6 @@
 // WebSemantic web app: chat on the left, qualified results on the right. Python runs in a background worker.
 "use strict";
-const APP_VERSION = "0.3.10";  // also in index.html (cache busting) and the footer
+const APP_VERSION = "0.3.13";  // also in index.html (cache busting) and the footer
 
 const params = new URLSearchParams(location.search);
 const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
@@ -65,6 +65,7 @@ const T = {
 const $ = (id) => document.getElementById(id);
 let lang = "en", code = "tls", state = null, busy = false, conversation = 0, blobs = [];
 let hashes = null, trace = null;  // fingerprints of what runs here; the visitor's local record of this conversation
+let log = [], last = null;  // what the page shows, kept in this tab to survive a reload (pull-to-refresh, a tab put to sleep)
 
 // ------------------------------------------------------------ Python worker
 const worker = new Worker("py-worker.js?v=" + APP_VERSION);
@@ -96,12 +97,49 @@ function status(text) { $("status").textContent = text; }
 function say(role, text) {
   const div = document.createElement("div");
   div.className = "msg " + role; div.innerHTML = md(text);
-  if (role === "user") { div.title = T[lang].reuse; div.onclick = () => { $("input").value = text; $("input").focus(); }; }
+  if (role === "user") { div.title = T[lang].reuse; div.onclick = () => { $("input").value = text; fitInput(); $("input").focus(); }; }
   $("chat").appendChild(div); $("chat").scrollTop = $("chat").scrollHeight;
+  if (!role.includes("wait")) log.push({ role, text });
+  document.body.classList.add("talking");
+  follow(div, role === "bot");
   return div;
+}
+function follow(div, fromTop) {  // phone: the newest message stays in view above the input; a long reply is shown from its first line
+  if (!window.matchMedia("(max-width:900px)").matches) return;
+  const room = window.innerHeight - $("form").offsetHeight - 16;
+  div.scrollIntoView({ block: fromTop || div.offsetHeight > room ? "start" : "nearest" });
+}
+
+// ------------------------------------------------------------ the conversation survives a reload of this tab (nothing leaves the browser)
+const SNAP = "ws-conversation";
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";  // the restored conversation decides where the view goes
+function keep() {
+  const snap = { v: APP_VERSION, code, lang, state, log, last, trace };
+  try { sessionStorage.setItem(SNAP, JSON.stringify(snap)); }
+  catch (_) {  // too large: keep the conversation without the figures
+    try { sessionStorage.setItem(SNAP, JSON.stringify({ ...snap, last: last && { ...last, results: null }, trace: null })); } catch (__) {}
+  }
+}
+function forget() { log = []; last = null; try { sessionStorage.removeItem(SNAP); } catch (_) {} }
+function restore() {
+  let snap = null;
+  try { snap = JSON.parse(sessionStorage.getItem(SNAP) || "null"); } catch (_) { snap = null; }
+  if (!snap || snap.v !== APP_VERSION || !snap.state || !(snap.log || []).length) return false;
+  lang = snap.lang; code = snap.code;
+  for (const [id, v] of [["lang", lang], ["code", code]])
+    document.querySelectorAll(`#${id} button`).forEach((x) => x.classList.toggle("on", x.dataset.v === v));
+  applyLanguage();
+  trace = snap.trace || null; $("trace-btn").disabled = !trace;
+  for (const m of snap.log) say(m.role, m.text);
+  if (snap.last) render({ ...snap.last, reply: null });
+  state = snap.state; keep();
+  follow($("chat").lastElementChild, true);
+  if (document.fonts) document.fonts.ready.then(() => follow($("chat").lastElementChild, true));  // the text reflows once the font is in
+  return true;
 }
 
 // ------------------------------------------------------------ charts (plain SVG, sober palette)
+const chartWidth = () => (window.matchMedia("(max-width:900px)").matches ? 420 : 640);
 const INK = "#1c2836", MID = "#5f6b7a", LIGHT = "#b8c2cf", NAVY = "#1f3a5f", BLUE = "#3b7dd8", TEAL = "#2a9d8f", ORANGE = "#e07b3f";
 function axes(w, h, pad, ymax, yticks, xlabels) {
   let g = `<line x1="${pad.l}" y1="${h - pad.b}" x2="${w - pad.r}" y2="${h - pad.b}" stroke="${LIGHT}"/>`;
@@ -115,18 +153,18 @@ function axes(w, h, pad, ymax, yticks, xlabels) {
 }
 function niceTicks(max) { if (!(max > 0) || !isFinite(max)) return [0]; const step = Math.pow(10, Math.floor(Math.log10(max))) * (max / Math.pow(10, Math.floor(Math.log10(max))) > 5 ? 2 : 1); const t = []; for (let v = 0; v <= max; v += step) t.push(+v.toFixed(6)); return t; }
 function lineBand(series) {
-  const w = 640, h = 230, pad = { l: 48, r: 10, t: 8, b: 26 }, n = series.median.length;
+  const w = chartWidth(), h = 230, pad = { l: 48, r: 10, t: 8, b: 26 }, n = series.median.length;
   const ymax = Math.max(...series.p90.filter(Number.isFinite), 1) * 1.08, X = (i) => pad.l + (i / (n - 1)) * (w - pad.l - pad.r);
   const Y = (v) => h - pad.b - (v / ymax) * (h - pad.t - pad.b);
   const lower = series.p10.map((v, i) => [X(i), Y(v)]).reverse().map(([x, y]) => `${x},${y}`);
   const upper = series.p90.map((v, i) => `${X(i)},${Y(v)}`);
   const days = []; series.t.forEach((t, i) => { if (t.endsWith("00:00:00") && i % 24 === 0) days.push([X(i), t.slice(5, 10)]); });
-  return `<svg viewBox="0 0 ${w} ${h}">${axes(w, h, pad, ymax, niceTicks(ymax), days.filter((_, k) => k % Math.ceil(days.length / 8) === 0))}` +
+  return `<svg viewBox="0 0 ${w} ${h}">${axes(w, h, pad, ymax, niceTicks(ymax), days.filter((_, k) => k % Math.ceil(days.length / (PHONE() ? 4 : 8)) === 0))}` +
     `<polygon points="${upper.concat(lower).join(" ")}" fill="rgba(59,125,216,0.16)"/>` +
     `<polyline points="${series.median.map((v, i) => `${X(i)},${Y(v)}`).join(" ")}" fill="none" stroke="${NAVY}" stroke-width="1.4"/></svg>`;
 }
 function stacked(hourly, names) {
-  const w = 640, h = 230, pad = { l: 48, r: 10, t: 8, b: 26 }, cols = ["lighting_kw", "ventilation_kw", "auxiliary_kw"], colours = [BLUE, TEAL, ORANGE];
+  const w = chartWidth(), h = 230, pad = { l: 48, r: 10, t: 8, b: 26 }, cols = ["lighting_kw", "ventilation_kw", "auxiliary_kw"], colours = [BLUE, TEAL, ORANGE];
   const tot = hourly.hour.map((_, i) => cols.reduce((s, c) => s + (hourly[c][i] || 0), 0)), ymax = Math.max(...tot, 1) * 1.1;
   const bw = (w - pad.l - pad.r) / hourly.hour.length;
   let bars = "";
@@ -139,7 +177,7 @@ function stacked(hourly, names) {
     `<div class="legend">${names.map((n, k) => `<i style="background:${colours[k]}"></i>${esc(n)}`).join("")}</div>`;
 }
 function bars(values, labels, unit, horizontal = false) {
-  const w = 640, colours = [LIGHT, TEAL, ORANGE];
+  const w = chartWidth(), colours = [LIGHT, TEAL, ORANGE];
   if (horizontal) {
     const h = 30 + 34 * values.length; let g = "";
     values.forEach((v, i) => { const ok = Number.isFinite(v), bw = ok ? (v / 100) * (w - 230) : 0; g += `<text x="0" y="${28 + i * 34}" font-size="12" fill="${INK}">${esc(labels[i])}</text><rect x="190" y="${14 + i * 34}" width="${bw}" height="20" fill="${[TEAL, ORANGE][i]}"/><text x="${196 + bw}" y="${28 + i * 34}" font-size="12" fill="${INK}">${ok ? v.toFixed(0) + " " + unit : "—"}</text>`; });
@@ -162,7 +200,7 @@ function table(tbl) {
 }
 function grouped(chart) {
   // grouped bars from a zero line (values may be negative: differences in %), with an optional reference line
-  const w = 640, h = 260, pad = { l: 48, r: 10, t: 22, b: 40 }, cats = chart.categories, series = chart.series;
+  const w = chartWidth(), h = 260, pad = { l: 48, r: 10, t: 22, b: 40 }, cats = chart.categories, series = chart.series;
   const all = series.flatMap((s) => s.values).concat(chart.line ? [chart.line.value] : []).filter(Number.isFinite);
   const hi = Math.max(...all, 0), lo = Math.min(...all, 0), span = (hi - lo) || 1;
   // doses per session lie close together: the axis is zoomed around them (ticks shown), not started at 0
@@ -202,14 +240,15 @@ function grouped(chart) {
 // ------------------------------------------------------------ rendering
 function render(out) {
   const t = T[lang];
-  state = out.state;
+  state = out.state; last = { ...out, reply: null };
   if (out.reply) say("bot", out.reply);
   $("decision").hidden = false; $("decision").className = "decision " + out.decision;
   $("decision").innerHTML = `<span class="code">${esc(out.decision)}</span>${esc(t.decision[out.decision])}`;
   $("vars").innerHTML = `<caption>${esc(t.varsNote)} ${openApp()}</caption>` + "<tr>" + [t.vars[0], t.vars[1], t.vars[3], t.vars[4]].map((h) => `<th>${esc(h)}</th>`).join("") + "</tr>" +
     out.variables.map((r) => "<tr>" + [r[0], r[1], r[3], r[4]].map((c) => `<td>${esc(c ?? "")}</td>`).join("") + "</tr>").join("");
   clearResults(false);
-  if (!out.results) return;  // never leave the figures of an earlier scenario next to new parameters
+  const reply = $("chat").lastElementChild;
+  if (!out.results) { keep(); if (out.reply) follow(reply, true); return; }  // never leave the figures of an earlier scenario next to new parameters
   const r = out.results, labels = r.kpi_labels || t.kpis[r.kind];
   $("kpis").innerHTML = r.kpis.map((v, i) => `<div class="kpi"><b>${esc(v)}</b><small>${esc(labels[i])}</small></div>`).join("");
   if (r.kind === "tls") {
@@ -239,8 +278,8 @@ function render(out) {
     return `<a download="${esc(name)}" href="${url}">${esc(name)}</a>`;
   }).join("") + `<p class="open">${openApp()}</p>`;
   showTab("results");
-  // on a phone the results sit below the chat: bring them into view
-  if (window.matchMedia("(max-width:900px)").matches) $("decision").scrollIntoView({ behavior: "smooth", block: "start" });
+  keep();
+  if (out.reply) follow(reply, true);  // on a phone: the reply from its first line, the results just below it
 }
 
 function clearResults(all = true) {
@@ -261,7 +300,7 @@ function applyLanguage() {
   $("about").innerHTML = t.about; $("mic").title = t.voice;
   $("footer").innerHTML = `${esc(t.foot)} · <a href="https://github.com/cyrilvoyant/websemantic" target="_blank" rel="noopener">GitHub</a> · <a href="https://doi.org/10.5281/zenodo.23238902" target="_blank" rel="noopener">DOI</a> · <a href="https://pypi.org/project/websemantic/" target="_blank" rel="noopener">PyPI</a> · MIT · app ${APP_VERSION}`;
   $("more-examples").textContent = t.more;
-  renderExamples();
+  renderExamples(); dock();
   status(pyReady ? t.ready : t.loading);
 }
 
@@ -283,7 +322,7 @@ function renderExamples() {
     if (t.tags[ex.kind]) { const tag = document.createElement("span"); tag.className = "tag"; tag.textContent = t.tags[ex.kind]; b.appendChild(tag); }
     b.onclick = async () => {  // an example is a complete case: it starts a new conversation
       if (state && $("chat").children.length) await newConversation();
-      $("input").value = text; $("input").focus();
+      $("input").value = text; fitInput(); $("input").focus();
     };
     $("examples").appendChild(b);
   }
@@ -291,7 +330,7 @@ function renderExamples() {
 
 async function newConversation() {
   conversation++; busy = false; trace = null; $("trace-btn").disabled = true; $("input").value = "";  // replies of an earlier conversation are ignored
-  $("chat").innerHTML = ""; clearResults(); state = null;
+  $("chat").innerHTML = ""; clearResults(); state = null; forget(); document.body.classList.remove("talking");
   try { state = JSON.parse(await py("api_fresh", code, lang)); } catch (e) { status(T[lang].failed + e); }
 }
 
@@ -343,11 +382,21 @@ function downloadTrace() {
 }
 
 // ------------------------------------------------------------ conversation
+const PHONE = () => window.matchMedia("(max-width:900px)").matches;
+function fitInput() {  // the input grows with its text (up to a third of a phone screen, by CSS)
+  const box = $("input"); box.style.height = "auto"; box.style.height = box.scrollHeight + 2 + "px";
+  dock();
+}
+function dock() {  // height of the fixed input block on a phone, for the page padding and the scrolling
+  document.documentElement.style.setProperty("--dock", $("form").offsetHeight + "px");
+}
+
 async function send(message) {
   message = message.trim();
   if (!message || busy) return;
+  if (PHONE()) $("input").blur();  // close the keyboard before the page scrolls (iPhone: keeps the input tappable)
   const mine = conversation, m = code, l = lang;
-  busy = true; $("input").value = "";
+  busy = true; $("input").value = ""; fitInput();
   say("user", message);
   const wait = say("bot wait", pyReady ? T[l].thinking : T[l].loading);
   try {
@@ -376,13 +425,16 @@ async function send(message) {
     wait.remove(); render(out);
   } catch (e) {
     if (mine === conversation) { wait.remove(); say("bot", T[l].failed + e); }
-  } finally { if (mine === conversation) busy = false; }
+  } finally {
+    if (mine === conversation) busy = false;
+    if (!PHONE()) $("input").focus({ preventScroll: true });
+  }
 }
 
 async function example() {
   if (busy) return;
   conversation++; const mine = conversation, m = code, l = lang;
-  busy = true; $("chat").innerHTML = ""; clearResults();
+  busy = true; $("chat").innerHTML = ""; clearResults(); forget();
   const wait = say("bot wait", pyReady ? T[l].computing : T[l].loading);
   try {
     const out = JSON.parse(await py("api_example", m, l));
@@ -416,6 +468,16 @@ if (SR) {
 
 // ------------------------------------------------------------ wiring
 $("form").onsubmit = (e) => { e.preventDefault(); send($("input").value); };
+$("input").oninput = fitInput;
+if (window.ResizeObserver) new ResizeObserver(dock).observe($("form"), { box: "border-box" });
+window.addEventListener("resize", dock); dock();
+if (window.visualViewport) {
+  const kb = () => {  // keyboard height left uncovered by the browser (0 where the page is resized, Android Chrome)
+    const v = window.visualViewport, h = Math.max(0, window.innerHeight - v.height - v.offsetTop);
+    document.documentElement.style.setProperty("--kb", (h > 40 ? h : 0) + "px");
+  };
+  window.visualViewport.addEventListener("resize", kb); window.visualViewport.addEventListener("scroll", kb);
+}
 $("input").onkeydown = (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send($("input").value); } };
 $("example-btn").onclick = example;
 $("more-examples").onclick = () => { exampleOffset += 3; renderExamples(); };
@@ -424,10 +486,9 @@ $("trace-btn").onclick = downloadTrace;
 document.querySelectorAll("#jump button").forEach((b) => {
   b.onclick = () => {  // phone: go to the conversation, or show a tab and scroll to it
     document.querySelectorAll("#jump button").forEach((x) => x.classList.toggle("on", x === b));
-    if (b.dataset.go === "chat") { $("chat").scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+    if (b.dataset.go === "chat") { follow($("chat").lastElementChild || $("chat"), true); return; }
     showTab(b.dataset.go);
-    $("decision").hidden ? $("tab-results").scrollIntoView({ behavior: "smooth", block: "start" })
-                         : $("decision").scrollIntoView({ behavior: "smooth", block: "start" });
+    ($("decision").hidden ? $("tab-results") : $("decision")).scrollIntoView({ block: "start" });
   };
 });
 document.querySelectorAll(".tabs button").forEach((b) => { b.onclick = () => showTab(b.dataset.tab); });
@@ -442,5 +503,4 @@ for (const [id, setter] of [["lang", (v) => { lang = v; }], ["code", (v) => { co
 if ((navigator.language || "").toLowerCase().startsWith("fr")) {
   lang = "fr"; document.querySelectorAll("#lang button").forEach((x) => x.classList.toggle("on", x.dataset.v === "fr"));
 }
-applyLanguage();
-newConversation();
+if (!restore()) { applyLanguage(); newConversation(); }

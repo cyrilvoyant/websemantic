@@ -2,12 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="theme-color" content="#1f3a5f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <title>WebSemantic</title>
   <meta name="description" content="Talk to scientific codes that ask before they compute: road-tunnel electricity demand and radiotherapy dose equivalence, in English or French.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=0.3.10">
+  <link rel="stylesheet" href="style.css?v=0.3.13">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
 </head>
 <body>
@@ -35,7 +38,8 @@
     <section class="left">
       <div id="chat" class="chat" aria-live="polite"></div>
       <form id="form" class="composer">
-        <textarea id="input" rows="2"></textarea>
+        <nav id="jump" class="jump" aria-label="Sections"><button type="button" data-go="chat"></button><button type="button" data-go="results"></button><button type="button" data-go="variables"></button><button type="button" data-go="about"></button></nav>
+        <textarea id="input" rows="3"></textarea>
         <button type="button" id="mic" class="icon" title="Voice" aria-label="Voice" hidden><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><line x1="12" y1="18" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/></svg></button>
         <button type="submit" id="send" class="primary">→</button>
       </form>
@@ -68,8 +72,7 @@
     </section>
   </main>
 
-  <nav id="jump" class="jump" aria-label="Sections"><button data-go="chat"></button><button data-go="results"></button><button data-go="variables"></button><button data-go="about"></button></nav>
   <footer id="footer" class="foot"></footer>
-  <script src="app.js?v=0.3.10"></script>
+  <script src="app.js?v=0.3.13"></script>
 </body>
 </html>

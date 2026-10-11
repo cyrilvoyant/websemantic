@@ -469,10 +469,17 @@ def test_resumption_asks_when_the_sessions_given_are_ambiguous():
     out, state = yes(state)
     assert "14 séances déjà faites" in out["reply"] and out["decision"] == "clarify"
     out, state = turn("lql", state, "14", reading(LQL_TASK))
+    assert "Noté : 14 séances déjà faites" in out["reply"] and "aucune valeur" not in out["reply"]
     out, state = yes(state)
     r = out["results"]
     assert out["decision"] == "execute" and state["lql"]["remaining"] == 21
     assert "21 séances restantes" in out["reply"] and "dose maximale" in out["reply"]
+
+
+def test_a_stop_after_the_nth_session_gives_the_sessions_done():
+    msg = "Prostate, 20 séances de 3 Gy, arrêt de 10 jours après la 8e séance. Quelle dose par séance pour la reprise ? rectum"
+    out, state = lql_case(msg, SITE, RECTUM)
+    assert state["lql"]["mode"] == "resume" and state["lql"]["done"] == 8 and "ambiguous_done" not in state["lql"]
 
 
 def test_maximum_dose_reports_the_limiting_organ():

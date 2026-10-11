@@ -15,6 +15,13 @@ the concept DOI [10.5281/zenodo.23238902](https://doi.org/10.5281/zenodo.2323890
   - French and common names of the LQL organs and tumour sites (`skos:altLabel`);
   - anatomical groups used by the app.
 - **Descriptors:** English expressions for the qualitative conventions (values unchanged).
+- **Phone (app 0.3.13):**
+  - input and section bar fixed at the bottom, above the keyboard;
+  - the view follows the newest message, with the results below it;
+  - no pull-to-refresh;
+  - the conversation survives a reload of the tab (kept in the browser only);
+  - wide tables scroll inside their frame;
+  - installable (manifest, icons).
 - **Paper.** The paper refers to version 0.2.6 and to the frozen experiments; this line evolves separately.
 
 ## 0.2.6 — 2026-10-10
