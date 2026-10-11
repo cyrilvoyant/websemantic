@@ -1,6 +1,6 @@
 // WebSemantic web app: chat on the left, qualified results on the right. Python runs in a background worker.
 "use strict";
-const APP_VERSION = "0.3.15";  // also in index.html (cache busting) and the footer
+const APP_VERSION = "0.3.16";  // also in index.html (cache busting) and the footer
 
 const params = new URLSearchParams(location.search);
 const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
@@ -244,7 +244,11 @@ function render(out) {
   state = out.state; last = { ...out, reply: null };
   if (out.reply) say("bot", out.reply);
   $("decision").hidden = false; $("decision").className = "decision " + out.decision;
-  $("decision").innerHTML = `<span class="code">${esc(out.decision)}</span>${esc(t.decision[out.decision])}`;
+  const pin = (out.results && out.results.qualification && out.results.qualification.software) || null;
+  const base = pin && pin.version ? pin.version.split("+")[0] : "";
+  const frozen = out.decision === "execute" && pin  // the pinned version that computed, e.g. LQL-Equiv v3.0.0 (commit dfc9a33)
+    ? ` : ${pin.name}${base ? " " + (base.startsWith("v") ? base : "v" + base) : ""}${pin.commit ? ` (commit ${pin.commit.slice(0, 7)})` : ""}` : "";
+  $("decision").innerHTML = `<span class="code">${esc(out.decision)}</span>${esc(t.decision[out.decision] + frozen)}`;
   $("vars").innerHTML = `<caption>${esc(t.varsNote)} ${openApp()}</caption>` + "<tr>" + [t.vars[0], t.vars[1], t.vars[3], t.vars[4]].map((h) => `<th>${esc(h)}</th>`).join("") + "</tr>" +
     out.variables.map((r) => "<tr>" + [r[0], r[1], r[3], r[4]].map((c) => `<td>${esc(c ?? "")}</td>`).join("") + "</tr>").join("");
   clearResults(false);
