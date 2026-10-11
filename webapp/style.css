@@ -88,6 +88,7 @@ caption{caption-side:top;text-align:left;font-size:12.5px;color:var(--mid);paddi
 .app-link:hover{background:var(--navy);color:#fff}
 .files .open{margin:10px 0 0}
 details summary{cursor:pointer;color:var(--navy);font-weight:500;margin-bottom:4px}
+.jump{display:none}
 .foot{max-width:1360px;margin:0 auto;padding:10px 20px 18px;text-align:center;color:#8c96a3;font-size:12px}
 .foot a{color:#8c96a3}
 @media (max-width:900px){
@@ -105,7 +106,12 @@ details summary{cursor:pointer;color:var(--navy);font-weight:500;margin-bottom:4
   .chat{height:auto;min-height:120px;overflow:visible}
   .kpis{grid-template-columns:1fr 1fr}
   /* phone: the input stays at the bottom of the screen, always reachable; larger touch targets */
-  body{padding-bottom:84px}
+  body{padding-bottom:128px}
+  /* phone: a bar of sections just above the input, always reachable */
+  .jump{display:flex;position:fixed;left:0;right:0;bottom:calc(64px + env(safe-area-inset-bottom));z-index:21;
+    background:var(--bg);border-top:1px solid var(--line)}
+  .jump button{flex:1;border:0;background:none;padding:10px 4px;font-size:13px;color:var(--navy)}
+  .jump button.on{font-weight:600;border-top:2px solid var(--navy)}
   .composer{position:fixed;left:0;right:0;bottom:0;z-index:20;margin:0;padding:8px 12px calc(8px + env(safe-area-inset-bottom));
     background:var(--bg);border-top:1px solid var(--line)}
   .composer textarea{font-size:16px;min-height:48px}

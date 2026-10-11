@@ -1,6 +1,6 @@
 // WebSemantic web app: chat on the left, qualified results on the right. Python runs in a background worker.
 "use strict";
-const APP_VERSION = "0.3.9";  // also in index.html (cache busting) and the footer
+const APP_VERSION = "0.3.10";  // also in index.html (cache busting) and the footer
 
 const params = new URLSearchParams(location.search);
 const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
@@ -13,7 +13,7 @@ const T = {
     intro: "Describe your case. The code asks for what is missing and computes only what you accept.",
     codes: { tls: "Road tunnel energy", lql: "Radiotherapy dose" },
     placeholder: { tls: "Describe your case… e.g. a long tunnel with a lot of traffic", lql: "Describe your case… e.g. 20 sessions of 3 Gy, prostate, rectum as organ at risk" },
-    allCases: "All cases", details: "Technical details (versions, checks, options)", varsNote: "To work in the original application, open it and enter these values:", openApp: { lql: "Open the original LQL-Equiv", tls: "Open the original TLS (code and app)" }, traceBtn: "Download the trace", reuse: "Tap to edit this message again", examples: "Examples", more: "Other examples ↻", tags: { refuse: "refusal example", ask: "the code will ask" }, exampleBtn: "Example without language model", resetBtn: "New conversation",
+    allCases: "All cases", details: "Technical details (versions, checks, options)", varsNote: "To work in the original application, open it and enter these values:", openApp: { lql: "Open the original LQL-Equiv", tls: "Open the original TLS (code and app)" }, traceBtn: "Download the trace", jump: { chat: "Chat", results: "Results", variables: "Variables", about: "About" }, reuse: "Tap to edit this message again", examples: "Examples", more: "Other examples ↻", tags: { refuse: "refusal example", ask: "the code will ask" }, exampleBtn: "Example without language model", resetBtn: "New conversation",
     tabs: { results: "Results", about: "About" },
     loading: "Loading the scientific codes in your browser (about 15 s on the first visit)…",
     timeout: "The calculation took too long in this browser; nothing is shown.",
@@ -39,7 +39,7 @@ const T = {
     intro: "Décrivez votre cas. Le code demande ce qui manque et ne calcule que ce que vous acceptez.",
     codes: { tls: "Énergie d'un tunnel", lql: "Dose en radiothérapie" },
     placeholder: { tls: "Décrivez votre cas… par ex. un tunnel long avec beaucoup de trafic", lql: "Décrivez votre cas… par ex. 20 séances de 3 Gy, prostate, rectum comme organe à risque" },
-    allCases: "Tous les cas", details: "Détails techniques (versions, vérifications, options)", varsNote: "Pour travailler dans l'application d'origine, ouvrez-la et saisissez ces valeurs :", openApp: { lql: "Ouvrir LQL-Equiv (application d'origine)", tls: "Ouvrir TLS d'origine (code et application)" }, traceBtn: "Télécharger la trace", reuse: "Touchez pour reprendre ce message", examples: "Exemples", more: "Autres exemples ↻", tags: { refuse: "exemple de refus", ask: "le code demandera" }, exampleBtn: "Exemple sans modèle de langage", resetBtn: "Nouvelle conversation",
+    allCases: "Tous les cas", details: "Détails techniques (versions, vérifications, options)", varsNote: "Pour travailler dans l'application d'origine, ouvrez-la et saisissez ces valeurs :", openApp: { lql: "Ouvrir LQL-Equiv (application d'origine)", tls: "Ouvrir TLS d'origine (code et application)" }, traceBtn: "Télécharger la trace", jump: { chat: "Conversation", results: "Résultats", variables: "Variables", about: "À propos" }, reuse: "Touchez pour reprendre ce message", examples: "Exemples", more: "Autres exemples ↻", tags: { refuse: "exemple de refus", ask: "le code demandera" }, exampleBtn: "Exemple sans modèle de langage", resetBtn: "Nouvelle conversation",
     tabs: { results: "Résultats", about: "À propos" },
     loading: "Chargement des codes scientifiques dans votre navigateur (environ 15 s à la première visite)…",
     timeout: "Le calcul a pris trop de temps dans ce navigateur ; rien n'est affiché.",
@@ -255,6 +255,7 @@ function applyLanguage() {
   $("tagline").textContent = t.tagline; $("intro").textContent = t.intro;
   document.querySelectorAll("#code button").forEach((b) => { b.textContent = t.codes[b.dataset.v]; });
   $("input").placeholder = t.placeholder[code]; $("examples-label").textContent = t.examples;
+  document.querySelectorAll("#jump button").forEach((b) => { b.textContent = t.jump[b.dataset.go]; });
   $("example-btn").textContent = t.exampleBtn; $("reset-btn").textContent = t.resetBtn; $("trace-btn").textContent = t.traceBtn;
   $("tab-results").textContent = t.tabs.results; $("tab-about").textContent = t.tabs.about;
   $("about").innerHTML = t.about; $("mic").title = t.voice;
@@ -420,6 +421,15 @@ $("example-btn").onclick = example;
 $("more-examples").onclick = () => { exampleOffset += 3; renderExamples(); };
 $("reset-btn").onclick = newConversation;
 $("trace-btn").onclick = downloadTrace;
+document.querySelectorAll("#jump button").forEach((b) => {
+  b.onclick = () => {  // phone: go to the conversation, or show a tab and scroll to it
+    document.querySelectorAll("#jump button").forEach((x) => x.classList.toggle("on", x === b));
+    if (b.dataset.go === "chat") { $("chat").scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+    showTab(b.dataset.go);
+    $("decision").hidden ? $("tab-results").scrollIntoView({ behavior: "smooth", block: "start" })
+                         : $("decision").scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+});
 document.querySelectorAll(".tabs button").forEach((b) => { b.onclick = () => showTab(b.dataset.tab); });
 for (const [id, setter] of [["lang", (v) => { lang = v; }], ["code", (v) => { code = v; }]]) {
   document.querySelectorAll(`#${id} button`).forEach((b) => {
