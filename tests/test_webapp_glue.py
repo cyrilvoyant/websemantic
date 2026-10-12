@@ -630,17 +630,18 @@ def test_every_lql_computation_is_checked_by_the_ontology_shapes():
 def test_maximum_dose_states_the_declared_tolerance_on_codex_counterexample():
     # Codex 12/10: 39 x 2 Gy reference, prostate, rectum, 20 sessions -> 3.08 Gy gives a rectal EQD2 of 78.26 Gy for 78 Gy
     r = glue.wb.maximum_dose(glue.WS, glue.DESC["lql"], "Prostate", ["Rectum"], glue.wb.Schedule(2.0, 39, 0.0), 20)
-    assert r["maximum_dose"] == 3.08 and r["limiting_organ"] == "Rectum" and r["within_tolerance"] is True
+    assert r["maximum_dose"] == 3.08 and r["limiting_organ"] == "Rectum" and r["established"] is True
     assert 0 < r["limiting_difference_gy"] <= glue.wb.TOLERANCE_GY and r["undetermined_organs"] == []
+    assert r["next_dose"] == 3.09 and r["next_exceeds"] is True  # maximal on the grid under the ceiling
     msg = "dose maximale en 20 séances sans dépasser l'équivalent de 39 × 2 Gy pour la prostate, rectum"
     out, state = lql_case(msg, SITE, RECTUM)
     out, state = yes(state)
-    assert "78,26 Gy pour 78,00 Gy" in out["reply"] and "±0,5 Gy" in out["reply"]
+    assert "EQD2 78,26 Gy pour 78,00 Gy" in out["reply"] and "0,5 Gy" in out["reply"] and "chaque organe vérifié" in out["reply"]
 
 
 def test_resumption_rows_carry_the_tolerance_check():
     r = glue.wb.resumption(glue.WS, glue.DESC["lql"], "Prostate", ["Rectum"], glue.wb.Schedule(3.0, 20, 0.0), 8, 10.0, 12)
-    assert all(row["within_tolerance"] and abs(row["limiting_difference_gy"]) <= 0.5 for row in r["equivalent"])
+    assert all(row["established"] and all(v["within"] for v in row["organs_at_maximum"].values()) for row in r["equivalent"])
 
 
 def test_no_lql_computation_when_the_ontology_rules_are_unavailable(monkeypatch):
@@ -658,3 +659,20 @@ def test_minimum_names_the_examined_counts_and_the_tumour_gap():
     r = glue.wb.minimum_organ_dose(glue.WS, glue.DESC["lql"], "Prostate", ["Rectum"], glue.wb.Schedule(2.0, 39, 0.0))
     assert r["best_sessions"] in r["examined_sessions"] and 0 <= r["best_tumour_difference_gy"] < 0.05
     assert r["not_comparable_sessions"] == []
+
+
+def test_maximum_is_the_last_admissible_grid_dose_for_every_organ():
+    # Codex 0.3.17 review: 39 x 2 Gy, prostate, rectum, 5 sessions; 7.26 Gy keeps the rectum under 78.5 Gy
+    r = glue.wb.maximum_dose(glue.WS, glue.DESC["lql"], "Prostate", ["Rectum", "Bladder"], glue.wb.Schedule(2.0, 39, 0.0), 5)
+    assert r["maximum_dose"] >= 7.26 and r["next_exceeds"] is True
+    assert all(v["within"] and v["eqd2"] <= v["reference_eqd2"] + 0.5 for v in r["organs_at_maximum"].values())
+
+
+def test_no_global_maximum_while_an_organ_has_no_value():
+    from websemantic.lql_interruption import _admissible
+    a = _admissible({"A": lambda d: 26.0 * d, "B": lambda d: None}, {"A": 78.0, "B": 70.0}, 0.5, 10.0)
+    assert a["dose_per_session"] is None and a["undetermined_organs"] == ["B"]
+    a = _admissible({"A": lambda d: 26.0 * d, "B": lambda d: 20.0 * d}, {"A": 78.0, "B": None}, 0.5, 10.0)
+    assert a["dose_per_session"] is None and a["undetermined_organs"] == ["B"]
+    a = _admissible({"A": lambda d: 26.0 * d, "B": lambda d: 20.0 * d}, {"A": 78.0, "B": 70.0}, 0.5, 10.0)
+    assert a["dose_per_session"] == 3.01 and a["limiting_organ"] == "A" and a["next_exceeds"] is True

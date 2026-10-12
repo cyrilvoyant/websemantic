@@ -123,10 +123,54 @@ def _iso_dose(effect, target, top):
     return hi, final
 
 
-def resume(situation, workspace, descriptor, counts=None):
+def _admissible(effects, references, tolerance, top):
+    """Highest dose per session on the 0.01 Gy grid (<= top) for which every organ's LQL-Equiv EQD2 is valid and at most
+    its reference EQD2 + tolerance. Each organ's ceiling is the grid point just below the first dose that exceeds it;
+    the smallest ceiling is then checked for every organ, and the next grid dose is checked for the limiting organ
+    (maximality on the grid). No dose is returned while an organ has no value."""
+    top = _grid(math.floor(top / RESOLUTION_GY + 1e-9) * RESOLUTION_GY)
+    ceilings, undetermined = {}, []
+    for o, effect in effects.items():
+        if references[o] is None:
+            undetermined.append(o)
+            continue
+        limit = references[o] + tolerance
+        first, _ = _iso_dose(effect, limit + 1e-9, top)  # first grid dose beyond the ceiling
+        candidate = top if first is None else _grid(first - RESOLUTION_GY)
+        value = effect(candidate) if candidate > 0 else None
+        if value is None or value > limit:
+            undetermined.append(o)
+        else:
+            ceilings[o] = candidate
+    out = {"tolerance_gy": tolerance, "dose_per_session": None, "limiting_organ": None, "organs": {},
+           "undetermined_organs": sorted(undetermined), "next_dose": None, "next_exceeds": None, "at_search_bound": None}
+    if undetermined or not ceilings:
+        return out
+    limiting = min(ceilings, key=ceilings.get)
+    dose = ceilings[limiting]
+    organs = {}
+    for o, effect in effects.items():  # every organ at the retained dose
+        value = effect(dose)
+        organs[o] = {"eqd2": value, "reference_eqd2": references[o], "ceiling_eqd2": references[o] + tolerance,
+                     "difference_gy": None if value is None else value - references[o],
+                     "within": value is not None and value <= references[o] + tolerance}
+    if not all(v["within"] for v in organs.values()):
+        out.update(organs=organs, undetermined_organs=sorted(o for o, v in organs.items() if not v["within"]))
+        return out
+    following = _grid(dose + RESOLUTION_GY)
+    nxt = effects[limiting](following) if dose < top else None
+    out.update(dose_per_session=dose, limiting_organ=limiting, organs=organs, next_dose=following if dose < top else None,
+               next_exceeds=None if dose >= top else (nxt is None or nxt > references[limiting] + tolerance),
+               at_search_bound=dose >= top)
+    return out
+
+
+def resume(situation, workspace, descriptor, counts=None, tolerance_gy=None):
     """Biologically equivalent resumption, tissue by tissue. Returns plain data (JSON-ready).
 
     counts: numbers of remaining sessions to examine (default: every number from 1 to max_remaining).
+    tolerance_gy: when given, each row also has the highest admissible dose per session under the ceilings
+    reference EQD2 + tolerance for every organ (see _admissible).
     """
     s = situation
     check(s)
@@ -166,6 +210,9 @@ def resume(situation, workspace, descriptor, counts=None):
             row["organs"][o] = {"equivalent": entry(odose, oobt, plan_organs[o]), "eqd2_with_tumour_schedule": under,
                                 "difference_with_tumour_schedule_percent":
                                     None if under is None else round(100 * (under / plan_organs[o] - 1), 1)}
+        if tolerance_gy is not None:
+            row["admissible"] = _admissible({o: (lambda d, o=o, n=n: model.eqd2(o, schedule(d, n))[1]) for o in s.organs},
+                                            plan_organs, tolerance_gy, s.max_dose_per_session)
         rows.append(row)
 
     last = rows[-1]  # all the sessions still possible: the closest to the planned fractionation

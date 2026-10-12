@@ -99,25 +99,18 @@ def table(workspace, descriptor, tumour, organs, schedules, reference_dose=2.0):
 TOLERANCE_GY = 0.5  # declared by the author: the limiting organ may differ from its reference EQD2 by at most 0.5 Gy
 
 
-def _limit(organ_rows):
-    """Highest dose per session over all organs: the smallest organ-equivalent dose (first 0.01 Gy grid dose whose
-    LQL-Equiv EQD2 reaches the organ's reference EQD2). The limiting organ's obtained EQD2 may exceed its reference by
-    a few tenths of a gray; the result is kept only within the declared tolerance. Organs without a value (outside the
-    library's validity domain, or not reached within the search bound) are listed, never dropped silently."""
-    doses = {o: v["equivalent"]["dose_per_session"] for o, v in organ_rows.items()}
-    reachable = {o: d for o, d in doses.items() if d is not None}
-    out = {"tolerance_gy": TOLERANCE_GY, "undetermined_organs": sorted(o for o, d in doses.items() if d is None),
-           "maximum_dose": None, "limiting_organ": None, "limiting_target_eqd2": None, "limiting_obtained_eqd2": None,
-           "limiting_difference_gy": None, "within_tolerance": None}
-    if not reachable:
-        return out
-    limit = min(reachable, key=reachable.get)
-    entry = organ_rows[limit]["equivalent"]
-    within = abs(entry["difference_gy"]) <= TOLERANCE_GY + 1e-9
-    out.update(maximum_dose=reachable[limit] if within else None, limiting_organ=limit,
-               limiting_target_eqd2=entry["target_eqd2"], limiting_obtained_eqd2=entry["obtained_eqd2"],
-               limiting_difference_gy=entry["difference_gy"], within_tolerance=within)
-    return out
+def _limit(row):
+    """Highest dose per session on the 0.01 Gy grid that keeps every organ at or below its reference EQD2 + 0.5 Gy
+    (declared tolerance), every organ checked at that dose by LQL-Equiv (lql_interruption._admissible). No dose is
+    established while an organ has no value: those organs are listed, never dropped silently."""
+    a = row["admissible"]
+    lim = a["limiting_organ"]
+    at = a["organs"].get(lim) if lim else None
+    return {"tolerance_gy": a["tolerance_gy"], "maximum_dose": a["dose_per_session"], "limiting_organ": lim,
+            "established": a["dose_per_session"] is not None, "undetermined_organs": a["undetermined_organs"],
+            "limiting_target_eqd2": at and at["reference_eqd2"], "limiting_obtained_eqd2": at and at["eqd2"],
+            "limiting_difference_gy": at and at["difference_gy"], "organs_at_maximum": a["organs"],
+            "next_dose": a["next_dose"], "next_exceeds": a["next_exceeds"], "at_search_bound": a["at_search_bound"]}
 
 
 def maximum_dose(workspace, descriptor, tumour, organs, reference, sessions):
@@ -125,11 +118,11 @@ def maximum_dose(workspace, descriptor, tumour, organs, reference, sessions):
     with the reference schedule, within the declared tolerance (see _limit; each value computed by LQL-Equiv)."""
     reference.check()
     r = resume(Situation(tumour, tuple(organs), reference.dose, reference.sessions, 0, reference.gap_days, sessions),
-               workspace, descriptor, counts=[sessions])
+               workspace, descriptor, counts=[sessions], tolerance_gy=TOLERANCE_GY)
     row = r["equivalent"][0]
     doses = {o: v["equivalent"]["dose_per_session"] for o, v in row["organs"].items()}
     return {"reference": asdict(reference), "sessions": sessions, "organ_equivalent_doses": doses,
-            **_limit(row["organs"]), "tumour_equivalent_dose": row["tumour"]["dose_per_session"], "planned": r["planned"],
+            **_limit(row), "tumour_equivalent_dose": row["tumour"]["dose_per_session"], "planned": r["planned"],
             "rows": r["equivalent"], "options": r["options"], "scope": r["scope"]}
 
 
@@ -140,9 +133,9 @@ def resumption(workspace, descriptor, tumour, organs, planned, done, gap_days, r
     planned.check()
     counts = list(range(max(1, remaining - 2), remaining + 1))
     r = resume(Situation(tumour, tuple(organs), planned.dose, planned.sessions, done, gap_days, remaining),
-               workspace, descriptor, counts=counts)
+               workspace, descriptor, counts=counts, tolerance_gy=TOLERANCE_GY)
     for row in r["equivalent"]:
-        row.update(_limit(row["organs"]))
+        row.update(_limit(row))
     return r
 
 
