@@ -86,7 +86,7 @@ T = {
         "k_courses": "courses", "k_physical": "total physical dose (Gy)",
         "explain_sequence": "How to read: each column is one course, in order, with the interruption before it; the cells give its EQD2 contribution (it may be negative after a long interruption, because the model counts repopulation) and the last column the cumulated EQD2, TCP and NTCP computed by LQL-Equiv for the whole prescription.",
         "plan_minimum": "Same tumour effect as **{}** for several numbers of sessions, and the EQD2 it gives to the organs at risk {}.",
-        "answer_minimum": "Answer: for the same tumour effect as {ref}, the organs at risk are least exposed with **{n} sessions of {d} Gy** (most exposed organ: {w} % of its EQD2 with {ref}). Best number of sessions for each organ: {per}.",
+        "answer_minimum": "Answer: for the same tumour effect as {ref}, among the numbers of sessions examined, the organs at risk are least exposed with **{n} sessions of {d} Gy** (most exposed organ: {w} % of its EQD2 with {ref}; tumour target reached within {tg} Gy). Best number of sessions for each organ: {per}.",
         "chart_minimum": "Organs' EQD2 with the tumour-equivalent dose, relative to the reference schedule (%), by number of sessions",
         "k_best_sessions": "best number of sessions", "k_best_dose": "tumour-equivalent dose (Gy per session)",
         "k_worst_organ": "most exposed organ vs reference (%)", "k_cases": "numbers of sessions examined",
@@ -108,7 +108,7 @@ T = {
         "see_table": "see the table, schedule by schedule",
         "chart_eqd2": "EQD2 of each tissue (Gy)",
         "k_eqd_target": "tumour EQD2 (Gy)", "k_organs": "organs at risk", "k_schedules": "schedules",
-        "answer_resume": "Answer: to give back the planned tumour EQD2 ({eqd} Gy), the **{n} remaining sessions should be {d} Gy each**. Without compensation ({dp} Gy per session), the tumour loses {loss} %. To exceed no organ's planned EQD2, the highest dose per session is **{m} Gy** (limited by {lim}).",
+        "answer_resume": "Answer: to give back the planned tumour EQD2 ({eqd} Gy), the **{n} remaining sessions should be {d} Gy each**. Without compensation ({dp} Gy per session), the tumour loses {loss} %. To exceed no organ's planned EQD2, the highest dose per session is **{m} Gy** (limited by {lim}){tol}.",
         "col_planned_eqd2": "planned EQD2 (Gy)", "col_n_sessions": "{} sessions",
         "row_max": "highest dose, all organs",
         "chart_resume": "Equivalent dose per session for {} remaining sessions (Gy)",
@@ -116,7 +116,10 @@ T = {
         "line_max": "highest dose, all organs",
         "k_dose_resume": "tumour: Gy per session ({} sessions)", "k_max_dose": "highest dose, all organs (Gy)",
         "k_loss": "tumour loss without compensation (%)", "k_planned_eqd2": "planned tumour EQD2 (Gy)",
-        "answer_maximum": "Answer: over {n} sessions, the highest dose that exceeds, for no organ at risk, the EQD2 of {ref} is **{m} Gy per session** (limited by {lim}). For the tumour, the equivalent of {ref} would be {dt} Gy per session.",
+        "answer_maximum": "Answer: over {n} sessions, the highest dose that exceeds, for no organ at risk, the EQD2 of {ref} is **{m} Gy per session** (limited by {lim}{tol}). For the tumour, the equivalent of {ref} would be {dt} Gy per session.",
+        "tolerance": ", EQD2 {obt} Gy for {tgt} Gy, within the declared tolerance of ±0.5 Gy",
+        "undetermined": " No value for {}: outside the library's validity domain or not reached within the search bound.",
+        "beyond_tolerance": "not determined within ±0.5 Gy",
         "col_ref_eqd2": "EQD2 with {} (Gy)", "col_equiv_dose": "equivalent dose, {} sessions",
         "chart_maximum": "Equivalent dose per session over {} sessions (Gy)",
         "k_limiting": "limiting organ", "k_tumour_equiv": "tumour equivalent (Gy per session)", "k_sessions": "sessions",
@@ -141,6 +144,7 @@ T = {
                  "please reduce the period or the number of runs.",
         "failed_run": "The code refused this scenario: {}",
         "shacl_refused": "The ontology's rules (SHACL) reject this scenario, so nothing was computed: {}.",
+        "shacl_unavailable": "The ontology's rules (SHACL) could not be loaded in this browser, so nothing was computed. Reload the page and try again.",
         "example_done": "Example computed without the language model: every value is stated and accepted (see Variables).",
         "not_computable": "not computable",
         "status": ("stated by you", "accepted", "proposed, to accept"),
@@ -205,7 +209,7 @@ T = {
         "k_courses": "cures", "k_physical": "dose physique totale (Gy)",
         "explain_sequence": "Comment lire : chaque colonne est une cure, dans l'ordre, avec l'arrêt qui la précède ; les cases donnent sa contribution en EQD2 (elle peut être négative après un long arrêt, car le modèle compte la repopulation) et la dernière colonne l'EQD2 cumulée, le TCP et le NTCP calculés par LQL-Equiv pour toute la prescription.",
         "plan_minimum": "Même effet tumoral que **{}** pour plusieurs nombres de séances, et l'EQD2 qui en résulte pour les organes à risque {}.",
-        "answer_minimum": "Réponse : pour le même effet tumoral que {ref}, les organes à risque sont le moins exposés avec **{n} séances de {d} Gy** (organe le plus exposé : {w} % de son EQD2 avec {ref}). Meilleur nombre de séances pour chaque organe : {per}.",
+        "answer_minimum": "Réponse : pour le même effet tumoral que {ref}, parmi les nombres de séances examinés, les organes à risque sont le moins exposés avec **{n} séances de {d} Gy** (organe le plus exposé : {w} % de son EQD2 avec {ref} ; cible tumorale atteinte à {tg} Gy près). Meilleur nombre de séances pour chaque organe : {per}.",
         "chart_minimum": "EQD2 des organes avec la dose tumorale équivalente, par rapport au schéma de référence (%), selon le nombre de séances",
         "k_best_sessions": "meilleur nombre de séances", "k_best_dose": "dose équivalente tumeur (Gy par séance)",
         "k_worst_organ": "organe le plus exposé / référence (%)", "k_cases": "nombres de séances examinés",
@@ -227,7 +231,7 @@ T = {
         "see_table": "voir le tableau, schéma par schéma",
         "chart_eqd2": "EQD2 de chaque tissu (Gy)",
         "k_eqd_target": "EQD2 tumeur (Gy)", "k_organs": "organes à risque", "k_schedules": "schémas",
-        "answer_resume": "Réponse : pour retrouver l'EQD2 prévue de la tumeur ({eqd} Gy), les **{n} séances restantes doivent être de {d} Gy chacune**. Sans compensation ({dp} Gy par séance), la tumeur perd {loss} %. Pour ne dépasser l'EQD2 prévue d'aucun organe, la dose maximale par séance est **{m} Gy** (limitée par {lim}).",
+        "answer_resume": "Réponse : pour retrouver l'EQD2 prévue de la tumeur ({eqd} Gy), les **{n} séances restantes doivent être de {d} Gy chacune**. Sans compensation ({dp} Gy par séance), la tumeur perd {loss} %. Pour ne dépasser l'EQD2 prévue d'aucun organe, la dose maximale par séance est **{m} Gy** (limitée par {lim}){tol}.",
         "col_planned_eqd2": "EQD2 prévue (Gy)", "col_n_sessions": "{} séances",
         "row_max": "dose maximale, tous organes",
         "chart_resume": "Dose équivalente par séance pour {} séances restantes (Gy)",
@@ -235,7 +239,10 @@ T = {
         "line_max": "dose maximale, tous organes",
         "k_dose_resume": "tumeur : Gy par séance ({} séances)", "k_max_dose": "dose maximale, tous organes (Gy)",
         "k_loss": "perte tumeur sans compensation (%)", "k_planned_eqd2": "EQD2 tumeur prévue (Gy)",
-        "answer_maximum": "Réponse : en {n} séances, la dose maximale qui ne dépasse, pour aucun organe à risque, l'EQD2 de {ref} est **{m} Gy par séance** (limitée par {lim}). Pour la tumeur, l'équivalent de {ref} serait {dt} Gy par séance.",
+        "answer_maximum": "Réponse : en {n} séances, la dose maximale qui ne dépasse, pour aucun organe à risque, l'EQD2 de {ref} est **{m} Gy par séance** (limitée par {lim}{tol}). Pour la tumeur, l'équivalent de {ref} serait {dt} Gy par séance.",
+        "tolerance": ", EQD2 {obt} Gy pour {tgt} Gy, dans la tolérance déclarée de ±0,5 Gy",
+        "undetermined": " Pas de valeur pour {} : hors du domaine de validité de la bibliothèque ou non atteint dans la borne de recherche.",
+        "beyond_tolerance": "non déterminée à ±0,5 Gy près",
         "col_ref_eqd2": "EQD2 avec {} (Gy)", "col_equiv_dose": "dose équivalente, {} séances",
         "chart_maximum": "Dose équivalente par séance en {} séances (Gy)",
         "k_limiting": "organe limitant", "k_tumour_equiv": "équivalent tumeur (Gy par séance)", "k_sessions": "séances",
@@ -260,6 +267,7 @@ T = {
                  "points de temps : réduisez la période ou le nombre de tirages.",
         "failed_run": "Le code a refusé ce scénario : {}",
         "shacl_refused": "Les règles de l'ontologie (SHACL) refusent ce scénario, rien n'est calculé : {}.",
+        "shacl_unavailable": "Les règles de l'ontologie (SHACL) n'ont pas pu être chargées dans ce navigateur, rien n'est calculé. Rechargez la page et réessayez.",
         "example_done": "Exemple calculé sans modèle de langage : toutes les valeurs sont données et acceptées (voir Variables).",
         "not_computable": "non calculable",
         "status": ("donné par vous", "accepté", "proposé, à accepter"),
@@ -1301,6 +1309,19 @@ def course_chain(courses, lang):
     return t["then"].join(parts)
 
 
+def tolerance_text(r, lang):
+    """The limiting organ's obtained EQD2 against its reference (declared tolerance ±0.5 Gy), and organs without a value."""
+    t = T[lang]
+    tol = (t["tolerance"].format(obt=num(r["limiting_obtained_eqd2"], ".2f", lang), tgt=num(r["limiting_target_eqd2"], ".2f", lang))
+           if r.get("limiting_organ") and r.get("within_tolerance") else "")
+    und = t["undetermined"].format(", ".join(r["undetermined_organs"])) if r.get("undetermined_organs") else ""
+    return tol, und
+
+
+def max_text(r, lang):
+    return num(r["maximum_dose"], ".2f", lang) if r.get("within_tolerance") is not False else T[lang]["beyond_tolerance"]
+
+
 def lql_compute(state, lang):
     """Runs the chosen question with LQL-Equiv and builds a clear answer, a table of all cases and a chart."""
     t, L = T[lang], state.get("lql") or {}
@@ -1341,9 +1362,10 @@ def lql_compute(state, lang):
         last = rows[-1]
         n, d = last["sessions"], last["tumour"]["dose_per_session"]
         unc = r["uncompensated"]
+        tol, und = tolerance_text(last, lang)
         headline = t["answer_resume"].format(
             n=n, d=g(d, ".2f"), eqd=g(r["planned"]["tumour_eqd2"]), loss=g(abs(unc["tumour_difference_percent"] or 0)),
-            dp=g(planned.dose, "g"), m=g(last["maximum_dose"], ".2f"), lim=last["limiting_organ"] or "—")
+            dp=g(planned.dose, "g"), m=max_text(last, lang), lim=last["limiting_organ"] or "—", tol=tol) + und
         head = [t["col_tissue"], t["col_planned_eqd2"]] + [t["col_n_sessions"].format(x["sessions"]) for x in rows]
         table = [[f"{site} ({t['target']})", g(r["planned"]["tumour_eqd2"])] + [f"{g(x['tumour']['dose_per_session'], '.2f')} Gy"
                                                                               for x in rows]]
@@ -1388,7 +1410,8 @@ def lql_compute(state, lang):
         pct = lambda v: "—" if v is None else localise(f"{v:+.1f}", lang)  # noqa: E731
         per_organ = ", ".join(f"{o} → {r['per_organ'][o]}" for o in organs)
         headline = t["answer_minimum"].format(ref=schedule_label(asdict_s(ref), lang), n=r["best_sessions"],
-                                             d=g(r["best_dose"], ".2f"), w=pct(r["best_worst_percent"]), per=per_organ)
+                                             d=g(r["best_dose"], ".2f"), w=pct(r["best_worst_percent"]), per=per_organ,
+                                             tg=g(abs(r["best_tumour_difference_gy"] or 0), ".2f"))
         head = [t["col_tissue"]] + [t["col_n_sessions"].format(x["sessions"]) for x in rows]
         table = [[f"{site} ({t['target']})"] + [f"{g(x['tumour']['dose_per_session'], '.2f')} Gy" for x in rows]]
         table += [[o] + [f"{g(x['organs'][o]['eqd2_with_tumour_schedule'])} Gy ({pct(x['organs'][o]['difference_with_tumour_schedule_percent'])} %)"
@@ -1404,8 +1427,9 @@ def lql_compute(state, lang):
         ref = (wb.Schedule(float(ref_s["dose"]), int(ref_s["sessions"]), float(ref_s["gap_days"])) if ref_s else planned)
         r = wb.maximum_dose(WS, DESC["lql"], site, organs, ref, int(L["target"]))
         doses = r["organ_equivalent_doses"]
-        headline = t["answer_maximum"].format(n=r["sessions"], m=g(r["maximum_dose"], ".2f"), lim=r["limiting_organ"] or "—",
-                                             ref=schedule_label(asdict_s(ref), lang), dt=g(r["tumour_equivalent_dose"], ".2f"))
+        tol, und = tolerance_text(r, lang)
+        headline = t["answer_maximum"].format(n=r["sessions"], m=max_text(r, lang), lim=r["limiting_organ"] or "—", tol=tol,
+                                             ref=schedule_label(asdict_s(ref), lang), dt=g(r["tumour_equivalent_dose"], ".2f")) + und
         head = [t["col_tissue"], t["col_ref_eqd2"].format(schedule_label(asdict_s(ref), lang)),
                 t["col_equiv_dose"].format(r["sessions"])]
         table = [[f"{site} ({t['target']})", g(r["planned"]["tumour_eqd2"]), f"{g(r['tumour_equivalent_dose'], '.2f')} Gy"]]
@@ -1459,7 +1483,8 @@ def respond(model, lang, state, reply, results=None, decision=None):
 
 def lql_shacl(state):
     """The ontology's SHACL shapes on the LQL-Equiv scenario about to be computed: each course or compared schedule
-    (one group instance each), the tumour site, the organs at risk and the reference dose."""
+    (one group instance each), the tumour site, the organs at risk and the reference dose. For a resumption, a maximum
+    or a minimum, only the reference schedule and inputs are checked: the doses found by the search are not."""
     L, inp = state.get("lql") or {}, {n: r.get("value") for n, r in state["inputs"].items()}
     if L.get("mode") in ("compare", "sequence") and L.get("schedules"):
         courses = [dict(dose_per_fraction=float(s["dose"]), n_fractions=int(s["sessions"]), gap_days=float(s["gap_days"]))
@@ -1468,7 +1493,12 @@ def lql_shacl(state):
         courses = [dict(dose_per_fraction=float(inp["dose_per_fraction"]), n_fractions=int(inp["n_fractions"]),
                         gap_days=float(inp.get("gap_days") or 0))]
     ref = inp.get("reference_dose")
-    return check_lql(WS, courses, inp.get("tumour_site"), organs_of(state), None if ref is None else float(ref))
+    result = check_lql(WS, courses, inp.get("tumour_site"), organs_of(state), None if ref is None else float(ref))
+    searched = L.get("mode") in ("resume", "maximum", "minimum")
+    result["scope"] = ("reference schedule and inputs; doses found by the search not checked" if searched else
+                       "every schedule or course and the inputs")
+    result["scope_kind"] = "reference" if searched else "all"
+    return result
 
 
 def compute(model, lang, state):
@@ -1478,6 +1508,8 @@ def compute(model, lang, state):
     if shacl and shacl["status"] == "violation":
         return respond(model, lang, state, T[lang]["shacl_refused"].format("; ".join(shacl["messages"])),
                        decision="clarify")
+    if shacl and shacl["status"] != "conforms":  # rules not loaded: no LQL-Equiv computation without the check
+        return respond(model, lang, state, T[lang]["shacl_unavailable"], decision="clarify")
     try:
         mode = (state.get("lql") or {}).get("mode", "simulate")
         if model == "lql" and (mode != "simulate" or len(organs_of(state)) > 1):

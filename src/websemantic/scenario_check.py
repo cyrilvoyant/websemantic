@@ -13,7 +13,7 @@ import time
 from pathlib import Path
 
 CONCEPTS = {"dose_per_fraction": "LQL_dose_per_fraction", "n_fractions": "LQL_n_fractions",
-            "gap_days": "LQL_gap_days"}
+            "gap_days": "LQL_gap_days", "total_dose": "LQL_total_dose"}  # total_dose only when the user stated it
 _RULES = {}
 
 
@@ -73,7 +73,9 @@ def check_lql(workspace, courses, tumour_site=None, organs=(), reference_dose=No
     for result in report.subjects(sh.resultMessage, None):  # each message with the record it is about
         focus, text = report.value(result, sh.focusNode), str(report.value(result, sh.resultMessage))
         messages.add(f"{named[focus]}: {text}" if focus in named else text)
+    stated_totals = any(c.get("total_dose") is not None for c in courses)
     return {"status": "conforms" if conforms else "violation", "conforms": bool(conforms),
             "messages": sorted(messages), "records": len(rows),
+            "relations_not_evaluated": [] if stated_totals else ["total dose per course (no total dose stated)"],
             "shapes": "ontology/shapes.ttl", "shapes_sha256": digest, "engine": f"pyshacl {pyshacl.__version__}",
             "seconds": round(time.perf_counter() - start, 3)}

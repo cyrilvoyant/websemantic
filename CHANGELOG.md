@@ -23,6 +23,7 @@ the concept DOI [10.5281/zenodo.23238902](https://doi.org/10.5281/zenodo.2323890
   - wide tables scroll inside their frame;
   - installable (manifest, icons).
 - **SHACL in the browser (app 0.3.14):** every LQL-Equiv scenario is checked by the ontology's shapes (`ontology/shapes.ttl`, pyshacl, pinned pure-Python packages loaded after the codes) before it is computed; a violation stops the calculation and names the parameter (`src/websemantic/scenario_check.py`). TLS parameters are not mapped to ontology concepts in this version.
+- **Review corrections (app 0.3.17):** maximum dose reported with the limiting organ's obtained EQD2 and the author's declared tolerance (±0.5 Gy); organs without a value named; minimum organ dose ranked only on candidates with every organ, among the session counts examined, with the tumour gap; no LQL-Equiv computation unless the SHACL check conforms (unavailable rules block); scope of the check stated (reference schedule for searches; a total dose is checked only when stated); trace reset for examples and workbench state in the trace; session snapshot tied to the bundle, validated, and removed when it cannot be saved.
 - **Paper.** The paper refers to version 0.2.6 and to the frozen experiments; this line evolves separately.
 
 ## 0.2.6 — 2026-10-10

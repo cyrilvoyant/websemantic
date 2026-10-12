@@ -96,41 +96,63 @@ def table(workspace, descriptor, tumour, organs, schedules, reference_dose=2.0):
             **_provenance(module, descriptor)}
 
 
+TOLERANCE_GY = 0.5  # declared by the author: the limiting organ may differ from its reference EQD2 by at most 0.5 Gy
+
+
+def _limit(organ_rows):
+    """Highest dose per session over all organs: the smallest organ-equivalent dose (first 0.01 Gy grid dose whose
+    LQL-Equiv EQD2 reaches the organ's reference EQD2). The limiting organ's obtained EQD2 may exceed its reference by
+    a few tenths of a gray; the result is kept only within the declared tolerance. Organs without a value (outside the
+    library's validity domain, or not reached within the search bound) are listed, never dropped silently."""
+    doses = {o: v["equivalent"]["dose_per_session"] for o, v in organ_rows.items()}
+    reachable = {o: d for o, d in doses.items() if d is not None}
+    out = {"tolerance_gy": TOLERANCE_GY, "undetermined_organs": sorted(o for o, d in doses.items() if d is None),
+           "maximum_dose": None, "limiting_organ": None, "limiting_target_eqd2": None, "limiting_obtained_eqd2": None,
+           "limiting_difference_gy": None, "within_tolerance": None}
+    if not reachable:
+        return out
+    limit = min(reachable, key=reachable.get)
+    entry = organ_rows[limit]["equivalent"]
+    within = abs(entry["difference_gy"]) <= TOLERANCE_GY + 1e-9
+    out.update(maximum_dose=reachable[limit] if within else None, limiting_organ=limit,
+               limiting_target_eqd2=entry["target_eqd2"], limiting_obtained_eqd2=entry["obtained_eqd2"],
+               limiting_difference_gy=entry["difference_gy"], within_tolerance=within)
+    return out
+
+
 def maximum_dose(workspace, descriptor, tumour, organs, reference, sessions):
     """Highest dose per session over `sessions` sessions such that no organ at risk exceeds the EQD2 it receives
-    with the reference schedule: the smallest of the organs' equivalent doses (each computed by LQL-Equiv)."""
+    with the reference schedule, within the declared tolerance (see _limit; each value computed by LQL-Equiv)."""
     reference.check()
     r = resume(Situation(tumour, tuple(organs), reference.dose, reference.sessions, 0, reference.gap_days, sessions),
                workspace, descriptor, counts=[sessions])
     row = r["equivalent"][0]
     doses = {o: v["equivalent"]["dose_per_session"] for o, v in row["organs"].items()}
-    reachable = {o: d for o, d in doses.items() if d is not None}
-    limit = min(reachable, key=reachable.get) if reachable else None
     return {"reference": asdict(reference), "sessions": sessions, "organ_equivalent_doses": doses,
-            "maximum_dose": reachable.get(limit), "limiting_organ": limit,
-            "tumour_equivalent_dose": row["tumour"]["dose_per_session"], "planned": r["planned"],
+            **_limit(row["organs"]), "tumour_equivalent_dose": row["tumour"]["dose_per_session"], "planned": r["planned"],
             "rows": r["equivalent"], "options": r["options"], "scope": r["scope"]}
 
 
 def resumption(workspace, descriptor, tumour, organs, planned, done, gap_days, remaining):
     """Resumption after an interruption: the tumour-equivalent dose for the remaining sessions, each organ's
-    equivalent dose, and the highest dose per session that keeps every organ within its planned EQD2."""
+    equivalent dose, and the highest dose per session that keeps every organ within its planned EQD2 (declared
+    tolerance, see _limit)."""
     planned.check()
     counts = list(range(max(1, remaining - 2), remaining + 1))
     r = resume(Situation(tumour, tuple(organs), planned.dose, planned.sessions, done, gap_days, remaining),
                workspace, descriptor, counts=counts)
     for row in r["equivalent"]:
-        doses = {o: v["equivalent"]["dose_per_session"] for o, v in row["organs"].items()}
-        reachable = {o: d for o, d in doses.items() if d is not None}
-        row["limiting_organ"] = min(reachable, key=reachable.get) if reachable else None
-        row["maximum_dose"] = reachable.get(row["limiting_organ"])
+        row.update(_limit(row["organs"]))
     return r
 
 
 def minimum_organ_dose(workspace, descriptor, tumour, organs, reference, counts=None):
     """Same tumour effect as the reference schedule, for several numbers of sessions: the tumour-equivalent dose per
-    session (LQL-Equiv) and the EQD2 it gives to each organ at risk. The best number of sessions is the one whose most
-    exposed organ (relative to its EQD2 with the reference) is lowest; per organ, the number with its lowest EQD2."""
+    session (LQL-Equiv) and the EQD2 it gives to each organ at risk. Among the numbers of sessions examined (a discrete
+    list, not a global minimum), the best is the one whose most exposed organ (relative to its EQD2 with the reference)
+    is lowest; a candidate is ranked only if every organ has a value, otherwise it is reported as not comparable. Per
+    organ, the number with its lowest EQD2. The tumour target is reached on a 0.01 Gy grid: the obtained difference is
+    reported."""
     reference.check()
     counts = sorted({n for n in (counts or (1, 3, 5, 8, 10, 15, 20, 25, 30, 35, 39, reference.sessions))
                      if 1 <= n <= 60})
@@ -141,14 +163,19 @@ def minimum_organ_dose(workspace, descriptor, tumour, organs, reference, counts=
         raise ValueError("No number of sessions reaches the reference tumour effect within the search bound.")
 
     def worst(row):
-        values = [v["difference_with_tumour_schedule_percent"] for v in row["organs"].values()]
-        return max(v for v in values if v is not None) if any(v is not None for v in values) else math.inf
+        return max(v["difference_with_tumour_schedule_percent"] for v in row["organs"].values())
 
-    best = min(rows, key=worst)
+    comparable = [row for row in rows
+                  if all(v["difference_with_tumour_schedule_percent"] is not None for v in row["organs"].values())]
+    if not comparable:
+        raise ValueError("No number of sessions gives a value for every organ at risk: candidates not comparable.")
+    best = min(comparable, key=worst)
     per_organ = {o: min((row for row in rows if row["organs"][o]["eqd2_with_tumour_schedule"] is not None),
                         key=lambda row: row["organs"][o]["eqd2_with_tumour_schedule"], default=None) for o in organs}
     return {"reference": asdict(reference), "rows": rows, "best_sessions": best["sessions"],
             "best_dose": best["tumour"]["dose_per_session"], "best_worst_percent": worst(best),
+            "best_tumour_difference_gy": best["tumour"]["difference_gy"], "examined_sessions": counts,
+            "not_comparable_sessions": [row["sessions"] for row in rows if row not in comparable],
             "per_organ": {o: (row["sessions"] if row else None) for o, row in per_organ.items()},
             "planned": r["planned"], "options": r["options"], "scope": r["scope"]}
 

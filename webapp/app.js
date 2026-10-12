@@ -1,6 +1,6 @@
 // WebSemantic web app: chat on the left, qualified results on the right. Python runs in a background worker.
 "use strict";
-const APP_VERSION = "0.3.16";  // also in index.html (cache busting) and the footer
+const APP_VERSION = "0.3.17";  // also in index.html (cache busting) and the footer
 
 const params = new URLSearchParams(location.search);
 const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
@@ -13,7 +13,7 @@ const T = {
     intro: "Describe your case. The code asks for what is missing and computes only what you accept.",
     codes: { tls: "Road tunnel energy", lql: "Radiotherapy dose" },
     placeholder: { tls: "Describe your case… e.g. a long tunnel with a lot of traffic", lql: "Describe your case… e.g. 20 sessions of 3 Gy, prostate, rectum as organ at risk" },
-    allCases: "All cases", details: "Technical details (versions, checks, options)", varsNote: "To work in the original application, open it and enter these values:", openApp: { lql: "Open the original LQL-Equiv", tls: "Open the original TLS application" }, traceBtn: "Download the trace", shacl: { label: "Ontology check (SHACL)", conforms: "the scenario conforms to the ontology's rules (types, declared bounds, complete groups, dose identity per course)", unavailable: "not available in this browser (rules not loaded)", records: "records" }, jump: { chat: "Chat", results: "Results", variables: "Variables", about: "About" }, reuse: "Tap to edit this message again", examples: "Examples", more: "Other examples ↻", tags: { refuse: "refusal example", ask: "the code will ask" }, exampleBtn: "Example without language model", resetBtn: "New conversation",
+    allCases: "All cases", details: "Technical details (versions, checks, options)", varsNote: "To work in the original application, open it and enter these values:", openApp: { lql: "Open the original LQL-Equiv", tls: "Open the original TLS application" }, traceBtn: "Download the trace", noSave: "This conversation could not be saved in the tab (storage full): a reload would lose it.", otherBundle: "The page was updated: the earlier conversation was closed.", shacl: { label: "Ontology check (SHACL)", conforms: { all: "every schedule and the inputs conform to the ontology's rules (types, declared bounds, complete groups; total dose not stated, so not checked)", reference: "the reference schedule and the inputs conform to the ontology's rules (types, declared bounds, complete groups); the doses found by the search are not checked by these rules" }, unavailable: "not available in this browser (rules not loaded)", records: "records" }, jump: { chat: "Chat", results: "Results", variables: "Variables", about: "About" }, reuse: "Tap to edit this message again", examples: "Examples", more: "Other examples ↻", tags: { refuse: "refusal example", ask: "the code will ask" }, exampleBtn: "Example without language model", resetBtn: "New conversation",
     tabs: { results: "Results", about: "About" },
     loading: "Loading the scientific codes in your browser (about 15 s on the first visit)…",
     timeout: "The calculation took too long in this browser; nothing is shown.",
@@ -39,7 +39,7 @@ const T = {
     intro: "Décrivez votre cas. Le code demande ce qui manque et ne calcule que ce que vous acceptez.",
     codes: { tls: "Énergie d'un tunnel", lql: "Dose en radiothérapie" },
     placeholder: { tls: "Décrivez votre cas… par ex. un tunnel long avec beaucoup de trafic", lql: "Décrivez votre cas… par ex. 20 séances de 3 Gy, prostate, rectum comme organe à risque" },
-    allCases: "Tous les cas", details: "Détails techniques (versions, vérifications, options)", varsNote: "Pour travailler dans l'application d'origine, ouvrez-la et saisissez ces valeurs :", openApp: { lql: "Ouvrir LQL-Equiv (application d'origine)", tls: "Ouvrir TLS (application d'origine)" }, traceBtn: "Télécharger la trace", shacl: { label: "Contrôle par l'ontologie (SHACL)", conforms: "le scénario respecte les règles de l'ontologie (types, bornes déclarées, groupes complets, identité des doses par cure)", unavailable: "indisponible dans ce navigateur (règles non chargées)", records: "enregistrements" }, jump: { chat: "Conversation", results: "Résultats", variables: "Variables", about: "À propos" }, reuse: "Touchez pour reprendre ce message", examples: "Exemples", more: "Autres exemples ↻", tags: { refuse: "exemple de refus", ask: "le code demandera" }, exampleBtn: "Exemple sans modèle de langage", resetBtn: "Nouvelle conversation",
+    allCases: "Tous les cas", details: "Détails techniques (versions, vérifications, options)", varsNote: "Pour travailler dans l'application d'origine, ouvrez-la et saisissez ces valeurs :", openApp: { lql: "Ouvrir LQL-Equiv (application d'origine)", tls: "Ouvrir TLS (application d'origine)" }, traceBtn: "Télécharger la trace", noSave: "Cette conversation n'a pas pu être gardée dans l'onglet (stockage plein) : un rechargement la perdrait.", otherBundle: "La page a été mise à jour : la conversation précédente est close.", shacl: { label: "Contrôle par l'ontologie (SHACL)", conforms: { all: "chaque schéma et les entrées respectent les règles de l'ontologie (types, bornes déclarées, groupes complets ; dose totale non énoncée, donc non contrôlée)", reference: "le schéma de référence et les entrées respectent les règles de l'ontologie (types, bornes déclarées, groupes complets) ; les doses trouvées par la recherche ne sont pas contrôlées par ces règles" }, unavailable: "indisponible dans ce navigateur (règles non chargées)", records: "enregistrements" }, jump: { chat: "Conversation", results: "Résultats", variables: "Variables", about: "À propos" }, reuse: "Touchez pour reprendre ce message", examples: "Exemples", more: "Autres exemples ↻", tags: { refuse: "exemple de refus", ask: "le code demandera" }, exampleBtn: "Exemple sans modèle de langage", resetBtn: "Nouvelle conversation",
     tabs: { results: "Résultats", about: "À propos" },
     loading: "Chargement des codes scientifiques dans votre navigateur (environ 15 s à la première visite)…",
     timeout: "Le calcul a pris trop de temps dans ce navigateur ; rien n'est affiché.",
@@ -65,7 +65,7 @@ const T = {
 const $ = (id) => document.getElementById(id);
 let lang = "en", code = "tls", state = null, busy = false, conversation = 0, blobs = [];
 let hashes = null, trace = null, shaclLoad = null;  // fingerprints of what runs here; the visitor's local record of this conversation
-let log = [], last = null;  // what the page shows, kept in this tab to survive a reload (pull-to-refresh, a tab put to sleep)
+let log = [], last = null, restoredBundle = null;  // what the page shows, kept in this tab to survive a reload (pull-to-refresh, a tab put to sleep)
 
 // ------------------------------------------------------------ Python worker
 const worker = new Worker("py-worker.js?v=" + APP_VERSION);
@@ -76,7 +76,13 @@ const pyLoaded = new Promise((res, rej) => { readyResolve = res; readyReject = r
 worker.onerror = (e) => { readyReject(String(e.message || e)); status(T[lang].failed + (e.message || e)); };
 worker.onmessage = (e) => {
   const m = e.data;
-  if (m.type === "ready") { pyReady = true; hashes = m.hashes || null; readyResolve(); status(T[lang].ready); return; }
+  if (m.type === "ready") {
+    pyReady = true; hashes = m.hashes || null; readyResolve(); status(T[lang].ready);
+    if (restoredBundle && hashes && hashes["bundle.zip"] !== restoredBundle) {  // restored from another delivery
+      restoredBundle = null; newConversation(); status(T[lang].otherBundle);
+    }
+    return;
+  }
   if (m.type === "error") { readyReject(m.error); status(T[lang].failed + m.error); return; }
   if (m.type === "shacl") { shaclLoad = m; return; }  // the ontology's rules, loaded after the codes
   const p = pending.get(m.id); if (!p) return; pending.delete(m.id);
@@ -115,17 +121,22 @@ function follow(div, fromTop) {  // phone: the newest message stays in view abov
 const SNAP = "ws-conversation";
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";  // the restored conversation decides where the view goes
 function keep() {
-  const snap = { v: APP_VERSION, code, lang, state, log, last, trace };
+  const snap = { v: APP_VERSION, bundle: hashes && hashes["bundle.zip"], code, lang, state, log, last, trace };
   try { sessionStorage.setItem(SNAP, JSON.stringify(snap)); }
   catch (_) {  // too large: keep the conversation without the figures
-    try { sessionStorage.setItem(SNAP, JSON.stringify({ ...snap, last: last && { ...last, results: null }, trace: null })); } catch (__) {}
+    try { sessionStorage.setItem(SNAP, JSON.stringify({ ...snap, last: last && { ...last, results: null }, trace: null })); }
+    catch (__) { try { sessionStorage.removeItem(SNAP); } catch (___) {} status(T[lang].noSave); }  // never restore an older one
   }
 }
 function forget() { log = []; last = null; try { sessionStorage.removeItem(SNAP); } catch (_) {} }
 function restore() {
   let snap = null;
   try { snap = JSON.parse(sessionStorage.getItem(SNAP) || "null"); } catch (_) { snap = null; }
-  if (!snap || snap.v !== APP_VERSION || !snap.state || !(snap.log || []).length) return false;
+  const valid = snap && snap.v === APP_VERSION && ["tls", "lql"].includes(snap.code) && ["en", "fr"].includes(snap.lang) &&
+    snap.state && typeof snap.state === "object" && Array.isArray(snap.log) && snap.log.length &&
+    snap.log.every((m) => m && ["user", "bot"].includes(m.role) && typeof m.text === "string");
+  if (!valid) { try { sessionStorage.removeItem(SNAP); } catch (_) {} return false; }
+  restoredBundle = snap.bundle || null;
   lang = snap.lang; code = snap.code;
   for (const [id, v] of [["lang", lang], ["code", code]])
     document.querySelectorAll(`#${id} button`).forEach((x) => x.classList.toggle("on", x.dataset.v === v));
@@ -272,7 +283,7 @@ function render(out) {
   const kv = (o) => Object.entries(o || {}).map(([k, v]) => `${esc(k)} = ${esc(v)}`).join(", ");
   $("provenance").innerHTML = `<details><summary>${esc(t.details)}</summary><p><b>${t.prov[0]}:</b> ${esc(sw.name)} ${esc(sw.version || "")} · commit <code>${esc((sw.commit || "").slice(0, 7))}</code>${doi} · ${esc(sw.licence || "")}</p>` +
     (q.verification ? `<p><b>${t.prov[7]}:</b> ${esc(q.verification)}</p>` : "") +
-    (r.shacl ? `<p><b>${t.shacl.label}:</b> ${esc(r.shacl.status === "conforms" ? t.shacl.conforms : t.shacl.unavailable)}` +
+    (r.shacl ? `<p><b>${t.shacl.label}:</b> ${esc(r.shacl.status === "conforms" ? t.shacl.conforms[r.shacl.scope_kind || "all"] : t.shacl.unavailable)}` +
                (r.shacl.engine ? ` (${esc(r.shacl.records)} ${t.shacl.records}, ${esc(r.shacl.engine)}, ${esc(r.shacl.shapes)})` : "") + "</p>" : "") +
     (q.options && Object.keys(q.options).length ? `<p><b>${t.prov[5]}:</b> ${kv(q.options)}</p>` : "") +
     (q.flags ? `<p><b>${t.prov[6]}:</b> ${kv(q.flags)}</p>` : "") +
@@ -369,6 +380,10 @@ function changes(before, after) {
   }
   const ob = (before && before.organs) || [], oa = (after && after.organs) || [];
   if (JSON.stringify(ob) !== JSON.stringify(oa)) out.push({ parameter: "organs", before: ob, after: oa });
+  for (const k of ["lql", "tls"]) {  // workbench state: mode, schedules, sessions given or remaining, tunnels compared
+    const b = (before && before[k]) || null, a = (after && after[k]) || null;
+    if (JSON.stringify(b) !== JSON.stringify(a)) out.push({ parameter: k, before: b, after: a });
+  }
   return out;
 }
 function outcome(r) {
@@ -443,7 +458,7 @@ async function send(message) {
 async function example() {
   if (busy) return;
   conversation++; const mine = conversation, m = code, l = lang;
-  busy = true; $("chat").innerHTML = ""; clearResults(); forget();
+  busy = true; $("chat").innerHTML = ""; clearResults(); forget(); trace = null; $("trace-btn").disabled = true;
   const wait = say("bot wait", pyReady ? T[l].computing : T[l].loading);
   try {
     const out = JSON.parse(await py("api_example", m, l));

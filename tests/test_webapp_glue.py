@@ -625,3 +625,36 @@ def test_every_lql_computation_is_checked_by_the_ontology_shapes():
     out, state = yes(state)
     s = out["results"]["shacl"]
     assert out["decision"] == "execute" and s["status"] == "conforms" and s["records"] == 9  # 2 courses x 3, site, organ, reference dose
+
+
+def test_maximum_dose_states_the_declared_tolerance_on_codex_counterexample():
+    # Codex 12/10: 39 x 2 Gy reference, prostate, rectum, 20 sessions -> 3.08 Gy gives a rectal EQD2 of 78.26 Gy for 78 Gy
+    r = glue.wb.maximum_dose(glue.WS, glue.DESC["lql"], "Prostate", ["Rectum"], glue.wb.Schedule(2.0, 39, 0.0), 20)
+    assert r["maximum_dose"] == 3.08 and r["limiting_organ"] == "Rectum" and r["within_tolerance"] is True
+    assert 0 < r["limiting_difference_gy"] <= glue.wb.TOLERANCE_GY and r["undetermined_organs"] == []
+    msg = "dose maximale en 20 séances sans dépasser l'équivalent de 39 × 2 Gy pour la prostate, rectum"
+    out, state = lql_case(msg, SITE, RECTUM)
+    out, state = yes(state)
+    assert "78,26 Gy pour 78,00 Gy" in out["reply"] and "±0,5 Gy" in out["reply"]
+
+
+def test_resumption_rows_carry_the_tolerance_check():
+    r = glue.wb.resumption(glue.WS, glue.DESC["lql"], "Prostate", ["Rectum"], glue.wb.Schedule(3.0, 20, 0.0), 8, 10.0, 12)
+    assert all(row["within_tolerance"] and abs(row["limiting_difference_gy"]) <= 0.5 for row in r["equivalent"])
+
+
+def test_no_lql_computation_when_the_ontology_rules_are_unavailable(monkeypatch):
+    monkeypatch.setattr(glue, "check_lql", lambda *a, **k: {"status": "unavailable", "conforms": None, "messages": []})
+    monkeypatch.setattr(glue, "lql_compute", lambda *a, **k: pytest.fail("computed without the SHACL check"))
+    monkeypatch.setattr(glue, "run", lambda *a, **k: pytest.fail("computed without the SHACL check"))
+    out, state = lql_case("20 séances de 3 Gy pour la prostate, rectum comme organe à risque", SITE, RECTUM,
+                          {"field": "dose_per_fraction", "value": 3, "origin": "provided", "evidence": "3 Gy"},
+                          {"field": "n_fractions", "value": 20, "origin": "provided", "evidence": "20 séances"})
+    out, state = yes(state)
+    assert out["decision"] == "clarify" and "rien n'est calculé" in out["reply"] and not out.get("results")
+
+
+def test_minimum_names_the_examined_counts_and_the_tumour_gap():
+    r = glue.wb.minimum_organ_dose(glue.WS, glue.DESC["lql"], "Prostate", ["Rectum"], glue.wb.Schedule(2.0, 39, 0.0))
+    assert r["best_sessions"] in r["examined_sessions"] and 0 <= r["best_tumour_difference_gy"] < 0.05
+    assert r["not_comparable_sessions"] == []
