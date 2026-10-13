@@ -1,41 +1,95 @@
+<img src="docs/websemantic-logo.svg" alt="WebSemantic logo" width="88" align="right">
+
 # WebSemantic
 
-<a href="https://www.oie.minesparis.psl.eu/"><img src="docs/mines-paris-psl-oie.png" alt="Mines Paris – PSL, centre O.I.E. (Observation, Impacts, Énergie)" height="48"></a>
+**Language models can prepare scientific simulations. WebSemantic makes sure they do not guess.**
 
-Centre O.I.E. (Observation, Impacts, Énergie), Mines Paris – PSL.
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23238902-blue.svg)](https://doi.org/10.5281/zenodo.23238902)
+[![PyPI](https://img.shields.io/pypi/v/websemantic.svg)](https://pypi.org/project/websemantic/)
+[![RSD](https://img.shields.io/badge/rsd-websemantic-00a3e3.svg)](https://research-software-directory.org/software/websemantic)
+[![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/15359/badge)](https://www.bestpractices.dev/projects/15359)
+[![Licence: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Web app](https://img.shields.io/badge/web%20app-Hugging%20Face-yellow.svg)](https://cyrilvoyant-websemantic.static.hf.space)
 
-Préparer une simulation en phrases, examiner les hypothèses et obtenir des résultats avec leurs unités et leur provenance. Trois profils : TLS, LQL-Equiv (un cursus fictif) et pyrcel (un mode d’aérosol, ascendance constante).
+Ask a language model to run a simulation and it fills the gaps by itself. "A weak updraft" becomes 0.1 m/s, "the
+usual dose" becomes 3 Gy, and the code runs on values that nobody stated. In our tests, such guesses changed the
+computed result by up to a factor of 2.6, and moved a complication probability from 3 % to 47 %.
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23238902.svg)](https://doi.org/10.5281/zenodo.23238902) [![PyPI](https://img.shields.io/pypi/v/websemantic.svg)](https://pypi.org/project/websemantic/) [![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/15359/badge)](https://www.bestpractices.dev/projects/15359) · ontologie : [w3id.org/websemantic/ns](https://w3id.org/websemantic/ns) · [Contribuer](CONTRIBUTING.md) · [Sécurité](SECURITY.md)
+WebSemantic sits between the person, the language model and a validated scientific code. The model only translates
+words into the code's variables. WebSemantic checks them, proposes the declared defaults and conventions, asks for
+what is missing, and runs the original code only after the person agrees. Every result states its units, its
+sources and the exact version of the code that produced it.
 
-## Application en ligne
+**Try it:** [cyrilvoyant-websemantic.static.hf.space](https://cyrilvoyant-websemantic.static.hf.space), free, nothing
+to install, in English or French, on a computer or a phone.
 
-**[huggingface.co/spaces/CyrilVoyant/websemantic](https://huggingface.co/spaces/CyrilVoyant/websemantic)**: free, nothing to install, English or French, phone-ready.
+## One description, four views
 
-Describe a case in your own words. A language model (Mistral) only translates your words into the code's variables. The page shows what it understood and asks for what is missing. The original, unchanged codes compute in your browser after a yes, with their sources checked by SHA-256:
+Each code is described once, in a descriptor ([example](descriptors/tls/descriptor.yaml)): its parameters, canonical
+units, bounds, defaults, qualitative conventions and tasks. WebSemantic derives four artefacts from it, so they never
+contradict each other.
 
-- **TLS:** electricity demand of road tunnels, up to one simulated year.
-- **LQL-Equiv:** EQD2, BED, TCP and NTCP for one or several organs at risk. It also compares schedules, gives the biologically equivalent resumption after an interruption, the maximum dose without exceeding the organs, and the minimum organ dose for the same tumour effect. Before any LQL-Equiv calculation, the ontology's SHACL shapes check the scenario in the browser (types, declared bounds, complete groups, dose identity per course).
+| Artefact | What it holds | Used by |
+|---|---|---|
+| **Contract** ([LLM-CONTRACT.md](packs/tls/LLM-CONTRACT.md)) | Reading rules: what each parameter means, its unit, what may be assumed, what must be asked | Language models |
+| **Ontology** ([core.ttl](ontology/core.ttl), [shapes.ttl](ontology/shapes.ttl)) | OWL and SKOS vocabulary aligned with QUDT and PROV-O; SHACL shapes that check a scenario | Validation, linked data |
+| **Validator** | One decision per scenario: execute, clarify or refuse. It never fills in a value | Every run |
+| **FAIR metadata** ([codemeta.json](codemeta.json), [CITATION.cff](CITATION.cff)) | Identity, licence, versions, persistent identifiers | Catalogues, citation |
 
-Every result can be downloaded: tables, a manifest with versions and checks, and the semantics.ttl RDF graph. The page code is in [`webapp/`](webapp/). Fictitious scenarios for research and teaching.
+**Software-agnostic.** Adding a code takes a descriptor and a thin adapter ([guide](docs/integrating-models.md)).
+The code itself is never modified: it is pinned to a commit and its sources are checked by SHA-256 before each run.
 
-## Avec un agent Python
+**LLM-ready.** An agent that reaches this repository needs nothing else: [llm.md](llm.md) gives the rules and
+[agent/run.py](agent/README.md) runs a code from an accepted scenario.
 
-Lisez [les règles de réutilisation](llm.md), puis [le point d’entrée Python](agent/README.md). Il indique les fichiers, leurs empreintes et la commande commune aux trois modèles : `python agent/run.py tls|lql|pyrcel scenario.json` (choisir un modèle). Ce parcours utilise les fichiers sources, sans Git ni clé Gemini.
+## From a request to a result
 
-## Utiliser
+```mermaid
+flowchart LR
+    A["Request in words"] --> B["Language model<br/>words to variables only"]
+    B --> C["Validator<br/>units, bounds, origins"]
+    C -- "missing or ambiguous" --> D["Question to the person"]
+    D --> B
+    C -- "complete" --> E["Person confirms"]
+    E --> F["Ontology rules<br/>SHACL"]
+    F --> G["Pinned original code<br/>commit and SHA-256"]
+    G --> H["Result<br/>units, provenance, version"]
+```
 
-Dans le package Windows, ouvrez `Installer.cmd` une fois, puis `WebSemantic.cmd` et choisissez 1 (TLS), 2 (LQL) ou 3 (pyrcel).
+A number is accepted only if it appears in the person's words. A default or a convention is only proposed, and
+counts once the person accepts it. In the web app, the SHACL check runs before every LQL-Equiv calculation; the TLS
+parameters are not yet mapped to ontology concepts.
 
-> Étudie un tunnel fictif de 2 km, deux tubes et deux voies par tube, avec éclairage LED fixe et ventilation longitudinale. Propose les paramètres manquants.
+## Three codes, three domains
 
-Demandez le tableau des paramètres ou les formules, précisez les choix, puis acceptez les hypothèses. Le calcul démarre lorsque la configuration est complète et validée. Une modification explicite recalcule l’étude. Le dossier des résultats est affiché à chaque calcul.
+The three test cases were chosen to differ: a stochastic engineering model, a dose model with high stakes, and a
+third-party physics code.
 
-Le [guide](packaging/windows/Guide.txt) propose quatre essais, dont une comparaison de deux tunnels et une exécution par un agent Python.
+| Code | Domain | What it computes | Web app |
+|---|---|---|---|
+| [Tunnel Load Simulator](https://github.com/cyrilvoyant/tunnel-load-simulator) | Road tunnels | Electricity demand, Monte Carlo, up to one simulated year; comparison of tunnels | Yes |
+| [LQL-Equiv](https://github.com/cyrilvoyant/LQL-Equiv-web) | Radiotherapy research | EQD2, BED, TCP and NTCP; schedule comparison, resumption after an interruption, maximum and minimum doses | Yes |
+| [pyrcel](https://github.com/darothen/pyrcel) | Cloud physics | Adiabatic parcel, aerosol activation | Python route |
 
-## Installer depuis GitHub
+LQL-Equiv runs on fictitious scenarios for research and teaching. It is not a medical device and the practitioner
+decides.
 
-Python 3.12+ et Git sont nécessaires pour installer les trois profils depuis GitHub. Configurez `GEMINI_API_KEY` pour le dialogue.
+## Use it
+
+**In the browser.** [The web app](https://cyrilvoyant-websemantic.static.hf.space) runs TLS and LQL-Equiv. A relay
+keeps the language model's key private (Mistral); the codes themselves run in your browser. Each result can be
+downloaded with its tables, its provenance and a local trace of the conversation. Source: [`webapp/`](webapp/).
+
+**From your own agent.** Read [llm.md](llm.md), then [agent/README.md](agent/README.md). One command per code, no Git
+and no key needed:
+
+```sh
+python agent/run.py tls scenario.json
+python agent/run.py lql scenario.json
+python agent/run.py pyrcel scenario.json
+```
+
+**On your computer.** Python 3.12+ and Git are needed; the terminal dialogue uses a `GEMINI_API_KEY`.
 
 ```powershell
 git clone --recurse-submodules https://github.com/cyrilvoyant/websemantic.git
@@ -45,27 +99,33 @@ python -m venv .venv
 & .\.venv\Scripts\python.exe -m websemantic.cli chat
 ```
 
-[Installation](docs/installation-windows.md) · [Dialogue et raccourcis](docs/terminal.md)
+On Windows, the packaged version installs with `Installer.cmd` and starts with `WebSemantic.cmd`
+([guide](packaging/windows/Guide.txt)). More: [installation](docs/installation-windows.md),
+[terminal dialogue](docs/terminal.md).
 
-## Autres profils
+## What comes back
 
-LQL : « Étudie un schéma fictif rectum/prostate : 20 fractions de 3 Gy, référence 2 Gy. Propose les hypothèses manquantes. »
+- **CSV tables**: time series, daily values, profiles and indicators, with their units.
+- **manifest.json**: every parameter with its value, unit, origin, source and acceptance; software versions and
+  commits; SHA-256 of inputs and outputs.
+- **semantics.ttl**: the provenance as an RDF graph (PROV-O).
 
-pyrcel : « Simule une parcelle à 1 m/s, 283 K, 850 hPa et S0 = -0,02 ; un mode lognormal de 1000 particules/cm³, rayon sec médian 0,05 µm, sigma 2, kappa 0,54. Propose les réglages manquants. »
+[TLS parameters and outputs](docs/tls-reference.md) · [JSON contract](ontology/tls-contract.json) ·
+[Agent execution](docs/agent-contract.md)
 
-Examinez les paramètres et leurs unités, puis acceptez les hypothèses. LQL sert à la recherche sur des schémas fictifs ; pyrcel simule une parcelle idéale.
+## Evidence
 
-## Résultats
+The method was tested on 72 requests, each asked with eight combinations of documentation, contract, ontology and
+FAIR metadata, three times, with four language models (frozen release 0.2.6; paper in preparation). Adding the
+contract to the documentation reduced premature calculations from 26 to 6 % (Mistral-Small), 17 to 1 % (Qwen2.5),
+52 to 23 % (Codestral) and 25 to 3 % (Gemini), and raised the correct handling of vague words from 0–30 % to
+45–95 %. The ontology does more as a checker than as reading material for the model.
 
-TLS produit des données simulées. L’énergie totale couvre la période calculée ; l’énergie annualisée extrapole par `365/n_days`. Puissance : kW ; énergie : kWh ou MWh selon la table.
+## For developers
 
-Les CSV contiennent les trajectoires, les séries journalières, les profils et les indicateurs par réalisation. `manifest.json` décrit les paramètres, les sources, les unités et les agrégations ; `semantics.ttl` conserve la provenance. Une comparaison ajoute `scenario` aux CSV réunis et conserve les deux calculs individuels. `comparison.json` donne les écarts entre médianes.
-
-[Paramètres et sorties TLS](docs/tls-reference.md) · [Contrat JSON](ontology/tls-contract.json) · [Exécution depuis un agent](docs/agent-contract.md)
-
-## Développement
-
-Les définitions sont maintenues dans le [descripteur](descriptors/tls/descriptor.yaml). Le calcul utilise l’adaptateur et le backend TLS fixé, sans modifier ses sources.
+Definitions live in the descriptors ([TLS](descriptors/tls/descriptor.yaml),
+[LQL-Equiv](descriptors/lqlequiv/descriptor.yaml), [pyrcel](descriptors/pyrcel/descriptor.yaml)); the contracts,
+ontology files and metadata are generated from them.
 
 ```powershell
 & .\.venv\Scripts\python.exe -m pip install -e ".[dev,tls]"
@@ -73,8 +133,17 @@ Les définitions sont maintenues dans le [descripteur](descriptors/tls/descripto
 & .\.venv\Scripts\python.exe -m ruff check src tests tools
 ```
 
-[Architecture](docs/architecture.md) · [Intégration](docs/integrating-models.md) · [Protocole](docs/protocol.md)
+[Architecture](docs/architecture.md) · [Adding a code](docs/integrating-models.md) · [Protocol](docs/protocol.md) ·
+[Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md)
 
-## Licence
+## Cite and licence
 
-[MIT](LICENSE), depuis la version 0.2.6 ; les versions 0.2.0 à 0.2.5 restent sous PolyForm Noncommercial 1.0.0. Les composants conservent leurs licences (TLS et LQL-Equiv : MIT ; pyrcel : BSD-3-Clause). Le dépôt public ne contient aucune clé. Les archives privées de validation restent privées.
+Cite the concept DOI [10.5281/zenodo.23238902](https://doi.org/10.5281/zenodo.23238902) (all versions; see
+[CITATION.cff](CITATION.cff)). Ontology namespace: [w3id.org/websemantic/ns](https://w3id.org/websemantic/ns).
+
+[MIT](LICENSE) from version 0.2.6; versions 0.2.0 to 0.2.5 remain under PolyForm Noncommercial 1.0.0. The pinned
+codes keep their own licences (TLS and LQL-Equiv: MIT; pyrcel: BSD-3-Clause). The repository holds no key.
+
+<a href="https://www.oie.minesparis.psl.eu/"><img src="docs/mines-paris-psl-oie.png" alt="Mines Paris – PSL, Centre O.I.E. (Observation, Impacts, Energy)" height="44"></a>
+
+Cyril Voyant, Centre O.I.E. (Observation, Impacts, Energy), Mines Paris – PSL.
