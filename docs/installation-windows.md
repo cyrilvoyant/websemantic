@@ -1,14 +1,15 @@
-# Installation Windows
+# Installation on Windows
 
 ## Package
 
-Décompressez l’archive et ouvrez `Installer.cmd` une fois. Ensuite, ouvrez `WebSemantic.cmd` et choisissez TLS. Le lanceur indique si un composant manque ; l’installation conserve les composants compatibles.
+Unzip the archive and open `Installer.cmd` once. Then open `WebSemantic.cmd` and choose TLS. The launcher reports any
+missing component; the installation keeps the compatible ones.
 
-La configuration de l’essai est lue automatiquement. Gardez l’archive et le fichier `.env` privés.
+The trial configuration is read automatically. Keep the archive and the `.env` file private.
 
-## Dépôt public
+## Public repository
 
-Python 3.10+ et Git sont nécessaires.
+Python 3.12+ and Git are needed.
 
 ```powershell
 git clone --recurse-submodules https://github.com/cyrilvoyant/websemantic.git
@@ -17,12 +18,14 @@ python -m venv .venv
 & .\.venv\Scripts\python.exe -m pip install -e ".[tls]"
 ```
 
-Configurez `GEMINI_API_KEY` dans vos variables d’environnement ou dans un `.env` privé. Rouvrez le terminal après une modification des variables Windows.
+Set `GEMINI_API_KEY` in your environment variables or in a private `.env` file. Reopen the terminal after changing
+Windows variables.
 
 ```powershell
 & .\.venv\Scripts\python.exe -m websemantic.cli chat
 ```
 
-Le dialogue utilise Internet. Pour vérifier le calcul local avec les commandes, choisissez TLS puis `/p`, `/v`, `/q`.
+The dialogue needs an Internet connection. To check the local calculation with commands, choose TLS, then `/p`, `/v`,
+`/q`.
 
-Pour un retour de test, joignez la demande, la réponse et le dossier du calcul, sans fichier contenant une clé.
+To report a test, attach the request, the answer and the result folder, without any file that contains a key.

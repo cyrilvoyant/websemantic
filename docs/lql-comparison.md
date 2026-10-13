@@ -1,11 +1,23 @@
-# Comparer des schémas fictifs
+# Comparing fictitious schedules
 
 `python agent/run.py lql examples/lql-comparison.json`
 
-Le document contient `task: "compare_schedules"` et `schedules`, une liste de deux schémas ou plus. Chaque élément contient un `id` unique et un `scenario` complet au format de `examples/lql-complete.json`. Tous les schémas passent le validateur avant le premier calcul. L'organe à risque et la dose de référence doivent être identiques ; chaque valeur conserve unité, origine, source et accord.
+The document contains `task: "compare_schedules"` and `schedules`, a list of two or more schedules. Each item has a
+unique `id` and a complete `scenario` in the format of `examples/lql-complete.json`. All schedules pass the validator
+before the first calculation. The organ at risk and the reference dose must be identical; each value keeps its unit,
+origin, source and agreement.
 
-Sans autre sélection, la cible doit être identique. Pour plusieurs cibles, ajouter `targets`, un enregistrement de paramètre dont `value` est une liste de noms exacts de la bibliothèque, `unit` vaut `null`, `origin` vaut `assumption`, `source` explique la sélection et `accepted` vaut `true`. Pour un groupe, remplacer `targets` par `anatomical_group`, avec la même structure et une clé du descripteur (`thoracic`, `head_and_neck`, `central_nervous_system`, `pelvis`, `abdomen`, `skin`). Le groupe sélectionne les cibles, jamais l'organe à risque. Un groupe sans cible est refusé.
+Without another selection, the target must be identical. For several targets, add `targets`, a parameter record whose
+`value` is a list of exact library names, with `unit` set to `null`, `origin` to `assumption`, a `source` explaining
+the selection and `accepted` set to `true`. For a group, replace `targets` with `anatomical_group`, with the same
+structure and a descriptor key (`thoracic`, `head_and_neck`, `central_nervous_system`, `pelvis`, `abdomen`, `skin`).
+The group selects the targets, never the organ at risk. A group without a target is refused.
 
-`indicators.csv` conserve une ligne par schéma et cible. `comparisons.csv` contient chaque paire pour chaque cible : `left_dominates`, `right_dominates`, `equivalent`, `tradeoff` ou `indeterminate`. Les écarts TCP et NTCP sont en points de pourcentage, gauche moins droite. La dominance exige TCP supérieur ou égal et NTCP inférieur ou égal, avec au moins une inégalité stricte. Une probabilité absente interdit le verdict ; aucun classement global des cibles n'est construit.
+`indicators.csv` keeps one row per schedule and target. `comparisons.csv` contains each pair for each target:
+`left_dominates`, `right_dominates`, `equivalent`, `tradeoff` or `indeterminate`. TCP and NTCP differences are in
+percentage points, left minus right. Dominance requires a TCP greater than or equal and an NTCP lower than or equal,
+with at least one strict inequality. A missing probability forbids a verdict; no global ranking of targets is built.
 
-Le manifeste conserve le document accepté, les définitions et les chemins des calculs individuels, avec leurs paramètres natifs, drapeaux de validité et traces sémantiques. Cette comparaison de simulations fictives n'est pas une recommandation clinique.
+The manifest keeps the accepted document, the definitions and the paths of the individual calculations, with their
+native parameters, validity flags and semantic traces. This comparison of fictitious simulations is not a clinical
+recommendation.

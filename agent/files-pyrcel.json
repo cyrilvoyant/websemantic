@@ -111,7 +111,7 @@
     {
       "path": "ontology/README.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/README.md",
-      "sha256_lf": "d07dee433093dce65f0b085e65dd97548da4e4df34688e97db7a067a15c4733c"
+      "sha256_lf": "6519ebd364936999ca234c42547b634b6a817dfc9a720372f187cb9f5467d61e"
     },
     {
       "path": "llm.md",
@@ -121,7 +121,7 @@
     {
       "path": "agent/README.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/agent/README.md",
-      "sha256_lf": "639909c289e60e93fd22838b40c8def52a68dbf5f6fe90c12a9cf346765c3c4a"
+      "sha256_lf": "0f98e1ec4ec6477f24370b6bf4edfe84692fca82fd5e1f7abb3dff46baf1cbbe"
     },
     {
       "path": "LICENSE",

@@ -1,59 +1,93 @@
-# Exécuter TLS depuis un agent
+# Running TLS from an agent
 
-## Accès
+## Access
 
-Commencer par [agent/README.md](../agent/README.md). Le fichier `agent/files.json` indique les sources et leurs empreintes. Lire les fichiers avec les outils web puis les écrire aux chemins indiqués dans l’espace Python. Ce parcours requiert numpy, pandas et rdflib ; le projet et Git n’ont pas besoin d’être installés.
+Start with [agent/README.md](../agent/README.md). The file `agent/files.json` lists the sources and their
+fingerprints. Read the files with web tools, then write them at the given paths in the Python workspace. This route
+needs numpy, pandas and rdflib; neither the project nor Git has to be installed.
 
-L’adaptateur vérifie l’empreinte du module TLS exécuté, avec normalisation CRLF/LF, et conserve la méthode dans le manifeste. Un checkout présent ajoute les contrôles Git. La provenance par fichiers décrit un module correspondant à la révision publiée, pas un checkout authentifié.
+The adapter checks the fingerprint of the TLS module it runs, with CRLF/LF normalisation, and records the method in
+the manifest. When a checkout is present, Git checks are added. File-based provenance describes a module that matches
+the published revision, not an authenticated checkout.
 
-## Contrat
+## Contract
 
-Lire `ontology/tls-contract.json`, `docs/tls-reference.md`, `descriptors/tls/descriptor.yaml` et l’adaptateur `src/websemantic/adapters/tls.py`. Le format du scénario est défini dans `ontology/tls-scenario.schema.json` ; `examples/tls-complete.json` illustre une configuration acceptée.
+Read `ontology/tls-contract.json`, `docs/tls-reference.md`, `descriptors/tls/descriptor.yaml` and the adapter
+`src/websemantic/adapters/tls.py`. The scenario format is defined in `ontology/tls-scenario.schema.json`;
+`examples/tls-complete.json` shows an accepted configuration.
 
-- Conserver les noms, types, unités et catégories du contrat.
-- Distinguer valeurs fournies, conversions, hypothèses et inconnues.
-- Associer les valeurs fournies à un extrait de la demande ; documenter les conversions.
-- Accepter un défaut ou une hypothèse seulement après accord explicite. Une question ou une négation ne vaut pas accord.
-- Utiliser les échelles qualitatives déclarées comme conventions de simulation. Une valeur explicite reste prioritaire ; une ambiguïté demande une précision.
-- Conserver URL, date et justification des sources consultées. Une commune, l’air ambiant ou des accidents routiers ne déterminent pas les probabilités d’événements TLS.
+- Keep the names, types, units and categories of the contract.
+- Separate provided values, conversions, assumptions and unknowns.
+- Tie each provided value to an excerpt of the request; document conversions.
+- Accept a default or an assumption only after explicit agreement. A question or a negation is not agreement.
+- Use the declared qualitative scales as simulation conventions. An explicit value takes priority; an ambiguity calls
+  for a question.
+- Keep the URL, date and justification of every source consulted. A municipality, the ambient air or road accidents
+  do not determine the probabilities of TLS events.
 
-## Calcul
+## Calculation
 
-Appliquer `websemantic.core.validation.validate`, puis appeler l’adaptateur approuvé. Celui-ci contrôle les contraintes et la révision TLS `748e053e129669cf3e896d381e3c0ac01c763edd`. Conserver le backend intact et exécuter son calcul ; les formules explicatives ne le remplacent pas. Aucune clé Gemini n’est nécessaire pour cet accès Python.
+Apply `websemantic.core.validation.validate`, then call the approved adapter. It checks the constraints and the TLS
+revision `748e053e129669cf3e896d381e3c0ac01c763edd`. Keep the backend intact and run its calculation; explanatory
+formulas do not replace it. No Gemini key is needed for this Python access.
 
-Graine de base : 42 sauf demande explicite ; graine par réalisation : `base_seed + run`. Conserver le script, l’environnement, les traces et la révision WebSemantic.
+Base seed: 42 unless explicitly requested; seed per realisation: `base_seed + run`. Keep the script, the environment,
+the traces and the WebSemantic revision.
 
-Pour deux scénarios, valider chaque configuration et conserver les mêmes date, durée, pas, nombre de réalisations et graine. `websemantic.comparison.run` exécute les deux cas ; `ontology/tls-comparison.schema.json` décrit leur format.
+For two scenarios, validate each configuration and keep the same start date, duration, time step, number of
+realisations and seed. `websemantic.comparison.run` runs both cases; `ontology/tls-comparison.schema.json` describes
+their format.
 
-## Restitution
+## Reporting
 
-Lire les CSV et `manifest.json`, notamment `output_qualification.tables`, avant de répondre. Donner en français les résultats essentiels, les unités, la période, les hypothèses et le dossier. Le JSON reprend les valeurs calculées, leur agrégation et les révisions.
+Read the CSV files and `manifest.json`, in particular `output_qualification.tables`, before answering. Give the main
+results, units, period, assumptions and folder in the user's language. The JSON repeats the computed values, their
+aggregation and the revisions.
 
-- `kpis.csv` : indicateurs par réalisation ; les médianes viennent de ces lignes.
-- `representative.csv` et `daily.csv` : réalisation 0 ; énergie journalière en kWh, puissance moyenne en kW.
-- `envelope.csv` : quantiles horaires entre réalisations.
-- `season_profiles.csv` : profils des saisons couvertes.
+- `kpis.csv`: indicators per realisation; the medians come from these rows.
+- `representative.csv` and `daily.csv`: realisation 0; daily energy in kWh, mean power in kW.
+- `envelope.csv`: hourly quantiles across realisations.
+- `season_profiles.csv`: profiles of the seasons covered.
 
-`annualized_mwh = total_mwh × 365/n_days` est une extrapolation en MWh/an. `specific_kwh_m_year` est en kWh/(m·an), tous tubes compris. Les horodatages n’ont pas de fuseau déclaré. Les sorties sont synthétiques ; les quantiles Monte Carlo décrivent les mécanismes simulés.
+`annualized_mwh = total_mwh × 365/n_days` is an extrapolation in MWh per year. `specific_kwh_m_year` is in kWh per
+metre and year, all tubes included. Timestamps carry no declared time zone. The outputs are synthetic; the Monte Carlo
+quantiles describe the simulated mechanisms.
 
-Une comparaison achevée a un manifeste `complete`, deux `scenario_runs` et aucun `INCOMPLETE.txt`. Les CSV réunis portent `scenario`. `comparison.json` donne les différences de médianes et le pourcentage relatif au scénario 2 (`null` si référence nulle). Des graines communes ne garantissent pas les mêmes tirages lorsque les paramètres changent leur séquence.
+A completed comparison has a `complete` manifest, two `scenario_runs` and no `INCOMPLETE.txt`. The merged CSV files
+carry `scenario`. `comparison.json` gives the differences of medians and the percentage relative to scenario 2 (`null`
+when the reference is zero). Common seeds do not guarantee the same draws when the parameters change their sequence.
 
 ## Maintenance
 
-`python tools/export_tls_contract.py` régénère contrat, vocabulaire, référentiel et exemple depuis le descripteur. Cette commande exécute un petit scénario pour inventorier les colonnes.
+`python tools/export_tls_contract.py` regenerates the contract, vocabulary, reference and example from the descriptor.
+The command runs a small scenario to list the columns.
 
-## Réponse courte
+## Short answer
 
-Par défaut, afficher les trois médianes (énergie totale, énergie annualisée, pic), leurs unités, la période et le lien vers les fichiers. Indiquer brièvement « simulation ; annualisation extrapolée ». Conserver paramètres, hypothèses, sources, empreintes, versions et graines dans les fichiers de traçabilité. Donner les détails sur demande. Si le parcours exécuté diffère du parcours prévu, le signaler en une phrase et consigner les détails dans la note d’exécution.
+By default, show the three medians (total energy, annualised energy, peak), their units, the period and the link to
+the files. Add briefly "simulation; annualisation extrapolated". Keep parameters, assumptions, sources, fingerprints,
+versions and seeds in the traceability files. Give details on request. If the route executed differs from the planned
+route, say so in one sentence and record the details in the execution note.
 
-## Lieu et contexte
+## Place and context
 
-Si une ville est citée, consulter les sources locales avec les outils web de l’agent. `geography` dans le contrat donne le catalogue des lieux, URL, champs proposés et règles utilisés par le dialogue local. Pour un autre lieu, rechercher des sources adaptées. Tracer URL, date, faits consultés et hypothèses dans `geographical_context.json` avec les résultats.
+If a city is named, consult local sources with the agent's web tools. `geography` in the contract gives the catalogue
+of places, URLs, proposed fields and rules used by the local dialogue. For another place, look for suitable sources.
+Record URL, date, facts consulted and assumptions in `geographical_context.json` with the results.
 
-Conserver les caractéristiques explicites du tunnel. Pour « le même tunnel », conserver sa configuration ; proposer séparément les adaptations locales justifiées et demander leur acceptation avant de les appliquer. Une ville ne détermine ni la géométrie ni les probabilités d’événements. Si les sources manquent, conserver les hypothèses acceptées en le signalant brièvement. La date simulée détermine le facteur saisonnier ; le nom de ville seul ne modifie pas le calcul TLS.
+Keep the explicit characteristics of the tunnel. For "the same tunnel", keep its configuration; propose justified
+local adaptations separately and ask for their acceptance before applying them. A city determines neither the geometry
+nor the event probabilities. If sources are missing, keep the accepted assumptions and say so briefly. The simulated
+date sets the seasonal factor; the city name alone does not change the TLS calculation.
 
-## Suivi et comparaison
+## Follow-up and comparison
 
-Le parcours détaillé est dans [agent/README.md](../agent/README.md). Le lanceur accepte deux scénarios complets et utilise le même orchestrateur que le dialogue local. Pour une suite d’étude, `--previous` conserve le lien au manifeste et trace les différences ; pas interne, réalisations et graine ne changent que sur demande explicite. Conserver les demandes pertinentes dans `request`, afin que les preuves restent exactes ; ne pas inventer de citations.
+The detailed route is in [agent/README.md](../agent/README.md). The launcher accepts two complete scenarios and uses
+the same orchestrator as the local dialogue. For a follow-up study, `--previous` keeps the link to the manifest and
+records the differences; internal step, realisations and seed change only on explicit request. Keep the relevant
+requests in `request`, so that the evidence stays exact; never invent quotations.
 
-Un lieu connu cité dans la demande nécessite un contexte fourni par l’agent via `--context`. Pour un autre lieu, utiliser aussi `--place`. L’agent réalise la recherche avec ses outils web ; le lanceur vérifie les champs et l’acceptation, puis conserve le rapport. Ces contrôles ne prouvent pas la vérité des sources. Le format est décrit dans `agent/context.schema.json`.
+A known place named in the request requires a context provided by the agent through `--context`. For another place,
+also use `--place`. The agent does the research with its web tools; the launcher checks the fields and the acceptance,
+then keeps the report. These checks do not prove that the sources are true. The format is described in
+`agent/context.schema.json`.

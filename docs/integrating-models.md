@@ -1,11 +1,21 @@
-# Ajouter un modèle
+# Adding a code
 
-1. Créer `descriptors/<modèle>/descriptor.yaml` : logiciel, paramètres, expérience, tâches et présentation. Définir types, unités, catégories, bornes, sens et références.
-2. Déclarer les défauts avec leur provenance. Réserver `operational_default` aux réglages techniques autorisés explicitement. Décrire les alias et conversions d’unités.
-3. Écrire un adaptateur local `run(scenario, descriptor, workspace, output_root=None)` qui retourne `(dossier, indicateurs_medians)`. Valider puis appeler le backend intact ; produire les CSV et `manifest.json` avec logiciel, scénario et qualification.
-4. Déclarer `runtime.adapter`, ainsi que le chemin et le marqueur du backend si nécessaire. Enregistrer le modèle dans `src/websemantic/environments.json` après vérification.
-5. Définir les tableaux, indicateurs et notes dans `presentation.results`. Tester configurations, refus, unités et provenance.
+1. Create `descriptors/<code>/descriptor.yaml`: software, parameters, experiment, tasks and presentation. Define types,
+   units, categories, bounds, meanings and references.
+2. Declare the defaults with their provenance. Keep `operational_default` for technical settings that are explicitly
+   allowed. Describe the aliases and the unit conversions.
+3. Write a local adapter `run(scenario, descriptor, workspace, output_root=None)` that returns `(folder,
+   median_indicators)`. Validate, then call the unmodified backend; produce the CSV files and `manifest.json` with
+   software, scenario and qualification.
+4. Declare `runtime.adapter`, and the backend path and marker if needed. Register the code in
+   `src/websemantic/environments.json` once it has been checked.
+5. Define the tables, indicators and notes in `presentation.results`. Test configurations, refusals, units and
+   provenance.
 
-Les échelles `qualitative_scale` associent une expression à une valeur typée ou une fraction d’une référence documentée. Elles proposent des hypothèses à accepter. `qualitative_policy` encadre les catégories, dates et identifiants.
+A `qualitative_scale` maps an expression to a typed value or to a fraction of a documented reference. It proposes
+assumptions that must be accepted. `qualitative_policy` governs categories, dates and identifiers.
 
-Les lieux, sources et règles de contexte appartiennent au descripteur. Les imports exécutés viennent des adaptateurs locaux déclarés. Le vocabulaire et la provenance sont exportés depuis les définitions du modèle.
+Places, sources and context rules belong to the descriptor. The code that runs comes only from the declared local
+adapters. The vocabulary and the provenance are exported from the code's definitions.
+
+Pin the code itself as a Git submodule at a fixed commit (see `.gitmodules`); WebSemantic never modifies it.

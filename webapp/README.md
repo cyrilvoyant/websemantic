@@ -17,7 +17,7 @@ tags:
   - pyodide
 ---
 
-# WebSemantic — ask before you compute
+# WebSemantic: ask before you compute
 
 Talk to two scientific codes, in English or French, by text or voice: **road-tunnel electricity demand** (Tunnel
 Load Simulator) and **radiotherapy dose equivalence** (LQL-Equiv). The code asks for what is missing, proposes its
@@ -30,4 +30,4 @@ Scenarios are fictitious by design: do not enter personal or patient data.
 
 - Source: https://github.com/cyrilvoyant/websemantic (MIT) · PyPI: `pip install websemantic`
 - Concept DOI: https://doi.org/10.5281/zenodo.23238902 · Ontology: https://w3id.org/websemantic/ns
-- Author: Cyril Voyant, Mines Paris – PSL ([ORCID 0000-0003-0242-7377](https://orcid.org/0000-0003-0242-7377))
+- Author: Cyril Voyant, Mines Paris - PSL ([ORCID 0000-0003-0242-7377](https://orcid.org/0000-0003-0242-7377))

@@ -118,8 +118,8 @@ On Windows, the packaged version installs with `Installer.cmd` and starts with `
 The method was tested on 72 requests, each asked with eight combinations of documentation, contract, ontology and
 FAIR metadata, three times, with four language models (frozen release 0.2.6; paper in preparation). Adding the
 contract to the documentation reduced premature calculations from 26 to 6 % (Mistral-Small), 17 to 1 % (Qwen2.5),
-52 to 23 % (Codestral) and 25 to 3 % (Gemini), and raised the correct handling of vague words from 0–30 % to
-45–95 %. The ontology does more as a checker than as reading material for the model.
+52 to 23 % (Codestral) and 25 to 3 % (Gemini), and raised the correct handling of vague words from 0 to 30 % to
+45 to 95 %. The ontology does more as a checker than as reading material for the model.
 
 ## For developers
 
@@ -133,7 +133,7 @@ ontology files and metadata are generated from them.
 & .\.venv\Scripts\python.exe -m ruff check src tests tools
 ```
 
-[Architecture](docs/architecture.md) · [Adding a code](docs/integrating-models.md) · [Protocol](docs/protocol.md) ·
+[Architecture](docs/architecture.md) · [Adding a code](docs/integrating-models.md) · [All documentation](docs/README.md) ·
 [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md)
 
 ## Cite and licence
@@ -144,6 +144,6 @@ Cite the concept DOI [10.5281/zenodo.23238902](https://doi.org/10.5281/zenodo.23
 [MIT](LICENSE) from version 0.2.6; versions 0.2.0 to 0.2.5 remain under PolyForm Noncommercial 1.0.0. The pinned
 codes keep their own licences (TLS and LQL-Equiv: MIT; pyrcel: BSD-3-Clause). The repository holds no key.
 
-<a href="https://www.oie.minesparis.psl.eu/"><img src="docs/mines-paris-psl-oie.png" alt="Mines Paris – PSL, Centre O.I.E. (Observation, Impacts, Energy)" height="44"></a>
+<a href="https://www.oie.minesparis.psl.eu/"><img src="docs/mines-paris-psl-oie.png" alt="Mines Paris - PSL, Centre O.I.E. (Observation, Impacts, Energy)" height="44"></a>
 
-Cyril Voyant, Centre O.I.E. (Observation, Impacts, Energy), Mines Paris – PSL.
+Cyril Voyant, Centre O.I.E. (Observation, Impacts, Energy), Mines Paris - PSL.

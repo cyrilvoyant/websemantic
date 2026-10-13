@@ -25,13 +25,11 @@ identifiers:
 - type: url
   value: https://w3id.org/websemantic/ns
   description: Persistent namespace of the WebSemantic ontology (w3id.org)
-abstract: 'Semantic framework for preparing scientific simulation scenarios, validating
-  typed configurations and qualifying numerical outputs with explicit provenance.
-  One descriptor per software is compiled into an LLM contract, an ontology with SHACL shapes and FAIR
-  metadata; three unchanged backends are linked at pinned revisions (TLS, LQL-Equiv, pyrcel).
-  Outputs are synthetic and have not been validated against field measurements.
-
-  '
+abstract: 'WebSemantic lets language models prepare scientific simulations without guessing.
+  One descriptor per code is compiled into a contract for language models, an ontology with SHACL
+  shapes, a validator that decides to execute, clarify or refuse, and FAIR metadata. The original
+  codes stay unchanged at pinned revisions (TLS, LQL-Equiv, pyrcel); a web application runs TLS and
+  LQL-Equiv in the browser. Outputs are synthetic and have not been validated against field measurements.'
 keywords:
 - semantic web
 - scientific software
@@ -39,6 +37,8 @@ keywords:
 - simulation configuration
 - provenance
 - PROV-O
+- ontology
+- SHACL
 - FAIR
 - reproducibility
 references:
