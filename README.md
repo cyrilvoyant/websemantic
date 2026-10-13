@@ -2,7 +2,7 @@
 
 # WebSemantic
 
-**Language models can prepare scientific simulations. WebSemantic makes sure they do not guess.**
+**Language models can prepare scientific simulations. WebSemantic checks inputs and asks users to resolve missing values.**
 
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23238902-blue.svg)](https://doi.org/10.5281/zenodo.23238902)
 [![PyPI](https://img.shields.io/pypi/v/websemantic.svg)](https://pypi.org/project/websemantic/)
@@ -11,11 +11,11 @@
 [![Licence: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Web app](https://img.shields.io/badge/web%20app-Hugging%20Face-yellow.svg)](https://cyrilvoyant-websemantic.static.hf.space)
 
-Ask a language model to run a simulation and it fills the gaps by itself. "A weak updraft" becomes 0.1 m/s, "the
-usual dose" becomes 3 Gy, and the code runs on values that nobody stated. In our tests, such guesses changed the
+A language model asked to run a simulation may fill gaps by itself. "A weak updraft" becomes 0.1 m/s, "the
+usual dose" becomes 3 Gy, and the code runs on values that nobody stated. In simulations of plausible numerical interpretations, these choices changed the
 computed result by up to a factor of 2.6, and moved a complication probability from 3 % to 47 %.
 
-WebSemantic sits between the person, the language model and a validated scientific code. The model only translates
+WebSemantic sits between the person, the language model and an unchanged scientific code. The model only translates
 words into the code's variables. WebSemantic checks them, proposes the declared defaults and conventions, asks for
 what is missing, and runs the original code only after the person agrees. Every result states its units, its
 sources and the exact version of the code that produced it.
@@ -26,8 +26,8 @@ to install, in English or French, on a computer or a phone.
 ## One description, four views
 
 Each code is described once, in a descriptor ([example](descriptors/tls/descriptor.yaml)): its parameters, canonical
-units, bounds, defaults, qualitative conventions and tasks. WebSemantic derives four artefacts from it, so they never
-contradict each other.
+units, bounds, defaults, qualitative conventions and tasks. WebSemantic derives four artefacts from it, to reduce inconsistencies between
+their definitions.
 
 | Artefact | What it holds | Used by |
 |---|---|---|
@@ -39,10 +39,10 @@ contradict each other.
 **Software-agnostic.** Adding a code takes a descriptor and a thin adapter ([guide](docs/integrating-models.md)).
 The code itself is never modified: it is pinned to a commit and its sources are checked by SHA-256 before each run.
 
-**LLM-ready.** An agent that reaches this repository needs nothing else: [llm.md](llm.md) gives the rules and
+**LLM-ready.** An agent with Python, the required dependencies and access to the source files can start here: [llm.md](llm.md) gives the rules and
 [agent/run.py](agent/README.md) runs a code from an accepted scenario.
 
-## From a request to a result
+## From a request to a result in the web app
 
 ```mermaid
 flowchart TD
@@ -51,14 +51,16 @@ flowchart TD
     C -- "missing or ambiguous" --> D["Question to the person"]
     D --> B
     C -- "complete" --> E["Person confirms"]
-    E --> F["Ontology rules<br/>SHACL"]
+    E -- "LQL-Equiv" --> F["LQL-Equiv input rules<br/>SHACL"]
+    E -- "TLS" --> G
     F --> G["Pinned original code<br/>commit and SHA-256"]
     G --> H["Result<br/>units, provenance, version"]
 ```
 
-A number is accepted only if it appears in the person's words. A default or a convention is only proposed, and
+A provided number must be supported by the person's words or an explicit unit conversion. A default or a convention is only proposed, and
 counts once the person accepts it. In the web app, the SHACL check runs before every LQL-Equiv calculation; the TLS
-parameters are not yet mapped to ontology concepts.
+parameters are not yet mapped to ontology concepts. For dose searches, SHACL checks the reference schedule
+and stated inputs, not every candidate produced by the search.
 
 ## Three codes, three domains
 
@@ -105,18 +107,23 @@ On Windows, the packaged version installs with `Installer.cmd` and starts with `
 
 ## What comes back
 
+A single run provides:
+
 - **CSV tables**: time series, daily values, profiles and indicators, with their units.
 - **manifest.json**: every parameter with its value, unit, origin, source and acceptance; software versions and
   commits; SHA-256 of inputs and outputs.
 - **semantics.ttl**: the provenance as an RDF graph (PROV-O).
+
+Web-app comparisons and searches provide a results file with versions and checks; they do not all
+produce the single-run manifest and RDF graph.
 
 [TLS parameters and outputs](docs/tls-reference.md) · [JSON contract](ontology/tls-contract.json) ·
 [Agent execution](docs/agent-contract.md)
 
 ## Evidence
 
-The method was tested on 72 requests, each asked with eight combinations of documentation, contract, ontology and
-FAIR metadata, three times, with four language models (frozen release 0.2.6; paper in preparation). Adding the
+The corpus contains 78 cases (72 distinct first-turn requests), each asked with eight combinations of documentation, contract, ontology and
+FAIR metadata, three times, giving 1872 responses per model, with four language models (frozen release 0.2.6; paper in preparation). Adding the
 contract to the documentation reduced premature calculations from 26 to 6 % (Mistral-Small), 17 to 1 % (Qwen2.5),
 52 to 23 % (Codestral) and 25 to 3 % (Gemini), and raised the correct handling of vague words from 0 to 30 % to
 45 to 95 %. The ontology does more as a checker than as reading material for the model.
