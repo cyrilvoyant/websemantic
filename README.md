@@ -45,7 +45,7 @@ The code itself is never modified: it is pinned to a commit and its sources are 
 ## From a request to a result
 
 ```mermaid
-flowchart LR
+flowchart TD
     A["Request in words"] --> B["Language model<br/>words to variables only"]
     B --> C["Validator<br/>units, bounds, origins"]
     C -- "missing or ambiguous" --> D["Question to the person"]
