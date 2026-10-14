@@ -96,7 +96,7 @@ def vocabulary(descriptor, qualification=None):
         "maximumExclusive": "Borne maximale exclue.",
         "boundAuthority": "Origine déclarée de la borne ; code ou politique du prototype.",
         "requiresIndicator": "Indicateur associé à l'intention.",
-        "aggregation": "Méthode de regroupement de la table calculée.",
+        "aggregationNote": "Méthode de regroupement de la table calculée (texte ; distinct de wsem:aggregation, qui relie une variable de sortie à une agrégation déclarée).",
         "hasColumn": "Colonne d'une table calculée.",
         "meaning": "Sens scientifique et limites de la quantité.",
         "quantity": "Nature de la quantité : énergie, puissance, indice, identifiant, etc.",
@@ -177,7 +177,7 @@ def vocabulary(descriptor, qualification=None):
             graph.add((term, SKOS.inScheme, scheme))
             graph.add((term, SKOS.broader, concept(descriptor, "group/outputs")))
             graph.add((term, SKOS.prefLabel, Literal(table)))
-            graph.add((term, WS.aggregation, Literal(info["aggregation"], lang="fr")))
+            graph.add((term, WS.aggregationNote, Literal(info["aggregation"], lang="fr")))
             for column, metadata in info["columns"].items():
                 field = concept(descriptor, f"outputs/{table}/{column}")
                 graph.add((term, WS.hasColumn, field))
@@ -256,7 +256,7 @@ def export_semantics(scenario, qualification, target, descriptor):
         graph.add((output, PROV.wasDerivedFrom, node))
         graph.add((output, PROV.wasGeneratedBy, activity))
         graph.add((output, PROV.atLocation, URIRef((target / info.get('file', table + '.csv')).resolve().as_uri())))
-        graph.add((output, WS.aggregation, Literal(info["aggregation"], lang="fr")))
+        graph.add((output, WS.aggregationNote, Literal(info["aggregation"], lang="fr")))
         for name, metadata in info["columns"].items():
             column = WS[f"{target.name}/outputs/{table}/{name}"]
             graph.add((output, WS.hasColumn, column))

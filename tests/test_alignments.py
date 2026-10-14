@@ -59,3 +59,5 @@ def test_a_run_graph_reads_as_an_observation_by_the_pinned_code(tmp_path):
             ?run a sosa:Observation ; prov:wasAssociatedWith ?code .
             ?code a sosa:Sensor , schema:SoftwareSourceCode ; wsem:revision ?revision }"""))
     assert [str(row.revision) for row in rows] == [descriptor["software"]["commit"]]
+    tables = set(data.subjects(RDF.type, WSEM.SimulationOutput))
+    assert tables and not any((table, RDF.type, WSEM.OutputVariable) in data for table in tables)

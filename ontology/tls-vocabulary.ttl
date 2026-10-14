@@ -33,8 +33,8 @@ wsem:accepted a rdf:Property ;
     rdfs:domain wsem:Parameter ;
     rdfs:range rdfs:Literal .
 
-wsem:aggregation a rdf:Property ;
-    rdfs:comment "Méthode de regroupement de la table calculée."@fr .
+wsem:aggregationNote a rdf:Property ;
+    rdfs:comment "Méthode de regroupement de la table calculée (texte ; distinct de wsem:aggregation, qui relie une variable de sortie à une agrégation déclarée)."@fr .
 
 wsem:allowedValue a rdf:Property ;
     rdfs:comment "Valeur catégorielle autorisée."@fr .
@@ -1256,7 +1256,7 @@ wsem:value a rdf:Property ;
     skos:broader <https://w3id.org/websemantic/ns#tls/group/outputs> ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "daily" ;
-    wsem:aggregation "Agrégation journalière de la réalisation 0 : somme de l'énergie et moyenne de la puissance ; pas une médiane Monte Carlo. Les dates suivent le calendrier sans fuseau déclaré."@fr ;
+    wsem:aggregationNote "Agrégation journalière de la réalisation 0 : somme de l'énergie et moyenne de la puissance ; pas une médiane Monte Carlo. Les dates suivent le calendrier sans fuseau déclaré."@fr ;
     wsem:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/daily/energy_kwh>,
         <https://w3id.org/websemantic/ns#tls/outputs/daily/mean_kw>,
         <https://w3id.org/websemantic/ns#tls/outputs/daily/timestamp> .
@@ -1277,7 +1277,7 @@ wsem:value a rdf:Property ;
     skos:broader <https://w3id.org/websemantic/ns#tls/group/outputs> ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "season_profiles" ;
-    wsem:aggregation "Puissance moyenne par saison et heure du jour, dans chaque réalisation, uniquement sur les jours simulés."@fr ;
+    wsem:aggregationNote "Puissance moyenne par saison et heure du jour, dans chaque réalisation, uniquement sur les jours simulés."@fr ;
     wsem:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/season_profiles/hour_int>,
         <https://w3id.org/websemantic/ns#tls/outputs/season_profiles/power_kw>,
         <https://w3id.org/websemantic/ns#tls/outputs/season_profiles/run>,
@@ -1287,7 +1287,7 @@ wsem:value a rdf:Property ;
     skos:broader <https://w3id.org/websemantic/ns#tls/group/outputs> ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "envelope" ;
-    wsem:aggregation "Puissances moyennées par heure dans chaque réalisation, puis statistiques entre réalisations. p10/p90 sont des quantiles empiriques, pas un intervalle de confiance."@fr ;
+    wsem:aggregationNote "Puissances moyennées par heure dans chaque réalisation, puis statistiques entre réalisations. p10/p90 sont des quantiles empiriques, pas un intervalle de confiance."@fr ;
     wsem:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/envelope/mean>,
         <https://w3id.org/websemantic/ns#tls/outputs/envelope/median>,
         <https://w3id.org/websemantic/ns#tls/outputs/envelope/p10>,
@@ -1306,7 +1306,7 @@ wsem:value a rdf:Property ;
     skos:broader <https://w3id.org/websemantic/ns#tls/group/outputs> ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "kpis" ;
-    wsem:aggregation "Une ligne par réalisation sur toute la période simulée."@fr ;
+    wsem:aggregationNote "Une ligne par réalisation sur toute la période simulée."@fr ;
     wsem:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/kpis/annualized_mwh>,
         <https://w3id.org/websemantic/ns#tls/outputs/kpis/base_seed>,
         <https://w3id.org/websemantic/ns#tls/outputs/kpis/load_factor>,
@@ -1323,7 +1323,7 @@ wsem:value a rdf:Property ;
     skos:broader <https://w3id.org/websemantic/ns#tls/group/outputs> ;
     skos:inScheme <https://w3id.org/websemantic/ns#vocabulary/c21cfff2027903a8> ;
     skos:prefLabel "representative" ;
-    wsem:aggregation "Réalisation 0 au pas natif ; exemple de trajectoire, pas la médiane."@fr ;
+    wsem:aggregationNote "Réalisation 0 au pas natif ; exemple de trajectoire, pas la médiane."@fr ;
     wsem:hasColumn <https://w3id.org/websemantic/ns#tls/outputs/representative/accident_event>,
         <https://w3id.org/websemantic/ns#tls/outputs/representative/auxiliary_kw>,
         <https://w3id.org/websemantic/ns#tls/outputs/representative/day_type>,

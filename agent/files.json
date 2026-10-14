@@ -51,7 +51,7 @@
     {
       "path": "src/websemantic/semantics.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/semantics.py",
-      "sha256_lf": "b66c5371a247bc1c4bb535975ab3b13916329ff44b725e1cbd64545d3f0ed030"
+      "sha256_lf": "93e171aa754dd777a78bb08b7f4e3eb74fdbda2d5de7baf6bd8bcac9fa2be6c3"
     },
     {
       "path": "src/websemantic/comparison.py",
@@ -81,7 +81,7 @@
     {
       "path": "ontology/tls-vocabulary.ttl",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/tls-vocabulary.ttl",
-      "sha256_lf": "d8ef72aec325220b8e852387c4ec459e9025c7779a1506f4267dc70569be5f92"
+      "sha256_lf": "9abcdd21dcaace2ab07018fcab895fcd35f742f6de3d9700980994579c8e9e95"
     },
     {
       "path": "ontology/shapes.ttl",
