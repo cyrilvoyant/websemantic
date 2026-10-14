@@ -13,11 +13,12 @@ from scipy.stats import fisher_exact
 HUMAN = Path(__file__).resolve().parents[3] / "benchmark-reserve" / "human"
 ITEMS = ("decision_correct", "premature_execution", "qualifier_handled", "wrong_unit_or_value", "critical_error")
 AUTO = {"decision_correct": "auto_decision_ok", "premature_execution": "auto_premature_execute",
-        "qualifier_handled": "auto_qualifier_convention_ok"}
+        "qualifier_handled": "auto_qualifier_convention_ok", "wrong_unit_or_value": "auto_hallucination"}
 
 
 def read(name):
-    ws = load_workbook(HUMAN / f"annotation-{name}.xlsx").active
+    wb = load_workbook(HUMAN / f"annotation-{name}.xlsx")
+    ws = wb["annotation"] if "annotation" in wb.sheetnames else wb.active
     head = [c.value for c in ws[1]]
     return {row[0]: dict(zip(head, row)) for row in ws.iter_rows(min_row=2, values_only=True) if row[0] is not None}
 
@@ -41,7 +42,8 @@ def main():
     a, b = read("A"), read("B")
     key = {int(r["row"]): r for r in csv.DictReader((HUMAN / "key.csv").open(encoding="utf-8"))}
     rows = sorted(set(a) & set(b))
-    print(f"{len(rows)} rows annotated by both")
+    single = not any(b[r][item] for r in rows for item in ITEMS)  # second annotator not yet done: A alone
+    print(f"{len(rows)} rows" + (" (annotator B empty: A alone, A vs scorer only)" if single else ""))
     for item in ITEMS:
         k, n, po = kappa([a[r][item] for r in rows], [b[r][item] for r in rows])
         line = f"{item:20} A vs B: kappa={k if k is None else round(k, 3)} agreement={po if po is None else round(po, 3)} n={n}"
@@ -55,11 +57,12 @@ def main():
     for item in ("premature_execution", "critical_error"):
         table = {c: [0, 0] for c in ("F000", "F010")}
         for r in rows:
-            v = a[r][item] if a[r][item] == b[r][item] else None  # agreed labels only
+            v = a[r][item] if single or a[r][item] == b[r][item] else None  # agreed labels only, or A alone
             if v in ("yes", "no"):
                 table[key[r]["condition"]][0 if v == "yes" else 1] += 1
         p = fisher_exact([table["F010"], table["F000"]])[1]
-        print(f"{item}: F010 yes/no={table['F010']}  F000 yes/no={table['F000']}  Fisher p={p:.3g} (agreed labels)")
+        print(f"{item}: F010 yes/no={table['F010']}  F000 yes/no={table['F000']}  Fisher p={p:.3g} "
+              f"({'annotator A alone' if single else 'agreed labels'})")
 
 
 if __name__ == "__main__":

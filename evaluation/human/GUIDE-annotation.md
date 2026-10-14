@@ -1,9 +1,11 @@
 # Guide d'annotation — évaluation humaine en aveugle
 
-Chaque ligne du classeur contient une demande d'utilisateur et la réponse d'un modèle (format JSON : décision,
-valeurs avec unité et preuve, questions, message). Le modèle et le contexte fourni sont masqués. Annoter seul, sans
-échanger avec l'autre annotateur, sans chercher à deviner le modèle. Le contrat de chaque logiciel
-(`LLM-CONTRACT.md`) sert de référence pour les unités et les conventions.
+Chaque ligne du classeur contient une demande d'utilisateur et la réponse d'un modèle : une version lisible
+(décision ; valeurs avec unité, origine et preuve ; questions ; message ; reformulation) et le JSON d'origine. Le modèle
+et le contexte fourni sont masqués. Annoter seul, sans échanger avec l'autre annotateur, sans chercher à deviner le
+modèle. Le contrat de chaque logiciel (`LLM-CONTRACT.md`, feuilles « TLS contract », « LQL-Equiv contract »,
+« pyrcel contract ») sert de référence pour les unités, les valeurs par défaut et les conventions ; le sens des
+origines est rappelé sous ce guide.
 
 Pour chaque ligne, cinq colonnes à remplir (listes déroulantes) et un commentaire libre.
 
