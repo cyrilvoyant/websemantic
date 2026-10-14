@@ -1,0 +1,40 @@
+@prefix wsem:    <https://w3id.org/websemantic/ns#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix schema:  <https://schema.org/> .
+@prefix sosa:    <http://www.w3.org/ns/sosa/> .
+@prefix ssn:     <http://www.w3.org/ns/ssn/> .
+@prefix swo:     <http://www.ebi.ac.uk/swo/> .
+
+# Alignment of the WebSemantic core with CodeMeta (schema.org terms), the Software Ontology (SWO) and SOSA/SSN.
+# Same policy as the core: rdfs:subClassOf / rdfs:subPropertyOf / rdfs:seeAlso only, no owl:equivalentClass.
+# A run of a pinned code is read as a SOSA observation made by software: SOSA defines a Sensor as a device, agent or
+# software (simulation) implementing a Procedure, and an Observation as the act of estimating or calculating a value.
+# Added after the campaigns of the paper (core 0.2.6); it changes no definition of the core.
+
+<https://w3id.org/websemantic/ns/alignments> a owl:Ontology ;
+    dcterms:title "WebSemantic alignments"@en ;
+    dcterms:description "Alignment of the WebSemantic core with CodeMeta (schema.org), the Software Ontology and SOSA/SSN, so that simulated outputs can be queried like observations."@en ;
+    owl:imports <https://w3id.org/websemantic/ns> ;
+    owl:versionInfo "0.3.0" ;
+    dcterms:created "2026-10-14"^^xsd:date ;
+    dcterms:creator <https://orcid.org/0000-0003-0242-7377> ;
+    dcterms:license <https://spdx.org/licenses/MIT> ;
+    rdfs:seeAlso <https://codemeta.github.io/terms/> , <http://www.ebi.ac.uk/swo/> , <https://www.w3.org/TR/vocab-ssn/> .
+
+# Software: a source code release (CodeMeta), a piece of software (SWO), and software that implements a procedure (SOSA).
+wsem:Software rdfs:subClassOf schema:SoftwareSourceCode , swo:SWO_0000001 , sosa:Sensor ;
+    rdfs:seeAlso <https://codemeta.github.io/terms/> .
+
+# What the code computes and how.
+wsem:TaskProfile rdfs:subClassOf sosa:Procedure .
+wsem:ParameterDefinition rdfs:subClassOf ssn:Input .
+wsem:OutputVariable rdfs:subClassOf sosa:ObservableProperty , ssn:Output .
+wsem:requiresParameter rdfs:subPropertyOf ssn:hasInput .
+wsem:producesOutput rdfs:subPropertyOf ssn:hasOutput .
+
+# A run and its outputs.
+wsem:Execution rdfs:subClassOf sosa:Observation .
+wsem:SimulationOutput rdfs:subClassOf sosa:Result .

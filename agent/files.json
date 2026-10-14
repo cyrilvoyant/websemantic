@@ -51,7 +51,7 @@
     {
       "path": "src/websemantic/semantics.py",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/src/websemantic/semantics.py",
-      "sha256_lf": "f415f90b650b80ad1baf51dda91df37a4d3e48012c5a25d59cbe92a7cf9128a9"
+      "sha256_lf": "b66c5371a247bc1c4bb535975ab3b13916329ff44b725e1cbd64545d3f0ed030"
     },
     {
       "path": "src/websemantic/comparison.py",
@@ -96,7 +96,7 @@
     {
       "path": "ontology/README.md",
       "url": "https://raw.githubusercontent.com/cyrilvoyant/websemantic/main/ontology/README.md",
-      "sha256_lf": "6519ebd364936999ca234c42547b634b6a817dfc9a720372f187cb9f5467d61e"
+      "sha256_lf": "027651a69751db9c15c4a88731729ff824cf10db02cd56c40a5403cf9a2d1f38"
     },
     {
       "path": "ontology/tls-scenario.schema.json",

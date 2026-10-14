@@ -210,9 +210,11 @@ def export_semantics(scenario, qualification, target, descriptor):
     software = descriptor.get('software', {})
     agent = WS['software/' + sha256(json.dumps(software, sort_keys=True).encode()).hexdigest()[:16]]
     graph.add((activity, RDF.type, PROV.Activity))
+    graph.add((activity, RDF.type, WS.Execution))
     graph.add((activity, PROV.used, node))
     graph.add((activity, PROV.wasAssociatedWith, agent))
     graph.add((agent, RDF.type, PROV.SoftwareAgent))
+    graph.add((agent, RDF.type, WS.Software))
     graph.add((agent, RDFS.label, Literal(software.get('name', 'Scientific software'))))
     if software.get('commit'):
         graph.add((agent, WS.revision, Literal(software['commit'])))
