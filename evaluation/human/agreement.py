@@ -3,7 +3,8 @@ the automatic scorer on the three items that have an automatic counterpart of th
 contract effect (F010 vs F000) with Fisher's exact test.
 wrong_unit_or_value has no automatic counterpart: the scorer's hallucination flag also counts defaults and conventions
 used without acceptance, a different construct, so it is not compared.
-Disagreements between A and B are listed in adjudication.xlsx (created once, never overwritten); the effect is reported
+Disagreements between A and B are listed in adjudication.xlsx (rows appended, decisions never erased, a decision
+reused only while its A and B labels match the current annotations); the effect is reported
 on adjudicated labels (agreed + adjudicated) when every disagreement is adjudicated, and separately on agreed labels.
 With annotator B empty, results for A alone are provisional (no inter-annotator agreement).
 Usage: python agreement.py   (reads benchmark-reserve/human/annotation-A.xlsx, annotation-B.xlsx, key.csv)
@@ -47,24 +48,49 @@ def as_yesno(v):
 
 
 def adjudication(a, b, rows):
-    """Final labels for the disagreements, from adjudication.xlsx; the file is created with an empty column if absent."""
+    """Final labels for the disagreements, from adjudication.xlsx.
+    New disagreements are appended; existing rows and their decisions are never erased. A decision is used only while the
+    A and B labels it was taken on still match the current annotations; otherwise its row is marked stale and a new row
+    is appended for the current labels."""
     path = HUMAN / "adjudication.xlsx"
-    disagreements = [(r, item, a[r][item], b[r][item]) for r in rows for item in ITEMS
-                     if a[r][item] and b[r][item] and a[r][item] != b[r][item]]
-    if not path.exists():
+    head = ["row", "item", "A", "B", "final", "reason", "status"]
+    current = {(r, item): (a[r][item], b[r][item]) for r in rows for item in ITEMS
+               if a[r][item] and b[r][item] and a[r][item] != b[r][item]}
+    if path.exists():
+        wb = load_workbook(path)
+        ws = wb["adjudication"]
+        if [c.value for c in ws[1]][:len(head)] != head:
+            ws.cell(1, 7, "status").font = Font(bold=True)
+    else:
         wb = Workbook()
         ws = wb.active
         ws.title = "adjudication"
-        ws.append(["row", "item", "A", "B", "final", "reason"])
+        ws.append(head)
         for c in ws[1]:
             c.font = Font(bold=True)
-        for d in disagreements:
-            ws.append(list(d))
+    final, valid, changed = {}, set(), 0
+    for row in ws.iter_rows(min_row=2):
+        r, item, la, lb, decision = (c.value for c in row[:5])
+        if r is None:
+            continue
+        if current.get((r, item)) == (la, lb):
+            valid.add((r, item))
+            if decision:
+                final[(r, item)] = decision
+            status = "adjudicated" if decision else "pending"
+        else:
+            status = "stale: A/B changed since" if (r, item) in current else "no longer a disagreement"
+        if row[6].value != status:
+            ws.cell(row[0].row, 7, status)
+            changed += 1
+    added = [(r, item, la, lb) for (r, item), (la, lb) in sorted(current.items()) if (r, item) not in valid]
+    for r, item, la, lb in added:
+        ws.append([r, item, la, lb, None, None, "pending"])
+    if added or changed or not path.exists():
         wb.save(path)
-        print(f"{len(disagreements)} disagreements written to {path.name}: fill 'final' together, keep A and B")
-    ws = load_workbook(path)["adjudication"]
-    final = {(r[0], r[1]): r[4] for r in ws.iter_rows(min_row=2, values_only=True) if r[0] is not None and r[4]}
-    missing = [(r, item) for r, item, _, _ in disagreements if (r, item) not in final]
+    if added:
+        print(f"{len(added)} disagreements added to {path.name}: fill 'final' and 'reason' together; A and B stay unchanged")
+    missing = [key for key in current if key not in final]
     return final, missing
 
 
