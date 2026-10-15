@@ -1,0 +1,165 @@
+{
+ "coverage": {
+  "tls|F000": {
+   "incomplete_configuration": 18,
+   "invalid_configuration": 44,
+   "comparable_with_completion": 10
+  },
+  "tls|F010": {
+   "comparable_without_completion": 54,
+   "incomplete_configuration": 1,
+   "comparable_with_completion": 3,
+   "unjustified_abstention": 9,
+   "invalid_configuration": 2,
+   "justified_abstention": 3
+  },
+  "lqlequiv|F000": {
+   "comparable_without_completion": 30,
+   "incomplete_configuration": 15
+  },
+  "lqlequiv|F010": {
+   "comparable_without_completion": 30,
+   "unjustified_abstention": 15
+  },
+  "pyrcel|F000": {
+   "comparable_without_completion": 19,
+   "incomplete_configuration": 14,
+   "justified_abstention": 6,
+   "invalid_configuration": 3,
+   "different_support": 3
+  },
+  "pyrcel|F010": {
+   "comparable_without_completion": 28,
+   "unjustified_abstention": 11,
+   "justified_abstention": 3,
+   "different_support": 3
+  }
+ },
+ "per_code": {
+  "tls": {
+   "primary": "total_mwh",
+   "requests_with_comparable_answers": 8,
+   "paired_requests": 4,
+   "median_abs_err_F000": 0.0,
+   "median_abs_err_F010": 0.0,
+   "differences_F000_minus_F010": {
+    "TLS-P03": 0.0,
+    "TLS-P04": 0.0,
+    "TLS-P05": 0.0,
+    "TLS-P15": 0.0
+   },
+   "nonzero_differences": 0,
+   "ties": 4,
+   "lower_error_with_contract": 0,
+   "higher_error_with_contract": 0,
+   "wilcoxon_p": "not tested (fewer than six non-zero differences)"
+  },
+  "lqlequiv": {
+   "primary": "eqd_oar_total",
+   "requests_with_comparable_answers": 5,
+   "paired_requests": 5,
+   "median_abs_err_F000": 0.0,
+   "median_abs_err_F010": 0.0,
+   "differences_F000_minus_F010": {
+    "LQL-P01": 0.0,
+    "LQL-P03": 0.0,
+    "LQL-P04": 0.0,
+    "LQL-P05": 0.0,
+    "LQL-P06": 0.0
+   },
+   "nonzero_differences": 0,
+   "ties": 5,
+   "lower_error_with_contract": 0,
+   "higher_error_with_contract": 0,
+   "wilcoxon_p": "not tested (fewer than six non-zero differences)"
+  },
+  "pyrcel": {
+   "primary": "Nd",
+   "requests_with_comparable_answers": 5,
+   "paired_requests": 4,
+   "median_abs_err_F000": 0.0,
+   "median_abs_err_F010": 0.0,
+   "differences_F000_minus_F010": {
+    "PYR-P01": 0.0,
+    "PYR-P02": 0.0,
+    "PYR-P04": 0.0,
+    "PYR-P06": 0.0
+   },
+   "nonzero_differences": 0,
+   "ties": 4,
+   "lower_error_with_contract": 0,
+   "higher_error_with_contract": 0,
+   "wilcoxon_p": "not tested (fewer than six non-zero differences)"
+  }
+ },
+ "per_model": {
+  "lqlequiv|mistral-small|F000": {
+   "n": 12,
+   "median_abs_err": 0.0
+  },
+  "lqlequiv|mistral-small|F010": {
+   "n": 12,
+   "median_abs_err": 0.0
+  },
+  "pyrcel|mistral-small|F000": {
+   "n": 6,
+   "median_abs_err": 0.0
+  },
+  "pyrcel|mistral-small|F010": {
+   "n": 12,
+   "median_abs_err": 0.0
+  },
+  "tls|mistral-small|F010": {
+   "n": 24,
+   "median_abs_err": 0.0
+  },
+  "lqlequiv|qwen|F000": {
+   "n": 13,
+   "median_abs_err": 0.0
+  },
+  "lqlequiv|qwen|F010": {
+   "n": 3,
+   "median_abs_err": 0.0
+  },
+  "pyrcel|qwen|F000": {
+   "n": 9,
+   "median_abs_err": 0.0
+  },
+  "pyrcel|qwen|F010": {
+   "n": 6,
+   "median_abs_err": 0.0
+  },
+  "tls|qwen|F010": {
+   "n": 14,
+   "median_abs_err": 0.0
+  },
+  "tls|qwen|F000": {
+   "n": 4,
+   "median_abs_err": 0.0
+  },
+  "lqlequiv|codestral|F010": {
+   "n": 15,
+   "median_abs_err": 0.0
+  },
+  "lqlequiv|codestral|F000": {
+   "n": 5,
+   "median_abs_err": 0.0
+  },
+  "pyrcel|codestral|F010": {
+   "n": 10,
+   "median_abs_err": 0.0
+  },
+  "pyrcel|codestral|F000": {
+   "n": 4,
+   "median_abs_err": 0.0
+  },
+  "tls|codestral|F010": {
+   "n": 19,
+   "median_abs_err": 0.0
+  },
+  "tls|codestral|F000": {
+   "n": 6,
+   "median_abs_err": 0.0
+  }
+ }
+}
