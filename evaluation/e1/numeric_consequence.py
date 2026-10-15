@@ -25,6 +25,9 @@ RUNS = {"mistral-small": "local_mistral-small-3.2-24b__20261008T085744Z-full",
 CONDITIONS = ("F000", "F010")
 DOMAINS = ("tls", "lqlequiv", "pyrcel")
 PRIMARY = {"tls": "total_mwh", "lqlequiv": "eqd_oar_total", "pyrcel": "Nd"}
+# numeric_e1 returns pyrcel's native Nd in m^-3; the adapter reports cm^-3 (output.Nd / 1e6): converted here, unit stated.
+SCALE = {"tls": 1.0, "lqlequiv": 1.0, "pyrcel": 1e-6}
+UNIT = {"tls": "MWh", "lqlequiv": "Gy", "pyrcel": "cm^-3"}
 CONFIGS = {"tls": N.tls_configs, "lqlequiv": N.lql_configs, "pyrcel": N.pyrcel_configs}
 INVENTORY = HERE / "numeric-consequence-inventory.csv"
 ANSWERS = HERE / "numeric-consequence-answers.csv"
@@ -104,7 +107,8 @@ def run(limit=None):
     for i, r in enumerate(selected[:limit] if limit else selected, 1):
         case = cs[r["case_id"]]
         domain = case["domain"]
-        head = {k: r[k] for k in ("model", "condition", "case_id", "rep")} | {"domain": domain, "primary": PRIMARY[domain]}
+        head = {k: r[k] for k in ("model", "condition", "case_id", "rep")} | {"domain": domain, "primary": PRIMARY[domain],
+                                                                              "unit": UNIT[domain]}
         f = N.RESERVE / r["file"]
         if r["sha256"] == "missing" or not f.exists():
             answers.append({**head, "category": "technical_failure", "detail": "answer file missing"})
@@ -120,9 +124,9 @@ def run(limit=None):
         if key not in cache:
             try:
                 first, second = replay(ref_cfg), replay(ref_cfg)  # second run: numerical reproducibility
-                a, b = first["scalars"][PRIMARY[domain]], second["scalars"][PRIMARY[domain]]
-                references.append({"case_id": case["id"], "domain": domain, "primary": PRIMARY[domain], "run1": a, "run2": b,
-                                   "difference": abs(a - b)})
+                a, b = (x["scalars"][PRIMARY[domain]] * SCALE[domain] for x in (first, second))
+                references.append({"case_id": case["id"], "domain": domain, "primary": PRIMARY[domain], "unit": UNIT[domain],
+                                   "run1": a, "run2": b, "difference": abs(a - b)})
                 cache[key] = first
             except Exception as exc:  # noqa: BLE001 - a reference failure is a technical failure, not a candidate error
                 cache[key] = exc
@@ -145,10 +149,10 @@ def run(limit=None):
         if primary["status"] != "ok":
             answers.append({**head, "category": "technical_failure", "detail": primary["status"]})
             continue
-        ref_value, got_value = cache[key]["scalars"][PRIMARY[domain]], got["scalars"][PRIMARY[domain]]
+        ref_value, got_value = (x["scalars"][PRIMARY[domain]] * SCALE[domain] for x in (cache[key], got))
         answers.append({**head, "category": "comparable_with_completion" if completed else "comparable_without_completion",
                         "detail": " ".join(completed), "reference": ref_value, "value": got_value,
-                        "abs_err": primary["abs_err"], "rel_err": primary["rel_err"]})
+                        "abs_err": primary["abs_err"] * SCALE[domain], "rel_err": primary["rel_err"]})
         if i % 25 == 0:
             print(i, "answers")
     for path, rows in ((ANSWERS, answers), (SECONDARY, secondary), (REFERENCES, references)):

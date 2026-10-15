@@ -29,7 +29,7 @@ time step than the reference, so its outputs are not compared); comparable calcu
 authorised completion* (fields outside the expected set, such as protocol settings or defaults accepted by the request,
 taken from the case and listed). Non-replayable answers are never coded as an error, zero or infinite.
 
-**Primary outputs (fixed).** TLS: total energy `total_mwh` (MWh; median over the Monte Carlo realisations of the run).
+**Primary outputs (fixed).** (Correction of 15 October 2026, after the first run, found by Codex: pyrcel Nd is converted from the native m⁻³ to cm⁻³ as in the adapter; categories and zero errors unchanged.) TLS: total energy `total_mwh` (MWh; median over the Monte Carlo realisations of the run).
 LQL-Equiv: equivalent dose of the organ at risk `eqd_oar_total` (Gy; a code output, not a clinical decision). pyrcel:
 activated droplet number `Nd` (cm⁻³). All other outputs compared by `numeric_e1.py` are secondary (RMSE for aligned
 series, absolute error for scalars, relative error only for a non-zero reference).
