@@ -10,6 +10,8 @@ With annotator B empty, results for A alone are provisional (no inter-annotator 
 Usage: python agreement.py [--blank-as-no A B] [--single]
   --blank-as-no  annotators who declared that an empty item cell means "no" (their files are not modified)
   --single       annotator A alone, B ignored (provisional)
+  --no-adjudication  disagreements kept as legitimate, not adjudicated (amendment of 15 October 2026): effect
+                     reported for each annotator and on agreed labels; adjudication.xlsx neither read nor written
 Reads benchmark-reserve/human/annotation-A.xlsx, annotation-B.xlsx, key.csv.
 """
 
@@ -122,6 +124,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--blank-as-no", nargs="*", default=[], choices=("A", "B"))
     parser.add_argument("--single", action="store_true")
+    parser.add_argument("--no-adjudication", action="store_true")
     args = parser.parse_args(argv)
     a, b = read("A", "A" in args.blank_as_no), read("B", "B" in args.blank_as_no)
     key = {int(r["row"]): r for r in csv.DictReader((HUMAN / "key.csv").open(encoding="utf-8"))}
@@ -147,6 +150,13 @@ def main(argv=None):
     if single:
         for item in EFFECT:
             fisher(item, rows, lambda r: a[r][item], key, "annotator A alone, provisional")
+        return
+    if args.no_adjudication:
+        for item in EFFECT:
+            fisher(item, rows, lambda r: a[r][item], key, "annotator A")
+            fisher(item, rows, lambda r: b[r][item], key, "annotator B")
+            fisher(item, rows, lambda r: a[r][item] if a[r][item] == b[r][item] else None, key,
+                   "agreed labels only; disagreements kept, not adjudicated")
         return
     final, missing = adjudication(a, b, rows)
     for item in EFFECT:

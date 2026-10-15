@@ -62,3 +62,18 @@ The initial protocol above is retained. The following changes are post-diagnosti
 - The original six primary tests concern the two open models. An additional Codestral comparison is exploratory unless a separate prospective analysis plan is recorded before inspecting those comparison outcomes. Missing conditions must not silently reduce the planned family of tests.
 
 Interpretation clarification: a non-significant TC–F010 contrast does not establish equivalence or absence of added value. It only means that the specified test did not detect a difference on this first-turn endpoint. An unusable answer is not a successful scientific response merely because it contains no premature execution decision.
+
+## Amendment recorded on 15 October 2026 after both human annotations were complete
+
+The initial protocol above is retained; this change is post hoc and must be presented as such. Both annotators had
+finished; annotator A had already seen the agreement of their own labels with the automatic scorer.
+
+- Disagreements between the two annotators (5 labels in 3 answers) are **not adjudicated**. They are kept as legitimate
+  differences of expert judgement: a joint decision would let one annotator's view prevail over the other's and bias a
+  blind, independent annotation. Decision of Cyril Voyant.
+- The human-scored contract effect is therefore reported for each annotator separately and on agreed labels; no
+  adjudicated analysis is reported (`agreement.py --no-adjudication`).
+- Both annotators declared that an empty item cell means "no" (`agreement.py --blank-as-no A B`); the workbooks are kept
+  as filled.
+- Annotation conditions as declared: two physicists, each on their own workbook, in turn on the same computer, without
+  copying from the other workbook.
