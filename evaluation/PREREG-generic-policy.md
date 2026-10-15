@@ -24,3 +24,13 @@ rule. G better than F000 and not different from F010: most of the gain comes fro
 non-significant difference is not equivalence. G is shorter than the contract; length is not matched.
 
 **Paper.** One column in the table of cell means and two sentences in the contract section; no new section.
+
+## Addition recorded on 15 October 2026 (after the main analysis)
+
+The generic-rules condition G was also collected for `gemini-3.5-flash-lite` on 15 October 2026
+(`runs/e1/gemini-3.5-flash-lite__generic-20261015`, 234 answers, 0 network or HTTP error, 28 unreadable answers),
+so that the figure of the contract stages has no untested cell. This collection is post hoc: it was decided after the
+main analysis and is not part of the preregistered family. Contexts and instructions are byte-identical to those used for
+the other models on 9 October (G contexts f3a899fd1212, 202b16d76f21, ce123472d4ed; instructions 9f8e8d33b7fc). Gemini
+stays outside the Holm family of the four primary tests; the rows of the other three models in `e1-generic.csv` are
+unchanged.
