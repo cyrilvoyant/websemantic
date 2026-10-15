@@ -7,9 +7,13 @@ Disagreements between A and B are listed in adjudication.xlsx (rows appended, de
 reused only while its A and B labels match the current annotations); the effect is reported
 on adjudicated labels (agreed + adjudicated) when every disagreement is adjudicated, and separately on agreed labels.
 With annotator B empty, results for A alone are provisional (no inter-annotator agreement).
-Usage: python agreement.py   (reads benchmark-reserve/human/annotation-A.xlsx, annotation-B.xlsx, key.csv)
+Usage: python agreement.py [--blank-as-no A B] [--single]
+  --blank-as-no  annotators who declared that an empty item cell means "no" (their files are not modified)
+  --single       annotator A alone, B ignored (provisional)
+Reads benchmark-reserve/human/annotation-A.xlsx, annotation-B.xlsx, key.csv.
 """
 
+import argparse
 import csv
 from collections import Counter
 from pathlib import Path
@@ -25,11 +29,21 @@ AUTO = {"decision_correct": "auto_decision_ok", "premature_execution": "auto_pre
 EFFECT = ("premature_execution", "critical_error")
 
 
-def read(name):
+def read(name, blank_as_no=False):
     wb = load_workbook(HUMAN / f"annotation-{name}.xlsx")
     ws = wb["annotation"] if "annotation" in wb.sheetnames else wb.active
     head = [c.value for c in ws[1]]
-    return {row[0]: dict(zip(head, row)) for row in ws.iter_rows(min_row=2, values_only=True) if row[0] is not None}
+    rows = {}
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        if row[0] is None:
+            continue
+        record = dict(zip(head, row))
+        for item in ITEMS:
+            value = record.get(item)
+            value = value.strip() if isinstance(value, str) else value
+            record[item] = "no" if blank_as_no and value in (None, "") else (value or None)
+        rows[row[0]] = record
+    return rows
 
 
 def kappa(a, b):
@@ -104,12 +118,18 @@ def fisher(item, rows, label, key, note):
     print(f"{item}: F010 yes/no={table['F010']}  F000 yes/no={table['F000']}  Fisher p={p:.3g} ({note})")
 
 
-def main():
-    a, b = read("A"), read("B")
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--blank-as-no", nargs="*", default=[], choices=("A", "B"))
+    parser.add_argument("--single", action="store_true")
+    args = parser.parse_args(argv)
+    a, b = read("A", "A" in args.blank_as_no), read("B", "B" in args.blank_as_no)
     key = {int(r["row"]): r for r in csv.DictReader((HUMAN / "key.csv").open(encoding="utf-8"))}
     rows = sorted(set(a) & set(b))
-    single = not any(b[r][item] for r in rows for item in ITEMS)  # second annotator not yet done: A alone
-    print(f"{len(rows)} rows" + (" | PROVISIONAL: annotator B empty, A alone, no inter-annotator agreement" if single else ""))
+    single = args.single or not any(b[r][item] for r in rows for item in ITEMS)  # A alone
+    if args.blank_as_no:
+        print("empty cells read as 'no' for annotator(s) " + ", ".join(args.blank_as_no) + " (declared by the annotator)")
+    print(f"{len(rows)} rows" + (" | PROVISIONAL: A alone, no inter-annotator agreement" if single else ""))
     for item in ITEMS:
         line = f"{item:20}"
         if not single:
