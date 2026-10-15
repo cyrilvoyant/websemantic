@@ -5,10 +5,14 @@
 **Language models can prepare scientific simulations. WebSemantic checks inputs and asks users to resolve missing values.**
 
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23238902-blue.svg)](https://doi.org/10.5281/zenodo.23238902)
+[![Software Heritage](https://archive.softwareheritage.org/badge/origin/https://github.com/cyrilvoyant/websemantic/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/cyrilvoyant/websemantic)
 [![PyPI](https://img.shields.io/pypi/v/websemantic.svg)](https://pypi.org/project/websemantic/)
+[![Python](https://img.shields.io/pypi/pyversions/websemantic.svg)](https://pypi.org/project/websemantic/)
 [![RSD](https://img.shields.io/badge/rsd-websemantic-00a3e3.svg)](https://research-software-directory.org/software/websemantic)
+[![fair-software.eu](https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F-green)](https://fair-software.eu)
 [![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/15359/badge)](https://www.bestpractices.dev/projects/15359)
 [![Licence: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Ontology](https://img.shields.io/badge/ontology-w3id.org%2Fwebsemantic-8a2be2.svg)](https://w3id.org/websemantic/ns)
 [![Web app](https://img.shields.io/badge/web%20app-Hugging%20Face-yellow.svg)](https://cyrilvoyant-websemantic.static.hf.space)
 
 A language model asked to run a simulation may fill gaps by itself. "A weak updraft" becomes 0.1 m/s, "the
